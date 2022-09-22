@@ -1,0 +1,226 @@
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+import SaveIcon from '@mui/icons-material/Save';
+import CancelIcon from '@mui/icons-material/Close';
+import {
+    GridRowModes,
+    DataGrid,
+    GridToolbarContainer,
+    GridActionsCellItem,
+    GridRowsProp,
+    GridRowModesModel,
+    GridRowParams,
+    GridRowId,
+    GridRowModel,
+    MuiEvent,
+    MuiBaseEvent
+} from '@mui/x-data-grid';
+import { randomId } from '@mui/x-data-grid-generator';
+import { createTask, deleteTask, getTasks, updateTask } from '../../actions/taskAction';
+import Task from '../../interfaces/Task';
+interface EditToolbarProps {
+    setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
+    setRowModesModel: (
+        newModel: (oldModel: GridRowModesModel) => GridRowModesModel,
+    ) => void;
+}
+function EditToolbar(props: EditToolbarProps) {
+    const { setRows, setRowModesModel } = props;
+
+    const handleClick = () => {
+        const id = randomId(); // Id doesn't relate to mongodb id
+        setRows((oldRows) => [...oldRows, { id, name: '', description: '', isNew: true }]);
+        setRowModesModel((oldModel) => ({
+            ...oldModel,
+            [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
+        }));
+    };
+
+    return (
+        <GridToolbarContainer>
+            <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
+                Add record
+            </Button>
+        </GridToolbarContainer>
+    );
+}
+
+const TaskInfo = (): JSX.Element => {
+    const [rows, setRows] = React.useState<Task[]>([{
+        _id: '',
+        name: '',
+        description: '',
+        status: 'active'
+    }]);
+    const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>({});
+    React.useEffect(() => {
+        const fetchData = async () => {
+            const data = await getTasks();
+            const tasks = data.data;
+            setRows(tasks);
+        }
+        fetchData();
+    }, []);
+    const handleRowEditStart = (params: GridRowParams, event: MuiEvent<MuiBaseEvent>) => {
+        event.defaultMuiPrevented = true;
+    };
+
+    const handleRowEditStop = async (params: GridRowParams, event: MuiEvent<MuiBaseEvent>) => {
+        event.defaultMuiPrevented = true;
+    };
+
+    const handleEditClick = (id: GridRowId) => () => {
+        setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+    };
+
+    const handleSaveClick = (id: GridRowId) => async () => {
+        setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+    };
+
+    const handleDeleteClick = (id: GridRowId) => async () => {
+        /* FRONTEND DELETE */
+        setRows(rows.filter((row) => row._id !== id));
+        /* BACKEND DELETE */
+        const idAsString = id as string;
+        await deleteTask(idAsString);
+    };
+
+    const handleCancelClick = (id: GridRowId) => () => {
+        setRowModesModel({
+            ...rowModesModel,
+            [id]: { mode: GridRowModes.View, ignoreModifications: true },
+        });
+
+        const editedRow = rows.find((row) => row._id === id);
+        if (editedRow?.isNew) {
+            setRows(rows.filter((row) => row._id !== id));
+        }
+    };
+
+    const processRowUpdate = async (newRow: GridRowModel) => {
+        const updatedRow = { ...newRow, isNew: false };
+        const username = localStorage.getItem('username') || '';
+        /* Add a new row */
+        if (newRow.isNew) {
+            // Update row to the server
+            const task = { name: newRow.name, description: newRow.description, status: newRow.status, createdBy: username };
+            await createTask(task);
+        }
+        else {
+            /* Update an existing row */
+            const task = { name: newRow.name, description: newRow.description, status: newRow.status, updatedBy: username };
+            await updateTask(task, newRow.id);
+        }
+        setRows(rows.map((row) => (row._id === newRow.id ? updatedRow : row)));
+        return updatedRow;
+    };
+
+    const columns = [
+        { field: 'name', headerName: 'Name', editable: true, width: 200 },
+        { field: 'status', headerName: 'Status', editable: true },
+        { field: 'description', headerName: 'Description', editable: true, width: 300 },
+        {
+            field: 'createdAt',
+            headerName: 'Created At',
+            type: 'dateTime',
+            width: 200,
+        },
+        {
+            field: 'updatedAt',
+            headerName: 'Updated At',
+            type: 'dateTime',
+            width: 200,
+        },
+        {
+            field: 'createdBy',
+            headerName: 'Created By',
+        },
+        {
+            field: 'updatedBy',
+            headerName: 'Updated By',
+        },
+        {
+            field: 'actions',
+            type: 'actions',
+            headerName: 'Actions',
+            width: 100,
+            cellClassName: 'actions',
+            getActions: ({ id }) => {
+                const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
+
+                if (isInEditMode) {
+                    return [
+                        <GridActionsCellItem
+                            icon={<SaveIcon />}
+                            label="Save"
+                            onClick={handleSaveClick(id)}
+                        />,
+                        <GridActionsCellItem
+                            icon={<CancelIcon />}
+                            label="Cancel"
+                            className="textPrimary"
+                            onClick={handleCancelClick(id)}
+                            color="inherit"
+                        />,
+                    ];
+                }
+
+                return [
+                    <GridActionsCellItem
+                        icon={<EditIcon />}
+                        label="Edit"
+                        className="textPrimary"
+                        onClick={handleEditClick(id)}
+                        color="inherit"
+                    />,
+                    <GridActionsCellItem
+                        icon={<DeleteIcon />}
+                        label="Delete"
+                        onClick={handleDeleteClick(id)}
+                        color="inherit"
+                    />,
+                ];
+            },
+        },
+    ];
+
+    return (
+        <Box
+            sx={{
+                height: 500,
+                width: '100%',
+                '& .actions': {
+                    color: 'text.secondary',
+                },
+                '& .textPrimary': {
+                    color: 'text.primary',
+                },
+                flex: 4
+            }}
+        >
+            <DataGrid
+                autoHeight
+                rows={rows}
+                getRowId={(row) => row._id}
+                columns={columns}
+                editMode="row"
+                rowModesModel={rowModesModel}
+                onRowEditStart={handleRowEditStart}
+                onRowEditStop={handleRowEditStop}
+                processRowUpdate={processRowUpdate}
+                components={{
+                    Toolbar: EditToolbar,
+                }}
+                componentsProps={{
+                    toolbar: { setRows, setRowModesModel },
+                }}
+                experimentalFeatures={{ newEditingApi: true }}
+            />
+        </Box>
+    );
+}
+export default TaskInfo;
