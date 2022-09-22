@@ -2,12 +2,12 @@ import { Table, TableContainer, TableBody, TableRow, TableCell, Button, Dialog, 
 import { Paper } from '@mui/material';
 import { DataGrid, GridRowParams } from '@mui/x-data-grid';
 import React from 'react'
-import axios from '../../api';
 import useProjectStore from '../../store/useStore';
 import { getProjectInfo } from '../../actions/projectAction';
 import { getTasks } from '../../actions/taskAction';
 import Phase from '../../interfaces/Phase';
 import Task from '../../interfaces/Task';
+import { addTaskToPhase } from '../../actions/phaseAction';
 const PhaseInfo = (): JSX.Element => {
     const currentProject = useProjectStore(state => state.currentProject);
     const [phaseInfo, setPhaseInfo] = React.useState<Phase[]>([{
@@ -50,10 +50,9 @@ const PhaseInfo = (): JSX.Element => {
     }
     const handleDoubleClick = async (params: GridRowParams) => {
         const { id } = params;
+        const taskId = id.toString();
         const phaseId = currentPhase;
-        const response = await axios.patch(`/phase/${phaseId}/task`, {
-            taskId: id
-        });
+        const response = await addTaskToPhase(phaseId, taskId);
         if (response.status === 200) {
             setOpenSnackbar(true);
             await getPhaseInfo();
@@ -68,7 +67,7 @@ const PhaseInfo = (): JSX.Element => {
                 <td>
                     <Button onClick={() => handleClickOpen(_id)} >Add task</Button>
                     <Dialog open={open} onClose={handleClose} fullWidth maxWidth="lg">
-                        <DataGrid rows={rows} columns={columns} autoHeight onRowDoubleClick={handleDoubleClick} />
+                        <DataGrid rows={rows} columns={columns} autoHeight onRowDoubleClick={handleDoubleClick} getRowId={row => row._id} />
                     </Dialog>
                     <div style={{ height: 400, width: '100%' }}>
                         <DataGrid

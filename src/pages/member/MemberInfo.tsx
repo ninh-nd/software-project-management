@@ -25,16 +25,16 @@ const MemberInfo = (): JSX.Element => {
     const [openSnackbar, setOpenSnackbar] = React.useState(false);
     const currentProject = useProjectStore(state => state.currentProject);
     const [selectedRows, setSelectedRows] = React.useState<string[]>(['']);
+    async function getMemberList() {
+        const res = await getMembersOfProject(currentProject);
+        const memberList = res.data;
+        setMemberList(memberList);
+    }
     React.useEffect(() => {
         async function fetchData() {
             const res = await getTasks();
             const data = res.data;
             setTaskList(data);
-        }
-        async function getMemberList() {
-            const res = await getMembersOfProject(currentProject);
-            const memberList = res.data;
-            setMemberList(memberList);
         }
         getMemberList();
         fetchData();
@@ -74,15 +74,15 @@ const MemberInfo = (): JSX.Element => {
     }
     const markAsComplete = async () => {
         selectedRows.forEach(async (id) => {
-            // TODO: Frontend update state
             await markTask(id, 'complete');
         });
+        await getMemberList();
     }
     const markAsIncomplete = async () => {
         selectedRows.forEach(async (id) => {
-            // TODO: Frontend update state
             await markTask(id, 'active');
         });
+        await getMemberList();
     }
     return (
         <div style={{ flex: 4 }}>

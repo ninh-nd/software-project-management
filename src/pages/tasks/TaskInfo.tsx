@@ -17,7 +17,8 @@ import {
     GridRowId,
     GridRowModel,
     MuiEvent,
-    MuiBaseEvent
+    MuiBaseEvent,
+    GridColumns
 } from '@mui/x-data-grid';
 import { randomId } from '@mui/x-data-grid-generator';
 import { createTask, deleteTask, getTasks, updateTask } from '../../actions/taskAction';
@@ -31,9 +32,9 @@ interface EditToolbarProps {
 function EditToolbar(props: EditToolbarProps) {
     const { setRows, setRowModesModel } = props;
 
-    const handleClick = () => {
+    const addRecord = () => {
         const id = randomId(); // Id doesn't relate to mongodb id
-        setRows((oldRows) => [...oldRows, { id, name: '', description: '', isNew: true }]);
+        setRows((oldRows) => [...oldRows, { _id: id, name: '', description: '', isNew: true }]);
         setRowModesModel((oldModel) => ({
             ...oldModel,
             [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
@@ -42,7 +43,7 @@ function EditToolbar(props: EditToolbarProps) {
 
     return (
         <GridToolbarContainer>
-            <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
+            <Button color="primary" startIcon={<AddIcon />} onClick={addRecord}>
                 Add record
             </Button>
         </GridToolbarContainer>
@@ -50,12 +51,7 @@ function EditToolbar(props: EditToolbarProps) {
 }
 
 const TaskInfo = (): JSX.Element => {
-    const [rows, setRows] = React.useState<Task[]>([{
-        _id: '',
-        name: '',
-        description: '',
-        status: 'active'
-    }]);
+    const [rows, setRows] = React.useState<GridRowsProp>([]);
     const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>({});
     React.useEffect(() => {
         const fetchData = async () => {
@@ -113,16 +109,16 @@ const TaskInfo = (): JSX.Element => {
         else {
             /* Update an existing row */
             const task = { name: newRow.name, description: newRow.description, status: newRow.status, updatedBy: username };
-            await updateTask(task, newRow.id);
+            await updateTask(task, newRow._id);
         }
-        setRows(rows.map((row) => (row._id === newRow.id ? updatedRow : row)));
+        setRows(rows.map((row) => (row._id === newRow._id ? updatedRow : row)));
         return updatedRow;
     };
 
-    const columns = [
-        { field: 'name', headerName: 'Name', editable: true, width: 200 },
+    const columns: GridColumns = [
+        { field: 'name', headerName: 'Name', editable: true, flex: 0.3 },
         { field: 'status', headerName: 'Status', editable: true },
-        { field: 'description', headerName: 'Description', editable: true, width: 300 },
+        { field: 'description', headerName: 'Description', editable: true, flex: 1 },
         {
             field: 'createdAt',
             headerName: 'Created At',

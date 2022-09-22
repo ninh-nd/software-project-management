@@ -8,6 +8,6 @@ export async function markTask(taskId: string, status: string) {
     return response;
 }
 export async function assignTask(taskId: string, memberId: string) {
-    const response = await resourcesAPI.patch(`/member/${memberId}/task`, { taskId });
+    const response = await resourcesAPI.patch(`/member/${memberId}/assignTask`, { taskId });
     return response;
 }
