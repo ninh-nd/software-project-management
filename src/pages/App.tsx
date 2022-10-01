@@ -14,7 +14,7 @@ export default function App() {
     const fetch = useStore(state => state.fetch);
     React.useEffect(() => {
         fetch();
-    }, []);
+    }, [currentProject]);
     const accessToken = localStorage.getItem('accessToken');
     return (
         <>
