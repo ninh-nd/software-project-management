@@ -7,11 +7,5 @@ export default interface Task {
     updatedBy?: string;
     isNew?: boolean;
 }
-export interface TaskUpdate {
-    name: string;
-    description: string;
-    status: string;
-    createdBy?: string;
-    updatedBy?: string;
-    isNew?: boolean;
-}
+
+export type TaskUpdate = Omit<Task, "_id">;
