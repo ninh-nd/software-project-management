@@ -7,11 +7,11 @@ specifiers:
   '@mui/material': ^5.8.4
   '@mui/x-data-grid': ^5.13.0
   '@mui/x-data-grid-generator': ^5.17.3
+  '@tanstack/react-query': ^4.12.0
   '@types/react': ^18.0.17
   '@types/react-dom': ^18.0.6
   '@vitejs/plugin-react': ^2.1.0
   axios: ^0.27.2
-  prop-types: ^15.8.1
   react: ^18.2.0
   react-dom: ^18.2.0
   react-router-dom: ^6.3.0
@@ -26,8 +26,8 @@ dependencies:
   '@mui/icons-material': 5.10.6_53tnv4wp66xcbe2be5ezn33rnm
   '@mui/material': 5.10.6_af5ln35zuaotaffazii6n6bke4
   '@mui/x-data-grid': 5.17.3_tfaux7nhmx624dgof2icasxrfm
+  '@tanstack/react-query': 4.12.0_biqbaboplfbrettd7655fr4n2y
   axios: 0.27.2
-  prop-types: 15.8.1
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
   react-router-dom: 6.4.1_biqbaboplfbrettd7655fr4n2y
@@ -756,6 +756,28 @@ packages:
   /@remix-run/router/1.0.1:
     resolution: {integrity: sha512-eBV5rvW4dRFOU1eajN7FmYxjAIVz/mRHgUE9En9mBn6m3mulK3WTR5C3iQhL9MZ14rWAq+xOlEaCkDiW0/heOg==}
     engines: {node: '>=14'}
+    dev: false
+
+  /@tanstack/query-core/4.12.0:
+    resolution: {integrity: sha512-KEiFPNLMFByhNL2s6RBFL6Z5cNdwwQzFpW/II3GY+rEuQ343ZEoVyQ48zlUXXkEkbamQFIFg2onM8Pxf0Yo01A==}
+    dev: false
+
+  /@tanstack/react-query/4.12.0_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-prchV1q+CJ0ZVo8Rts2cOF3azDfQizZZySmH6XXsXRcPTbir0sgb9fp0vY/5l5ZkSYjTvWt/OL8WQhAhYMSvrA==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react-native: '*'
+    peerDependenciesMeta:
+      react-dom:
+        optional: true
+      react-native:
+        optional: true
+    dependencies:
+      '@tanstack/query-core': 4.12.0
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      use-sync-external-store: 1.2.0_react@18.2.0
     dev: false
 
   /@types/d3-color/3.1.0:

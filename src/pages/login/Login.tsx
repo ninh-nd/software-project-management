@@ -21,10 +21,10 @@ const Login = (): JSX.Element => {
     const username = data.get('username') as string;
     const password = data.get('password') as string;
     const response = await login(username, password);
-    if (response.status === 400 || response.status === 401) {
+    if (response.data.status === 'error') {
       setErrorText('Invalid username or password');
-    } else if (response.status === 201) {
-      const { role, username, id, accessToken } = await response.data;
+    } else {
+      const { role, username, id, accessToken } = response.data;
       localStorage.setItem('accessToken', accessToken);
       localStorage.setItem('id', id);
       localStorage.setItem('username', username);
@@ -33,7 +33,7 @@ const Login = (): JSX.Element => {
       const data = getProjectList.data;
       setErrorText('');
       setCurrentProject(data.projects[0].name);
-      navigate(`/${data.projects[0].name}`);
+      navigate("/");
     }
   };
 
