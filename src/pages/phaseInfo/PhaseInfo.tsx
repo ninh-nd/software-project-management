@@ -5,35 +5,39 @@ import React from 'react'
 import useProjectStore from '../../store/useStore';
 import { getProjectInfo } from '../../actions/projectAction';
 import { getTasks } from '../../actions/taskAction';
-import Phase from '../../interfaces/Phase';
+import Project from '../../interfaces/Project';
 import Task from '../../interfaces/Task';
 import { addTaskToPhase } from '../../actions/phaseAction';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import ServerResponse from '../../interfaces/ServerResponse';
+interface AddTaskToPhaseParams {
+    phaseId: string;
+    taskId: string;
+}
+
 const PhaseInfo = (): JSX.Element => {
+    const queryClient = useQueryClient();
     const currentProject = useProjectStore(state => state.currentProject);
-    const [phaseInfo, setPhaseInfo] = React.useState<Phase[]>([{
-        _id: '',
-        name: '',
-        tasks: []
-    }]); // Phase list 
-    const [rows, setRows] = React.useState<Task[]>([]); // Task table 
     const [open, setOpen] = React.useState(false); // Dialog state
     const [openSnackbar, setOpenSnackbar] = React.useState(false); // Snackbar state
     const [currentPhase, setCurrentPhase] = React.useState(''); // Currently selected phase
-    async function getPhaseInfo() {
-        const response = await getProjectInfo(currentProject);
-        const data = response.data;
-        const phaseList = data.phaseList;
-        setPhaseInfo(phaseList);
+    const phaseQuery = useQuery<ServerResponse<Project>>(['phaseList'], () => getProjectInfo(currentProject));
+    const taskQuery = useQuery<ServerResponse<Task[]>>(['taskList'], () => getTasks());
+    const mutation = useMutation<unknown, Error, AddTaskToPhaseParams>({
+        mutationFn: ({ phaseId, taskId }) => addTaskToPhase(phaseId, taskId),
+        onSuccess: () => {
+            setOpenSnackbar(true);
+            queryClient.invalidateQueries(['phaseList']);
+        }
+    })
+    if (phaseQuery.isLoading || taskQuery.isLoading) {
+        return <div>Loading...</div>;
     }
-    async function fetchData() {
-        const res = await getTasks();
-        const data = res.data;
-        setRows(data);
+    if (phaseQuery.isError || taskQuery.isError) {
+        return <div>Error</div>;
     }
-    React.useEffect(() => {
-        getPhaseInfo();
-        fetchData();
-    }, [currentProject]);
+    const phaseList = phaseQuery.data.data.phaseList;
+    const taskList = taskQuery.data.data;
     const columns = [
         { field: 'name', headerName: 'Name', width: 200 },
         { field: 'status', headerName: 'Status' },
@@ -52,14 +56,10 @@ const PhaseInfo = (): JSX.Element => {
         const { id } = params;
         const taskId = id.toString();
         const phaseId = currentPhase;
-        const response = await addTaskToPhase(phaseId, taskId);
-        if (response.status === 200) {
-            setOpenSnackbar(true);
-            await getPhaseInfo();
-        }
+        mutation.mutate({ phaseId, taskId });
     }
     function phaseInfoRender() {
-        return phaseInfo.map(({ _id, name, tasks }) => (
+        return phaseList.map(({ _id, name, tasks }) => (
             <TableRow key={_id}>
                 <TableCell component="th" scope="row" align="center">
                     {name}
@@ -67,7 +67,7 @@ const PhaseInfo = (): JSX.Element => {
                 <td>
                     <Button onClick={() => handleClickOpen(_id)} >Add task</Button>
                     <Dialog open={open} onClose={handleClose} fullWidth maxWidth="lg">
-                        <DataGrid rows={rows} columns={columns} autoHeight onRowDoubleClick={handleDoubleClick} getRowId={row => row._id} />
+                        <DataGrid rows={taskList} columns={columns} autoHeight onRowDoubleClick={handleDoubleClick} getRowId={row => row._id} />
                     </Dialog>
                     <div style={{ height: 400, width: '100%' }}>
                         <DataGrid

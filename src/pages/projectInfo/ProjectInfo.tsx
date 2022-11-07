@@ -7,11 +7,11 @@ import { useQuery } from '@tanstack/react-query';
 import ServerResponse from '../../interfaces/ServerResponse';
 const ProjectInfo = (): JSX.Element => {
     const currentProject = useStore(state => state.currentProject);
-    const projectInfo = useQuery<ServerResponse<Project>>(['projectInfo'], () => getProjectInfo(currentProject));
-    if (projectInfo.isLoading) {
+    const projectInfoQuery = useQuery<ServerResponse<Project>>(['projectInfo'], () => getProjectInfo(currentProject));
+    if (projectInfoQuery.isLoading) {
         return <div>Loading...</div>;
     }
-    if (projectInfo.isError) {
+    if (projectInfoQuery.isError) {
         return <div>Error</div>;
     }
     return (
@@ -23,31 +23,31 @@ const ProjectInfo = (): JSX.Element => {
                             <TableCell component="th" scope="row">
                                 Project Name
                             </TableCell>
-                            <TableCell align="right">{projectInfo.data.data.name}</TableCell>
+                            <TableCell align="right">{projectInfoQuery.data.data.name}</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell component="th" scope="row">
                                 URL
                             </TableCell>
-                            <TableCell align="right"><a href="{projectInfo.url}">{projectInfo.data.data.url}</a></TableCell>
+                            <TableCell align="right"><a href="{projectInfo.url}">{projectInfoQuery.data.data.url}</a></TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell component="th" scope="row">
                                 Status
                             </TableCell>
-                            <TableCell align="right">{projectInfo.data.data.status}</TableCell>
+                            <TableCell align="right">{projectInfoQuery.data.data.status}</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell component="th" scope="row">
                                 Created at
                             </TableCell>
-                            <TableCell align="right">{projectInfo.data.data.createdAt}</TableCell>
+                            <TableCell align="right">{projectInfoQuery.data.data.createdAt}</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell component="th" scope="row">
                                 Updated at
                             </TableCell>
-                            <TableCell align="right">{projectInfo.data.data.updatedAt}</TableCell>
+                            <TableCell align="right">{projectInfoQuery.data.data.updatedAt}</TableCell>
                         </TableRow>
                     </TableBody>
                 </Table>
