@@ -56,7 +56,7 @@ const TaskInfo = (): JSX.Element => {
     React.useEffect(() => {
         const fetchData = async () => {
             const data = await getTasks();
-            const tasks = data;
+            const tasks = data.data;
             setRows(tasks);
         }
         fetchData();
