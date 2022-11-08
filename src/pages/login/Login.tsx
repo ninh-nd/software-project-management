@@ -4,14 +4,13 @@ import {
   Container, createTheme, CssBaseline, ThemeProvider,
   Avatar, Typography, TextField, FormControlLabel,
 } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { redirect } from 'react-router-dom';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { login } from '../../actions/accountAction';
 import { getProjectOwn } from '../../actions/projectManagerAction';
 import useProjectStore from '../../store/useStore';
 const theme = createTheme();
 const Login = (): JSX.Element => {
-  const navigate = useNavigate();
   const [errorText, setErrorText] = React.useState('');
   const setCurrentProject = useProjectStore(state => state.setCurrentProject);
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -30,10 +29,10 @@ const Login = (): JSX.Element => {
       localStorage.setItem('username', username);
       localStorage.setItem('role', role);
       const getProjectList = await getProjectOwn(id);
-      const data = getProjectList.data;
+      const currentProject = getProjectList.data.projects[0].name;
       setErrorText('');
-      setCurrentProject(data.projects[0].name);
-      navigate("/");
+      setCurrentProject(currentProject);
+      return redirect(`/${currentProject}`);
     }
   };
 

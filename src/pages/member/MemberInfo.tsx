@@ -7,8 +7,16 @@ import { assignTask, getMembersOfProject, markTask } from '../../actions/memberA
 import { getTasks } from '../../actions/taskAction';
 import Member from '../../interfaces/Member';
 import Task from '../../interfaces/Task';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import ServerResponse from '../../interfaces/ServerResponse';
+interface AssignTaskParams {
+    taskId: string;
+    memberId: string;
+}
+interface MarkTaskParams {
+    taskIdArray: string[];
+    status: string;
+}
 const MemberInfo = (): JSX.Element => {
     const queryClient = useQueryClient();
     const [open, setOpen] = React.useState(false);
@@ -16,8 +24,21 @@ const MemberInfo = (): JSX.Element => {
     const [openSnackbar, setOpenSnackbar] = React.useState(false);
     const currentProject = useProjectStore(state => state.currentProject);
     const [selectedRows, setSelectedRows] = React.useState<string[]>(['']);
+    const assignTaskMutation = useMutation<unknown, Error, AssignTaskParams>({
+        mutationFn: ({ taskId, memberId }) => assignTask(taskId, memberId),
+        onSuccess: () => {
+            setOpenSnackbar(true);
+            queryClient.invalidateQueries(['memberList']);
+        }
+    })
+    const markTaskMutation = useMutation<unknown, Error, MarkTaskParams>({
+        mutationFn: ({ taskIdArray, status }) => markTask(taskIdArray, status),
+        onSuccess: () => {
+            queryClient.invalidateQueries(['memberList']);
+        }
+    })
     const memberListQuery = useQuery<ServerResponse<Member[]>>(['memberList'], () => getMembersOfProject(currentProject));
-    const taskQuery = useQuery<ServerResponse<Task[]>>(['taskList'], () => getTasks());
+    const taskQuery = useQuery<ServerResponse<Task[]>>(['taskList'], getTasks);
     if (memberListQuery.isLoading || taskQuery.isLoading) {
         return <div>Loading...</div>;
     }
@@ -47,27 +68,17 @@ const MemberInfo = (): JSX.Element => {
     const handleAssignTask = async (params: GridRowParams) => {
         const { id } = params;
         const memberId = currentMember;
-        const response = await assignTask(id.toString(), memberId);
-        if (response.status === 200) {
-            setOpenSnackbar(true);
-            //TODO: Re-render task list
-        }
+        assignTaskMutation.mutate({ taskId: id.toString(), memberId });
     }
     const getSelection = (arrayOfIds: GridSelectionModel) => {
         const array = arrayOfIds as string[];
         setSelectedRows(array);
     }
     const markAsComplete = async () => {
-        selectedRows.forEach(async (id) => {
-            await markTask(id, 'complete');
-        });
-        queryClient.invalidateQueries({ queryKey: ['memberList'] });
+        markTaskMutation.mutate({ taskIdArray: selectedRows, status: 'complete' });
     }
     const markAsIncomplete = async () => {
-        selectedRows.forEach(async (id) => {
-            await markTask(id, 'active');
-        });
-        queryClient.invalidateQueries({ queryKey: ['memberList'] });
+        markTaskMutation.mutate({ taskIdArray: selectedRows, status: 'active' });
     }
     return (
         <div style={{ flex: 4 }}>
