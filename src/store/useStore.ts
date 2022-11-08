@@ -16,7 +16,7 @@ const useProjectStore = create<ProjectState>()((set) => ({
     fetch: async () => {
         const id = localStorage.getItem('id');
         const projectList = await axios.get(`/pm/${id}/project`);
-        const data = projectList.data;
+        const data = projectList.data.data;
         set({ projectList: data.projects });
         set({ currentProject: data.projects[0].name });
     }

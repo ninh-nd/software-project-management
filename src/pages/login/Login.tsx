@@ -4,14 +4,13 @@ import {
   Container, createTheme, CssBaseline, ThemeProvider,
   Avatar, Typography, TextField, FormControlLabel,
 } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { redirect } from 'react-router-dom';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { login } from '../../actions/accountAction';
 import { getProjectOwn } from '../../actions/projectManagerAction';
 import useProjectStore from '../../store/useStore';
 const theme = createTheme();
 const Login = (): JSX.Element => {
-  const navigate = useNavigate();
   const [errorText, setErrorText] = React.useState('');
   const setCurrentProject = useProjectStore(state => state.setCurrentProject);
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -21,19 +20,19 @@ const Login = (): JSX.Element => {
     const username = data.get('username') as string;
     const password = data.get('password') as string;
     const response = await login(username, password);
-    if (response.status === 400 || response.status === 401) {
+    if (response.data.status === 'error') {
       setErrorText('Invalid username or password');
-    } else if (response.status === 201) {
-      const { role, username, id, accessToken } = await response.data;
+    } else {
+      const { role, username, id, accessToken } = response.data;
       localStorage.setItem('accessToken', accessToken);
       localStorage.setItem('id', id);
       localStorage.setItem('username', username);
       localStorage.setItem('role', role);
       const getProjectList = await getProjectOwn(id);
-      const data = getProjectList.data;
+      const currentProject = getProjectList.data.projects[0].name;
       setErrorText('');
-      setCurrentProject(data.projects[0].name);
-      navigate(`/${data.projects[0].name}`);
+      setCurrentProject(currentProject);
+      return redirect(`/${currentProject}`);
     }
   };
 

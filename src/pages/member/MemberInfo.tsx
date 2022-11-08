@@ -7,38 +7,44 @@ import { assignTask, getMembersOfProject, markTask } from '../../actions/memberA
 import { getTasks } from '../../actions/taskAction';
 import Member from '../../interfaces/Member';
 import Task from '../../interfaces/Task';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import ServerResponse from '../../interfaces/ServerResponse';
+interface AssignTaskParams {
+    taskId: string;
+    memberId: string;
+}
+interface MarkTaskParams {
+    taskIdArray: string[];
+    status: string;
+}
 const MemberInfo = (): JSX.Element => {
-    const [memberList, setMemberList] = React.useState<Member[]>([{
-        _id: '',
-        name: '',
-        taskAssigned: [],
-        activityHistory: []
-    }]);
-    const [taskList, setTaskList] = React.useState<Task[]>([{
-        _id: '',
-        name: '',
-        description: '',
-        status: ''
-    }]);
+    const queryClient = useQueryClient();
     const [open, setOpen] = React.useState(false);
     const [currentMember, setCurrentMember] = React.useState('');
     const [openSnackbar, setOpenSnackbar] = React.useState(false);
     const currentProject = useProjectStore(state => state.currentProject);
     const [selectedRows, setSelectedRows] = React.useState<string[]>(['']);
-    async function getMemberList() {
-        const res = await getMembersOfProject(currentProject);
-        const memberList = res.data;
-        setMemberList(memberList);
-    }
-    React.useEffect(() => {
-        async function fetchData() {
-            const res = await getTasks();
-            const data = res.data;
-            setTaskList(data);
+    const assignTaskMutation = useMutation<unknown, Error, AssignTaskParams>({
+        mutationFn: ({ taskId, memberId }) => assignTask(taskId, memberId),
+        onSuccess: () => {
+            setOpenSnackbar(true);
+            queryClient.invalidateQueries(['memberList']);
         }
-        getMemberList();
-        fetchData();
-    }, [currentProject]);
+    })
+    const markTaskMutation = useMutation<unknown, Error, MarkTaskParams>({
+        mutationFn: ({ taskIdArray, status }) => markTask(taskIdArray, status),
+        onSuccess: () => {
+            queryClient.invalidateQueries(['memberList']);
+        }
+    })
+    const memberListQuery = useQuery<ServerResponse<Member[]>>(['memberList'], () => getMembersOfProject(currentProject));
+    const taskQuery = useQuery<ServerResponse<Task[]>>(['taskList'], getTasks);
+    if (memberListQuery.isLoading || taskQuery.isLoading) {
+        return <div>Loading...</div>;
+    }
+    if (memberListQuery.isError || taskQuery.isError) {
+        return <div>Error</div>;
+    }
     const activityHistoryColumns = [
         { field: 'action', headerName: 'Action', width: 200 },
         { field: 'content', headerName: 'Content', minWidth: 400, flex: 1 },
@@ -62,31 +68,21 @@ const MemberInfo = (): JSX.Element => {
     const handleAssignTask = async (params: GridRowParams) => {
         const { id } = params;
         const memberId = currentMember;
-        const response = await assignTask(id.toString(), memberId);
-        if (response.status === 200) {
-            setOpenSnackbar(true);
-            //TODO: Re-render task list
-        }
+        assignTaskMutation.mutate({ taskId: id.toString(), memberId });
     }
     const getSelection = (arrayOfIds: GridSelectionModel) => {
         const array = arrayOfIds as string[];
         setSelectedRows(array);
     }
     const markAsComplete = async () => {
-        selectedRows.forEach(async (id) => {
-            await markTask(id, 'complete');
-        });
-        await getMemberList();
+        markTaskMutation.mutate({ taskIdArray: selectedRows, status: 'complete' });
     }
     const markAsIncomplete = async () => {
-        selectedRows.forEach(async (id) => {
-            await markTask(id, 'active');
-        });
-        await getMemberList();
+        markTaskMutation.mutate({ taskIdArray: selectedRows, status: 'active' });
     }
     return (
         <div style={{ flex: 4 }}>
-            {memberList.map((member) => {
+            {memberListQuery.data.data.map((member) => {
                 const activityHistory = member.activityHistory;
                 const tasks = member.taskAssigned;
                 const id = member._id;
@@ -107,7 +103,7 @@ const MemberInfo = (): JSX.Element => {
                                 <Button onClick={() => handleClick(id)}>Assign task</Button>
                                 <Dialog open={open} onClose={handleClose} fullWidth maxWidth="lg">
                                     <DataGrid
-                                        rows={taskList}
+                                        rows={taskQuery.data.data}
                                         getRowId={(row) => row._id}
                                         columns={taskColumns}
                                         autoHeight

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from "react-router-dom";
 import SelectProject from './SelectProject';
 import { Box, Divider } from '@mui/material';
