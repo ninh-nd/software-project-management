@@ -12,13 +12,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 7.12.1
+
       - name: Use Node 16
         uses: actions/setup-node@v3
         with:
           node-version: 16.x
 
-      - name: Install pnpm and serve
-        run: npm install -g pnpm serve
+      - name: Install serve
+        run: npm install -g serve
         
       - name: Install packages
         run: pnpm install --frozen-lockfile
