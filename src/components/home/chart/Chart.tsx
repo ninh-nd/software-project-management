@@ -1,15 +1,22 @@
-import './chart.css';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Commits, PullRequests } from '../../../interfaces/GithubData';
+import Title from '../featuredInfo/Title';
+import { Paper } from '@mui/material';
 type ChartProps = {
   commits: Commits;
   prs: PullRequests;
 }
 const Chart = ({ commits, prs }: ChartProps): JSX.Element => {
   return (
-    <div className='chart'>
-      <h3 className="chartTitle">Activity history</h3>
-      <ResponsiveContainer width="100%" aspect={4 / 1}>
+    <Paper
+      sx={{
+        p: 2,
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
+      <Title>Activity History</Title>
+      <ResponsiveContainer width="100%" aspect={3 / 1}>
         <BarChart
           width={500}
           height={300}
@@ -29,7 +36,27 @@ const Chart = ({ commits, prs }: ChartProps): JSX.Element => {
           <Bar dataKey="total" fill="#8884d8" name="Number of commits" />
         </BarChart>
       </ResponsiveContainer>
-    </div >
+      <ResponsiveContainer width="100%" aspect={3 / 1}>
+        <BarChart
+          width={500}
+          height={300}
+          data={prs.contribution}
+          margin={{
+            top: 5,
+            right: 30,
+            left: 20,
+            bottom: 5,
+          }}
+        >
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="author" />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          <Bar dataKey="total" fill="#82ca9d" name="Number of pull requests" />
+        </BarChart>
+      </ResponsiveContainer>
+    </Paper >
   )
 }
 export default Chart;

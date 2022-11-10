@@ -2,7 +2,6 @@ import React from 'react';
 import Sidebar from '../components/common/sidebar/Sidebar';
 import Topbar from '../components/common/topbar/Topbar';
 import Home from './home/Home';
-import './app.css';
 import { Route, Routes, Navigate } from 'react-router-dom';
 import ProjectInfo from './projectInfo/ProjectInfo';
 import PhaseInfo from './phaseInfo/PhaseInfo';
@@ -10,6 +9,7 @@ import TaskInfo from './tasks/TaskInfo';
 import MemberInfo from './member/MemberInfo';
 import useStore from '../store/useStore';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Box } from '@mui/material';
 const queryClient = new QueryClient();
 export default function DashboardLayout() {
     const currentProject = useStore(state => state.currentProject);
@@ -20,7 +20,7 @@ export default function DashboardLayout() {
     return (
         <QueryClientProvider client={queryClient}>
             <Topbar />
-            <div className="container">
+            <Box sx={{ display: 'flex' }}>
                 <Sidebar />
                 <Routes>
                     <Route path="/" element={<Navigate to={`/${currentProject}`} replace />} />
@@ -30,7 +30,7 @@ export default function DashboardLayout() {
                     <Route path='tasks' element={<TaskInfo />} />
                     <Route path=':projectName/memberInfo' element={<MemberInfo />} />
                 </Routes>
-            </div>
+            </Box>
         </QueryClientProvider>
     );
 }
