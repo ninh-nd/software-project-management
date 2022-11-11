@@ -6,9 +6,9 @@ import {
 } from '@mui/material';
 import { redirect } from 'react-router-dom';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import { login } from '../../actions/accountAction';
-import { getProjectOwn } from '../../actions/projectManagerAction';
-import useProjectStore from '../../store/useStore';
+import { login } from '~/actions/accountAction';
+import { getProjectOwn } from '~/actions/projectManagerAction';
+import useProjectStore from '~/store/useStore';
 const theme = createTheme();
 const Login = (): JSX.Element => {
   const [errorText, setErrorText] = React.useState('');

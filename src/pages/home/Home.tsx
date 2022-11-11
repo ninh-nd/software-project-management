@@ -1,19 +1,20 @@
-import Chart from '../../components/home/chart/Chart';
-import { getCommits, getPullRequests } from '../../actions/activityHistoryAction';
-import useStore from '../../store/useStore';
-import { Commits, PullRequests } from '../../interfaces/GithubData';
+import Chart from '~/components/home/chart/Chart';
+import { getCommits, getPullRequests } from '~/actions/activityHistoryAction';
+import useStore from '~/store/useStore';
+import { Commits, PullRequests } from '~/interfaces/GithubData';
 import { useQuery } from '@tanstack/react-query';
-import ServerResponse from '../../interfaces/ServerResponse';
-import { Box, Container, Grid } from '@mui/material';
-import TotalCommits from '../../components/home/featuredInfo/TotalCommits';
-import TotalPullRequests from '../../components/home/featuredInfo/TotalPull';
-import ProjectInfo from '../../components/home/featuredInfo/ProjectInfo';
+import ServerResponse from '~/interfaces/ServerResponse';
+import { Box, Container, Grid, Skeleton } from '@mui/material';
+import TotalCommits from '~/components/home/featuredInfo/TotalCommits';
+import TotalPullRequests from '~/components/home/featuredInfo/TotalPull';
+import ProjectInfo from '~/components/home/featuredInfo/ProjectInfo';
+import "~/styles/style.scss";
 const Home = (): JSX.Element => {
   const currentProject = useStore(state => state.currentProject);
   const commits = useQuery<ServerResponse<Commits>>(['commits'], () => getCommits(currentProject));
   const pullRequests = useQuery<ServerResponse<PullRequests>>(['pullRequests'], () => getPullRequests(currentProject));
   if (commits.isLoading || pullRequests.isLoading) {
-    return <div>Loading...</div>;
+    return <Skeleton variant="rounded" className="fullPageSkeleton" />;
   }
   if (commits.isError || pullRequests.isError) {
     return <div>Error</div>;

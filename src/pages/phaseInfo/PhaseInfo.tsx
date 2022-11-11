@@ -1,15 +1,18 @@
-import { Table, TableContainer, TableBody, TableRow, TableCell, Button, Dialog, Snackbar, Alert } from '@mui/material';
+import { Table, TableContainer, TableBody, TableRow, TableCell, Button, Dialog, Snackbar, Alert, Box, Skeleton } from '@mui/material';
 import { Paper } from '@mui/material';
 import { DataGrid, GridRowParams } from '@mui/x-data-grid';
 import React from 'react'
-import useProjectStore from '../../store/useStore';
-import { getProjectInfo } from '../../actions/projectAction';
-import { getTasks } from '../../actions/taskAction';
-import Project from '../../interfaces/Project';
-import Task from '../../interfaces/Task';
-import { addTaskToPhase } from '../../actions/phaseAction';
+import useProjectStore from '~/store/useStore';
+import { getProjectInfo } from '~/actions/projectAction';
+import { getTasks } from '~/actions/taskAction';
+import Project from '~/interfaces/Project';
+import Task from '~/interfaces/Task';
+import { addTaskToPhase } from '~/actions/phaseAction';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import ServerResponse from '../../interfaces/ServerResponse';
+import ServerResponse from '~/interfaces/ServerResponse';
+import Title from '~/components/common/Title';
+import '~/styles/style.scss';
+import ErrorLoadingPage from '~/components/common/ErrorLoadingPage';
 interface AddTaskToPhaseParams {
     phaseId: string;
     taskId: string;
@@ -31,10 +34,10 @@ const PhaseInfo = (): JSX.Element => {
         }
     })
     if (phaseQuery.isLoading || taskQuery.isLoading) {
-        return <div>Loading...</div>;
+        return <Skeleton variant="rounded" className="fullPageSkeleton" />;
     }
     if (phaseQuery.isError || taskQuery.isError) {
-        return <div>Error</div>;
+        return <ErrorLoadingPage />;
     }
     const phaseList = phaseQuery.data.data.phaseList;
     const taskList = taskQuery.data.data;
@@ -62,14 +65,14 @@ const PhaseInfo = (): JSX.Element => {
         return phaseList.map(({ _id, name, tasks }) => (
             <TableRow key={_id}>
                 <TableCell component="th" scope="row" align="center">
-                    {name}
+                    <Title>{name}</Title>
                 </TableCell>
-                <td>
+                <TableCell>
                     <Button onClick={() => handleClickOpen(_id)} >Add task</Button>
                     <Dialog open={open} onClose={handleClose} fullWidth maxWidth="lg">
                         <DataGrid rows={taskList} columns={columns} autoHeight onRowDoubleClick={handleDoubleClick} getRowId={row => row._id} />
                     </Dialog>
-                    <div style={{ height: 400, width: '100%' }}>
+                    <Box sx={{ height: 400, width: '100%' }}>
                         <DataGrid
                             rows={tasks}
                             getRowId={(row) => row._id}
@@ -78,13 +81,13 @@ const PhaseInfo = (): JSX.Element => {
                             rowsPerPageOptions={[5]}
                             checkboxSelection
                         />
-                    </div>
-                </td>
+                    </Box>
+                </TableCell>
             </TableRow>
         ))
     }
     return (
-        <div style={{ flex: 4 }}>
+        <Box sx={{ flexGrow: 1 }}>
             <TableContainer component={Paper}>
                 <Table aria-label="simple table">
                     <TableBody>
@@ -95,7 +98,7 @@ const PhaseInfo = (): JSX.Element => {
             <Snackbar open={openSnackbar} autoHideDuration={2000} onClose={handleClose}>
                 <Alert severity="success">Task added successfully</Alert>
             </Snackbar>
-        </div>
+        </Box>
     )
 }
 export default PhaseInfo;

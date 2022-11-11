@@ -1,6 +1,6 @@
 import { Typography, Select, FormControl, MenuItem, SelectChangeEvent } from '@mui/material'
 import { useNavigate } from 'react-router-dom';
-import useProjectStore from '../../../store/useStore';
+import useProjectStore from '~/store/useStore';
 const SelectProject = (): JSX.Element => {
     const currentProject = useProjectStore(state => state.currentProject);
     const projects = useProjectStore(state => state.projectList);

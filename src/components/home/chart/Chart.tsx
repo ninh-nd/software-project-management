@@ -1,8 +1,8 @@
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { Commits, PullRequests } from '../../../interfaces/GithubData';
-import Title from '../featuredInfo/Title';
+import { Commits, PullRequests } from '~/interfaces/GithubData';
+import Title from '~/components/common/Title';
 import { Paper } from '@mui/material';
-import '../style.scss';
+import '~/styles/style.scss';
 type ChartProps = {
   commits: Commits;
   prs: PullRequests;

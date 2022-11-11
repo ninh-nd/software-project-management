@@ -1,4 +1,4 @@
-import resourcesAPI from "../api";
+import resourcesAPI from "~/api";
 export async function getCommits(projectName: string) {
     const response = await resourcesAPI.get(`/activity/github/${projectName}/commit`);
     return response.data;

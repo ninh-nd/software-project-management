@@ -1,12 +1,12 @@
 import React from 'react';
-import Sidebar from '../components/common/sidebar/Sidebar';
-import Topbar from '../components/common/topbar/Topbar';
+import Sidebar from '~/components/common/sidebar/Sidebar';
+import Topbar from '~/components/common/topbar/Topbar';
 import Home from './home/Home';
 import { Route, Routes, Navigate } from 'react-router-dom';
 import PhaseInfo from './phaseInfo/PhaseInfo';
 import TaskInfo from './tasks/TaskInfo';
 import MemberInfo from './member/MemberInfo';
-import useStore from '../store/useStore';
+import useStore from '~/store/useStore';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Box } from '@mui/material';
 const queryClient = new QueryClient();

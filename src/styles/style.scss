@@ -23,3 +23,15 @@
     flex-direction: row;
     justify-content: space-between;
 }
+
+.paper {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+.fullPageSkeleton {
+    flex-grow: 1;
+    height: 100vh;
+    min-height: 100vh;
+}

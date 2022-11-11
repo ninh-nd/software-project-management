@@ -1,6 +1,6 @@
 import create from 'zustand';
-import Project from '../interfaces/Project';
-import axios from '../api'
+import Project from '~/interfaces/Project';
+import axios from '~/api'
 interface ProjectState {
     currentProject: string;
     projectList: Project[];

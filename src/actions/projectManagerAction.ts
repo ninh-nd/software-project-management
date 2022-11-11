@@ -1,6 +1,6 @@
-import resourcesAPI from "../api";
-import Project from "../interfaces/Project";
-import ServerResponse from "../interfaces/ServerResponse";
+import resourcesAPI from "~/api";
+import Project from "~/interfaces/Project";
+import ServerResponse from "~/interfaces/ServerResponse";
 interface I {
     projects: Project[];
 }

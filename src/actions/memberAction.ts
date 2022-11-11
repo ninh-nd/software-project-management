@@ -1,5 +1,5 @@
 import { AxiosResponse } from "axios";
-import resourcesAPI from "../api";
+import resourcesAPI from "~/api";
 export async function getMembersOfProject(projectName: string) {
     const response = await resourcesAPI.get(`/project/${projectName}/member`);
     return response.data;

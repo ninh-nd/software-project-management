@@ -1,14 +1,16 @@
 import React from 'react'
 import { DataGrid, GridRowParams, GridSelectionModel } from '@mui/x-data-grid';
-import './member.css';
-import { Button, Snackbar, Alert, Dialog } from '@mui/material';
-import useProjectStore from '../../store/useStore';
-import { assignTask, getMembersOfProject, markTask } from '../../actions/memberAction';
-import { getTasks } from '../../actions/taskAction';
-import Member from '../../interfaces/Member';
-import Task from '../../interfaces/Task';
+import '~/styles/style.scss';
+import { Button, Snackbar, Alert, Dialog, Box, Skeleton } from '@mui/material';
+import useProjectStore from '~/store/useStore';
+import { assignTask, getMembersOfProject, markTask } from '~/actions/memberAction';
+import { getTasks } from '~/actions/taskAction';
+import Member from '~/interfaces/Member';
+import Task from '~/interfaces/Task';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import ServerResponse from '../../interfaces/ServerResponse';
+import ServerResponse from '~/interfaces/ServerResponse';
+import Title from '~/components/common/Title';
+import ErrorLoadingPage from '~/components/common/ErrorLoadingPage';
 interface AssignTaskParams {
     taskId: string;
     memberId: string;
@@ -40,10 +42,10 @@ const MemberInfo = (): JSX.Element => {
     const memberListQuery = useQuery<ServerResponse<Member[]>>(['memberList'], () => getMembersOfProject(currentProject));
     const taskQuery = useQuery<ServerResponse<Task[]>>(['taskList'], getTasks);
     if (memberListQuery.isLoading || taskQuery.isLoading) {
-        return <div>Loading...</div>;
+        return <Skeleton variant="rounded" className="fullPageSkeleton" />;
     }
     if (memberListQuery.isError || taskQuery.isError) {
-        return <div>Error</div>;
+        return <ErrorLoadingPage />;
     }
     const activityHistoryColumns = [
         { field: 'action', headerName: 'Action', width: 200 },
@@ -81,25 +83,25 @@ const MemberInfo = (): JSX.Element => {
         markTaskMutation.mutate({ taskIdArray: selectedRows, status: 'active' });
     }
     return (
-        <div style={{ flex: 4 }}>
+        <Box sx={{ flexGrow: 1 }}>
             {memberListQuery.data.data.map((member) => {
                 const activityHistory = member.activityHistory;
                 const tasks = member.taskAssigned;
                 const id = member._id;
                 return (
-                    <div key={member._id} className="box">
-                        <div className="header">
-                            Member's name: {member.name}
-                        </div>
-                        <div style={{ width: '100%' }}>
-                            <div className="tableName">Activity History</div>
+                    <Box key={member._id} className="box">
+                        <Title>
+                            Member: {member.name}
+                        </Title>
+                        <Box style={{ width: '100%' }}>
+                            <Title className="tableName">Activity History</Title>
                             <DataGrid
                                 getRowId={(row) => row._id}
                                 rows={activityHistory}
                                 columns={activityHistoryColumns}
                                 autoHeight />
-                            <div className="tableName">Tasks</div>
-                            <div className="buttonRow">
+                            <Title className="tableName">Tasks</Title>
+                            <Box className="buttonRow">
                                 <Button onClick={() => handleClick(id)}>Assign task</Button>
                                 <Dialog open={open} onClose={handleClose} fullWidth maxWidth="lg">
                                     <DataGrid
@@ -111,7 +113,7 @@ const MemberInfo = (): JSX.Element => {
                                 </Dialog>
                                 <Button onClick={markAsComplete}>Mark selected tasks as completed</Button>
                                 <Button onClick={markAsIncomplete}>Mark selected tasks as active</Button>
-                            </div>
+                            </Box>
                             {tasks ? <DataGrid
                                 getRowId={(row) => row._id}
                                 rows={tasks}
@@ -120,14 +122,14 @@ const MemberInfo = (): JSX.Element => {
                                 checkboxSelection
                                 onSelectionModelChange={getSelection}
                             /> : null}
-                        </div>
-                    </div>
+                        </Box>
+                    </Box>
                 )
             })}
             <Snackbar open={openSnackbar} autoHideDuration={2000} onClose={handleClose}>
                 <Alert severity="success">Task added successfully</Alert>
             </Snackbar>
-        </div>
+        </Box>
     )
 }
 export default MemberInfo;

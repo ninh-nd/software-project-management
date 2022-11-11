@@ -1,5 +1,5 @@
-import resourcesAPI from "../api";
-import { TaskUpdate as Task } from "../interfaces/Task";
+import resourcesAPI from "~/api";
+import { TaskUpdate as Task } from "~/interfaces/Task";
 export async function getTasks() {
     const response = await resourcesAPI.get(`/task`);
     return response.data;

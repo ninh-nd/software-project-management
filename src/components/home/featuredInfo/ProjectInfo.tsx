@@ -1,19 +1,20 @@
-import { Table, TableContainer, TableBody, TableRow, TableCell } from '@mui/material';
+import { Table, TableContainer, TableBody, TableRow, TableCell, Skeleton } from '@mui/material';
 import { Paper } from '@mui/material';
-import { getProjectInfo } from '../../../actions/projectAction';
-import useStore from '../../../store/useStore';
-import Project from '../../../interfaces/Project';
+import { getProjectInfo } from '~/actions/projectAction';
+import useStore from '~/store/useStore';
+import Project from '~/interfaces/Project';
 import { useQuery } from '@tanstack/react-query';
-import ServerResponse from '../../../interfaces/ServerResponse';
-import '../style.scss';
+import ServerResponse from '~/interfaces/ServerResponse';
+import '~/styles/style.scss';
+import ErrorLoadingComponent from '~/components/common/ErrorLoadingComponent';
 const ProjectInfo = (): JSX.Element => {
     const currentProject = useStore(state => state.currentProject);
     const projectInfoQuery = useQuery<ServerResponse<Project>>(['projectInfo'], () => getProjectInfo(currentProject));
     if (projectInfoQuery.isLoading) {
-        return <div>Loading...</div>;
+        return <Skeleton variant="rounded" className="paper" height={200} />;
     }
     if (projectInfoQuery.isError) {
-        return <div>Error</div>;
+        return <ErrorLoadingComponent />;
     }
     return (
         <Paper className="paper">
