@@ -4,10 +4,8 @@ import Title from './Title';
 export default function TotalPullRequests({ prs }: { prs: PullRequests }): JSX.Element {
     return (
         <Paper
+            className="paper"
             sx={{
-                p: 2,
-                display: 'flex',
-                flexDirection: 'column',
                 height: 120,
             }}
         >

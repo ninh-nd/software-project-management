@@ -1,10 +1,11 @@
 import { Table, TableContainer, TableBody, TableRow, TableCell } from '@mui/material';
 import { Paper } from '@mui/material';
-import { getProjectInfo } from '../../actions/projectAction';
-import useStore from '../../store/useStore';
-import Project from '../../interfaces/Project';
+import { getProjectInfo } from '../../../actions/projectAction';
+import useStore from '../../../store/useStore';
+import Project from '../../../interfaces/Project';
 import { useQuery } from '@tanstack/react-query';
-import ServerResponse from '../../interfaces/ServerResponse';
+import ServerResponse from '../../../interfaces/ServerResponse';
+import '../style.scss';
 const ProjectInfo = (): JSX.Element => {
     const currentProject = useStore(state => state.currentProject);
     const projectInfoQuery = useQuery<ServerResponse<Project>>(['projectInfo'], () => getProjectInfo(currentProject));
@@ -15,8 +16,8 @@ const ProjectInfo = (): JSX.Element => {
         return <div>Error</div>;
     }
     return (
-        <div style={{ flex: 4 }}>
-            <TableContainer component={Paper}>
+        <Paper className="paper">
+            <TableContainer>
                 <Table aria-label="simple table">
                     <TableBody>
                         <TableRow>
@@ -52,7 +53,7 @@ const ProjectInfo = (): JSX.Element => {
                     </TableBody>
                 </Table>
             </TableContainer>
-        </div>
+        </Paper>
     )
 }
 export default ProjectInfo;

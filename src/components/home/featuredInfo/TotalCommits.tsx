@@ -1,13 +1,12 @@
 import { Paper, Typography } from '@mui/material';
 import { Commits } from '../../../interfaces/GithubData';
 import Title from './Title';
+import '../style.scss';
 export default function TotalCommits({ commits }: { commits: Commits }): JSX.Element {
     return (
         <Paper
+            className="paper"
             sx={{
-                p: 2,
-                display: 'flex',
-                flexDirection: 'column',
                 height: 120,
             }}
         >

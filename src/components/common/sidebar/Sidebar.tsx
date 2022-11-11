@@ -22,15 +22,6 @@ const Sidebar = (): JSX.Element => {
             </ListItemButton>
           </ListItem>
 
-          <ListItem component={Link} to={`${currentProject}/projectInfo`}>
-            <ListItemButton>
-              <ListItemIcon>
-                <InfoOutlined />
-              </ListItemIcon>
-              <ListItemText primary="Project" />
-            </ListItemButton>
-          </ListItem>
-
           <ListItem component={Link} to={`${currentProject}/phases`}>
             <ListItemButton>
               <ListItemIcon>

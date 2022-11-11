@@ -2,20 +2,15 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsive
 import { Commits, PullRequests } from '../../../interfaces/GithubData';
 import Title from '../featuredInfo/Title';
 import { Paper } from '@mui/material';
+import '../style.scss';
 type ChartProps = {
   commits: Commits;
   prs: PullRequests;
 }
 const Chart = ({ commits, prs }: ChartProps): JSX.Element => {
   return (
-    <Paper
-      sx={{
-        p: 2,
-        display: 'flex',
-        flexDirection: 'column',
-      }}
-    >
-      <Title>Activity History</Title>
+    <Paper className="paper">
+      <Title>Activity history</Title>
       <ResponsiveContainer width="100%" aspect={3 / 1}>
         <BarChart
           width={500}
