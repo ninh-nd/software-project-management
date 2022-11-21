@@ -1,3 +1,4 @@
+/* Not type-safe component */
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -20,9 +21,7 @@ import {
     MuiBaseEvent,
     GridColumns
 } from '@mui/x-data-grid';
-import { randomId } from '@mui/x-data-grid-generator';
 import { createTask, deleteTask, getTasks, updateTask } from '../../actions/taskAction';
-import Task from '../../interfaces/Task';
 interface EditToolbarProps {
     setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
     setRowModesModel: (
@@ -33,7 +32,7 @@ function EditToolbar(props: EditToolbarProps) {
     const { setRows, setRowModesModel } = props;
 
     const addRecord = () => {
-        const id = randomId(); // Id doesn't relate to mongodb id
+        const id = React.useId();
         setRows((oldRows) => [...oldRows, { _id: id, name: '', description: '', isNew: true }]);
         setRowModesModel((oldModel) => ({
             ...oldModel,
