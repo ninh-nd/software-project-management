@@ -2,7 +2,6 @@ import { Table, TableContainer, TableBody, TableRow, TableCell, Button, Dialog, 
 import { Paper } from '@mui/material';
 import { DataGrid, GridRowParams } from '@mui/x-data-grid';
 import React from 'react'
-import useProjectStore from '~/store/useStore';
 import { getProjectInfo } from '~/actions/projectAction';
 import { getTasks } from '~/actions/taskAction';
 import Project from '~/interfaces/Project';
@@ -13,6 +12,7 @@ import ServerResponse from '~/interfaces/ServerResponse';
 import Title from '~/components/common/Title';
 import '~/styles/style.scss';
 import ErrorLoadingPage from '~/components/common/ErrorLoadingPage';
+import { useCurrentProject } from '~/hooks/hooks';
 interface AddTaskToPhaseParams {
     phaseId: string;
     taskId: string;
@@ -20,7 +20,7 @@ interface AddTaskToPhaseParams {
 
 const PhaseInfo = (): JSX.Element => {
     const queryClient = useQueryClient();
-    const currentProject = useProjectStore(state => state.currentProject);
+    const currentProject = useCurrentProject();
     const [open, setOpen] = React.useState(false); // Dialog state
     const [openSnackbar, setOpenSnackbar] = React.useState(false); // Snackbar state
     const [currentPhase, setCurrentPhase] = React.useState(''); // Currently selected phase

@@ -2,7 +2,6 @@ import React from 'react'
 import { DataGrid, GridRowParams, GridSelectionModel } from '@mui/x-data-grid';
 import '~/styles/style.scss';
 import { Button, Snackbar, Alert, Dialog, Box, Skeleton } from '@mui/material';
-import useProjectStore from '~/store/useStore';
 import { assignTask, getMembersOfProject, markTask } from '~/actions/memberAction';
 import { getTasks } from '~/actions/taskAction';
 import Member from '~/interfaces/Member';
@@ -11,6 +10,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import ServerResponse from '~/interfaces/ServerResponse';
 import Title from '~/components/common/Title';
 import ErrorLoadingPage from '~/components/common/ErrorLoadingPage';
+import { useCurrentProject } from '~/hooks/hooks';
 interface AssignTaskParams {
     taskId: string;
     memberId: string;
@@ -24,7 +24,7 @@ const MemberInfo = (): JSX.Element => {
     const [open, setOpen] = React.useState(false);
     const [currentMember, setCurrentMember] = React.useState('');
     const [openSnackbar, setOpenSnackbar] = React.useState(false);
-    const currentProject = useProjectStore(state => state.currentProject);
+    const currentProject = useCurrentProject();
     const [selectedRows, setSelectedRows] = React.useState<string[]>(['']);
     const assignTaskMutation = useMutation<unknown, Error, AssignTaskParams>({
         mutationFn: ({ taskId, memberId }) => assignTask(taskId, memberId),

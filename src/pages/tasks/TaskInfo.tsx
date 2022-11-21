@@ -32,7 +32,7 @@ function EditToolbar(props: EditToolbarProps) {
     const { setRows, setRowModesModel } = props;
 
     const addRecord = () => {
-        const id = React.useId();
+        const id = Date.now().toString(); // Generate a random id for frontend usage only
         setRows((oldRows) => [...oldRows, { _id: id, name: '', description: '', isNew: true }]);
         setRowModesModel((oldModel) => ({
             ...oldModel,

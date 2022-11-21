@@ -1,14 +1,14 @@
 import { Table, TableContainer, TableBody, TableRow, TableCell, Skeleton } from '@mui/material';
 import { Paper } from '@mui/material';
 import { getProjectInfo } from '~/actions/projectAction';
-import useStore from '~/store/useStore';
 import Project from '~/interfaces/Project';
 import { useQuery } from '@tanstack/react-query';
 import ServerResponse from '~/interfaces/ServerResponse';
 import '~/styles/style.scss';
 import ErrorLoadingComponent from '~/components/common/ErrorLoadingComponent';
+import { useCurrentProject } from '~/hooks/hooks';
 const ProjectInfo = (): JSX.Element => {
-    const currentProject = useStore(state => state.currentProject);
+    const currentProject = useCurrentProject();
     const projectInfoQuery = useQuery<ServerResponse<Project>>(['projectInfo'], () => getProjectInfo(currentProject));
     if (projectInfoQuery.isLoading) {
         return <Skeleton variant="rounded" className="paper" height={200} />;

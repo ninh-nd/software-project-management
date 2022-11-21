@@ -1,10 +1,10 @@
 import { Typography, Select, FormControl, MenuItem, SelectChangeEvent } from '@mui/material'
 import { useNavigate } from 'react-router-dom';
-import useProjectStore from '~/store/useStore';
+import { useCurrentProject, useProjectActions, useProjectList } from '~/hooks/hooks';
 const SelectProject = (): JSX.Element => {
-    const currentProject = useProjectStore(state => state.currentProject);
-    const projects = useProjectStore(state => state.projectList);
-    const setCurrentProject = useProjectStore(state => state.setCurrentProject);
+    const currentProject = useCurrentProject();
+    const projects = useProjectList();
+    const { setCurrentProject } = useProjectActions();
     const navigate = useNavigate();
     const handleChange = (event: SelectChangeEvent<string>) => {
         setCurrentProject(event.target.value);

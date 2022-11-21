@@ -8,11 +8,11 @@ import { redirect } from 'react-router-dom';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { login } from '~/actions/accountAction';
 import { getProjectOwn } from '~/actions/projectManagerAction';
-import useProjectStore from '~/store/useStore';
+import { useProjectActions } from '~/hooks/hooks';
 const theme = createTheme();
 const Login = (): JSX.Element => {
   const [errorText, setErrorText] = React.useState('');
-  const setCurrentProject = useProjectStore(state => state.setCurrentProject);
+  const { setCurrentProject } = useProjectActions();
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);

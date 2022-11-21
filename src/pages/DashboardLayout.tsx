@@ -6,13 +6,13 @@ import { Route, Routes, Navigate } from 'react-router-dom';
 import PhaseInfo from './phaseInfo/PhaseInfo';
 import TaskInfo from './tasks/TaskInfo';
 import MemberInfo from './member/MemberInfo';
-import useStore from '~/store/useStore';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Box } from '@mui/material';
+import { useCurrentProject, useProjectActions } from '~/hooks/hooks';
 const queryClient = new QueryClient();
 export default function DashboardLayout() {
-    const currentProject = useStore(state => state.currentProject);
-    const fetch = useStore(state => state.fetch);
+    const currentProject = useCurrentProject();
+    const { fetch } = useProjectActions();
     React.useEffect(() => {
         fetch();
     }, [currentProject]);

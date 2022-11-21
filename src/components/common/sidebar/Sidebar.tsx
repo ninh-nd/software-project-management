@@ -5,10 +5,10 @@ import { Drawer } from '@mui/material';
 import { List } from '@mui/material';
 import { ListItem, ListItemIcon, ListItemText, ListItemButton } from '@mui/material';
 import { HomeOutlined, InfoOutlined, AssessmentOutlined, TaskOutlined } from '@mui/icons-material';
-import useProjectStore from '~/store/useStore';
+import { useCurrentProject } from "~/hooks/hooks";
 const drawerWidth = 240;
 const Sidebar = (): JSX.Element => {
-  const currentProject = useProjectStore(state => state.currentProject);
+  const currentProject = useCurrentProject();
   return (
     <Box sx={{ display: 'flex' }}>
       <Drawer variant="permanent" sx={{ width: drawerWidth, flexShrink: 0, '& .MuiDrawer-paper': { width: drawerWidth, boxSizing: 'border-box', } }}>
