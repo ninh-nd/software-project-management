@@ -12,7 +12,7 @@ import ServerResponse from '~/interfaces/ServerResponse';
 import Title from '~/components/common/Title';
 import '~/styles/style.scss';
 import ErrorLoadingPage from '~/components/common/ErrorLoadingPage';
-import { useCurrentProject } from '~/hooks/hooks';
+import { useParams } from 'react-router-dom';
 interface AddTaskToPhaseParams {
     phaseId: string;
     taskId: string;
@@ -20,7 +20,8 @@ interface AddTaskToPhaseParams {
 
 const PhaseInfo = (): JSX.Element => {
     const queryClient = useQueryClient();
-    const currentProject = useCurrentProject();
+    const { projectName: currentProject } = useParams();
+    if (currentProject === undefined) return <></>;
     const [open, setOpen] = React.useState(false); // Dialog state
     const [openSnackbar, setOpenSnackbar] = React.useState(false); // Snackbar state
     const [currentPhase, setCurrentPhase] = React.useState(''); // Currently selected phase

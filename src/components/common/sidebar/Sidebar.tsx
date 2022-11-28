@@ -13,7 +13,7 @@ const Sidebar = (): JSX.Element => {
     <Box sx={{ display: 'flex' }}>
       <Drawer variant="permanent" sx={{ width: drawerWidth, flexShrink: 0, '& .MuiDrawer-paper': { width: drawerWidth, boxSizing: 'border-box', } }}>
         <List>
-          <ListItem component={Link} to={`${currentProject}`}>
+          <ListItem component={Link} to={`/${currentProject}`}>
             <ListItemButton>
               <ListItemIcon>
                 <HomeOutlined />
@@ -22,7 +22,7 @@ const Sidebar = (): JSX.Element => {
             </ListItemButton>
           </ListItem>
 
-          <ListItem component={Link} to={`${currentProject}/phases`}>
+          <ListItem component={Link} to={`/${currentProject}/phases`}>
             <ListItemButton>
               <ListItemIcon>
                 <AssessmentOutlined />
@@ -31,7 +31,7 @@ const Sidebar = (): JSX.Element => {
             </ListItemButton>
           </ListItem>
 
-          <ListItem component={Link} to={`${currentProject}/tasks`}>
+          <ListItem component={Link} to={`/${currentProject}/tasks`}>
             <ListItemButton>
               <ListItemIcon>
                 <TaskOutlined />
@@ -40,7 +40,7 @@ const Sidebar = (): JSX.Element => {
             </ListItemButton>
           </ListItem>
 
-          <ListItem component={Link} to={`${currentProject}/memberInfo`}>
+          <ListItem component={Link} to={`/${currentProject}/memberInfo`}>
             <ListItemButton>
               <ListItemIcon>
                 <InfoOutlined />

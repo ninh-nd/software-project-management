@@ -8,9 +8,10 @@ import TotalCommits from '~/components/home/featuredInfo/TotalCommits';
 import TotalPullRequests from '~/components/home/featuredInfo/TotalPull';
 import ProjectInfo from '~/components/home/featuredInfo/ProjectInfo';
 import "~/styles/style.scss";
-import { useCurrentProject } from '~/hooks/hooks';
+import { useParams } from 'react-router-dom';
 const Home = (): JSX.Element => {
-  const currentProject = useCurrentProject();
+  const { projectName: currentProject } = useParams();
+  if (currentProject === undefined) return <></>;
   const commits = useQuery<ServerResponse<Commits>>(['commits'], () => getCommits(currentProject));
   const pullRequests = useQuery<ServerResponse<PullRequests>>(['pullRequests'], () => getPullRequests(currentProject));
   if (commits.isLoading || pullRequests.isLoading) {

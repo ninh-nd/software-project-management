@@ -10,7 +10,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import ServerResponse from '~/interfaces/ServerResponse';
 import Title from '~/components/common/Title';
 import ErrorLoadingPage from '~/components/common/ErrorLoadingPage';
-import { useCurrentProject } from '~/hooks/hooks';
+import { useParams } from 'react-router-dom';
 interface AssignTaskParams {
     taskId: string;
     memberId: string;
@@ -24,7 +24,8 @@ const MemberInfo = (): JSX.Element => {
     const [open, setOpen] = React.useState(false);
     const [currentMember, setCurrentMember] = React.useState('');
     const [openSnackbar, setOpenSnackbar] = React.useState(false);
-    const currentProject = useCurrentProject();
+    const { projectName: currentProject } = useParams();
+    if (currentProject === undefined) return <></>;
     const [selectedRows, setSelectedRows] = React.useState<string[]>(['']);
     const assignTaskMutation = useMutation<unknown, Error, AssignTaskParams>({
         mutationFn: ({ taskId, memberId }) => assignTask(taskId, memberId),
