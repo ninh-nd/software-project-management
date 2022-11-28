@@ -9,6 +9,7 @@ import TotalPullRequests from '~/components/home/featuredInfo/TotalPull';
 import ProjectInfo from '~/components/home/featuredInfo/ProjectInfo';
 import "~/styles/style.scss";
 import { useParams } from 'react-router-dom';
+import ErrorLoadingComponent from '~/components/common/ErrorLoadingComponent';
 const Home = (): JSX.Element => {
   const { currentProject } = useParams();
   if (currentProject === undefined) return <></>;
@@ -18,7 +19,7 @@ const Home = (): JSX.Element => {
     return <Skeleton variant="rounded" className="fullPageSkeleton" />;
   }
   if (commits.isError || pullRequests.isError) {
-    return <div>Error</div>;
+    return <ErrorLoadingComponent />
   }
   return (
     <Box sx={{ flexGrow: 1, height: '100vh' }}>
