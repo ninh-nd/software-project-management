@@ -1,7 +1,11 @@
 import resourcesAPI from "~/api";
 import { TaskUpdate as Task } from "~/interfaces/Task";
-export async function getTasks() {
-    const response = await resourcesAPI.get(`/task`);
+export async function getTasks(projectName: string) {
+    const response = await resourcesAPI.get(`/task`, {
+        params: {
+            projectName
+        }
+    });
     return response.data;
 }
 export async function deleteTask(taskId: string) {

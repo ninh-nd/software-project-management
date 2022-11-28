@@ -20,13 +20,13 @@ interface AddTaskToPhaseParams {
 
 const PhaseInfo = (): JSX.Element => {
     const queryClient = useQueryClient();
-    const { projectName: currentProject } = useParams();
+    const { currentProject } = useParams();
     if (currentProject === undefined) return <></>;
     const [open, setOpen] = React.useState(false); // Dialog state
     const [openSnackbar, setOpenSnackbar] = React.useState(false); // Snackbar state
     const [currentPhase, setCurrentPhase] = React.useState(''); // Currently selected phase
     const phaseQuery = useQuery<ServerResponse<Project>>(['phaseList'], () => getProjectInfo(currentProject));
-    const taskQuery = useQuery<ServerResponse<Task[]>>(['taskList'], () => getTasks());
+    const taskQuery = useQuery<ServerResponse<Task[]>>(['taskList'], () => getTasks(currentProject));
     const mutation = useMutation<unknown, Error, AddTaskToPhaseParams>({
         mutationFn: ({ phaseId, taskId }) => addTaskToPhase(phaseId, taskId),
         onSuccess: () => {

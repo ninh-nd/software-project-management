@@ -10,7 +10,7 @@ import ProjectInfo from '~/components/home/featuredInfo/ProjectInfo';
 import "~/styles/style.scss";
 import { useParams } from 'react-router-dom';
 const Home = (): JSX.Element => {
-  const { projectName: currentProject } = useParams();
+  const { currentProject } = useParams();
   if (currentProject === undefined) return <></>;
   const commits = useQuery<ServerResponse<Commits>>(['commits'], () => getCommits(currentProject));
   const pullRequests = useQuery<ServerResponse<PullRequests>>(['pullRequests'], () => getPullRequests(currentProject));

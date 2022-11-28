@@ -6,9 +6,10 @@ import { useQuery } from '@tanstack/react-query';
 import ServerResponse from '~/interfaces/ServerResponse';
 import '~/styles/style.scss';
 import ErrorLoadingComponent from '~/components/common/ErrorLoadingComponent';
-import { useCurrentProject } from '~/hooks/hooks';
+import { useParams } from 'react-router-dom';
 const ProjectInfo = (): JSX.Element => {
-    const currentProject = useCurrentProject();
+    const { currentProject } = useParams();
+    if (currentProject === undefined) return <></>;
     const projectInfoQuery = useQuery<ServerResponse<Project>>(['projectInfo'], () => getProjectInfo(currentProject));
     if (projectInfoQuery.isLoading) {
         return <Skeleton variant="rounded" className="paper" height={200} />;

@@ -22,6 +22,7 @@ import {
     GridColumns
 } from '@mui/x-data-grid';
 import { createTask, deleteTask, getTasks, updateTask } from '../../actions/taskAction';
+import { useParams } from 'react-router-dom';
 interface EditToolbarProps {
     setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
     setRowModesModel: (
@@ -52,9 +53,13 @@ function EditToolbar(props: EditToolbarProps) {
 const TaskInfo = (): JSX.Element => {
     const [rows, setRows] = React.useState<GridRowsProp>([]);
     const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>({});
+    const { currentProject } = useParams();
+    if (currentProject === undefined) {
+        return <></>
+    }
     React.useEffect(() => {
         const fetchData = async () => {
-            const data = await getTasks();
+            const data = await getTasks(currentProject);
             const tasks = data.data;
             setRows(tasks);
         }
@@ -102,12 +107,12 @@ const TaskInfo = (): JSX.Element => {
         /* Add a new row */
         if (newRow.isNew) {
             // Update row to the server
-            const task = { name: newRow.name, description: newRow.description, status: newRow.status, createdBy: username };
+            const task = { name: newRow.name, description: newRow.description, status: newRow.status, createdBy: username, projectName: currentProject };
             await createTask(task);
         }
         else {
             /* Update an existing row */
-            const task = { name: newRow.name, description: newRow.description, status: newRow.status, updatedBy: username };
+            const task = { name: newRow.name, description: newRow.description, status: newRow.status, updatedBy: username, projectName: currentProject };
             await updateTask(task, newRow._id);
         }
         setRows(rows.map((row) => (row._id === newRow._id ? updatedRow : row)));

@@ -9,7 +9,7 @@ import TaskInfo from "./tasks/TaskInfo";
 export default function App() {
     return (
         <Routes>
-            <Route element={<DashboardLayout />} path="/:projectName">
+            <Route element={<DashboardLayout />} path="/:currentProject">
                 <Route path='' element={<Home />} />
                 <Route path='phases' element={<PhaseInfo />} />
                 <Route path='tasks' element={<TaskInfo />} />

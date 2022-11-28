@@ -1,13 +1,16 @@
 import React from 'react';
 import Sidebar from '~/components/common/sidebar/Sidebar';
 import Topbar from '~/components/common/topbar/Topbar';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useParams } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Box } from '@mui/material';
-import { useCurrentProject, useProjectActions } from '~/hooks/hooks';
+import { useProjectActions } from '~/hooks/hooks';
 const queryClient = new QueryClient();
 export default function DashboardLayout() {
-    const currentProject = useCurrentProject();
+    const { currentProject } = useParams();
+    if (currentProject === undefined) {
+        return <></>;
+    }
     const { fetch } = useProjectActions();
     React.useEffect(() => {
         fetch();

@@ -1,14 +1,16 @@
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import SelectProject from './SelectProject';
 import { Box, Divider } from '@mui/material';
 import { Drawer } from '@mui/material';
 import { List } from '@mui/material';
 import { ListItem, ListItemIcon, ListItemText, ListItemButton } from '@mui/material';
 import { HomeOutlined, InfoOutlined, AssessmentOutlined, TaskOutlined } from '@mui/icons-material';
-import { useCurrentProject } from "~/hooks/hooks";
 const drawerWidth = 240;
 const Sidebar = (): JSX.Element => {
-  const currentProject = useCurrentProject();
+  const { currentProject } = useParams();
+  if (currentProject === undefined) {
+    return <></>;
+  }
   return (
     <Box sx={{ display: 'flex' }}>
       <Drawer variant="permanent" sx={{ width: drawerWidth, flexShrink: 0, '& .MuiDrawer-paper': { width: drawerWidth, boxSizing: 'border-box', } }}>

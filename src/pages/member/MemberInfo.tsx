@@ -24,7 +24,7 @@ const MemberInfo = (): JSX.Element => {
     const [open, setOpen] = React.useState(false);
     const [currentMember, setCurrentMember] = React.useState('');
     const [openSnackbar, setOpenSnackbar] = React.useState(false);
-    const { projectName: currentProject } = useParams();
+    const { currentProject } = useParams();
     if (currentProject === undefined) return <></>;
     const [selectedRows, setSelectedRows] = React.useState<string[]>(['']);
     const assignTaskMutation = useMutation<unknown, Error, AssignTaskParams>({
@@ -41,7 +41,7 @@ const MemberInfo = (): JSX.Element => {
         }
     })
     const memberListQuery = useQuery<ServerResponse<Member[]>>(['memberList'], () => getMembersOfProject(currentProject));
-    const taskQuery = useQuery<ServerResponse<Task[]>>(['taskList'], getTasks);
+    const taskQuery = useQuery<ServerResponse<Task[]>>(['taskList'], () => getTasks(currentProject));
     if (memberListQuery.isLoading || taskQuery.isLoading) {
         return <Skeleton variant="rounded" className="fullPageSkeleton" />;
     }
