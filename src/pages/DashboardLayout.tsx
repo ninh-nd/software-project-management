@@ -25,7 +25,7 @@ export default function DashboardLayout() {
                     <Route path="/" element={<Navigate to={`/${currentProject}`} replace />} />
                     <Route path='/:projectName' element={<Home />} />
                     <Route path=':projectName/phases' element={<PhaseInfo />} />
-                    <Route path='tasks' element={<TaskInfo />} />
+                    <Route path=':projectName/tasks' element={<TaskInfo />} />
                     <Route path=':projectName/memberInfo' element={<MemberInfo />} />
                 </Routes>
             </Box>

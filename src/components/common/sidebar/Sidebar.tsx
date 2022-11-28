@@ -31,7 +31,7 @@ const Sidebar = (): JSX.Element => {
             </ListItemButton>
           </ListItem>
 
-          <ListItem component={Link} to="tasks">
+          <ListItem component={Link} to={`${currentProject}/tasks`}>
             <ListItemButton>
               <ListItemIcon>
                 <TaskOutlined />
