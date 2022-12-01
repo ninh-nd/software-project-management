@@ -8,11 +8,9 @@ import { redirect } from 'react-router-dom';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { login } from '~/actions/accountAction';
 import { getProjectOwn } from '~/actions/projectManagerAction';
-import { useProjectActions } from '~/hooks/hooks';
 const theme = createTheme();
 const Login = (): JSX.Element => {
   const [errorText, setErrorText] = React.useState('');
-  const { setCurrentProject } = useProjectActions();
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -31,7 +29,6 @@ const Login = (): JSX.Element => {
       const getProjectList = await getProjectOwn(id);
       const currentProject = getProjectList.data.projects[0].name;
       setErrorText('');
-      setCurrentProject(currentProject);
       return redirect(`/${currentProject}`);
     }
   };
