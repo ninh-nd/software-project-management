@@ -4,10 +4,11 @@ import {
   Container, createTheme, CssBaseline, ThemeProvider,
   Avatar, Typography, TextField, FormControlLabel,
 } from '@mui/material';
-import { redirect, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { getAccountRole, login } from '~/actions/accountAction';
 import { getProjectOwn } from '~/actions/projectManagerAction';
+import Cookies from 'universal-cookie';
 const theme = createTheme();
 const Login = (): JSX.Element => {
   const navigate = useNavigate();
@@ -29,6 +30,9 @@ const Login = (): JSX.Element => {
     if (response?.status === 200) {
       setError(false);
       setErrorText('');
+      const sid = response.data.data.sid;
+      const cookies = new Cookies();
+      cookies.set('sid', sid);
       const roleData = await getAccountRole(username);
       if (roleData.data.role === 'manager') {
         const { data: { projects } } = await getProjectOwn(roleData.data.id);
