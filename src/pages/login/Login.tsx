@@ -4,32 +4,37 @@ import {
   Container, createTheme, CssBaseline, ThemeProvider,
   Avatar, Typography, TextField, FormControlLabel,
 } from '@mui/material';
-import { redirect } from 'react-router-dom';
+import { redirect, useNavigate } from 'react-router-dom';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import { login } from '~/actions/accountAction';
+import { getAccountRole, login } from '~/actions/accountAction';
 import { getProjectOwn } from '~/actions/projectManagerAction';
 const theme = createTheme();
 const Login = (): JSX.Element => {
+  const navigate = useNavigate();
   const [errorText, setErrorText] = React.useState('');
+  const [error, setError] = React.useState(false);
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
+    const formData = new FormData(event.currentTarget);
     // Send data to backend for validation
-    const username = data.get('username') as string;
-    const password = data.get('password') as string;
-    const response = await login(username, password);
-    if (response.data.status === 'error') {
+    const username = formData.get('username') as string;
+    const password = formData.get('password') as string;
+    let response;
+    try {
+      response = await login(username, password);
+    } catch (error) {
       setErrorText('Invalid username or password');
-    } else {
-      const { role, username, id, accessToken } = response.data;
-      localStorage.setItem('accessToken', accessToken);
-      localStorage.setItem('id', id);
-      localStorage.setItem('username', username);
-      localStorage.setItem('role', role);
-      const getProjectList = await getProjectOwn(id);
-      const currentProject = getProjectList.data.projects[0].name;
+      setError(true);
+    }
+    if (response?.status === 200) {
+      setError(false);
       setErrorText('');
-      return redirect(`/${currentProject}`);
+      const roleData = await getAccountRole(username);
+      if (roleData.data.role === 'manager') {
+        const { data: { projects } } = await getProjectOwn(roleData.data.id);
+        const currentProject = projects[0].name;
+        navigate(`/${currentProject}`);
+      }
     }
   };
 
@@ -52,7 +57,7 @@ const Login = (): JSX.Element => {
             Sign in
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-            <TextField margin="normal" required fullWidth id="username" label="Username" name="username" autoFocus helperText={errorText} />
+            <TextField margin="normal" required fullWidth id="username" label="Username" name="username" autoFocus helperText={errorText} error />
             <TextField margin="normal" type="password" required fullWidth id="password" label="Password" name="password" autoFocus />
             <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
             <Button
