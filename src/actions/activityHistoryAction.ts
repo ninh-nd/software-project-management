@@ -1,9 +1,11 @@
 import resourcesAPI from "~/api";
-export async function getCommits(projectName: string) {
+import { Commits, PullRequests } from "~/interfaces/GithubData";
+import ServerResponse from "~/interfaces/ServerResponse";
+export async function getCommits(projectName: string): Promise<ServerResponse<Commits[]>> {
     const response = await resourcesAPI.get(`/activity/github/${projectName}/commit`);
     return response.data;
 }
-export async function getPullRequests(projectName: string) {
+export async function getPullRequests(projectName: string): Promise<ServerResponse<PullRequests[]>> {
     const response = await resourcesAPI.get(`/activity/github/${projectName}/pullrequest`);
     return response.data;
 }
