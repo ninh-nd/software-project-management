@@ -5,7 +5,7 @@ import { Button, Snackbar, Alert, Dialog, Box, Skeleton } from '@mui/material';
 import { assignTask, getMembersOfProject, markTask } from '~/actions/memberAction';
 import { getTasks } from '~/actions/taskAction';
 import Member from '~/interfaces/Member';
-import Task from '~/interfaces/Task';
+import { Task } from '~/interfaces/Task';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import ServerResponse from '~/interfaces/ServerResponse';
 import Title from '~/components/common/Title';

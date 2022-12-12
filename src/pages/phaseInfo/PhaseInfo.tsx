@@ -5,7 +5,7 @@ import React from 'react'
 import { getProjectInfo } from '~/actions/projectAction';
 import { getTasks } from '~/actions/taskAction';
 import Project from '~/interfaces/Project';
-import Task from '~/interfaces/Task';
+import { Task } from '~/interfaces/Task';
 import { addTaskToPhase } from '~/actions/phaseAction';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import ServerResponse from '~/interfaces/ServerResponse';

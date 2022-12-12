@@ -1,4 +1,4 @@
-import Task from "./Task";
+import { Task } from "./Task";
 
 export default interface Phase {
     _id: string;

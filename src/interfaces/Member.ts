@@ -1,4 +1,4 @@
-import Task from "./Task";
+import { Task } from "./Task";
 import Activity from "./Activity";
 export default interface Member {
     _id: string;
