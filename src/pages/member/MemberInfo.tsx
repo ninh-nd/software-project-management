@@ -9,7 +9,6 @@ import { Task } from '~/interfaces/Task';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import ServerResponse from '~/interfaces/ServerResponse';
 import Title from '~/components/common/Title';
-import ErrorLoadingPage from '~/components/common/ErrorLoadingPage';
 import { useParams } from 'react-router-dom';
 interface AssignTaskParams {
     taskId: string;
@@ -45,9 +44,8 @@ const MemberInfo = (): JSX.Element => {
     if (memberListQuery.isLoading || taskQuery.isLoading) {
         return <Skeleton variant="rounded" className="fullPageSkeleton" />;
     }
-    if (memberListQuery.isError || taskQuery.isError) {
-        return <ErrorLoadingPage />;
-    }
+    const memberList = memberListQuery.data === undefined ? [] : memberListQuery.data.data;
+    const taskList = taskQuery.data === undefined ? [] : taskQuery.data.data;
     const activityHistoryColumns = [
         { field: 'action', headerName: 'Action', width: 200 },
         { field: 'content', headerName: 'Content', minWidth: 400, flex: 1 },
@@ -85,7 +83,7 @@ const MemberInfo = (): JSX.Element => {
     }
     return (
         <Box sx={{ flexGrow: 1 }}>
-            {memberListQuery.data.data.map((member) => {
+            {memberList.map((member) => {
                 const activityHistory = member.activityHistory;
                 const tasks = member.taskAssigned;
                 const id = member._id;
@@ -106,7 +104,7 @@ const MemberInfo = (): JSX.Element => {
                                 <Button onClick={() => handleClick(id)}>Assign task</Button>
                                 <Dialog open={open} onClose={handleClose} fullWidth maxWidth="lg">
                                     <DataGrid
-                                        rows={taskQuery.data.data}
+                                        rows={taskList}
                                         getRowId={(row) => row._id}
                                         columns={taskColumns}
                                         autoHeight

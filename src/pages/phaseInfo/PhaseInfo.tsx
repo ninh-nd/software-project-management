@@ -11,7 +11,6 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import ServerResponse from '~/interfaces/ServerResponse';
 import Title from '~/components/common/Title';
 import '~/styles/style.scss';
-import ErrorLoadingPage from '~/components/common/ErrorLoadingPage';
 import { useParams } from 'react-router-dom';
 interface AddTaskToPhaseParams {
     phaseId: string;
@@ -37,11 +36,8 @@ const PhaseInfo = (): JSX.Element => {
     if (phaseQuery.isLoading || taskQuery.isLoading) {
         return <Skeleton variant="rounded" className="fullPageSkeleton" />;
     }
-    if (phaseQuery.isError || taskQuery.isError) {
-        return <ErrorLoadingPage />;
-    }
-    const phaseList = phaseQuery.data.data.phaseList;
-    const taskList = taskQuery.data.data;
+    const phaseList = phaseQuery.data === undefined ? [] : phaseQuery.data.data.phaseList;
+    const taskList = taskQuery.data === undefined ? [] : taskQuery.data.data;
     const columns = [
         { field: 'name', headerName: 'Name', width: 200 },
         { field: 'status', headerName: 'Status' },
