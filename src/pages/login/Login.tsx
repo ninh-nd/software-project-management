@@ -86,7 +86,6 @@ const Login = (): JSX.Element => {
             </Grid>
           </Box>
         </Box>
-        <div />
       </Container>
     </ThemeProvider>
   );
