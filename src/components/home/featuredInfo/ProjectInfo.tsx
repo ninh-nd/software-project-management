@@ -1,4 +1,4 @@
-import { Table, TableContainer, TableBody, TableRow, TableCell, Skeleton } from '@mui/material';
+import { Table, TableContainer, TableBody, TableRow, TableCell, Skeleton, Link } from '@mui/material';
 import { Paper } from '@mui/material';
 import { getProjectInfo } from '~/actions/projectAction';
 import Project from '~/interfaces/Project';
@@ -29,7 +29,7 @@ const ProjectInfo = (): JSX.Element => {
                             <TableCell component="th" scope="row">
                                 URL
                             </TableCell>
-                            <TableCell align="right"><a href="{projectInfo.url}">{projectInfo.url}</a></TableCell>
+                            <TableCell align="right"><Link href={projectInfo.url} target="_blank" rel="noopener">{projectInfo.url}</Link></TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell component="th" scope="row">

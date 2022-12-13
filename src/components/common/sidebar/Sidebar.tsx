@@ -1,9 +1,9 @@
-import { Link, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import SelectProject from './SelectProject';
 import { Box, Divider } from '@mui/material';
 import { Drawer } from '@mui/material';
 import { List } from '@mui/material';
-import { ListItem, ListItemIcon, ListItemText, ListItemButton } from '@mui/material';
+import { ListItem, ListItemIcon, ListItemText, ListItemButton, Link } from '@mui/material';
 import { HomeOutlined, InfoOutlined, AssessmentOutlined, TaskOutlined } from '@mui/icons-material';
 const drawerWidth = 240;
 const Sidebar = (): JSX.Element => {
@@ -11,12 +11,13 @@ const Sidebar = (): JSX.Element => {
   if (currentProject === undefined) {
     return <></>;
   }
+  const navigate = useNavigate();
   return (
     <Box sx={{ display: 'flex' }}>
       <Drawer variant="permanent" sx={{ width: drawerWidth, flexShrink: 0, '& .MuiDrawer-paper': { width: drawerWidth, boxSizing: 'border-box', } }}>
         <List>
-          <ListItem component={Link} to={`/${currentProject}`}>
-            <ListItemButton>
+          <ListItem component={Link}>
+            <ListItemButton onClick={() => navigate(`/${currentProject}/`)}>
               <ListItemIcon>
                 <HomeOutlined />
               </ListItemIcon>
@@ -24,8 +25,8 @@ const Sidebar = (): JSX.Element => {
             </ListItemButton>
           </ListItem>
 
-          <ListItem component={Link} to={`/${currentProject}/phases`}>
-            <ListItemButton>
+          <ListItem component={Link}>
+            <ListItemButton onClick={() => navigate(`/${currentProject}/phases`)}>
               <ListItemIcon>
                 <AssessmentOutlined />
               </ListItemIcon>
@@ -33,8 +34,8 @@ const Sidebar = (): JSX.Element => {
             </ListItemButton>
           </ListItem>
 
-          <ListItem component={Link} to={`/${currentProject}/tasks`}>
-            <ListItemButton>
+          <ListItem component={Link}>
+            <ListItemButton onClick={() => navigate(`/${currentProject}/tasks`)}>
               <ListItemIcon>
                 <TaskOutlined />
               </ListItemIcon>
@@ -42,8 +43,8 @@ const Sidebar = (): JSX.Element => {
             </ListItemButton>
           </ListItem>
 
-          <ListItem component={Link} to={`/${currentProject}/memberInfo`}>
-            <ListItemButton>
+          <ListItem component={Link}>
+            <ListItemButton onClick={() => navigate(`/${currentProject}/memberInfo`)}>
               <ListItemIcon>
                 <InfoOutlined />
               </ListItemIcon>

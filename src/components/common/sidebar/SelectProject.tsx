@@ -1,6 +1,6 @@
 import { Typography, Select, FormControl, MenuItem, SelectChangeEvent } from '@mui/material'
 import { useNavigate, useParams } from 'react-router-dom';
-import { useProjectActions, useProjectList } from '~/hooks/hooks';
+import { useProjectActions, useProjectList } from '~/hooks/projects';
 const SelectProject = (): JSX.Element => {
     const { currentProject } = useParams();
     if (currentProject === undefined) {
