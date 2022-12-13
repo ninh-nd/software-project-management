@@ -5,7 +5,13 @@ import { Outlet, useParams } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Box } from '@mui/material';
 import { useProjectActions } from '~/hooks/hooks';
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            retry: false
+        }
+    }
+});
 export default function DashboardLayout() {
     const { currentProject } = useParams();
     if (currentProject === undefined) {
