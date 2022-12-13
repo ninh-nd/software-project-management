@@ -1,5 +1,5 @@
 import { Logout } from '@mui/icons-material';
-import { IconButton, Tooltip } from '@mui/material';
+import { IconButton, Tooltip, Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'universal-cookie';
 import { logout } from '~/actions/accountAction';
@@ -13,20 +13,20 @@ const Topbar = (): JSX.Element => {
     navigate('/login', { replace: true });
   }
   return (
-    <div className="topbar">
-      <div className="topbarWrapper">
-        <div className="topLeft">
+    <Box className="topbar">
+      <Box className="topbarWrapper">
+        <Box className="topLeft">
           <span className="logo">Dashboard</span>
-        </div>
-        <div className="topRight">
+        </Box>
+        <Box className="topRight">
           <Tooltip title="Logout">
             <IconButton onClick={handleLogOut}>
               <Logout />
             </IconButton>
           </Tooltip>
-        </div>
-      </div>
-    </div>
+        </Box>
+      </Box>
+    </Box>
   );
 }
 export default Topbar;
