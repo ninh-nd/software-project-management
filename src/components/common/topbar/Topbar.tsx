@@ -1,5 +1,17 @@
-import './topbar.css';
+import { Logout } from '@mui/icons-material';
+import { IconButton, Tooltip } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import Cookies from 'universal-cookie';
+import { logout } from '~/actions/accountAction';
+import '~/styles/style.scss';
 const Topbar = (): JSX.Element => {
+  const navigate = useNavigate();
+  const handleLogOut = async () => {
+    logout();
+    const cookies = new Cookies();
+    cookies.remove('sid', { path: '/' });
+    navigate('/login', { replace: true });
+  }
   return (
     <div className="topbar">
       <div className="topbarWrapper">
@@ -7,7 +19,11 @@ const Topbar = (): JSX.Element => {
           <span className="logo">Dashboard</span>
         </div>
         <div className="topRight">
-          <img src="https://images.pexels.com/photos/1526814/pexels-photo-1526814.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500" alt="" className="topAvatar" />
+          <Tooltip title="Logout">
+            <IconButton onClick={handleLogOut}>
+              <Logout />
+            </IconButton>
+          </Tooltip>
         </div>
       </div>
     </div>
