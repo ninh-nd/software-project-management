@@ -1,8 +1,7 @@
-import { Logout, Brightness4, Brightness7 } from '@mui/icons-material';
+import { Logout, Brightness4, Brightness7, AccountCircle } from '@mui/icons-material';
 import { IconButton, Tooltip, Box, AppBar } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import Cookies from 'universal-cookie';
-import { logout } from '~/actions/accountAction';
+import { getAccount, logout } from '~/actions/accountAction';
 import { useThemeActions, useThemeHook } from '~/hooks/theme';
 import '~/styles/style.scss';
 const Topbar = (): JSX.Element => {
@@ -11,8 +10,6 @@ const Topbar = (): JSX.Element => {
   const navigate = useNavigate();
   const handleLogOut = async () => {
     logout();
-    const cookies = new Cookies();
-    cookies.remove('sid', { path: '/' });
     navigate('/login', { replace: true });
   }
   const changeTheme = () => {
@@ -22,6 +19,12 @@ const Topbar = (): JSX.Element => {
       setTheme('light');
     }
   }
+  const redirectToAccountPage = async () => {
+    const account = await getAccount();
+    const { data: { username } } = account;
+    console.log(username)
+    navigate(`/user/${username}`);
+  }
   return (
     <AppBar className="topbar">
       <Box className="topbarWrapper">
@@ -29,6 +32,11 @@ const Topbar = (): JSX.Element => {
           <span className="logo">Dashboard</span>
         </Box>
         <Box className="topRight">
+          <Tooltip title="Account">
+            <IconButton onClick={redirectToAccountPage}>
+              <AccountCircle />
+            </IconButton>
+          </Tooltip>
           <Tooltip title={theme.palette.mode === 'light' ? 'Dark Mode' : 'Light Mode'}>
             <IconButton onClick={changeTheme}>
               {theme.palette.mode === 'light' ? <Brightness4 /> : <Brightness7 />}

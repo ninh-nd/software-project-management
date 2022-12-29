@@ -1,13 +1,15 @@
 import api from '~/api';
+import { IAccount } from '~/interfaces/Account';
+import ServerResponse from '~/interfaces/ServerResponse';
 export async function login(username: string, password: string) {
     const response = await api.post('/account/login', { username, password });
     return response;
 }
 export async function logout() {
-    const response = await api.post('/account/logout');
+    const response = await api.get('/account/logout');
     return response;
 }
-export async function getAccountRole(username: string) {
-    const response = await api.get(`/account/role?username=${username}`);
+export async function getAccount(): Promise<ServerResponse<IAccount>> {
+    const response = await api.get('/account/');
     return response.data;
 }

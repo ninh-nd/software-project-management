@@ -1,12 +1,16 @@
 import { Typography, Select, FormControl, MenuItem, SelectChangeEvent } from '@mui/material'
+import { useQuery } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useProjectActions, useProjectList } from '~/hooks/projects';
+import { getProjectOwn } from '~/actions/projectManagerAction';
+import Project from '~/interfaces/Project';
+import ServerResponse from '~/interfaces/ServerResponse';
 const SelectProject = (): JSX.Element => {
     const { currentProject } = useParams();
     if (currentProject === undefined) {
         return <></>;
     }
-    const projects = useProjectList();
+    const projectOwnQuery = useQuery<ServerResponse<Project[]>>(['projectOwn'], () => getProjectOwn())
+    const projects = projectOwnQuery.data === undefined ? [] : projectOwnQuery.data.data
     const navigate = useNavigate();
     const handleChange = (event: SelectChangeEvent<string>) => {
         navigate(`/${event.target.value}`);
