@@ -1,5 +1,4 @@
-import { Table, TableContainer, TableBody, TableRow, TableCell, Button, Dialog, Snackbar, Alert, Box, Skeleton } from '@mui/material';
-import { Paper } from '@mui/material';
+import { Button, Dialog, Snackbar, Alert, Box, Skeleton, Card, CardContent, Typography, CardActions } from '@mui/material';
 import { DataGrid, GridRowParams } from '@mui/x-data-grid';
 import React from 'react'
 import { getProjectInfo } from '~/actions/projectAction';
@@ -9,7 +8,6 @@ import { Task } from '~/interfaces/Task';
 import { addTaskToPhase } from '~/actions/phaseAction';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import ServerResponse from '~/interfaces/ServerResponse';
-import Title from '~/components/common/Title';
 import '~/styles/style.scss';
 import { useParams } from 'react-router-dom';
 interface AddTaskToPhaseParams {
@@ -60,38 +58,32 @@ const PhaseInfo = (): JSX.Element => {
     }
     function phaseInfoRender() {
         return phaseList.map(({ _id, name, tasks }) => (
-            <TableRow key={_id}>
-                <TableCell component="th" scope="row" align="center">
-                    <Title>{name}</Title>
-                </TableCell>
-                <TableCell>
+            <Card key={_id} sx={{ width: '20vw' }}>
+                <CardContent sx={{ height: '30vh' }}>
+                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                        {name}
+                    </Typography>
+                    <DataGrid
+                        rows={tasks}
+                        getRowId={(row) => row._id}
+                        columns={columns}
+                        pageSize={5}
+                        rowsPerPageOptions={[5]}
+                        checkboxSelection
+                    />
+                </CardContent>
+                <CardActions>
                     <Button onClick={() => handleClickOpen(_id)} >Add task</Button>
                     <Dialog open={open} onClose={handleClose} fullWidth maxWidth="lg">
                         <DataGrid rows={taskList} columns={columns} autoHeight onRowDoubleClick={handleDoubleClick} getRowId={row => row._id} />
                     </Dialog>
-                    <Box sx={{ height: 400, width: '100%' }}>
-                        <DataGrid
-                            rows={tasks}
-                            getRowId={(row) => row._id}
-                            columns={columns}
-                            pageSize={5}
-                            rowsPerPageOptions={[5]}
-                            checkboxSelection
-                        />
-                    </Box>
-                </TableCell>
-            </TableRow>
+                </CardActions>
+            </Card>
         ))
     }
     return (
-        <Box sx={{ flexGrow: 1 }}>
-            <TableContainer component={Paper}>
-                <Table aria-label="simple table">
-                    <TableBody>
-                        {phaseInfoRender()}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+        <Box sx={{ display: 'flex', justifyContent: 'space-evenly', flexGrow: '1' }}>
+            {phaseInfoRender()}
             <Snackbar open={openSnackbar} autoHideDuration={2000} onClose={handleClose}>
                 <Alert severity="success">Task added successfully</Alert>
             </Snackbar>

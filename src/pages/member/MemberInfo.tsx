@@ -1,7 +1,7 @@
 import React from 'react'
 import { DataGrid, GridRowParams, GridSelectionModel } from '@mui/x-data-grid';
 import '~/styles/style.scss';
-import { Button, Snackbar, Alert, Dialog, Box, Skeleton } from '@mui/material';
+import { Button, Snackbar, Alert, Dialog, Box, Skeleton, Paper, Typography } from '@mui/material';
 import { assignTask, getMembersOfProject, markTask } from '~/actions/memberAction';
 import { getTasks } from '~/actions/taskAction';
 import Member from '~/interfaces/Member';
@@ -48,9 +48,7 @@ const MemberInfo = (): JSX.Element => {
     const taskList = taskQuery.data === undefined ? [] : taskQuery.data.data;
     const activityHistoryColumns = [
         { field: 'action', headerName: 'Action', width: 200 },
-        { field: 'content', headerName: 'Content', minWidth: 400, flex: 1 },
-        { field: 'createdAt', headerName: 'Created At', width: 200 },
-        { field: 'updatedAt', headerName: 'Updated At', width: 200 }
+        { field: 'content', headerName: 'Content', minWidth: 400, flex: 1 }
     ]
     const taskColumns = [
         { field: 'name', headerName: 'Name', width: 200 },
@@ -82,24 +80,37 @@ const MemberInfo = (): JSX.Element => {
         markTaskMutation.mutate({ taskIdArray: selectedRows, status: 'active' });
     }
     return (
-        <Box sx={{ flexGrow: 1 }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             {memberList.map((member) => {
                 const activityHistory = member.activityHistory;
                 const tasks = member.taskAssigned;
                 const id = member._id;
                 return (
-                    <Box key={member._id} className="box">
-                        <Title>
-                            Member: {member.name}
-                        </Title>
-                        <Box style={{ width: '100%' }}>
+                    <Box key={member._id} className="box" component={Paper}>
+                        <Box component={Paper} sx={{ height: '10vh', width: '10vw' }}>
+                            <Title className="tableName">Member Info</Title>
+                            <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                                Member name: {member.name}
+                            </Typography>
+                        </Box>
+                        <Box component={Paper} sx={{ width: '30vw' }}>
                             <Title className="tableName">Activity History</Title>
                             <DataGrid
                                 getRowId={(row) => row._id}
                                 rows={activityHistory}
                                 columns={activityHistoryColumns}
                                 autoHeight />
+                        </Box>
+                        <Box component={Paper} sx={{ width: '20vw' }}>
                             <Title className="tableName">Tasks</Title>
+                            <DataGrid
+                                getRowId={(row) => row._id}
+                                rows={tasks}
+                                columns={taskColumns}
+                                autoHeight
+                                checkboxSelection
+                                onSelectionModelChange={getSelection}
+                            />
                             <Box className="buttonRow">
                                 <Button onClick={() => handleClick(id)}>Assign task</Button>
                                 <Dialog open={open} onClose={handleClose} fullWidth maxWidth="lg">
@@ -113,14 +124,6 @@ const MemberInfo = (): JSX.Element => {
                                 <Button onClick={markAsComplete}>Mark selected tasks as completed</Button>
                                 <Button onClick={markAsIncomplete}>Mark selected tasks as active</Button>
                             </Box>
-                            {tasks ? <DataGrid
-                                getRowId={(row) => row._id}
-                                rows={tasks}
-                                columns={taskColumns}
-                                autoHeight
-                                checkboxSelection
-                                onSelectionModelChange={getSelection}
-                            /> : null}
                         </Box>
                     </Box>
                 )
@@ -128,7 +131,7 @@ const MemberInfo = (): JSX.Element => {
             <Snackbar open={openSnackbar} autoHideDuration={2000} onClose={handleClose}>
                 <Alert severity="success">Task added successfully</Alert>
             </Snackbar>
-        </Box>
+        </Box >
     )
 }
 export default MemberInfo;
