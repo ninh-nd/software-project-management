@@ -2,9 +2,9 @@ import { Typography, Select, FormControl, MenuItem, SelectChangeEvent } from '@m
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getProjectOwn } from '~/actions/projectManagerAction';
-import Project from '~/interfaces/Project';
-import ServerResponse from '~/interfaces/ServerResponse';
+import { useProjectActions } from '~/hooks/project';
 const SelectProject = (): JSX.Element => {
+    const { setCurrentProject } = useProjectActions();
     const { currentProject } = useParams();
     if (currentProject === undefined) {
         return <></>;
@@ -13,7 +13,8 @@ const SelectProject = (): JSX.Element => {
     const projects = projectOwnQuery.data === undefined ? [] : projectOwnQuery.data.data
     const navigate = useNavigate();
     const handleChange = (event: SelectChangeEvent<string>) => {
-        navigate(`/${event.target.value}`);
+        setCurrentProject(event.target.value);
+        navigate(`/${event.target.value}/`);
     }
     return (
         <>

@@ -5,10 +5,9 @@ import { Drawer } from '@mui/material';
 import { List } from '@mui/material';
 import { ListItem, ListItemIcon, ListItemText, ListItemButton, Link } from '@mui/material';
 import { HomeOutlined, InfoOutlined, AssessmentOutlined, TaskOutlined } from '@mui/icons-material';
-import { useProjectHook } from "~/hooks/project";
 const drawerWidth = 240;
 const Sidebar = (): JSX.Element => {
-  const currentProject = useProjectHook();
+  const { currentProject } = useParams();
   const navigate = useNavigate();
   return (
     <Box sx={{ display: 'flex' }}>

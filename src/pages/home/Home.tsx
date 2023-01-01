@@ -1,19 +1,16 @@
 import Chart from '~/components/home/chart/Chart';
 import { getCommits, getPullRequests } from '~/actions/activityHistoryAction';
-import { Commits, PullRequests } from '~/interfaces/GithubData';
 import { useQuery } from '@tanstack/react-query';
-import ServerResponse from '~/interfaces/ServerResponse';
 import { Box, Container, Grid, Skeleton } from '@mui/material';
 import TotalCommits from '~/components/home/featuredInfo/TotalCommits';
 import TotalPullRequests from '~/components/home/featuredInfo/TotalPull';
 import ProjectInfo from '~/components/home/featuredInfo/ProjectInfo';
 import "~/styles/style.scss";
-import { useParams } from 'react-router-dom';
+import { useProjectHook } from '~/hooks/project';
 const Home = (): JSX.Element => {
-  const { currentProject } = useParams();
-  if (currentProject === undefined) return <></>;
-  const commitsQuery = useQuery(['commits'], () => getCommits(currentProject));
-  const pullRequestsQuery = useQuery(['pullRequests'], () => getPullRequests(currentProject));
+  const currentProject = useProjectHook();
+  const commitsQuery = useQuery(['commits', currentProject], () => getCommits(currentProject));
+  const pullRequestsQuery = useQuery(['pullRequests', currentProject], () => getPullRequests(currentProject));
   if (commitsQuery.isLoading || pullRequestsQuery.isLoading) {
     return <Skeleton variant="rounded" className="fullPageSkeleton" />;
   }
