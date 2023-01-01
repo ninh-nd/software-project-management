@@ -9,7 +9,7 @@ export async function logout() {
     const response = await api.get('/account/logout');
     return response;
 }
-export async function getAccount(): Promise<ServerResponse<IAccount>> {
+export async function getAccountInfo(): Promise<ServerResponse<IAccount>> {
     const response = await api.get('/account/');
     return response.data;
 }

@@ -9,7 +9,7 @@ import { useParams } from 'react-router-dom';
 const ProjectInfo = (): JSX.Element => {
     const { currentProject } = useParams();
     if (currentProject === undefined) return <></>;
-    const projectInfoQuery = useQuery<ServerResponse<Project>>(['projectInfo'], () => getProjectInfo(currentProject));
+    const projectInfoQuery = useQuery(['projectInfo'], () => getProjectInfo(currentProject));
     if (projectInfoQuery.isLoading) {
         return <Skeleton variant="rounded" className="paper" height={200} />;
     }

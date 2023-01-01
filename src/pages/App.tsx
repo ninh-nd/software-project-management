@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Routes, Route, redirect } from "react-router-dom";
-import AccountLayout from "~/layouts/AccountLayout";
+import { Routes, Route } from "react-router-dom";
 import DashboardLayout from "~/layouts/DashboardLayout";
+import AccountInfo from "./account/AccountInfo";
 import Home from "./home/Home";
 import Login from "./login/Login";
 import MemberInfo from "./member/MemberInfo";
@@ -26,9 +26,8 @@ export default function App() {
                     <Route path='memberInfo' element={<MemberInfo />} />
                 </Route>
                 <Route path="/login" element={<Login />} />
-                <Route element={<AccountLayout />} path="/user/:username">
-                    <Route path='' element={<></>} />
-                    <Route path='thirdParty' element={<></>} />
+                <Route element={<DashboardLayout />} path="/user/:username">
+                    <Route path='' element={<AccountInfo />} />
                 </Route>
             </Routes>
         </QueryClientProvider>

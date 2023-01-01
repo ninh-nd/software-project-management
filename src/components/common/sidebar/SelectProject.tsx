@@ -9,7 +9,7 @@ const SelectProject = (): JSX.Element => {
     if (currentProject === undefined) {
         return <></>;
     }
-    const projectOwnQuery = useQuery<ServerResponse<Project[]>>(['projectOwn'], () => getProjectOwn())
+    const projectOwnQuery = useQuery(['projectOwn'], () => getProjectOwn())
     const projects = projectOwnQuery.data === undefined ? [] : projectOwnQuery.data.data
     const navigate = useNavigate();
     const handleChange = (event: SelectChangeEvent<string>) => {

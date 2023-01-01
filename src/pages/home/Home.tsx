@@ -12,8 +12,8 @@ import { useParams } from 'react-router-dom';
 const Home = (): JSX.Element => {
   const { currentProject } = useParams();
   if (currentProject === undefined) return <></>;
-  const commitsQuery = useQuery<ServerResponse<Commits>>(['commits'], () => getCommits(currentProject));
-  const pullRequestsQuery = useQuery<ServerResponse<PullRequests>>(['pullRequests'], () => getPullRequests(currentProject));
+  const commitsQuery = useQuery(['commits'], () => getCommits(currentProject));
+  const pullRequestsQuery = useQuery(['pullRequests'], () => getPullRequests(currentProject));
   if (commitsQuery.isLoading || pullRequestsQuery.isLoading) {
     return <Skeleton variant="rounded" className="fullPageSkeleton" />;
   }

@@ -8,8 +8,10 @@ import { useNavigate } from 'react-router-dom';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { login } from '~/actions/accountAction';
 import { getProjectOwn } from '~/actions/projectManagerAction';
+import { useProjectActions } from '~/hooks/project';
 const theme = createTheme();
 const Login = (): JSX.Element => {
+  const { setCurrentProject } = useProjectActions();
   const navigate = useNavigate();
   const [errorText, setErrorText] = React.useState('');
   const [error, setError] = React.useState(false);
@@ -31,6 +33,7 @@ const Login = (): JSX.Element => {
       setErrorText('');
       const { data } = await getProjectOwn();
       const currentProject = data[0].name;
+      setCurrentProject(currentProject);
       navigate(`/${currentProject}`);
     }
   };

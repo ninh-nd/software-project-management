@@ -39,8 +39,8 @@ const MemberInfo = (): JSX.Element => {
             queryClient.invalidateQueries(['memberList']);
         }
     })
-    const memberListQuery = useQuery<ServerResponse<Member[]>>(['memberList'], () => getMembersOfProject(currentProject));
-    const taskQuery = useQuery<ServerResponse<Task[]>>(['taskList'], () => getTasks(currentProject));
+    const memberListQuery = useQuery(['memberList'], () => getMembersOfProject(currentProject));
+    const taskQuery = useQuery(['taskList'], () => getTasks(currentProject));
     if (memberListQuery.isLoading || taskQuery.isLoading) {
         return <Skeleton variant="rounded" className="fullPageSkeleton" />;
     }
