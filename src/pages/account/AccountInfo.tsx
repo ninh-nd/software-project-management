@@ -1,17 +1,34 @@
 import { GitHub } from "@mui/icons-material";
-import { Box, Button, Card, CardActions, CardContent, CardMedia, Grid, Paper, Typography } from "@mui/material"
+import { Box, Button, Card, CardActions, CardContent, CardMedia, Dialog, Grid, Paper, TextField, Typography } from "@mui/material"
 import { useQuery } from "@tanstack/react-query"
+import React from "react";
+import { useForm } from "react-hook-form";
 import { getAccountInfo } from "~/actions/accountAction"
 import { IThirdParty } from "~/interfaces/ThirdParty";
-
 const renderGithub = (github: IThirdParty | undefined) => {
+    const { register, handleSubmit } = useForm<{ accessToken: string }>();
+    const updateAccessTokenGithub = () => {
+        setOpen(true);
+        if (github === undefined) return;
+    }
+    const onSubmit = (data: { accessToken: string }) => {
+        // Update access token
+        setOpen(false);
+    }
+    const [open, setOpen] = React.useState(false);
     if (github === undefined) {
         return <Button>Connect to Github</Button>
     }
     return (
         <Box sx={{ display: 'flex' }}>
             <Button disabled>Connected to Github</Button>
-            <Button>Manage Github config</Button>
+            <Button onClick={updateAccessTokenGithub}>Update access token</Button>
+            <Dialog open={open} onClose={() => setOpen(false)}>
+                <Box component="form" sx={{ p: '20px' }} onSubmit={handleSubmit(onSubmit)}>
+                    <TextField label="Github access token" defaultValue={github.accessToken} fullWidth {...register("accessToken")} />
+                    <Button fullWidth type="submit">Update</Button>
+                </Box>
+            </Dialog>
         </Box>
     )
 }

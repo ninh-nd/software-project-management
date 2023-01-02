@@ -14,6 +14,7 @@ specifiers:
   axios: ^0.27.2
   react: ^18.2.0
   react-dom: ^18.2.0
+  react-hook-form: ^7.41.3
   react-router-dom: ^6.4.3
   recharts: ^2.1.16
   sass: ^1.56.1
@@ -31,6 +32,7 @@ dependencies:
   axios: 0.27.2
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
+  react-hook-form: 7.41.3_react@18.2.0
   react-router-dom: 6.4.3_biqbaboplfbrettd7655fr4n2y
   recharts: 2.1.16_v2m5e27vhdewzwhryxwfaorcca
   sass: 1.56.1
@@ -1456,6 +1458,15 @@ packages:
       loose-envify: 1.4.0
       react: 18.2.0
       scheduler: 0.23.0
+    dev: false
+
+  /react-hook-form/7.41.3_react@18.2.0:
+    resolution: {integrity: sha512-5QNTmqJtDb88WV5n41b6+AmcDMVyaJ3tccPgHAgS215w3jZ3bmJhDO27kNTr8u4YHNYXmS7p1/4/KachBAlUtw==}
+    engines: {node: '>=12.22.0'}
+    peerDependencies:
+      react: ^16.8.0 || ^17 || ^18
+    dependencies:
+      react: 18.2.0
     dev: false
 
   /react-is/16.13.1:

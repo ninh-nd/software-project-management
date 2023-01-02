@@ -2,25 +2,27 @@ import React from 'react';
 import {
   Box, Button, Checkbox, Grid, Link,
   Container, createTheme, CssBaseline, ThemeProvider,
-  Avatar, Typography, TextField, FormControlLabel,
+  Avatar, Typography, TextField, FormControlLabel, Input,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { login } from '~/actions/accountAction';
 import { getProjectOwn } from '~/actions/projectManagerAction';
 import { useProjectActions } from '~/hooks/project';
+import { useForm } from 'react-hook-form';
 const theme = createTheme();
+interface IFormInput {
+  username: string;
+  password: string;
+}
 const Login = (): JSX.Element => {
+  const { handleSubmit, register } = useForm<IFormInput>();
   const { setCurrentProject } = useProjectActions();
   const navigate = useNavigate();
   const [errorText, setErrorText] = React.useState('');
   const [error, setError] = React.useState(false);
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    // Send data to backend for validation
-    const username = formData.get('username') as string;
-    const password = formData.get('password') as string;
+  const onSubmit = async (data: IFormInput) => {
+    const { username, password } = data;
     let response;
     try {
       response = await login(username, password);
@@ -36,8 +38,7 @@ const Login = (): JSX.Element => {
       setCurrentProject(currentProject);
       navigate(`/${currentProject}`);
     }
-  };
-
+  }
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -56,9 +57,9 @@ const Login = (): JSX.Element => {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-            <TextField margin="normal" required fullWidth id="username" label="Username" name="username" autoFocus helperText={errorText} error />
-            <TextField margin="normal" type="password" required fullWidth id="password" label="Password" name="password" autoFocus />
+          <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: 1 }}>
+            <TextField margin="normal" required fullWidth {...register("username")} autoFocus helperText={errorText} error={error} label="Username" />
+            <TextField margin="normal" type="password" required fullWidth {...register("password")} autoFocus label="Password" />
             <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
             <Button
               type="submit"
