@@ -1,9 +1,9 @@
-import { Task } from "./Task";
+import { ITask } from "./Task"
 
-export default interface Phase {
-    _id: string;
-    name: string;
-    tasks: Task[];
-    createdAt?: string;
-    updatedAt?: string;
+export interface IPhase {
+    _id: string
+    name: string
+    tasks: ITask[]
+    createdAt?: string
+    updatedAt?: string
 }

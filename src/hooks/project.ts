@@ -1,9 +1,9 @@
-import create from "zustand";
+import create from "zustand"
 
 interface ProjectStore {
-    currentProject: string;
+    currentProject: string
     actions: {
-        setCurrentProject: (project: string) => void;
+        setCurrentProject: (project: string) => void
     }
 }
 const useProjectStore = create<ProjectStore>((set) => {
@@ -11,10 +11,10 @@ const useProjectStore = create<ProjectStore>((set) => {
         currentProject: '',
         actions: {
             setCurrentProject: (project: string) => {
-                set({ currentProject: project });
+                set({ currentProject: project })
             }
         }
     }
 })
-export const useProjectHook = () => useProjectStore((state) => state.currentProject);
-export const useProjectActions = () => useProjectStore((state) => state.actions);
+export const useProjectHook = () => useProjectStore((state) => state.currentProject)
+export const useProjectActions = () => useProjectStore((state) => state.actions)

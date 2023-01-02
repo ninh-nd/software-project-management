@@ -1,19 +1,19 @@
-import { Table, TableContainer, TableBody, TableRow, TableCell, Skeleton, Link } from '@mui/material';
-import { Paper } from '@mui/material';
-import { getProjectInfo } from '~/actions/projectAction';
-import Project from '~/interfaces/Project';
-import { useQuery } from '@tanstack/react-query';
-import ServerResponse from '~/interfaces/ServerResponse';
-import '~/styles/style.scss';
-import { useParams } from 'react-router-dom';
+import { Table, TableContainer, TableBody, TableRow, TableCell, Skeleton, Link } from '@mui/material'
+import { Paper } from '@mui/material'
+import { getProjectInfo } from '~/actions/projectAction'
+import Project from '~/interfaces/Project'
+import { useQuery } from '@tanstack/react-query'
+import IResponse from '~/interfaces/ServerResponse'
+import '~/styles/style.scss'
+import { useParams } from 'react-router-dom'
 const ProjectInfo = (): JSX.Element => {
-    const { currentProject } = useParams();
-    if (currentProject === undefined) return <></>;
-    const projectInfoQuery = useQuery(['projectInfo', currentProject], () => getProjectInfo(currentProject));
+    const { currentProject } = useParams()
+    if (currentProject === undefined) return <></>
+    const projectInfoQuery = useQuery(['projectInfo', currentProject], () => getProjectInfo(currentProject))
     if (projectInfoQuery.isLoading) {
-        return <Skeleton variant="rounded" className="paper" height={200} />;
+        return <Skeleton variant="rounded" className="paper" height={200} />
     }
-    const projectInfo = projectInfoQuery.data === undefined ? { name: '', url: '', status: '', createdAt: '', updatedAt: '', phaseList: [] } : projectInfoQuery.data.data;
+    const projectInfo = projectInfoQuery.data === undefined ? { name: '', url: '', status: '', createdAt: '', updatedAt: '', phaseList: [] } : projectInfoQuery.data.data
     return (
         <Paper className="paper">
             <TableContainer>
@@ -55,4 +55,4 @@ const ProjectInfo = (): JSX.Element => {
         </Paper>
     )
 }
-export default ProjectInfo;
+export default ProjectInfo

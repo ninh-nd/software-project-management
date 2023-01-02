@@ -1,8 +1,8 @@
-import { Task } from "./Task";
-import Activity from "./Activity";
-export default interface Member {
-    _id: string;
-    name: string;
-    taskAssigned: Task[],
-    activityHistory: Activity[]
+import { ITask } from "./Task"
+import { IActivity } from "./Activity"
+export interface IMember {
+    _id: string
+    name: string
+    taskAssigned: ITask[],
+    activityHistory: IActivity[]
 }

@@ -1,8 +1,8 @@
-import { Paper, Typography } from '@mui/material';
-import { Commits } from '~/interfaces/GithubData';
-import Title from '~/components/common/Title';
-import '~/styles/style.scss';
-export default function TotalCommits({ commits }: { commits: Commits }): JSX.Element {
+import { Paper, Typography } from '@mui/material'
+import { ICommits } from '~/interfaces/GithubData'
+import Title from '~/components/common/Title'
+import '~/styles/style.scss'
+export default function TotalCommits({ commits }: { commits: ICommits }): JSX.Element {
     return (
         <Paper
             className="paper"

@@ -1,10 +1,10 @@
-import Sidebar from '~/components/common/sidebar/Sidebar';
-import Topbar from '~/components/common/topbar/Topbar';
-import { Outlet } from 'react-router-dom';
-import { Box, CssBaseline, ThemeProvider } from '@mui/material';
-import { useThemeHook } from '~/hooks/theme';
+import Sidebar from '~/components/common/sidebar/Sidebar'
+import Topbar from '~/components/common/topbar/Topbar'
+import { Outlet } from 'react-router-dom'
+import { Box, CssBaseline, ThemeProvider } from '@mui/material'
+import { useThemeHook } from '~/hooks/theme'
 export default function DashboardLayout() {
-    const theme = useThemeHook();
+    const theme = useThemeHook()
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
@@ -14,5 +14,5 @@ export default function DashboardLayout() {
                 <Outlet />
             </Box>
         </ThemeProvider>
-    );
+    )
 }

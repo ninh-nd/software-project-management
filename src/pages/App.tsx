@@ -1,12 +1,12 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Routes, Route } from "react-router-dom";
-import DashboardLayout from "~/layouts/DashboardLayout";
-import AccountInfo from "./account/AccountInfo";
-import Home from "./home/Home";
-import Login from "./login/Login";
-import MemberInfo from "./member/MemberInfo";
-import PhaseInfo from "./phaseInfo/PhaseInfo";
-import TaskInfo from "./tasks/TaskInfo";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { Routes, Route } from "react-router-dom"
+import DashboardLayout from "~/layouts/DashboardLayout"
+import AccountInfo from "./account/AccountInfo"
+import Home from "./home/Home"
+import Login from "./login/Login"
+import MemberInfo from "./member/MemberInfo"
+import PhaseInfo from "./phaseInfo/PhaseInfo"
+import TaskInfo from "./tasks/TaskInfo"
 const queryClient = new QueryClient({
     defaultOptions: {
         queries: {
@@ -14,7 +14,7 @@ const queryClient = new QueryClient({
             refetchOnWindowFocus: false
         }
     }
-});
+})
 export default function App() {
     return (
         <QueryClientProvider client={queryClient}>

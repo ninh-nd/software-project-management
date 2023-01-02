@@ -1,11 +1,11 @@
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { Commits, PullRequests } from '~/interfaces/GithubData';
-import Title from '~/components/common/Title';
-import { Paper } from '@mui/material';
-import '~/styles/style.scss';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
+import { ICommits, IPullRequests } from '~/interfaces/GithubData'
+import Title from '~/components/common/Title'
+import { Paper } from '@mui/material'
+import '~/styles/style.scss'
 type ChartProps = {
-  commits: Commits;
-  prs: PullRequests;
+  commits: ICommits
+  prs: IPullRequests
 }
 const Chart = ({ commits, prs }: ChartProps): JSX.Element => {
   return (
@@ -54,4 +54,4 @@ const Chart = ({ commits, prs }: ChartProps): JSX.Element => {
     </Paper >
   )
 }
-export default Chart;
+export default Chart

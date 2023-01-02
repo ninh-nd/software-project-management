@@ -1,8 +1,8 @@
-import resourcesAPI from "~/api";
-import Project from "~/interfaces/Project";
-import ServerResponse from "~/interfaces/ServerResponse";
+import resourcesAPI from "~/api"
+import { IProject } from "~/interfaces/Project"
+import { IResponse } from "~/interfaces/ServerResponse"
 
-export async function getProjectOwn(): Promise<ServerResponse<Project[]>> {
-    const response = await resourcesAPI.get(`/pm/project`);
-    return response.data;
+export async function getProjectOwn(): Promise<IResponse<IProject[]>> {
+    const response = await resourcesAPI.get(`/pm/project`)
+    return response.data
 }

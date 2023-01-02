@@ -1,11 +1,11 @@
-import Phase from "./Phase";
+import { IPhase } from "./Phase"
 
-export default interface Project {
-    _id?: string;
-    name: string;
-    url: string;
-    status: string;
-    createdAt?: string;
-    updatedAt?: string;
-    phaseList: Phase[];
+export interface IProject {
+    _id?: string
+    name: string
+    url: string
+    status: string
+    createdAt?: string
+    updatedAt?: string
+    phaseList: IPhase[]
 }

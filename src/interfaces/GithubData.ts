@@ -1,12 +1,12 @@
-interface IndividualContribution {
-    author: string;
-    total: number;
+interface IIndividualContribution {
+    author: string
+    total: number
 }
-export interface Commits {
-    total: number;
-    contribution: IndividualContribution[];
+export interface ICommits {
+    total: number
+    contribution: IIndividualContribution[]
 }
-export interface PullRequests {
-    total: number;
-    contribution: IndividualContribution[];
+export interface IPullRequests {
+    total: number
+    contribution: IIndividualContribution[]
 }

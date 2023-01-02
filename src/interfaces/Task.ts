@@ -1,12 +1,12 @@
-export interface Task {
-    _id: string;
-    name: string;
-    description: string;
-    status?: string;
-    createdBy?: string;
-    updatedBy?: string;
-    isNew?: boolean;
-    projectName: string;
+export interface ITask {
+    _id: string
+    name: string
+    description: string
+    status?: string
+    createdBy?: string
+    updatedBy?: string
+    isNew?: boolean
+    projectName: string
 }
 
-export type TaskUpdate = Omit<Task, "_id">;
+export type ITaskUpdate = Omit<ITask, "_id">

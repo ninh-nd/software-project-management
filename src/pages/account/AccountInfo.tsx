@@ -1,21 +1,21 @@
-import { GitHub } from "@mui/icons-material";
+import { GitHub } from "@mui/icons-material"
 import { Box, Button, Card, CardActions, CardContent, CardMedia, Dialog, Grid, Paper, TextField, Typography } from "@mui/material"
 import { useQuery } from "@tanstack/react-query"
-import React from "react";
-import { useForm } from "react-hook-form";
+import React from "react"
+import { useForm } from "react-hook-form"
 import { getAccountInfo } from "~/actions/accountAction"
-import { IThirdParty } from "~/interfaces/ThirdParty";
+import { IThirdParty } from "~/interfaces/ThirdParty"
 const renderGithub = (github: IThirdParty | undefined) => {
-    const { register, handleSubmit } = useForm<{ accessToken: string }>();
+    const { register, handleSubmit } = useForm<{ accessToken: string }>()
     const updateAccessTokenGithub = () => {
-        setOpen(true);
-        if (github === undefined) return;
+        setOpen(true)
+        if (github === undefined) return
     }
     const onSubmit = (data: { accessToken: string }) => {
         // Update access token
-        setOpen(false);
+        setOpen(false)
     }
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = React.useState(false)
     if (github === undefined) {
         return <Button>Connect to Github</Button>
     }
@@ -34,9 +34,9 @@ const renderGithub = (github: IThirdParty | undefined) => {
 }
 
 const AccountInfo = () => {
-    const accountInfoQuery = useQuery(["accountInfo"], () => getAccountInfo());
-    const accountInfo = accountInfoQuery.data === undefined ? { username: '', email: '', thirdParty: [] } : accountInfoQuery.data.data;
-    const github = accountInfo.thirdParty.find((thirdParty) => thirdParty.name === 'Github');
+    const accountInfoQuery = useQuery(["accountInfo"], () => getAccountInfo())
+    const accountInfo = accountInfoQuery.data === undefined ? { username: '', email: '', thirdParty: [] } : accountInfoQuery.data.data
+    const github = accountInfo.thirdParty.find((thirdParty: IThirdParty) => thirdParty.name === 'Github')
     return (
         <Box className="accountPage">
             <Card sx={{ minWidth: '550px' }}>

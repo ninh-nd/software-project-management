@@ -1,7 +1,7 @@
-import { Paper, Typography } from '@mui/material';
-import { PullRequests } from '~/interfaces/GithubData';
-import Title from '~/components/common/Title';
-export default function TotalPullRequests({ prs }: { prs: PullRequests }): JSX.Element {
+import { Paper, Typography } from '@mui/material'
+import { IPullRequests } from '~/interfaces/GithubData'
+import Title from '~/components/common/Title'
+export default function TotalPullRequests({ prs }: { prs: IPullRequests }): JSX.Element {
     return (
         <Paper
             className="paper"
