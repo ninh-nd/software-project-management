@@ -1,11 +1,11 @@
 import { Typography, Select, FormControl, MenuItem, SelectChangeEvent } from '@mui/material'
 import { useQuery } from '@tanstack/react-query';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { getProjectOwn } from '~/actions/projectManagerAction';
-import { useProjectActions } from '~/hooks/project';
+import { useProjectActions, useProjectHook } from '~/hooks/project';
 const SelectProject = (): JSX.Element => {
     const { setCurrentProject } = useProjectActions();
-    const { currentProject } = useParams();
+    const currentProject = useProjectHook();
     if (currentProject === undefined) {
         return <></>;
     }

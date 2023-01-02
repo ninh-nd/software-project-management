@@ -4,10 +4,7 @@ import '~/styles/style.scss';
 import { Button, Snackbar, Alert, Dialog, Box, Skeleton, Paper, Typography } from '@mui/material';
 import { assignTask, getMembersOfProject, markTask } from '~/actions/memberAction';
 import { getTasks } from '~/actions/taskAction';
-import Member from '~/interfaces/Member';
-import { Task } from '~/interfaces/Task';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import ServerResponse from '~/interfaces/ServerResponse';
 import Title from '~/components/common/Title';
 import { useParams } from 'react-router-dom';
 interface AssignTaskParams {
@@ -30,17 +27,17 @@ const MemberInfo = (): JSX.Element => {
         mutationFn: ({ taskId, memberId }) => assignTask(taskId, memberId),
         onSuccess: () => {
             setOpenSnackbar(true);
-            queryClient.invalidateQueries(['memberList']);
+            queryClient.invalidateQueries(['memberList', currentProject]);
         }
     })
     const markTaskMutation = useMutation<unknown, Error, MarkTaskParams>({
         mutationFn: ({ taskIdArray, status }) => markTask(taskIdArray, status),
         onSuccess: () => {
-            queryClient.invalidateQueries(['memberList']);
+            queryClient.invalidateQueries(['memberList', currentProject]);
         }
     })
-    const memberListQuery = useQuery(['memberList'], () => getMembersOfProject(currentProject));
-    const taskQuery = useQuery(['taskList'], () => getTasks(currentProject));
+    const memberListQuery = useQuery(['memberList', currentProject], () => getMembersOfProject(currentProject));
+    const taskQuery = useQuery(['taskList', currentProject], () => getTasks(currentProject));
     if (memberListQuery.isLoading || taskQuery.isLoading) {
         return <Skeleton variant="rounded" className="fullPageSkeleton" />;
     }

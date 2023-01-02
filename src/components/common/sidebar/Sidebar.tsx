@@ -1,13 +1,14 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import SelectProject from './SelectProject';
 import { Box, Divider } from '@mui/material';
 import { Drawer } from '@mui/material';
 import { List } from '@mui/material';
 import { ListItem, ListItemIcon, ListItemText, ListItemButton, Link } from '@mui/material';
 import { HomeOutlined, InfoOutlined, AssessmentOutlined, TaskOutlined } from '@mui/icons-material';
+import { useProjectHook } from "~/hooks/project";
 const drawerWidth = 240;
 const Sidebar = (): JSX.Element => {
-  const { currentProject } = useParams();
+  const currentProject = useProjectHook();
   const navigate = useNavigate();
   return (
     <Box sx={{ display: 'flex' }}>
