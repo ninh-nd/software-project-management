@@ -5,7 +5,7 @@ export interface IProject {
     name: string
     url: string
     status: string
-    createdAt?: string
-    updatedAt?: string
+    createdAt: string
+    updatedAt: string
     phaseList: IPhase[]
 }

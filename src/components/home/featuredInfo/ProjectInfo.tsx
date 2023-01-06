@@ -12,6 +12,8 @@ const ProjectInfo = (): JSX.Element => {
         return <Skeleton variant="rounded" className="paper" height={200} />
     }
     const projectInfo = projectInfoQuery.data === undefined ? { name: '', url: '', status: '', createdAt: '', updatedAt: '', phaseList: [] } : projectInfoQuery.data.data
+    const createdAt = Intl.DateTimeFormat('en-Us', { year: 'numeric', month: 'long', day: '2-digit' }).format(new Date(projectInfo.createdAt))
+    const updatedAt = Intl.DateTimeFormat('en-Us', { year: 'numeric', month: 'long', day: '2-digit' }).format(new Date(projectInfo.updatedAt))
     return (
         <Paper className="paper">
             <TableContainer>
@@ -39,13 +41,13 @@ const ProjectInfo = (): JSX.Element => {
                             <TableCell component="th" scope="row">
                                 Created at
                             </TableCell>
-                            <TableCell align="right">{projectInfo.createdAt}</TableCell>
+                            <TableCell align="right">{createdAt}</TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell component="th" scope="row">
                                 Updated at
                             </TableCell>
-                            <TableCell align="right">{projectInfo.updatedAt}</TableCell>
+                            <TableCell align="right">{updatedAt}</TableCell>
                         </TableRow>
                     </TableBody>
                 </Table>
