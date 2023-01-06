@@ -1,9 +1,7 @@
 import { Table, TableContainer, TableBody, TableRow, TableCell, Skeleton, Link } from '@mui/material'
 import { Paper } from '@mui/material'
 import { getProjectInfo } from '~/actions/projectAction'
-import Project from '~/interfaces/Project'
 import { useQuery } from '@tanstack/react-query'
-import IResponse from '~/interfaces/ServerResponse'
 import '~/styles/style.scss'
 import { useParams } from 'react-router-dom'
 const ProjectInfo = (): JSX.Element => {
