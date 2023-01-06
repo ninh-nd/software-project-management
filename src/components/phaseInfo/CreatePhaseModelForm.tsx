@@ -3,8 +3,9 @@ import { Stepper, Box, Button, Step, StepLabel, Card, CardContent, Typography, C
 import { useQuery } from "@tanstack/react-query"
 import React from "react"
 import { DropResult } from "react-beautiful-dnd"
-import { useForm } from "react-hook-form"
+import { useParams } from "react-router-dom"
 import { getPhasePresets } from "~/actions/phaseAction"
+import { createPhaseModel } from "~/actions/projectAction"
 import { IPhaseCreate, IPhasePreset } from "~/interfaces/PhasePreset"
 import DraggableList from "./DraggableList"
 
@@ -18,9 +19,9 @@ interface CreatePhaseModelProps {
 }
 interface ConfirmPhaseModelProps {
     selectedModel: IPhaseCreate[]
+    setOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
-const SelectPresetOrCreate = (props: SelectPresetProps) => {
-    const { updateStep, setSelection } = props
+const SelectPresetOrCreate = ({ updateStep, setSelection }: SelectPresetProps) => {
     const selectPreset = () => {
         updateStep()
         setSelection('preset')
@@ -37,8 +38,7 @@ const SelectPresetOrCreate = (props: SelectPresetProps) => {
     )
 }
 
-const SelectPreset = (props: CreatePhaseModelProps) => {
-    const { updateStep, setSelectedModel } = props
+const SelectPreset = ({ updateStep, setSelectedModel }: CreatePhaseModelProps) => {
     const presetQuery = useQuery(['preset'], () => getPhasePresets())
     const presets = presetQuery.data === undefined ? [] : presetQuery.data.data
     const selectPreset = (preset: IPhasePreset) => {
@@ -49,7 +49,7 @@ const SelectPreset = (props: CreatePhaseModelProps) => {
         <Box sx={{ display: 'flex' }}>
             {presets.map((preset: IPhasePreset) => {
                 return (
-                    <Card sx={{ width: '200px', height: '200px', margin: '10px' }}>
+                    <Card sx={{ width: '200px', height: '200px', margin: '10px' }} key={preset.name}>
                         <CardContent>
                             <Typography gutterBottom variant="h5" component="div">
                                 {preset.name}
@@ -67,8 +67,7 @@ const SelectPreset = (props: CreatePhaseModelProps) => {
         </Box>
     )
 }
-const CreateNew = (props: CreatePhaseModelProps) => {
-    const { updateStep, setSelectedModel } = props
+const CreateNew = ({ updateStep, setSelectedModel }: CreatePhaseModelProps) => {
     const onDragEnd = ({ destination, source }: DropResult) => {
         if (!destination) return
         const result = Array.from(phases)
@@ -104,13 +103,19 @@ const CreateNew = (props: CreatePhaseModelProps) => {
     )
 }
 
-const ConfirmPhaseModel = (props: ConfirmPhaseModelProps) => {
-    const { selectedModel } = props
+const ConfirmPhaseModel = ({ selectedModel, setOpen }: ConfirmPhaseModelProps) => {
+    const { currentProject } = useParams()
+    const onSubmit = async () => {
+        if (currentProject !== undefined) {
+            await createPhaseModel(currentProject, selectedModel)
+            setOpen(false)
+        }
+    }
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             {selectedModel.map((phase: IPhaseCreate, index) => {
                 return (
-                    <ListItem>
+                    <ListItem key={index}>
                         <Card>
                             <CardContent>
                                 <Typography gutterBottom variant="h5" component="div">
@@ -123,13 +128,14 @@ const ConfirmPhaseModel = (props: ConfirmPhaseModelProps) => {
                     </ListItem>
                 )
             })}
-            <Button variant="contained" color="success" sx={{ m: '20px' }} endIcon={<ArrowForward />}>Confirm</Button>
+            <Button variant="contained" color="success" sx={{ m: '20px' }} endIcon={<ArrowForward />} type="submit" onClick={onSubmit}>Confirm</Button>
         </Box>
     )
 }
-
-const CreatePhaseModelForm = () => {
-    const { register, handleSubmit } = useForm()
+interface CreatePhaseModelFormProps {
+    setOpen: React.Dispatch<React.SetStateAction<boolean>>
+}
+const CreatePhaseModelForm = ({ setOpen }: CreatePhaseModelFormProps) => {
     const [activeStep, setActiveStep] = React.useState(0)
     const steps = ['Step 1', 'Step 2', 'Step 3']
     const [selection, setSelection] = React.useState<'preset' | 'create'>('preset')
@@ -147,7 +153,7 @@ const CreatePhaseModelForm = () => {
                 }
                 return <CreateNew updateStep={increaseStep} setSelectedModel={setSelectedModel} />
             case 2:
-                if (selectedModel !== undefined) return <ConfirmPhaseModel selectedModel={selectedModel} />
+                if (selectedModel !== undefined) return <ConfirmPhaseModel selectedModel={selectedModel} setOpen={setOpen} />
                 return <></>
         }
     }

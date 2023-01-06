@@ -10,7 +10,7 @@ const CreatePhaseModel = () => {
                 <Button variant="contained" sx={{ ml: '20px' }} onClick={() => setOpen(true)}>Create a phase model</Button>
             </Box>
             <Dialog open={open} onClose={() => setOpen(false)}>
-                <CreatePhaseModelForm />
+                <CreatePhaseModelForm setOpen={setOpen} />
             </Dialog>
         </Box>
     )
