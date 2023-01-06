@@ -1,4 +1,4 @@
-import { Button, Dialog, Snackbar, Alert, Box, Skeleton, Card, CardContent, Typography, CardActions } from '@mui/material'
+import { Button, Dialog, Snackbar, Alert, Box, Skeleton, Card, CardContent, Typography, CardActions, Grid } from '@mui/material'
 import { DataGrid, GridRowParams } from '@mui/x-data-grid'
 import React from 'react'
 import { getProjectInfo } from '~/actions/projectAction'
@@ -35,10 +35,19 @@ const PhaseInfo = (): JSX.Element => {
     }
     const phaseList = phaseQuery.data === undefined ? [] : phaseQuery.data.data.phaseList
     const taskList = taskQuery.data === undefined ? [] : taskQuery.data.data
-    const columns = [
+    const taskColumn = [
         { field: 'name', headerName: 'Name', width: 200 },
         { field: 'status', headerName: 'Status' },
         { field: 'description', headerName: 'Description', minWidth: 400, flex: 1 }
+    ]
+    const artifactColumn = [
+        { field: 'name', headerName: 'Name', width: 200 },
+        { field: 'content', headerName: 'Content', mindWidth: 400, flex: 1 },
+        { field: 'type', headerName: 'Type' },
+        { field: 'url', headerName: 'Url' },
+        { field: 'version', headerName: 'Version' },
+        { field: 'threats', headerName: 'Threats' },
+        { field: 'vulnerabilities', headerName: 'Vulnerabilities' }
     ]
     const handleClickOpen = (id: string) => {
         setOpen(true)
@@ -56,33 +65,65 @@ const PhaseInfo = (): JSX.Element => {
         mutation.mutate({ phaseId, taskId })
     }
     const phaseInfoRender = () => {
-        return phaseList.map(({ _id, name, tasks }: IPhase) => (
-            <Card key={_id} sx={{ width: '20vw' }}>
-                <CardContent sx={{ height: '30vh' }}>
-                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                        {name}
-                    </Typography>
-                    <DataGrid
-                        rows={tasks}
-                        getRowId={(row) => row._id}
-                        columns={columns}
-                        pageSize={5}
-                        rowsPerPageOptions={[5]}
-                        checkboxSelection
-                    />
-                </CardContent>
-                <CardActions>
-                    <Button onClick={() => handleClickOpen(_id)} >Add task</Button>
-                    <Dialog open={open} onClose={handleClose} fullWidth maxWidth="lg">
-                        <DataGrid rows={taskList} columns={columns} autoHeight onRowDoubleClick={handleDoubleClick} getRowId={row => row._id} />
-                    </Dialog>
-                </CardActions>
-            </Card>
-        ))
+        return phaseList.map(({ _id, name, tasks, artifacts }: IPhase) => {
+            const transformedArtifacts = artifacts.map((item) => {
+                const { _id, name, content, type, url, version } = item
+                const threats = item.threatList.join(", ")
+                const vuls = item.vulnerabilityList.join(", ")
+                return ({ _id, name, content, type, url, version, threats, vuls })
+            })
+            return (
+                <Grid container spacing={2}>
+                    <Grid item xs={6} sx={{ p: '20px' }}>
+                        <Card key={_id} sx={{ width: '100%' }}>
+                            <CardContent sx={{ height: '30vh' }}>
+                                <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                                    {name}
+                                </Typography>
+                                <DataGrid
+                                    rows={tasks}
+                                    getRowId={(row) => row._id}
+                                    columns={taskColumn}
+                                    pageSize={5}
+                                    rowsPerPageOptions={[5]}
+                                    checkboxSelection
+                                />
+                            </CardContent>
+                            <CardActions>
+                                <Button onClick={() => handleClickOpen(_id)} >Add task</Button>
+                                <Dialog open={open} onClose={handleClose} fullWidth maxWidth="lg">
+                                    <DataGrid rows={taskList} columns={taskColumn} autoHeight onRowDoubleClick={handleDoubleClick} getRowId={row => row._id} />
+                                </Dialog>
+                            </CardActions>
+                        </Card>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Card key={_id} sx={{ width: '100%' }}>
+                            <CardContent sx={{ height: '30vh' }}>
+                                <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+                                    Artifacts
+                                </Typography>
+                                <DataGrid
+                                    rows={transformedArtifacts}
+                                    getRowId={(row) => row._id}
+                                    columns={artifactColumn}
+                                    pageSize={5}
+                                    rowsPerPageOptions={[5]}
+                                    checkboxSelection
+                                />
+                            </CardContent>
+                            <CardActions>
+                                <Button onClick={() => handleClickOpen(_id)} >Add artifact</Button>
+                            </CardActions>
+                        </Card>
+                    </Grid>
+                </Grid>
+            )
+        })
     }
     if (phaseList.length === 0) return <CreatePhaseModel />
     return (
-        <Box sx={{ display: 'flex', justifyContent: 'space-evenly', flexGrow: '1' }}>
+        <Box sx={{ flexGrow: '1' }}>
             {phaseInfoRender()}
             <Snackbar open={openSnackbar} autoHideDuration={2000} onClose={handleClose}>
                 <Alert severity="success">Task added successfully</Alert>
