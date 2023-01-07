@@ -36,7 +36,7 @@ const Login = (): JSX.Element => {
       const { data } = await getProjectOwn()
       const currentProject = data[0].name
       setCurrentProject(currentProject)
-      navigate(`/${currentProject}`)
+      navigate(`/${currentProject}/`)
     }
   }
   return (
