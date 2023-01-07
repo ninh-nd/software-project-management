@@ -101,7 +101,7 @@ const PhaseInfo = (): JSX.Element => {
                 return ({ _id, name, content, type, url, version, threats, vuls })
             })
             return (
-                <Grid container spacing={2}>
+                <Grid container spacing={2} sx={{ mb: '20px' }}>
                     <Grid item xs={6} sx={{ p: '20px' }}>
                         <Card key={_id} sx={{ width: '100%' }}>
                             <CardContent sx={{ height: '30vh' }}>
