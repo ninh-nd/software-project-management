@@ -1,15 +1,15 @@
 import { Button, Dialog, Snackbar, Alert, Box, Skeleton, Card, CardContent, Typography, CardActions, Grid } from '@mui/material'
-import { DataGrid, GridRowParams } from '@mui/x-data-grid'
+import { DataGrid, GridRowParams, GridSelectionModel } from '@mui/x-data-grid'
 import React from 'react'
 import { getProjectInfo } from '~/actions/projectAction'
 import { getTasks } from '~/actions/taskAction'
-import { addTaskToPhase } from '~/actions/phaseAction'
+import { addTaskToPhase, removeTaskFromPhase } from '~/actions/phaseAction'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import '~/styles/style.scss'
 import { useParams } from 'react-router-dom'
 import CreatePhaseModel from '~/components/phaseInfo/CreatePhaseModel'
 import { IPhase } from '~/interfaces/Phase'
-interface AddTaskToPhaseParams {
+interface AddOrRemoveTaskToPhaseParams {
     phaseId: string
     taskId: string
 }
@@ -18,13 +18,22 @@ const PhaseInfo = (): JSX.Element => {
     const queryClient = useQueryClient()
     const { currentProject } = useParams()
     if (currentProject === undefined) return <></>
-    const [open, setOpen] = React.useState(false) // Dialog state
-    const [openSnackbar, setOpenSnackbar] = React.useState(false) // Snackbar state
-    const [currentPhase, setCurrentPhase] = React.useState('') // Currently selected phase
+    const [openTaskD, setOpenTaskD] = React.useState(false)
+    const [openArtifactD, setOpenArtifactD] = React.useState(false)
+    const [openSnackbar, setOpenSnackbar] = React.useState(false)
+    const [currentPhase, setCurrentPhase] = React.useState('')
+    const [selectedRows, setSelectedRows] = React.useState<string[]>([''])
     const phaseQuery = useQuery(['phaseList', currentProject], () => getProjectInfo(currentProject))
     const taskQuery = useQuery(['taskList', currentProject], () => getTasks(currentProject))
-    const mutation = useMutation<unknown, Error, AddTaskToPhaseParams>({
+    const addTaskMutation = useMutation<unknown, Error, AddOrRemoveTaskToPhaseParams>({
         mutationFn: ({ phaseId, taskId }) => addTaskToPhase(phaseId, taskId),
+        onSuccess: () => {
+            setOpenSnackbar(true)
+            queryClient.invalidateQueries(['phaseList', currentProject])
+        }
+    })
+    const removeTaskMutation = useMutation<unknown, Error, AddOrRemoveTaskToPhaseParams>({
+        mutationFn: ({ phaseId, taskId }) => removeTaskFromPhase(phaseId, taskId),
         onSuccess: () => {
             setOpenSnackbar(true)
             queryClient.invalidateQueries(['phaseList', currentProject])
@@ -49,12 +58,21 @@ const PhaseInfo = (): JSX.Element => {
         { field: 'threats', headerName: 'Threats' },
         { field: 'vulnerabilities', headerName: 'Vulnerabilities' }
     ]
-    const handleClickOpen = (id: string) => {
-        setOpen(true)
+    const handleClickOpenTaskD = (id: string) => {
+        setOpenTaskD(true)
         setCurrentPhase(id)
     }
-    const handleClose = () => {
-        setOpen(false)
+    const handleCloseTaskD = () => {
+        setOpenTaskD(false)
+        setOpenSnackbar(false)
+        setCurrentPhase('')
+    }
+    const handleClickOpenArtifactD = (id: string) => {
+        setOpenArtifactD(true)
+        setCurrentPhase(id)
+    }
+    const handleCloseArtifactD = () => {
+        setOpenArtifactD(false)
         setOpenSnackbar(false)
         setCurrentPhase('')
     }
@@ -62,7 +80,17 @@ const PhaseInfo = (): JSX.Element => {
         const { id } = params
         const taskId = id.toString()
         const phaseId = currentPhase
-        mutation.mutate({ phaseId, taskId })
+        addTaskMutation.mutate({ phaseId, taskId })
+    }
+    const onTaskRowSelect = (arrayOfIds: GridSelectionModel) => {
+        const array = arrayOfIds as string[]
+        setSelectedRows(array)
+    }
+    const handleDeleteSelectedTask = (id: string) => {
+        const phaseId = id
+        selectedRows.forEach((taskId) => {
+            removeTaskMutation.mutate({ phaseId, taskId })
+        })
     }
     const phaseInfoRender = () => {
         return phaseList.map(({ _id, name, tasks, artifacts }: IPhase) => {
@@ -87,11 +115,13 @@ const PhaseInfo = (): JSX.Element => {
                                     pageSize={5}
                                     rowsPerPageOptions={[5]}
                                     checkboxSelection
+                                    onSelectionModelChange={onTaskRowSelect}
                                 />
                             </CardContent>
                             <CardActions>
-                                <Button onClick={() => handleClickOpen(_id)} >Add task</Button>
-                                <Dialog open={open} onClose={handleClose} fullWidth maxWidth="lg">
+                                <Button onClick={() => handleClickOpenTaskD(_id)} >Add task</Button>
+                                <Button color="error" onClick={() => handleDeleteSelectedTask(_id)}>Delete selected task</Button>
+                                <Dialog open={openTaskD} onClose={handleCloseTaskD} fullWidth maxWidth="lg">
                                     <DataGrid rows={taskList} columns={taskColumn} autoHeight onRowDoubleClick={handleDoubleClick} getRowId={row => row._id} />
                                 </Dialog>
                             </CardActions>
@@ -113,7 +143,10 @@ const PhaseInfo = (): JSX.Element => {
                                 />
                             </CardContent>
                             <CardActions>
-                                <Button onClick={() => handleClickOpen(_id)} >Add artifact</Button>
+                                <Button onClick={() => handleClickOpenArtifactD(_id)} >Add artifact</Button>
+                                <Dialog open={openArtifactD} onClose={handleCloseArtifactD} fullWidth maxWidth="lg">
+
+                                </Dialog>
                             </CardActions>
                         </Card>
                     </Grid>
@@ -125,8 +158,8 @@ const PhaseInfo = (): JSX.Element => {
     return (
         <Box sx={{ flexGrow: '1' }}>
             {phaseInfoRender()}
-            <Snackbar open={openSnackbar} autoHideDuration={2000} onClose={handleClose}>
-                <Alert severity="success">Task added successfully</Alert>
+            <Snackbar open={openSnackbar} autoHideDuration={2000} onClose={() => setOpenSnackbar(false)}>
+                <Alert severity="success">Operation was success</Alert>
             </Snackbar>
         </Box>
     )
