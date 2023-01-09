@@ -7,6 +7,7 @@ import Login from "./login/Login"
 import MemberInfo from "./member/MemberInfo"
 import PhaseInfo from "./phaseInfo/PhaseInfo"
 import TaskInfo from "./tasks/TaskInfo"
+import VulnerabilityPage from "./vulnerabilities/VulnerabilityPage"
 const queryClient = new QueryClient({
     defaultOptions: {
         queries: {
@@ -19,6 +20,9 @@ export default function App() {
     return (
         <QueryClientProvider client={queryClient}>
             <Routes>
+                <Route element={<DashboardLayout />} path="/vulnerabilities">
+                    <Route path='' element={<VulnerabilityPage />} />
+                </Route>
                 <Route element={<DashboardLayout />} path="/:currentProject">
                     <Route path='' element={<Home />} />
                     <Route path='phases' element={<PhaseInfo />} />
