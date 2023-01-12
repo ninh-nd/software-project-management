@@ -1,6 +1,6 @@
 export interface IThirdParty {
-    name: string
-    username: string
-    url: string
-    accessToken: string
+  name: string;
+  username: string;
+  url: string;
+  accessToken: string;
 }

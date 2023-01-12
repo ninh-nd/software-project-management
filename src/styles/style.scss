@@ -1,51 +1,51 @@
 .tableName {
-    font-weight: 700;
-    font-size: 1.2em;
-    text-align: center;
-    padding-bottom: 10px;
-    padding-top: 10px;
+  font-weight: 700;
+  font-size: 1.2em;
+  text-align: center;
+  padding-bottom: 10px;
+  padding-top: 10px;
 }
 
 .buttonRow {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .paper {
-    padding: 16px;
-    display: flex;
-    flex-direction: column;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
 }
 
 .fullPageSkeleton {
-    flex-grow: 1;
-    height: 100vh;
-    min-height: 100vh;
+  flex-grow: 1;
+  height: 100vh;
+  min-height: 100vh;
 }
 
 .topbar {
-    width: 100%;
-    height: 50px;
-    background-color: white;
-    position: sticky;
-    top: 0;
-    z-index: 999;
+  width: 100%;
+  height: 50px;
+  background-color: white;
+  position: sticky;
+  top: 0;
+  z-index: 999;
 
-    .topbarWrapper {
-        height: 100%;
-        padding: 0px 20px;
-        display: flex;
-        align-items: center;
-        flex-direction: row-reverse;
-    }
+  .topbarWrapper {
+    height: 100%;
+    padding: 0px 20px;
+    display: flex;
+    align-items: center;
+    flex-direction: row-reverse;
+  }
 }
 
 .accountPage {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    flex-grow: 1;
-    height: 60vh;
-    justify-content: space-evenly;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-grow: 1;
+  height: 60vh;
+  justify-content: space-evenly;
 }

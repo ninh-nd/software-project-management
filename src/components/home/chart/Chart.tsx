@@ -1,12 +1,21 @@
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
-import { ICommits, IPullRequests } from '~/interfaces/GithubData'
-import Title from '~/components/common/Title'
-import { Paper } from '@mui/material'
-import '~/styles/style.scss'
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
+import { ICommits, IPullRequests } from "~/interfaces/GithubData";
+import Title from "~/components/common/Title";
+import { Paper } from "@mui/material";
+import "~/styles/style.scss";
 type ChartProps = {
-  commits: ICommits
-  prs: IPullRequests
-}
+  commits: ICommits;
+  prs: IPullRequests;
+};
 const Chart = ({ commits, prs }: ChartProps): JSX.Element => {
   return (
     <Paper className="paper">
@@ -51,7 +60,7 @@ const Chart = ({ commits, prs }: ChartProps): JSX.Element => {
           <Bar dataKey="total" fill="#82ca9d" name="Number of pull requests" />
         </BarChart>
       </ResponsiveContainer>
-    </Paper >
-  )
-}
-export default Chart
+    </Paper>
+  );
+};
+export default Chart;

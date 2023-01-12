@@ -1,24 +1,34 @@
-import Chart from '~/components/home/chart/Chart'
-import { getCommits, getPullRequests } from '~/actions/activityHistoryAction'
-import { useQuery } from '@tanstack/react-query'
-import { Box, Container, Grid, Skeleton } from '@mui/material'
-import TotalCommits from '~/components/home/featuredInfo/TotalCommits'
-import TotalPullRequests from '~/components/home/featuredInfo/TotalPull'
-import ProjectInfo from '~/components/home/featuredInfo/ProjectInfo'
-import "~/styles/style.scss"
-import { useParams } from 'react-router-dom'
+import Chart from "~/components/home/chart/Chart";
+import { getCommits, getPullRequests } from "~/actions/activityHistoryAction";
+import { useQuery } from "@tanstack/react-query";
+import { Box, Container, Grid, Skeleton } from "@mui/material";
+import TotalCommits from "~/components/home/featuredInfo/TotalCommits";
+import TotalPullRequests from "~/components/home/featuredInfo/TotalPull";
+import ProjectInfo from "~/components/home/featuredInfo/ProjectInfo";
+import "~/styles/style.scss";
+import { useParams } from "react-router-dom";
 const Home = (): JSX.Element => {
-  const { currentProject } = useParams()
-  if (currentProject === undefined) return <></>
-  const commitsQuery = useQuery(['commits', currentProject], () => getCommits(currentProject))
-  const pullRequestsQuery = useQuery(['pullRequests', currentProject], () => getPullRequests(currentProject))
+  const { currentProject } = useParams();
+  if (currentProject === undefined) return <></>;
+  const commitsQuery = useQuery(["commits", currentProject], () =>
+    getCommits(currentProject)
+  );
+  const pullRequestsQuery = useQuery(["pullRequests", currentProject], () =>
+    getPullRequests(currentProject)
+  );
   if (commitsQuery.isLoading || pullRequestsQuery.isLoading) {
-    return <Skeleton variant="rounded" className="fullPageSkeleton" />
+    return <Skeleton variant="rounded" className="fullPageSkeleton" />;
   }
-  const commits = commitsQuery.data === undefined ? { total: 0, contribution: [] } : commitsQuery.data.data
-  const pullRequests = pullRequestsQuery.data === undefined ? { total: 0, contribution: [] } : pullRequestsQuery.data.data
+  const commits =
+    commitsQuery.data === undefined
+      ? { total: 0, contribution: [] }
+      : commitsQuery.data.data;
+  const pullRequests =
+    pullRequestsQuery.data === undefined
+      ? { total: 0, contribution: [] }
+      : pullRequestsQuery.data.data;
   return (
-    <Box sx={{ flexGrow: 1, height: '100vh' }} >
+    <Box sx={{ flexGrow: 1, height: "100vh" }}>
       <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
         <Grid container spacing={3}>
           <Grid item xs={3}>
@@ -35,7 +45,7 @@ const Home = (): JSX.Element => {
           </Grid>
         </Grid>
       </Container>
-    </Box >
-  )
-}
-export default Home
+    </Box>
+  );
+};
+export default Home;

@@ -1,8 +1,8 @@
-import { IThirdParty } from "./ThirdParty"
+import { IThirdParty } from "./ThirdParty";
 
 export interface IAccount {
-    _id: string
-    username: string
-    email: string
-    thirdParty: IThirdParty[]
+  _id: string;
+  username: string;
+  email: string;
+  thirdParty: IThirdParty[];
 }
