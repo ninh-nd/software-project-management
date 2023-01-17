@@ -1,9 +1,10 @@
 import * as React from "react";
 import Typography from "@mui/material/Typography";
+import { SxProps } from "@mui/material";
 
 interface TitleProps {
   children?: React.ReactNode;
-  className?: string;
+  sx?: SxProps;
 }
 
 export default function Title(props: TitleProps) {
@@ -13,7 +14,7 @@ export default function Title(props: TitleProps) {
       variant="h6"
       color="primary"
       gutterBottom
-      className={props.className}
+      sx={props.sx}
     >
       {props.children}
     </Typography>

@@ -9,6 +9,7 @@ import {
   Dialog,
   Grid,
   Paper,
+  SxProps,
   TextField,
   Typography,
 } from "@mui/material";
@@ -17,6 +18,14 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { getAccountInfo } from "~/actions/accountAction";
 import { IThirdParty } from "~/interfaces/ThirdParty";
+const accountPageStyle: SxProps = {
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  flexGrow: 1,
+  height: "60vh",
+  justifyContent: "space-evenly",
+};
 const renderGithub = (github: IThirdParty | undefined) => {
   const { register, handleSubmit } = useForm<{ accessToken: string }>();
   const updateAccessTokenGithub = () => {
@@ -66,7 +75,7 @@ const AccountInfo = () => {
     (thirdParty: IThirdParty) => thirdParty.name === "Github"
   );
   return (
-    <Box className="accountPage">
+    <Box sx={accountPageStyle}>
       <Card sx={{ minWidth: "550px" }}>
         <Grid container spacing={2}>
           <Grid item xs={4}>

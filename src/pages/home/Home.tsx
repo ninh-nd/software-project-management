@@ -5,8 +5,8 @@ import { Box, Container, Grid, Skeleton } from "@mui/material";
 import TotalCommits from "~/components/home/featuredInfo/TotalCommits";
 import TotalPullRequests from "~/components/home/featuredInfo/TotalPull";
 import ProjectInfo from "~/components/home/featuredInfo/ProjectInfo";
-import "~/styles/style.scss";
 import { useParams } from "react-router-dom";
+import FullPageSkeleton from "~/components/common/FullPageSkeleton";
 const Home = (): JSX.Element => {
   const { currentProject } = useParams();
   if (currentProject === undefined) return <></>;
@@ -17,7 +17,7 @@ const Home = (): JSX.Element => {
     getPullRequests(currentProject)
   );
   if (commitsQuery.isLoading || pullRequestsQuery.isLoading) {
-    return <Skeleton variant="rounded" className="fullPageSkeleton" />;
+    return <FullPageSkeleton />;
   }
   const commits =
     commitsQuery.data === undefined

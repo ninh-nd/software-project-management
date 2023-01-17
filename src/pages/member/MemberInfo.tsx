@@ -1,6 +1,5 @@
 import React from "react";
 import { DataGrid, GridRowParams, GridSelectionModel } from "@mui/x-data-grid";
-import "~/styles/style.scss";
 import {
   Button,
   Snackbar,
@@ -11,6 +10,7 @@ import {
   Paper,
   Typography,
   Grid,
+  SxProps,
 } from "@mui/material";
 import {
   assignTask,
@@ -22,6 +22,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Title from "~/components/common/Title";
 import { useParams } from "react-router-dom";
 import { IMember } from "~/interfaces/Member";
+import FullPageSkeleton from "~/components/common/FullPageSkeleton";
+import TableTitle from "~/components/memberInfo/TableTitle";
 interface AssignTaskParams {
   taskId: string;
   memberId: string;
@@ -30,6 +32,19 @@ interface MarkTaskParams {
   taskIdArray: string[];
   status: string;
 }
+const ButtonRowBox = ({ children }: { children: JSX.Element[] }) => {
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-between",
+      }}
+    >
+      {children}
+    </Box>
+  );
+};
 const MemberInfo = (): JSX.Element => {
   const queryClient = useQueryClient();
   const [open, setOpen] = React.useState(false);
@@ -58,7 +73,7 @@ const MemberInfo = (): JSX.Element => {
     getTasks(currentProject)
   );
   if (memberListQuery.isLoading || taskQuery.isLoading) {
-    return <Skeleton variant="rounded" className="fullPageSkeleton" />;
+    return <FullPageSkeleton />;
   }
   const memberList =
     memberListQuery.data === undefined ? [] : memberListQuery.data.data;
@@ -106,7 +121,7 @@ const MemberInfo = (): JSX.Element => {
           <>
             <Grid item xs={2}>
               <Box sx={{ height: "100%" }}>
-                <Title className="tableName">Member Info</Title>
+                <TableTitle>Member Info</TableTitle>
                 <Typography
                   sx={{ fontSize: 14 }}
                   color="text.secondary"
@@ -118,7 +133,7 @@ const MemberInfo = (): JSX.Element => {
             </Grid>
             <Grid item xs={5}>
               <Box sx={{ height: "100%" }}>
-                <Title className="tableName">Activity History</Title>
+                <TableTitle>Activity History</TableTitle>
                 <DataGrid
                   getRowId={(row) => row._id}
                   rows={activityHistory}
@@ -130,7 +145,7 @@ const MemberInfo = (): JSX.Element => {
             <Grid item xs={5}>
               <Box sx={{ height: "100%" }}>
                 <Box>
-                  <Title className="tableName">Tasks</Title>
+                  <TableTitle>Tasks</TableTitle>
                   <DataGrid
                     getRowId={(row) => row._id}
                     rows={tasks}
@@ -140,7 +155,7 @@ const MemberInfo = (): JSX.Element => {
                     onSelectionModelChange={getSelection}
                   />
                 </Box>
-                <Box className="buttonRow">
+                <ButtonRowBox>
                   <Button onClick={() => handleClick(id)}>Assign task</Button>
                   <Dialog
                     open={open}
@@ -162,7 +177,7 @@ const MemberInfo = (): JSX.Element => {
                   <Button onClick={markAsIncomplete}>
                     Mark selected tasks as active
                   </Button>
-                </Box>
+                </ButtonRowBox>
               </Box>
             </Grid>
           </>

@@ -10,8 +10,8 @@ import {
 import { Paper } from "@mui/material";
 import { getProjectInfo } from "~/actions/projectAction";
 import { useQuery } from "@tanstack/react-query";
-import "~/styles/style.scss";
 import { useParams } from "react-router-dom";
+import InfoPaper from "../InfoPaper";
 const ProjectInfo = (): JSX.Element => {
   const { currentProject } = useParams();
   if (currentProject === undefined) return <></>;
@@ -43,7 +43,7 @@ const ProjectInfo = (): JSX.Element => {
     day: "2-digit",
   }).format(new Date(projectInfo.updatedAt));
   return (
-    <Paper className="paper">
+    <InfoPaper>
       <TableContainer>
         <Table aria-label="simple table">
           <TableBody>
@@ -84,7 +84,7 @@ const ProjectInfo = (): JSX.Element => {
           </TableBody>
         </Table>
       </TableContainer>
-    </Paper>
+    </InfoPaper>
   );
 };
 export default ProjectInfo;

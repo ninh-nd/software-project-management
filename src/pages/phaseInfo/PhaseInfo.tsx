@@ -17,10 +17,10 @@ import { getProjectInfo } from "~/actions/projectAction";
 import { getTasks } from "~/actions/taskAction";
 import { addTaskToPhase, removeTaskFromPhase } from "~/actions/phaseAction";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import "~/styles/style.scss";
 import { useParams } from "react-router-dom";
 import CreatePhaseModel from "~/components/phaseInfo/CreatePhaseModel";
 import { IPhase } from "~/interfaces/Phase";
+import FullPageSkeleton from "~/components/common/FullPageSkeleton";
 interface AddOrRemoveTaskToPhaseParams {
   phaseId: string;
   taskId: string;
@@ -64,7 +64,7 @@ const PhaseInfo = (): JSX.Element => {
     },
   });
   if (phaseQuery.isLoading || taskQuery.isLoading) {
-    return <Skeleton variant="rounded" className="fullPageSkeleton" />;
+    return <FullPageSkeleton />;
   }
   const phaseList =
     phaseQuery.data === undefined ? [] : phaseQuery.data.data.phaseList;

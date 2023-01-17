@@ -11,14 +11,14 @@ import {
 import { ICommits, IPullRequests } from "~/interfaces/GithubData";
 import Title from "~/components/common/Title";
 import { Paper } from "@mui/material";
-import "~/styles/style.scss";
+import InfoPaper from "../InfoPaper";
 type ChartProps = {
   commits: ICommits;
   prs: IPullRequests;
 };
 const Chart = ({ commits, prs }: ChartProps): JSX.Element => {
   return (
-    <Paper className="paper">
+    <InfoPaper>
       <Title>Activity history</Title>
       <ResponsiveContainer width="100%" aspect={3 / 1}>
         <BarChart
@@ -60,7 +60,7 @@ const Chart = ({ commits, prs }: ChartProps): JSX.Element => {
           <Bar dataKey="total" fill="#82ca9d" name="Number of pull requests" />
         </BarChart>
       </ResponsiveContainer>
-    </Paper>
+    </InfoPaper>
   );
 };
 export default Chart;

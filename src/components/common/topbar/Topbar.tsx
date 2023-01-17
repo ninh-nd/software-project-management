@@ -4,12 +4,24 @@ import {
   Brightness7,
   AccountCircle,
 } from "@mui/icons-material";
-import { IconButton, Tooltip, Box, AppBar } from "@mui/material";
+import { IconButton, Tooltip, Box, AppBar, SxProps } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import { getAccountInfo, logout } from "~/actions/accountAction";
 import { useProjectActions } from "~/hooks/project";
 import { useThemeActions, useThemeHook } from "~/hooks/theme";
-import "~/styles/style.scss";
+const topBarStyle: SxProps = {
+  width: "100%",
+  height: "50px",
+  position: "sticky",
+  top: "0",
+};
+const topbarWrapperStyle: SxProps = {
+  display: "flex",
+  height: "100%",
+  p: "0px 20px",
+  alignItems: "center",
+  flexDirection: "row-reverse",
+};
 const Topbar = (): JSX.Element => {
   const theme = useThemeHook();
   const { setTheme } = useThemeActions();
@@ -36,8 +48,8 @@ const Topbar = (): JSX.Element => {
     navigate(`/user/${username}`);
   };
   return (
-    <AppBar className="topbar">
-      <Box className="topbarWrapper">
+    <AppBar sx={topBarStyle}>
+      <Box sx={topbarWrapperStyle}>
         <Tooltip title="Logout">
           <IconButton onClick={handleLogOut}>
             <Logout />
