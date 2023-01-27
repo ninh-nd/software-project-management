@@ -21,6 +21,7 @@ import { useParams } from "react-router-dom";
 import CreatePhaseModel from "~/components/phaseInfo/CreatePhaseModel";
 import { IPhase } from "~/interfaces/Phase";
 import FullPageSkeleton from "~/components/common/FullPageSkeleton";
+import CreateArtifactForm from "~/components/phaseInfo/CreateArtifactForm";
 interface AddOrRemoveTaskToPhaseParams {
   phaseId: string;
   taskId: string;
@@ -202,7 +203,9 @@ const PhaseInfo = (): JSX.Element => {
                   onClose={handleCloseArtifactD}
                   fullWidth
                   maxWidth="lg"
-                ></Dialog>
+                >
+                  <CreateArtifactForm />
+                </Dialog>
               </CardActions>
             </Card>
           </Grid>

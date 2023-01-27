@@ -38,7 +38,7 @@ const Item = ({ text, icon, path }: ItemProps) => {
 const Sidebar = (): JSX.Element => {
   const currentProject = useProjectHook();
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box display="flex">
       <Drawer
         variant="permanent"
         sx={{

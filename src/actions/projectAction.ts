@@ -15,5 +15,5 @@ export async function createPhaseModel(
   const response = await resourcesAPI.post(`/project/${projectName}`, {
     phases: model,
   });
-  return response;
+  return response.data;
 }
