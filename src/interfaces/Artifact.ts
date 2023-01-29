@@ -1,3 +1,6 @@
+import { IThreat } from "./Threat";
+import { IVulnerability } from "./Vulnerability";
+
 export interface IArtifact {
   _id: string;
   name: string;
@@ -5,6 +8,16 @@ export interface IArtifact {
   type: "image" | "log" | "source code" | "executable" | "library";
   url: string;
   version: string;
-  threatList: string[]; // List of threat name
-  vulnerabilityList: string[]; // List of CVE-IDs
+  threatList: IThreat[];
+  vulnerabilityList: IVulnerability[];
+}
+
+export interface IArtifactCreate {
+  name: string;
+  content: string;
+  type: "image" | "log" | "source code" | "executable" | "library";
+  url: string;
+  version: string;
+  threatList: string[];
+  vulnerabilityList: string[];
 }

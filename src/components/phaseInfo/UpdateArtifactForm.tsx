@@ -13,10 +13,10 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
-import { addArtifactToPhase } from "~/actions/phaseAction";
+import { updateArtifact } from "~/actions/phaseAction";
 import { getThreats } from "~/actions/threatActions";
 import { getVulnerabilities } from "~/actions/vulnAction";
-import { IArtifact, IArtifactCreate } from "~/interfaces/Artifact";
+import { IArtifact } from "~/interfaces/Artifact";
 const type = ["image", "log", "source code", "executable", "library"];
 const FormItem = ({
   label,
@@ -37,6 +37,7 @@ const FormItem = ({
 );
 interface CreateArtifactFormProps {
   phaseId: string;
+  artifact: IArtifact;
   setCloseDialog: () => void;
   setOpenSnackbar?: ({
     open,
@@ -46,8 +47,9 @@ interface CreateArtifactFormProps {
     status: "success" | "error";
   }) => void;
 }
-export default function CreateArtifactForm({
+export default function UpdateArtifactForm({
   phaseId,
+  artifact,
   setCloseDialog,
   setOpenSnackbar,
 }: CreateArtifactFormProps) {
@@ -82,7 +84,7 @@ export default function CreateArtifactForm({
       threatList: threatIds,
       vulnerabilityList: vulnIds,
     };
-    const response = await addArtifactToPhase(phaseId, sendObject);
+    const response = await updateArtifact(phaseId, artifact._id, sendObject);
     if (response.status === "success") {
       queryClient.invalidateQueries(["phaseList", currentProject]);
       setCloseDialog();
@@ -98,10 +100,19 @@ export default function CreateArtifactForm({
     <Stack spacing={2} sx={{ p: 4 }}>
       <Box component="form" onSubmit={handleSubmit(submit)}>
         <FormItem label="Artifact's name">
-          <TextField {...register("name")} label="Name" />
+          <TextField
+            {...register("name")}
+            label="Name"
+            defaultValue={artifact.name}
+          />
         </FormItem>
         <FormItem label="Type">
-          <RadioGroup row value={selectedType} onChange={selectType}>
+          <RadioGroup
+            row
+            value={selectedType}
+            onChange={selectType}
+            defaultValue={artifact.type}
+          >
             {type.map((t) => (
               <FormControlLabel
                 {...register("type")}
@@ -117,6 +128,7 @@ export default function CreateArtifactForm({
           <>
             <FormItem label="Content" />
             <TextField
+              defaultValue={artifact.content}
               {...register("content")}
               label="Content"
               multiline
@@ -127,10 +139,18 @@ export default function CreateArtifactForm({
         ) : (
           <>
             <FormItem label="URL">
-              <TextField {...register("url")} label="URL" />
+              <TextField
+                {...register("url")}
+                label="URL"
+                defaultValue={artifact.url}
+              />
             </FormItem>
             <FormItem label="Version">
-              <TextField {...register("version")} label="Version" />
+              <TextField
+                {...register("version")}
+                label="Version"
+                defaultValue={artifact.version}
+              />
             </FormItem>
           </>
         )}
@@ -174,7 +194,7 @@ export default function CreateArtifactForm({
             variant="contained"
             sx={{ width: "40%", height: "40%", m: 2 }}
           >
-            Create
+            Update
           </Button>
         </Box>
       </Box>

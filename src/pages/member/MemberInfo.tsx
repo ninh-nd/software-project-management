@@ -1,29 +1,18 @@
-import React from "react";
+import { Box, Button, Dialog, Grid, Typography } from "@mui/material";
 import { DataGrid, GridRowParams, GridSelectionModel } from "@mui/x-data-grid";
-import {
-  Button,
-  Snackbar,
-  Alert,
-  Dialog,
-  Box,
-  Skeleton,
-  Paper,
-  Typography,
-  Grid,
-  SxProps,
-} from "@mui/material";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import React from "react";
+import { useParams } from "react-router-dom";
 import {
   assignTask,
   getMembersOfProject,
   markTask,
 } from "~/actions/memberAction";
 import { getTasks } from "~/actions/taskAction";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import Title from "~/components/common/Title";
-import { useParams } from "react-router-dom";
-import { IMember } from "~/interfaces/Member";
+import AlertSnackbar from "~/components/common/AlertSnackbar";
 import FullPageSkeleton from "~/components/common/FullPageSkeleton";
 import TableTitle from "~/components/memberInfo/TableTitle";
+import { IMember } from "~/interfaces/Member";
 interface AssignTaskParams {
   taskId: string;
   memberId: string;
@@ -183,13 +172,11 @@ const MemberInfo = (): JSX.Element => {
           </>
         );
       })}
-      <Snackbar
+      <AlertSnackbar
         open={openSnackbar}
-        autoHideDuration={2000}
         onClose={handleClose}
-      >
-        <Alert severity="success">Task added successfully</Alert>
-      </Snackbar>
+        status="success"
+      />
     </Grid>
   );
 };
