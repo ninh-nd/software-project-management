@@ -3,3 +3,4 @@ export interface IThreat {
   name: string;
   description: string;
 }
+export type IThreatCreate = Omit<IThreat, "_id">;

@@ -5,13 +5,13 @@ import InfoPaper from "../InfoPaper";
 export default function TotalCommits({
   commits,
 }: {
-  commits: ICommits;
+  commits: ICommits | undefined;
 }): JSX.Element {
   return (
     <InfoPaper>
       <Title>Total commits</Title>
       <Typography component="p" variant="h4">
-        {commits.total}
+        {commits === undefined ? 0 : commits?.total}
       </Typography>
     </InfoPaper>
   );

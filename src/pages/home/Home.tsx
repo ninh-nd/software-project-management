@@ -20,12 +20,10 @@ const Home = (): JSX.Element => {
     return <FullPageSkeleton />;
   }
   const commits =
-    commitsQuery.data === undefined
-      ? { total: 0, contribution: [] }
-      : commitsQuery.data.data;
+    commitsQuery.data === undefined ? undefined : commitsQuery.data.data;
   const pullRequests =
     pullRequestsQuery.data === undefined
-      ? { total: 0, contribution: [] }
+      ? undefined
       : pullRequestsQuery.data.data;
   return (
     <Box sx={{ flexGrow: 1, height: "100vh" }}>

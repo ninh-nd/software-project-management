@@ -27,7 +27,11 @@ const accountPageStyle: SxProps = {
   justifyContent: "space-evenly",
 };
 const renderGithub = (github: IThirdParty | undefined) => {
-  const { register, handleSubmit } = useForm<{ accessToken: string }>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<{ accessToken: string }>();
   const updateAccessTokenGithub = () => {
     setOpen(true);
     if (github === undefined) return;
@@ -54,7 +58,11 @@ const renderGithub = (github: IThirdParty | undefined) => {
             label="Github access token"
             defaultValue={github.accessToken}
             fullWidth
-            {...register("accessToken")}
+            {...register("accessToken", {
+              required: "Access token is required",
+            })}
+            error={errors.accessToken !== undefined}
+            helperText={errors.accessToken?.message}
           />
           <Button fullWidth type="submit">
             Update

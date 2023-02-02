@@ -1,20 +1,19 @@
 import {
-  BarChart,
   Bar,
-  XAxis,
-  YAxis,
+  BarChart,
   CartesianGrid,
-  Tooltip,
   Legend,
   ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
 } from "recharts";
-import { ICommits, IPullRequests } from "~/interfaces/GithubData";
 import Title from "~/components/common/Title";
-import { Paper } from "@mui/material";
+import { ICommits, IPullRequests } from "~/interfaces/GithubData";
 import InfoPaper from "../InfoPaper";
 type ChartProps = {
-  commits: ICommits;
-  prs: IPullRequests;
+  commits: ICommits | undefined;
+  prs: IPullRequests | undefined;
 };
 const Chart = ({ commits, prs }: ChartProps): JSX.Element => {
   return (
@@ -24,7 +23,7 @@ const Chart = ({ commits, prs }: ChartProps): JSX.Element => {
         <BarChart
           width={500}
           height={300}
-          data={commits.contribution}
+          data={commits === undefined ? [] : commits?.contribution}
           margin={{
             top: 5,
             right: 30,
@@ -44,7 +43,7 @@ const Chart = ({ commits, prs }: ChartProps): JSX.Element => {
         <BarChart
           width={500}
           height={300}
-          data={prs.contribution}
+          data={prs === undefined ? [] : prs?.contribution}
           margin={{
             top: 5,
             right: 30,

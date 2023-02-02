@@ -5,13 +5,13 @@ import InfoPaper from "../InfoPaper";
 export default function TotalPullRequests({
   prs,
 }: {
-  prs: IPullRequests;
+  prs: IPullRequests | undefined;
 }): JSX.Element {
   return (
     <InfoPaper>
       <Title>Total pull requests</Title>
       <Typography component="p" variant="h4">
-        {prs.total}
+        {prs === undefined ? 0 : prs?.total}
       </Typography>
     </InfoPaper>
   );

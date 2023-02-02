@@ -1,4 +1,4 @@
-import resourcesAPI from "~/api";
+import api from "~/api";
 import { PromiseServer } from "~/interfaces/ServerResponse";
 import {
   IVulnerability,
@@ -6,18 +6,18 @@ import {
 } from "~/interfaces/Vulnerability";
 
 export async function getCVE(cveId: string): PromiseServer<IVulnerability> {
-  const response = await resourcesAPI.get(`/vuln/search/${cveId}`);
+  const response = await api.get(`/vuln/search/${cveId}`);
   return response.data;
 }
-export async function createCVE(vuln: IVulnerabilityCreate) {
-  const response = await resourcesAPI.post(`/vuln`, {
+export async function createCVE(vuln: string) {
+  const response = await api.post(`/vuln`, {
     type: "single",
     data: vuln,
   });
   return response.data;
 }
-export async function createCVEs(vulns: IVulnerabilityCreate[]) {
-  const response = await resourcesAPI.post(`/vuln`, {
+export async function createCVEs(vulns: string) {
+  const response = await api.post(`/vuln`, {
     type: "multiple",
     data: vulns,
   });
@@ -25,6 +25,6 @@ export async function createCVEs(vulns: IVulnerabilityCreate[]) {
 }
 
 export async function getVulnerabilities(): PromiseServer<IVulnerability[]> {
-  const response = await resourcesAPI.get(`/vuln`);
+  const response = await api.get(`/vuln`);
   return response.data;
 }
