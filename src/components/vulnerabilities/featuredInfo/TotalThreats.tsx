@@ -10,7 +10,7 @@ export default function TotalThreats({ total }: Props) {
     <InfoPaper>
       <Title>Total threats in the database</Title>
       <Typography component="p" variant="h4">
-        {total === undefined ? 0 : total}
+        {total}
       </Typography>
     </InfoPaper>
   );

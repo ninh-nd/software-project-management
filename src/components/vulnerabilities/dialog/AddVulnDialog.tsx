@@ -8,6 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useQueryClient } from "@tanstack/react-query";
+import { useSnackbar } from "notistack";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { createCVE, createCVEs, getCVE } from "~/actions/vulnAction";
@@ -16,12 +17,11 @@ import { IVulnerabilityCreate } from "~/interfaces/Vulnerability";
 export default function AddVulnDialog({
   open,
   setOpen,
-  setOpenSnackbar,
 }: {
   open: boolean;
   setOpen: (open: boolean) => void;
-  setOpenSnackbar: (open: boolean) => void;
 }) {
+  const { enqueueSnackbar } = useSnackbar();
   const queryClient = useQueryClient();
   const { register, handleSubmit } = useForm<{ cveId: string }>();
   const { register: registerMultiple, handleSubmit: handleSubmitMultiple } =
@@ -74,7 +74,10 @@ export default function AddVulnDialog({
     const response = await createCVE(cve.cveId);
     if (response.status === "success") {
       queryClient.invalidateQueries(["vuln"]);
-      setOpenSnackbar(true);
+      enqueueSnackbar("Vulnerability created", { variant: "success" });
+      setOpen(false);
+    } else {
+      enqueueSnackbar(response.message, { variant: "error" });
       setOpen(false);
     }
   };
@@ -82,7 +85,10 @@ export default function AddVulnDialog({
     const response = await createCVEs(cveIds);
     if (response.status === "success") {
       queryClient.invalidateQueries(["vuln"]);
-      setOpenSnackbar(true);
+      enqueueSnackbar("Vulnerabilities created", { variant: "success" });
+      setOpen(false);
+    } else {
+      enqueueSnackbar(response.message, { variant: "error" });
       setOpen(false);
     }
   };

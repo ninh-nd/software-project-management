@@ -1,6 +1,7 @@
 import { Box, Button, Dialog, Grid, Typography } from "@mui/material";
 import { DataGrid, GridRowParams, GridSelectionModel } from "@mui/x-data-grid";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useSnackbar } from "notistack";
 import React from "react";
 import { useParams } from "react-router-dom";
 import {
@@ -9,7 +10,6 @@ import {
   markTask,
 } from "~/actions/memberAction";
 import { getTasks } from "~/actions/taskAction";
-import AlertSnackbar from "~/components/common/AlertSnackbar";
 import FullPageSkeleton from "~/components/common/FullPageSkeleton";
 import TableTitle from "~/components/memberInfo/TableTitle";
 import { IMember } from "~/interfaces/Member";
@@ -35,23 +35,24 @@ const ButtonRowBox = ({ children }: { children: JSX.Element[] }) => {
   );
 };
 const MemberInfo = (): JSX.Element => {
+  const { enqueueSnackbar } = useSnackbar();
   const queryClient = useQueryClient();
   const [open, setOpen] = React.useState(false);
   const [currentMember, setCurrentMember] = React.useState("");
-  const [openSnackbar, setOpenSnackbar] = React.useState(false);
   const { currentProject } = useParams();
   if (currentProject === undefined) return <></>;
   const [selectedRows, setSelectedRows] = React.useState<string[]>([""]);
   const assignTaskMutation = useMutation<unknown, Error, AssignTaskParams>({
     mutationFn: ({ taskId, memberId }) => assignTask(taskId, memberId),
     onSuccess: () => {
-      setOpenSnackbar(true);
+      enqueueSnackbar("Task assigned", { variant: "success" });
       queryClient.invalidateQueries(["memberList", currentProject]);
     },
   });
   const markTaskMutation = useMutation<unknown, Error, MarkTaskParams>({
     mutationFn: ({ taskIdArray, status }) => markTask(taskIdArray, status),
     onSuccess: () => {
+      enqueueSnackbar("Task marked", { variant: "success" });
       queryClient.invalidateQueries(["memberList", currentProject]);
     },
   });
@@ -83,7 +84,6 @@ const MemberInfo = (): JSX.Element => {
   const handleClose = () => {
     setOpen(false);
     setCurrentMember("");
-    setOpenSnackbar(false);
   };
   const handleAssignTask = async (params: GridRowParams) => {
     const { id } = params;
@@ -172,11 +172,6 @@ const MemberInfo = (): JSX.Element => {
           </>
         );
       })}
-      <AlertSnackbar
-        open={openSnackbar}
-        onClose={handleClose}
-        status="success"
-      />
     </Grid>
   );
 };

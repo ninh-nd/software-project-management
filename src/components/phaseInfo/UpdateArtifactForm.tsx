@@ -10,6 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useSnackbar } from "notistack";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
@@ -39,20 +40,13 @@ interface CreateArtifactFormProps {
   phaseId: string;
   artifact: IArtifact;
   setCloseDialog: () => void;
-  setOpenSnackbar?: ({
-    open,
-    status,
-  }: {
-    open: boolean;
-    status: "success" | "error";
-  }) => void;
 }
 export default function UpdateArtifactForm({
   phaseId,
   artifact,
   setCloseDialog,
-  setOpenSnackbar,
 }: CreateArtifactFormProps) {
+  const { enqueueSnackbar } = useSnackbar();
   const queryClient = useQueryClient();
   const { currentProject } = useParams();
   const [selectedType, setSelectedType] = React.useState(type[0]);
@@ -88,12 +82,10 @@ export default function UpdateArtifactForm({
     if (response.status === "success") {
       queryClient.invalidateQueries(["phaseList", currentProject]);
       setCloseDialog();
-      if (setOpenSnackbar !== undefined)
-        setOpenSnackbar({ open: true, status: "success" });
+      enqueueSnackbar("Artifact updated successfully", { variant: "success" });
     } else {
       setCloseDialog();
-      if (setOpenSnackbar !== undefined)
-        setOpenSnackbar({ open: true, status: "error" });
+      enqueueSnackbar(response.message, { variant: "error" });
     }
   };
   return (

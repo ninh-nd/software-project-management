@@ -1,8 +1,4 @@
-import {
-  ArticleOutlined,
-  CreateOutlined,
-  DeleteOutlined,
-} from "@mui/icons-material";
+import { CreateOutlined, DeleteOutlined } from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -22,8 +18,10 @@ import {
   GridSelectionModel,
 } from "@mui/x-data-grid";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useSnackbar } from "notistack";
 import React from "react";
 import { useParams } from "react-router-dom";
+import { getArtifact } from "~/actions/artifactAction";
 import {
   addTaskToPhase,
   removeArtifactFromPhase,
@@ -31,31 +29,25 @@ import {
 } from "~/actions/phaseAction";
 import { getProjectInfo } from "~/actions/projectAction";
 import { getTasks } from "~/actions/taskAction";
-import AlertSnackbar from "~/components/common/AlertSnackbar";
-import ConfirmDeleteModal from "~/components/phaseInfo/ConfirmDeleteModal";
 import FullPageSkeleton from "~/components/common/FullPageSkeleton";
+import ConfirmDeleteModal from "~/components/phaseInfo/ConfirmDeleteModal";
 import CreateArtifactForm from "~/components/phaseInfo/CreateArtifactForm";
 import CreatePhaseModel from "~/components/phaseInfo/CreatePhaseModel";
-import { IPhase } from "~/interfaces/Phase";
 import UpdateArtifactForm from "~/components/phaseInfo/UpdateArtifactForm";
-import { IArtifact } from "~/interfaces/Artifact";
-import { getArtifact } from "~/actions/artifactAction";
+import { IPhase } from "~/interfaces/Phase";
 interface AddOrRemoveTaskToPhaseParams {
   phaseId: string;
   taskId: string;
 }
 
 const PhaseInfo = (): JSX.Element => {
+  const { enqueueSnackbar } = useSnackbar();
   const queryClient = useQueryClient();
   const { currentProject } = useParams();
   if (currentProject === undefined) return <></>;
   const [openTaskDialog, setOpenTaskDialog] = React.useState(false);
   const [openArtCreateDialog, setOpenArtCreateDialog] = React.useState(false);
   const [openArtUpdateDialog, setOpenArtUpdateDialog] = React.useState(false);
-  const [openSnackbar, setOpenSnackbar] = React.useState({
-    open: false,
-    status: "success",
-  });
   const [selectedPhase, setSelectedPhase] = React.useState("");
   const [selectedRows, setSelectedRows] = React.useState<string[]>([""]);
   const [selectedArtifact, setSelectedArtifact] = React.useState("");
@@ -76,7 +68,7 @@ const PhaseInfo = (): JSX.Element => {
   >({
     mutationFn: ({ phaseId, taskId }) => addTaskToPhase(phaseId, taskId),
     onSuccess: () => {
-      setOpenSnackbar({ open: true, status: "success" });
+      enqueueSnackbar("Task added to phase", { variant: "success" });
       queryClient.invalidateQueries(["phaseList", currentProject]);
     },
   });
@@ -87,7 +79,7 @@ const PhaseInfo = (): JSX.Element => {
   >({
     mutationFn: ({ phaseId, taskId }) => removeTaskFromPhase(phaseId, taskId),
     onSuccess: () => {
-      setOpenSnackbar({ open: true, status: "success" });
+      enqueueSnackbar("Task removed from phase", { variant: "success" });
       queryClient.invalidateQueries(["phaseList", currentProject]);
     },
   });
@@ -144,7 +136,6 @@ const PhaseInfo = (): JSX.Element => {
   };
   const closeTaskDialog = () => {
     setOpenTaskDialog(false);
-    setOpenSnackbar({ open: false, status: "success" });
     setSelectedPhase("");
   };
   const openCreateArtDialog = (id: string) => {
@@ -153,12 +144,10 @@ const PhaseInfo = (): JSX.Element => {
   };
   const closeCreateArtDialog = () => {
     setOpenArtCreateDialog(false);
-    setOpenSnackbar({ open: false, status: "success" });
     setSelectedPhase("");
   };
   const closeUpdateArtDialog = () => {
     setOpenArtUpdateDialog(false);
-    setOpenSnackbar({ open: false, status: "success" });
     setSelectedPhase("");
   };
   const handleDoubleClick = async (params: GridRowParams) => {
@@ -197,10 +186,12 @@ const PhaseInfo = (): JSX.Element => {
       selectedArtifact
     );
     if (response.status === "success") {
-      setOpenSnackbar({ open: true, status: "success" });
+      enqueueSnackbar("Artifact removed from phase", { variant: "success" });
       queryClient.invalidateQueries(["phaseList", currentProject]);
     } else {
-      setOpenSnackbar({ open: true, status: "error" });
+      enqueueSnackbar(response.message, {
+        variant: "error",
+      });
     }
   };
   const phaseInfoRender = () => {
@@ -293,7 +284,6 @@ const PhaseInfo = (): JSX.Element => {
                   <CreateArtifactForm
                     phaseId={selectedPhase}
                     setCloseDialog={closeCreateArtDialog}
-                    setOpenSnackbar={setOpenSnackbar}
                   />
                 </Dialog>
                 <Dialog
@@ -307,7 +297,6 @@ const PhaseInfo = (): JSX.Element => {
                       phaseId={selectedPhase}
                       artifact={artifact}
                       setCloseDialog={closeUpdateArtDialog}
-                      setOpenSnackbar={setOpenSnackbar}
                     />
                   )}
                 </Dialog>
@@ -326,15 +315,6 @@ const PhaseInfo = (): JSX.Element => {
     });
   };
   if (phaseList.length === 0) return <CreatePhaseModel />;
-  return (
-    <Box sx={{ flexGrow: "1" }}>
-      {phaseInfoRender()}
-      <AlertSnackbar
-        open={openSnackbar.open}
-        onClose={() => setOpenSnackbar({ open: false, status: "success" })}
-        status="success"
-      />
-    </Box>
-  );
+  return <Box sx={{ flexGrow: "1" }}>{phaseInfoRender()}</Box>;
 };
 export default PhaseInfo;

@@ -9,14 +9,16 @@ export async function getCVE(cveId: string): PromiseServer<IVulnerability> {
   const response = await api.get(`/vuln/search/${cveId}`);
   return response.data;
 }
-export async function createCVE(vuln: string) {
+export async function createCVE(vuln: string): PromiseServer<IVulnerability> {
   const response = await api.post(`/vuln`, {
     type: "single",
     data: vuln,
   });
   return response.data;
 }
-export async function createCVEs(vulns: string) {
+export async function createCVEs(
+  vulns: string
+): PromiseServer<IVulnerability[]> {
   const response = await api.post(`/vuln`, {
     type: "multiple",
     data: vulns,

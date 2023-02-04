@@ -1,4 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { SnackbarProvider } from "notistack";
 import { Routes, Route } from "react-router-dom";
 import DashboardLayout from "~/layouts/DashboardLayout";
 import AccountInfo from "./account/AccountInfo";
@@ -19,21 +20,23 @@ const queryClient = new QueryClient({
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <Routes>
-        <Route element={<DashboardLayout />} path="/vulnerabilities">
-          <Route path="" element={<VulnerabilityPage />} />
-        </Route>
-        <Route element={<DashboardLayout />} path="/:currentProject">
-          <Route path="" element={<Home />} />
-          <Route path="phases" element={<PhaseInfo />} />
-          <Route path="tasks" element={<TaskInfo />} />
-          <Route path="memberInfo" element={<MemberInfo />} />
-        </Route>
-        <Route path="/login" element={<Login />} />
-        <Route element={<DashboardLayout />} path="/user/:username">
-          <Route path="" element={<AccountInfo />} />
-        </Route>
-      </Routes>
+      <SnackbarProvider autoHideDuration={2000}>
+        <Routes>
+          <Route element={<DashboardLayout />} path="/vulnerabilities">
+            <Route path="" element={<VulnerabilityPage />} />
+          </Route>
+          <Route element={<DashboardLayout />} path="/:currentProject">
+            <Route path="" element={<Home />} />
+            <Route path="phases" element={<PhaseInfo />} />
+            <Route path="tasks" element={<TaskInfo />} />
+            <Route path="memberInfo" element={<MemberInfo />} />
+          </Route>
+          <Route path="/login" element={<Login />} />
+          <Route element={<DashboardLayout />} path="/user/:username">
+            <Route path="" element={<AccountInfo />} />
+          </Route>
+        </Routes>
+      </SnackbarProvider>
     </QueryClientProvider>
   );
 }

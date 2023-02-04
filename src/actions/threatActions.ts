@@ -6,7 +6,9 @@ export async function getThreats(): PromiseServer<IThreat[]> {
   const response = await api.get("/threat");
   return response.data;
 }
-export async function createThreat(threat: IThreatCreate) {
+export async function createThreat(
+  threat: IThreatCreate
+): PromiseServer<IThreat> {
   const response = await api.post("/threat", {
     data: threat,
   });
