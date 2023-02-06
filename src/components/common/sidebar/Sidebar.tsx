@@ -64,6 +64,11 @@ const Sidebar = (): JSX.Element => {
             path={`/${currentProject}/tasks`}
           />
           <Item
+            text="Issues"
+            icon={<InfoOutlined />}
+            path={`/${currentProject}/issues`}
+          />
+          <Item
             text="Members"
             icon={<InfoOutlined />}
             path={`/${currentProject}/memberInfo`}

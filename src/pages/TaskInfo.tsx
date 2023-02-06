@@ -26,7 +26,7 @@ import {
   deleteTask,
   getTasks,
   updateTask,
-} from "../../actions/taskAction";
+} from "../actions/taskAction";
 import { useParams } from "react-router-dom";
 interface EditToolbarProps {
   setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
