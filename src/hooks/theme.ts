@@ -1,5 +1,5 @@
 import { createTheme, Theme } from "@mui/material";
-import create from "zustand";
+import { create } from "zustand";
 interface ThemeStore {
   theme: Theme;
   actions: {
