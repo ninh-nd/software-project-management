@@ -18,24 +18,8 @@ import { updateArtifact } from "~/actions/phaseAction";
 import { getThreats } from "~/actions/threatActions";
 import { getVulnerabilities } from "~/actions/vulnAction";
 import { IArtifact } from "~/interfaces/Artifact";
+import FormItem from "../common/FormItem";
 const type = ["image", "log", "source code", "executable", "library"];
-const FormItem = ({
-  label,
-  children,
-}: {
-  label: string;
-  children?: JSX.Element | JSX.Element[];
-}) => (
-  <Box
-    display="flex"
-    justifyContent="space-between"
-    alignItems="center"
-    sx={{ p: 1 }}
-  >
-    <Typography variant="h6">{label}</Typography>
-    {children}
-  </Box>
-);
 interface CreateArtifactFormProps {
   phaseId: string;
   artifact: IArtifact;

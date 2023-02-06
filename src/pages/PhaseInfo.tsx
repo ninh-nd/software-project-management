@@ -29,6 +29,7 @@ import {
 } from "~/actions/phaseAction";
 import { getProjectInfo } from "~/actions/projectAction";
 import { getTasks } from "~/actions/taskAction";
+import FormWrapper from "~/components/common/FormWrapper";
 import FullPageSkeleton from "~/components/common/FullPageSkeleton";
 import ConfirmDeleteModal from "~/components/phaseInfo/ConfirmDeleteModal";
 import CreateArtifactForm from "~/components/phaseInfo/CreateArtifactForm";
@@ -242,13 +243,18 @@ const PhaseInfo = (): JSX.Element => {
                   fullWidth
                   maxWidth="lg"
                 >
-                  <DataGrid
-                    rows={taskList}
-                    columns={taskColumn}
-                    autoHeight
-                    onRowDoubleClick={handleDoubleClick}
-                    getRowId={(row) => row._id}
-                  />
+                  <FormWrapper
+                    title="Add task"
+                    closeDialogFunction={closeTaskDialog}
+                  >
+                    <DataGrid
+                      rows={taskList}
+                      columns={taskColumn}
+                      autoHeight
+                      onRowDoubleClick={handleDoubleClick}
+                      getRowId={(row) => row._id}
+                    />
+                  </FormWrapper>
                 </Dialog>
               </CardActions>
             </Card>
@@ -281,10 +287,15 @@ const PhaseInfo = (): JSX.Element => {
                   fullWidth
                   maxWidth="lg"
                 >
-                  <CreateArtifactForm
-                    phaseId={selectedPhase}
-                    setCloseDialog={closeCreateArtDialog}
-                  />
+                  <FormWrapper
+                    title="Add artifact"
+                    closeDialogFunction={closeCreateArtDialog}
+                  >
+                    <CreateArtifactForm
+                      phaseId={selectedPhase}
+                      setCloseDialog={closeCreateArtDialog}
+                    />
+                  </FormWrapper>
                 </Dialog>
                 <Dialog
                   open={openArtUpdateDialog}
@@ -293,11 +304,16 @@ const PhaseInfo = (): JSX.Element => {
                   maxWidth="lg"
                 >
                   {artifact === null ? null : (
-                    <UpdateArtifactForm
-                      phaseId={selectedPhase}
-                      artifact={artifact}
-                      setCloseDialog={closeUpdateArtDialog}
-                    />
+                    <FormWrapper
+                      title="Update artifact"
+                      closeDialogFunction={closeUpdateArtDialog}
+                    >
+                      <UpdateArtifactForm
+                        phaseId={selectedPhase}
+                        artifact={artifact}
+                        setCloseDialog={closeUpdateArtDialog}
+                      />
+                    </FormWrapper>
                   )}
                 </Dialog>
               </CardActions>

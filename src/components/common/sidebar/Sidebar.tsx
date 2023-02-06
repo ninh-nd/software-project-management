@@ -16,6 +16,7 @@ import {
   AssessmentOutlined,
   TaskOutlined,
   SecurityOutlined,
+  AttributionOutlined,
 } from "@mui/icons-material";
 import { useProjectHook } from "~/hooks/project";
 const drawerWidth = 240;
@@ -64,13 +65,13 @@ const Sidebar = (): JSX.Element => {
             path={`/${currentProject}/tasks`}
           />
           <Item
-            text="Issues"
+            text="Tickets"
             icon={<InfoOutlined />}
-            path={`/${currentProject}/issues`}
+            path={`/${currentProject}/tickets`}
           />
           <Item
             text="Members"
-            icon={<InfoOutlined />}
+            icon={<AttributionOutlined />}
             path={`/${currentProject}/memberInfo`}
           />
           <Divider />

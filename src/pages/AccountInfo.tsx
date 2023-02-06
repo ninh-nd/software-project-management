@@ -17,6 +17,7 @@ import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { getAccountInfo } from "~/actions/accountAction";
+import FormWrapper from "~/components/common/FormWrapper";
 import { IThirdParty } from "~/interfaces/ThirdParty";
 const accountPageStyle: SxProps = {
   display: "flex",
@@ -49,25 +50,30 @@ const renderGithub = (github: IThirdParty | undefined) => {
       <Button disabled>Connected to Github</Button>
       <Button onClick={updateAccessTokenGithub}>Update access token</Button>
       <Dialog open={open} onClose={() => setOpen(false)}>
-        <Box
-          component="form"
-          sx={{ p: "20px" }}
-          onSubmit={handleSubmit(onSubmit)}
+        <FormWrapper
+          title="Update access token"
+          closeDialogFunction={() => setOpen(false)}
         >
-          <TextField
-            label="Github access token"
-            defaultValue={github.accessToken}
-            fullWidth
-            {...register("accessToken", {
-              required: "Access token is required",
-            })}
-            error={errors.accessToken !== undefined}
-            helperText={errors.accessToken?.message}
-          />
-          <Button fullWidth type="submit">
-            Update
-          </Button>
-        </Box>
+          <Box
+            component="form"
+            sx={{ p: "20px" }}
+            onSubmit={handleSubmit(onSubmit)}
+          >
+            <TextField
+              label="Github access token"
+              defaultValue={github.accessToken}
+              fullWidth
+              {...register("accessToken", {
+                required: "Access token is required",
+              })}
+              error={errors.accessToken !== undefined}
+              helperText={errors.accessToken?.message}
+            />
+            <Button fullWidth type="submit">
+              Update
+            </Button>
+          </Box>
+        </FormWrapper>
       </Dialog>
     </Box>
   );

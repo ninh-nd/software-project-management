@@ -10,6 +10,7 @@ import {
   markTask,
 } from "~/actions/memberAction";
 import { getTasks } from "~/actions/taskAction";
+import FormWrapper from "~/components/common/FormWrapper";
 import FullPageSkeleton from "~/components/common/FullPageSkeleton";
 import TableTitle from "~/components/memberInfo/TableTitle";
 import { IMember } from "~/interfaces/Member";
@@ -152,13 +153,18 @@ const MemberInfo = (): JSX.Element => {
                     fullWidth
                     maxWidth="lg"
                   >
-                    <DataGrid
-                      rows={taskList}
-                      getRowId={(row) => row._id}
-                      columns={taskColumns}
-                      autoHeight
-                      onRowDoubleClick={handleAssignTask}
-                    />
+                    <FormWrapper
+                      title="Assign task"
+                      closeDialogFunction={handleClose}
+                    >
+                      <DataGrid
+                        rows={taskList}
+                        getRowId={(row) => row._id}
+                        columns={taskColumns}
+                        autoHeight
+                        onRowDoubleClick={handleAssignTask}
+                      />
+                    </FormWrapper>
                   </Dialog>
                   <Button onClick={markAsComplete}>
                     Mark selected tasks as completed
