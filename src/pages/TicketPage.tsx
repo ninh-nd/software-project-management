@@ -9,21 +9,32 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
+import { useQuery } from "@tanstack/react-query";
 import React from "react";
+import { useParams } from "react-router-dom";
+import { getTickets } from "~/actions/ticketAction";
 import FormWrapper from "~/components/common/FormWrapper";
 import AddTicketForm from "~/components/ticket/AddTicketForm";
 import { ITicket } from "~/interfaces/Ticket";
 
 interface TabProps {
   title: string;
-  issueList: ITicket[];
+  ticketList: ITicket[];
 }
-function Tab({ title, issueList }: TabProps) {
+function renderDate(date: string) {
+  const dateObj = new Date(date);
+  return Intl.DateTimeFormat("en-Us", {
+    year: "numeric",
+    month: "long",
+    day: "2-digit",
+  }).format(dateObj);
+}
+function Tab({ title, ticketList }: TabProps) {
   return (
     <Paper elevation={3} sx={{ height: "73vh" }}>
       <Box>
         <Badge
-          badgeContent={issueList.length}
+          badgeContent={ticketList.length}
           color="primary"
           sx={{ m: 2 }}
           max={10}
@@ -34,13 +45,32 @@ function Tab({ title, issueList }: TabProps) {
         </Badge>
       </Box>
       <Stack sx={{ p: 2 }} spacing={0.5}>
-        {issueList.map((issue) => (
-          <Paper key={issue._id} sx={{ height: "5em" }} variant="outlined">
+        {ticketList.map((ticket) => (
+          <Paper key={ticket._id} sx={{ height: "8em" }} variant="outlined">
             <Link underline="hover">
               <Typography variant="body1" sx={{ m: 2 }}>
-                {issue.title}
+                {ticket.title}
               </Typography>
             </Link>
+            <Typography variant="body2" sx={{ m: 2 }}>
+              Priority:{" "}
+              {ticket.priority === "low" ? (
+                <Box color="green" display="inline">
+                  Low
+                </Box>
+              ) : ticket.priority === "medium" ? (
+                <Box color="orange" display="inline">
+                  Medium
+                </Box>
+              ) : (
+                <Box color="red" display="inline">
+                  High
+                </Box>
+              )}
+            </Typography>
+            <Typography variant="body2" sx={{ m: 2 }}>
+              Created: {renderDate(ticket.createdAt)}
+            </Typography>
           </Paper>
         ))}
       </Stack>
@@ -50,12 +80,12 @@ function Tab({ title, issueList }: TabProps) {
 
 export default function TicketPage() {
   const [open, setOpen] = React.useState(false);
-
-  const issueList = [
-    { id: 1, title: "test1", description: "test1", status: "todo" },
-    { id: 2, title: "test2", description: "test2", status: "todo" },
-    { id: 3, title: "test3", description: "test3", status: "todo" },
-  ];
+  const { currentProject } = useParams();
+  if (currentProject === undefined) return <></>;
+  const ticketQuery = useQuery(["ticket"], () => getTickets(currentProject));
+  const tickets = ticketQuery.data === undefined ? [] : ticketQuery.data.data;
+  const openTickets = tickets.filter((ticket) => ticket.status === "open");
+  const closeTickets = tickets.filter((ticket) => ticket.status === "closed");
   return (
     <Box flexGrow={1} sx={{ m: 10 }}>
       <Grid container spacing={1} justifyContent="center">
@@ -68,10 +98,10 @@ export default function TicketPage() {
       </Grid>
       <Grid container spacing={1} justifyContent="center">
         <Grid item xs={3}>
-          <Tab title="Open" issueList={issueList} />
+          <Tab title="Open" ticketList={openTickets} />
         </Grid>
         <Grid item xs={3}>
-          <Tab title="Close" issueList={issueList} />
+          <Tab title="Closed" ticketList={closeTickets} />
         </Grid>
       </Grid>
       <Dialog
@@ -84,7 +114,7 @@ export default function TicketPage() {
           title="Add Ticket"
           closeDialogFunction={() => setOpen(false)}
         >
-          <AddTicketForm />
+          <AddTicketForm setCloseDialog={() => setOpen(false)} />
         </FormWrapper>
       </Dialog>
     </Box>

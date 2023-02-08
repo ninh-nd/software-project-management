@@ -10,5 +10,8 @@ export interface ITicket {
   assignee: IMember[];
   assigner: IMember;
   targetedVulnerability: IVulnerability[];
+  projectName: string;
+  createdAt: string;
+  updatedAt: string;
 }
-export type ITicketCreate = Omit<ITicket, "_id">;
+export type ITicketCreate = Omit<ITicket, "_id" | "createdAt" | "updatedAt">;
