@@ -33,7 +33,9 @@ export default function App() {
               <Route path=":phaseId" element={<PhaseDetailInfo />} />
             </Route>
             <Route path="tickets" element={<TicketPage />} />
-            <Route path="memberInfo" element={<MemberInfo />} />
+            <Route path="memberInfo">
+              <Route path=":memberId" element={<MemberInfo />} />
+            </Route>
           </Route>
           <Route path="/login" element={<Login />} />
           <Route element={<DashboardLayout />} path="/user/:username">

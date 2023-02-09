@@ -1,24 +1,24 @@
-import { useNavigate } from "react-router-dom";
-import SelectProject from "./SelectProject";
-import { Box, Divider, Typography } from "@mui/material";
-import { Drawer } from "@mui/material";
-import { List } from "@mui/material";
 import {
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  ListItemButton,
-  Link,
-} from "@mui/material";
-import {
+  AssessmentOutlined,
   HomeOutlined,
   InfoOutlined,
-  AssessmentOutlined,
-  TaskOutlined,
   SecurityOutlined,
-  AttributionOutlined,
 } from "@mui/icons-material";
+import {
+  Box,
+  Divider,
+  Drawer,
+  Link,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Typography,
+} from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import { useProjectHook } from "~/hooks/project";
+import SelectProject from "./SelectProject";
 const drawerWidth = 240;
 interface ItemProps {
   text: string;
@@ -63,11 +63,6 @@ const Sidebar = (): JSX.Element => {
             text="Tickets"
             icon={<InfoOutlined />}
             path={`/${currentProject}/tickets`}
-          />
-          <Item
-            text="Members"
-            icon={<AttributionOutlined />}
-            path={`/${currentProject}/memberInfo`}
           />
           <Divider />
           <ListItem>
