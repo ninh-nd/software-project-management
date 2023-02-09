@@ -2,7 +2,7 @@ import { Box, Container, Grid } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { getPhase } from "~/actions/phaseAction";
-import ArtifactDetails from "~/components/phaseInfo/ArtifactDetails";
+import ArtifactDetails from "~/components/phaseInfo/details/ArtifactDetails";
 import PhaseDetails from "~/components/phaseInfo/PhaseDetails";
 
 export default function PhaseDetailInfo() {

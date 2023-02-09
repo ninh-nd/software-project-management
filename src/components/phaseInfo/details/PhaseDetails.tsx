@@ -19,7 +19,7 @@ import { useParams } from "react-router-dom";
 import { addTaskToPhase, removeTaskFromPhase } from "~/actions/phaseAction";
 import { getTasks } from "~/actions/taskAction";
 import { IPhase } from "~/interfaces/Phase";
-import FormWrapper from "../common/FormWrapper";
+import FormWrapper from "~/components/common/FormWrapper";
 interface AddOrRemoveTaskToPhaseParams {
   phaseId: string;
   taskId: string;

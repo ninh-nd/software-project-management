@@ -19,7 +19,7 @@ import React from "react";
 import { getArtifact } from "~/actions/artifactAction";
 import { removeArtifactFromPhase } from "~/actions/phaseAction";
 import { IPhase } from "~/interfaces/Phase";
-import FormWrapper from "../common/FormWrapper";
+import FormWrapper from "../../common/FormWrapper";
 import ConfirmDeleteModal from "./ConfirmDeleteModal";
 import CreateArtifactForm from "./CreateArtifactForm";
 import UpdateArtifactForm from "./UpdateArtifactForm";
