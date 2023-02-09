@@ -6,10 +6,10 @@ import AccountInfo from "./AccountInfo";
 import Home from "./Home";
 import TicketPage from "./TicketPage";
 import Login from "./Login";
-import MemberInfo from "./MemberInfo";
 import PhaseInfo from "./PhaseInfo";
 import VulnerabilityPage from "./VulnerabilityPage";
 import PhaseDetailInfo from "./PhaseDetailInfo";
+import MemberDetailInfo from "./MemberDetailInfo";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -34,7 +34,7 @@ export default function App() {
             </Route>
             <Route path="tickets" element={<TicketPage />} />
             <Route path="memberInfo">
-              <Route path=":memberId" element={<MemberInfo />} />
+              <Route path=":memberId" element={<MemberDetailInfo />} />
             </Route>
           </Route>
           <Route path="/login" element={<Login />} />

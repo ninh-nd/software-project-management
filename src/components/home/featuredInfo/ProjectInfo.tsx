@@ -1,16 +1,15 @@
 import {
-  Table,
-  TableContainer,
-  TableBody,
-  TableRow,
-  TableCell,
-  Skeleton,
   Link,
+  Skeleton,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
 } from "@mui/material";
-import { Paper } from "@mui/material";
-import { getProjectInfo } from "~/actions/projectAction";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
+import { getProjectInfo } from "~/actions/projectAction";
 import InfoPaper from "../InfoPaper";
 const ProjectInfo = (): JSX.Element => {
   const { currentProject } = useParams();

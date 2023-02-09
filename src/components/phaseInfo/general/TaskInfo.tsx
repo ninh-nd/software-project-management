@@ -23,10 +23,11 @@ import {
 import {
   createTask,
   deleteTask,
-  getAllTasks,
+  getAvailableTasks,
   updateTask,
 } from "~/actions/taskAction";
 import { useParams } from "react-router-dom";
+import { Card, CardContent, CardHeader } from "@mui/material";
 interface EditToolbarProps {
   setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
   setRowModesModel: (
@@ -68,7 +69,7 @@ const TaskInfo = (): JSX.Element => {
   }
   React.useEffect(() => {
     const fetchData = async () => {
-      const data = await getAllTasks(currentProject);
+      const data = await getAvailableTasks(currentProject);
       const tasks = data.data;
       setRows(tasks);
     };
@@ -200,24 +201,29 @@ const TaskInfo = (): JSX.Element => {
   ];
 
   return (
-    <DataGrid
-      sx={{ minHeight: 500 }}
-      rows={rows}
-      getRowId={(row) => row._id}
-      columns={columns}
-      editMode="row"
-      rowModesModel={rowModesModel}
-      onRowEditStart={handleRowEditStart}
-      onRowEditStop={handleRowEditStop}
-      processRowUpdate={processRowUpdate}
-      components={{
-        Toolbar: EditToolbar,
-      }}
-      componentsProps={{
-        toolbar: { setRows, setRowModesModel },
-      }}
-      experimentalFeatures={{ newEditingApi: true }}
-    />
+    <Card>
+      <CardHeader title="Unassigned tasks" />
+      <CardContent>
+        <DataGrid
+          sx={{ minHeight: 500 }}
+          rows={rows}
+          getRowId={(row) => row._id}
+          columns={columns}
+          editMode="row"
+          rowModesModel={rowModesModel}
+          onRowEditStart={handleRowEditStart}
+          onRowEditStop={handleRowEditStop}
+          processRowUpdate={processRowUpdate}
+          components={{
+            Toolbar: EditToolbar,
+          }}
+          componentsProps={{
+            toolbar: { setRows, setRowModesModel },
+          }}
+          experimentalFeatures={{ newEditingApi: true }}
+        />
+      </CardContent>
+    </Card>
   );
 };
 export default TaskInfo;

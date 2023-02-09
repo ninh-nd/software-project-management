@@ -7,6 +7,10 @@ export async function getMembersOfProject(
   const response = await api.get(`/project/${projectName}/member`);
   return response.data;
 }
+export async function getMemberById(memberId: string): PromiseServer<IMember> {
+  const response = await api.get(`/member/${memberId}`);
+  return response.data;
+}
 export async function markTask(taskIdArray: string[], status: string) {
   const response = await api.patch("/task", {
     data: taskIdArray,

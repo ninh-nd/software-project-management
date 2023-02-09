@@ -7,6 +7,7 @@ import TotalPullRequests from "~/components/home/featuredInfo/TotalPull";
 import ProjectInfo from "~/components/home/featuredInfo/ProjectInfo";
 import { useParams } from "react-router-dom";
 import FullPageSkeleton from "~/components/common/FullPageSkeleton";
+import MemberCard from "~/components/home/featuredInfo/MemberCard";
 const Home = (): JSX.Element => {
   const { currentProject } = useParams();
   if (currentProject === undefined) return <></>;
@@ -24,15 +25,22 @@ const Home = (): JSX.Element => {
   return (
     <Box sx={{ flexGrow: 1, height: "100vh" }}>
       <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-        <Grid container spacing={3}>
-          <Grid item xs={3}>
-            <TotalCommits commits={commits} />
+        <Grid container spacing={2}>
+          <Grid container item spacing={2} xs={6}>
+            <Grid item xs={6}>
+              <TotalCommits commits={commits} />
+            </Grid>
+            <Grid item xs={6}>
+              <TotalPullRequests prs={pullRequests} />
+            </Grid>
+            <Grid item xs={12}>
+              <MemberCard />
+            </Grid>
           </Grid>
-          <Grid item xs={3}>
-            <TotalPullRequests prs={pullRequests} />
-          </Grid>
-          <Grid item xs={6}>
-            <ProjectInfo />
+          <Grid container item spacing={2} xs={6}>
+            <Grid item xs={12}>
+              <ProjectInfo />
+            </Grid>
           </Grid>
           <Grid item xs={12}>
             <Chart commits={commits} prs={pullRequests} />
