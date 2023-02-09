@@ -1,6 +1,6 @@
 import { Box, Button, Dialog, Typography } from "@mui/material";
 import React from "react";
-import FormWrapper from "../common/FormWrapper";
+import FormWrapper from "~/components/common/FormWrapper";
 import CreatePhaseModelForm from "./CreatePhaseModelForm";
 const CreatePhaseModel = () => {
   const [open, setOpen] = React.useState(false);

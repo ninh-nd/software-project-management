@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { getPhase } from "~/actions/phaseAction";
 import ArtifactDetails from "~/components/phaseInfo/details/ArtifactDetails";
-import PhaseDetails from "~/components/phaseInfo/PhaseDetails";
+import PhaseDetails from "~/components/phaseInfo/details/PhaseDetails";
 
 export default function PhaseDetailInfo() {
   const { phaseId } = useParams();

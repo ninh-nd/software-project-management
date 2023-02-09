@@ -23,7 +23,7 @@ import {
 import {
   createTask,
   deleteTask,
-  getTasks,
+  getAllTasks,
   updateTask,
 } from "~/actions/taskAction";
 import { useParams } from "react-router-dom";
@@ -68,7 +68,7 @@ const TaskInfo = (): JSX.Element => {
   }
   React.useEffect(() => {
     const fetchData = async () => {
-      const data = await getTasks(currentProject);
+      const data = await getAllTasks(currentProject);
       const tasks = data.data;
       setRows(tasks);
     };

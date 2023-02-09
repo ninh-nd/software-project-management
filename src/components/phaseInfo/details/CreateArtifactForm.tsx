@@ -16,7 +16,7 @@ import { addArtifactToPhase } from "~/actions/phaseAction";
 import { getThreats } from "~/actions/threatActions";
 import { getVulnerabilities } from "~/actions/vulnAction";
 import { IArtifact } from "~/interfaces/Artifact";
-import FormItem from "../common/FormItem";
+import FormItem from "~/components/common/FormItem";
 const type = ["image", "log", "source code", "executable", "library"];
 interface CreateArtifactFormProps {
   phaseId: string;

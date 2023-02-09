@@ -13,8 +13,8 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { Link as RouterLink, useParams } from "react-router-dom";
 import { getProjectInfo } from "~/actions/projectAction";
-import CreatePhaseModel from "~/components/phaseInfo/CreatePhaseModel";
-import TaskInfo from "~/components/phaseInfo/TaskInfo";
+import CreatePhaseModel from "~/components/phaseInfo/general/CreatePhaseModel";
+import TaskInfo from "~/components/phaseInfo/general/TaskInfo";
 
 export default function PhaseInfo() {
   const { currentProject } = useParams();

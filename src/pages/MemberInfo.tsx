@@ -9,7 +9,7 @@ import {
   getMembersOfProject,
   markTask,
 } from "~/actions/memberAction";
-import { getTasks } from "~/actions/taskAction";
+import { getAllTasks } from "~/actions/taskAction";
 import FormWrapper from "~/components/common/FormWrapper";
 import FullPageSkeleton from "~/components/common/FullPageSkeleton";
 import TableTitle from "~/components/memberInfo/TableTitle";
@@ -61,7 +61,7 @@ const MemberInfo = (): JSX.Element => {
     getMembersOfProject(currentProject)
   );
   const taskQuery = useQuery(["taskList", currentProject], () =>
-    getTasks(currentProject)
+    getAllTasks(currentProject)
   );
   if (memberListQuery.isLoading || taskQuery.isLoading) {
     return <FullPageSkeleton />;
