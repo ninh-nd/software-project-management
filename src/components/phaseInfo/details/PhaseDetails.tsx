@@ -17,7 +17,7 @@ import { useSnackbar } from "notistack";
 import React from "react";
 import { useParams } from "react-router-dom";
 import { addTaskToPhase, removeTaskFromPhase } from "~/actions/phaseAction";
-import { getTasks } from "~/actions/taskAction";
+import { getAvailableTasks } from "~/actions/taskAction";
 import { IPhase } from "~/interfaces/Phase";
 import FormWrapper from "~/components/common/FormWrapper";
 interface AddOrRemoveTaskToPhaseParams {
@@ -38,7 +38,7 @@ export default function PhaseDetails({ phase }: PhaseDetailsProps) {
   const { currentProject } = useParams();
   if (currentProject === undefined) return <></>;
   const taskQuery = useQuery(["taskList", currentProject], () =>
-    getTasks(currentProject)
+    getAvailableTasks(currentProject)
   );
   const availableTasks =
     taskQuery.data === undefined ? [] : taskQuery.data.data;
@@ -52,6 +52,7 @@ export default function PhaseDetails({ phase }: PhaseDetailsProps) {
     onSuccess: () => {
       enqueueSnackbar("Task added to phase", { variant: "success" });
       queryClient.invalidateQueries(["phase", phase._id]);
+      queryClient.invalidateQueries(["taskList", currentProject]);
     },
   });
   const removeTaskMutation = useMutation<
@@ -63,6 +64,7 @@ export default function PhaseDetails({ phase }: PhaseDetailsProps) {
     onSuccess: () => {
       enqueueSnackbar("Task removed from phase", { variant: "success" });
       queryClient.invalidateQueries(["phase", phase._id]);
+      queryClient.invalidateQueries(["taskList", currentProject]);
     },
   });
   const [selectedRows, setSelectedRows] = React.useState<string[]>([""]);

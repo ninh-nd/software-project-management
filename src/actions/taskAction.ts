@@ -1,10 +1,21 @@
 import api from "~/api";
 import { PromiseServer } from "~/interfaces/ServerResponse";
 import { ITaskUpdate, ITask } from "~/interfaces/Task";
-export async function getTasks(projectName: string): PromiseServer<ITask[]> {
+export async function getAllTasks(projectName: string): PromiseServer<ITask[]> {
   const response = await api.get(`/task`, {
     params: {
       projectName,
+    },
+  });
+  return response.data;
+}
+export async function getAvailableTasks(
+  projectName: string
+): PromiseServer<ITask[]> {
+  const response = await api.get(`/task`, {
+    params: {
+      projectName,
+      filter: "unassigned",
     },
   });
   return response.data;
