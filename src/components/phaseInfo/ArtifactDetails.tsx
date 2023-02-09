@@ -40,7 +40,6 @@ export default function ArtifactDetails({ phase }: ArtifactDetailsProps) {
     const vulns = item.vulnerabilityList.map((vuln) => vuln.cveId).join(", ");
     return { _id, name, content, type, url, version, threats, vulns };
   });
-  console.log(transformedArtifacts);
   const getArtifactQuery = useQuery(["artifact"], () =>
     getArtifact(selectedArtifact)
   );
@@ -141,12 +140,12 @@ export default function ArtifactDetails({ phase }: ArtifactDetailsProps) {
           {artifact === undefined ? null : (
             <FormWrapper
               title="Update artifact"
-              closeDialogFunction={() => setOpenArtCreateDialog(false)}
+              closeDialogFunction={() => setOpenArtUpdateDialog(false)}
             >
               <UpdateArtifactForm
                 phaseId={phase._id}
                 artifact={artifact}
-                setCloseDialog={() => setOpenArtCreateDialog(false)}
+                setCloseDialog={() => setOpenArtUpdateDialog(false)}
               />
             </FormWrapper>
           )}
