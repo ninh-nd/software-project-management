@@ -8,8 +8,8 @@ import TicketPage from "./TicketPage";
 import Login from "./Login";
 import MemberInfo from "./MemberInfo";
 import PhaseInfo from "./PhaseInfo";
-import TaskInfo from "./TaskInfo";
 import VulnerabilityPage from "./VulnerabilityPage";
+import PhaseDetailInfo from "./PhaseDetailInfo";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -28,8 +28,10 @@ export default function App() {
           </Route>
           <Route element={<DashboardLayout />} path="/:currentProject">
             <Route path="" element={<Home />} />
-            <Route path="phases" element={<PhaseInfo />} />
-            <Route path="tasks" element={<TaskInfo />} />
+            <Route path="phases">
+              <Route path="" element={<PhaseInfo />} />
+              <Route path=":phaseId" element={<PhaseDetailInfo />} />
+            </Route>
             <Route path="tickets" element={<TicketPage />} />
             <Route path="memberInfo" element={<MemberInfo />} />
           </Route>

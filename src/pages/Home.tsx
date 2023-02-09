@@ -19,12 +19,8 @@ const Home = (): JSX.Element => {
   if (commitsQuery.isLoading || pullRequestsQuery.isLoading) {
     return <FullPageSkeleton />;
   }
-  const commits =
-    commitsQuery.data === undefined ? undefined : commitsQuery.data.data;
-  const pullRequests =
-    pullRequestsQuery.data === undefined
-      ? undefined
-      : pullRequestsQuery.data.data;
+  const commits = commitsQuery.data?.data;
+  const pullRequests = pullRequestsQuery.data?.data;
   return (
     <Box sx={{ flexGrow: 1, height: "100vh" }}>
       <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>

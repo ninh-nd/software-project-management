@@ -7,13 +7,11 @@ import {
   RadioGroup,
   Stack,
   TextField,
-  Typography,
 } from "@mui/material";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSnackbar } from "notistack";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
-import { useParams } from "react-router-dom";
 import { updateArtifact } from "~/actions/phaseAction";
 import { getThreats } from "~/actions/threatActions";
 import { getVulnerabilities } from "~/actions/vulnAction";
@@ -32,7 +30,6 @@ export default function UpdateArtifactForm({
 }: CreateArtifactFormProps) {
   const { enqueueSnackbar } = useSnackbar();
   const queryClient = useQueryClient();
-  const { currentProject } = useParams();
   const [selectedType, setSelectedType] = React.useState(type[0]);
   const { register, handleSubmit, control } = useForm<IArtifact>();
   const getVulQuery = useQuery(["vuln"], getVulnerabilities);
@@ -64,7 +61,7 @@ export default function UpdateArtifactForm({
     };
     const response = await updateArtifact(phaseId, artifact._id, sendObject);
     if (response.status === "success") {
-      queryClient.invalidateQueries(["phaseList", currentProject]);
+      queryClient.invalidateQueries(["phase", phaseId]);
       setCloseDialog();
       enqueueSnackbar("Artifact updated successfully", { variant: "success" });
     } else {

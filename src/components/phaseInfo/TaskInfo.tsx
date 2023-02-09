@@ -1,6 +1,5 @@
 /* Not type-safe component */
 import * as React from "react";
-import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
@@ -26,7 +25,7 @@ import {
   deleteTask,
   getTasks,
   updateTask,
-} from "../actions/taskAction";
+} from "~/actions/taskAction";
 import { useParams } from "react-router-dom";
 interface EditToolbarProps {
   setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
@@ -156,26 +155,6 @@ const TaskInfo = (): JSX.Element => {
       flex: 1,
     },
     {
-      field: "createdAt",
-      headerName: "Created At",
-      type: "dateTime",
-      width: 200,
-    },
-    {
-      field: "updatedAt",
-      headerName: "Updated At",
-      type: "dateTime",
-      width: 200,
-    },
-    {
-      field: "createdBy",
-      headerName: "Created By",
-    },
-    {
-      field: "updatedBy",
-      headerName: "Updated By",
-    },
-    {
       field: "actions",
       type: "actions",
       headerName: "Actions",
@@ -221,38 +200,24 @@ const TaskInfo = (): JSX.Element => {
   ];
 
   return (
-    <Box
-      sx={{
-        height: 500,
-        width: "100%",
-        "& .actions": {
-          color: "text.secondary",
-        },
-        "& .textPrimary": {
-          color: "text.primary",
-        },
-        flex: 4,
+    <DataGrid
+      sx={{ minHeight: 500 }}
+      rows={rows}
+      getRowId={(row) => row._id}
+      columns={columns}
+      editMode="row"
+      rowModesModel={rowModesModel}
+      onRowEditStart={handleRowEditStart}
+      onRowEditStop={handleRowEditStop}
+      processRowUpdate={processRowUpdate}
+      components={{
+        Toolbar: EditToolbar,
       }}
-    >
-      <DataGrid
-        autoHeight
-        rows={rows}
-        getRowId={(row) => row._id}
-        columns={columns}
-        editMode="row"
-        rowModesModel={rowModesModel}
-        onRowEditStart={handleRowEditStart}
-        onRowEditStop={handleRowEditStop}
-        processRowUpdate={processRowUpdate}
-        components={{
-          Toolbar: EditToolbar,
-        }}
-        componentsProps={{
-          toolbar: { setRows, setRowModesModel },
-        }}
-        experimentalFeatures={{ newEditingApi: true }}
-      />
-    </Box>
+      componentsProps={{
+        toolbar: { setRows, setRowModesModel },
+      }}
+      experimentalFeatures={{ newEditingApi: true }}
+    />
   );
 };
 export default TaskInfo;

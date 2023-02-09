@@ -6,6 +6,7 @@ export interface IPhase {
   name: string;
   tasks: ITask[];
   artifacts: IArtifact[];
+  description?: string;
   createdAt?: string;
   updatedAt?: string;
 }

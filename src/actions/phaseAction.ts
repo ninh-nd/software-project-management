@@ -3,6 +3,10 @@ import { IArtifactCreate } from "~/interfaces/Artifact";
 import { IPhase } from "~/interfaces/Phase";
 import { IPhasePreset } from "~/interfaces/PhasePreset";
 import { PromiseServer } from "~/interfaces/ServerResponse";
+export async function getPhase(id: string): PromiseServer<IPhase> {
+  const response = await api.get(`/phase/${id}`);
+  return response.data;
+}
 export async function addTaskToPhase(
   phaseId: string,
   taskId: string
