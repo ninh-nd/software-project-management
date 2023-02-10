@@ -10,6 +10,7 @@ import PhaseInfo from "./PhaseInfo";
 import VulnerabilityPage from "./VulnerabilityPage";
 import PhaseDetailInfo from "./PhaseDetailInfo";
 import MemberDetailInfo from "./MemberDetailInfo";
+import TicketDetailPage from "./TicketDetailPage";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -32,7 +33,10 @@ export default function App() {
               <Route path="" element={<PhaseInfo />} />
               <Route path=":phaseId" element={<PhaseDetailInfo />} />
             </Route>
-            <Route path="tickets" element={<TicketPage />} />
+            <Route path="tickets">
+              <Route path="" element={<TicketPage />} />
+              <Route path=":ticketId" element={<TicketDetailPage />} />
+            </Route>
             <Route path="memberInfo">
               <Route path=":memberId" element={<MemberDetailInfo />} />
             </Route>

@@ -16,7 +16,7 @@ import { getTickets } from "~/actions/ticketAction";
 import FormWrapper from "~/components/common/FormWrapper";
 import AddTicketForm from "~/components/ticket/AddTicketForm";
 import { ITicket } from "~/interfaces/Ticket";
-
+import { Link as RouterLink } from "react-router-dom";
 interface TabProps {
   title: string;
   ticketList: ITicket[];
@@ -47,7 +47,7 @@ function Tab({ title, ticketList }: TabProps) {
       <Stack sx={{ p: 2 }} spacing={0.5}>
         {ticketList.map((ticket) => (
           <Paper key={ticket._id} sx={{ height: "8em" }} variant="outlined">
-            <Link underline="hover">
+            <Link underline="hover" component={RouterLink} to={`${ticket._id}`}>
               <Typography variant="body1" sx={{ m: 2 }}>
                 {ticket.title}
               </Typography>
