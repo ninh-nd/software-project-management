@@ -57,15 +57,17 @@ export default function TaskCard({ member }: { member: IMember }) {
     const array = arrayOfIds as string[];
     setSelectedRows(array);
   };
-  const assignTaskMutation = useMutation<unknown, Error, AssignTaskParams>({
-    mutationFn: ({ taskId, memberId }) => assignTask(taskId, memberId),
+  const assignTaskMutation = useMutation({
+    mutationFn: ({ taskId, memberId }: AssignTaskParams) =>
+      assignTask(taskId, memberId),
     onSuccess: () => {
       enqueueSnackbar("Task assigned", { variant: "success" });
       queryClient.invalidateQueries(["member", member._id]);
     },
   });
-  const markTaskMutation = useMutation<unknown, Error, MarkTaskParams>({
-    mutationFn: ({ taskIdArray, status }) => markTask(taskIdArray, status),
+  const markTaskMutation = useMutation({
+    mutationFn: ({ taskIdArray, status }: MarkTaskParams) =>
+      markTask(taskIdArray, status),
     onSuccess: () => {
       enqueueSnackbar("Task marked", { variant: "success" });
       queryClient.invalidateQueries(["member", member._id]);

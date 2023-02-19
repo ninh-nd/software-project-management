@@ -43,24 +43,18 @@ export default function PhaseDetails({ phase }: PhaseDetailsProps) {
   const availableTasks =
     taskQuery.data === undefined ? [] : taskQuery.data.data;
   const [openTaskDialog, setOpenTaskDialog] = React.useState(false);
-  const addTaskMutation = useMutation<
-    unknown,
-    Error,
-    AddOrRemoveTaskToPhaseParams
-  >({
-    mutationFn: ({ phaseId, taskId }) => addTaskToPhase(phaseId, taskId),
+  const addTaskMutation = useMutation({
+    mutationFn: ({ phaseId, taskId }: AddOrRemoveTaskToPhaseParams) =>
+      addTaskToPhase(phaseId, taskId),
     onSuccess: () => {
       enqueueSnackbar("Task added to phase", { variant: "success" });
       queryClient.invalidateQueries(["phase", phase._id]);
       queryClient.invalidateQueries(["taskList", currentProject]);
     },
   });
-  const removeTaskMutation = useMutation<
-    unknown,
-    Error,
-    AddOrRemoveTaskToPhaseParams
-  >({
-    mutationFn: ({ phaseId, taskId }) => removeTaskFromPhase(phaseId, taskId),
+  const removeTaskMutation = useMutation({
+    mutationFn: ({ phaseId, taskId }: AddOrRemoveTaskToPhaseParams) =>
+      removeTaskFromPhase(phaseId, taskId),
     onSuccess: () => {
       enqueueSnackbar("Task removed from phase", { variant: "success" });
       queryClient.invalidateQueries(["phase", phase._id]);
