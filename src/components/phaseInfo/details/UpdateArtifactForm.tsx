@@ -17,17 +17,21 @@ import { getThreats } from "~/actions/threatActions";
 import { getVulnerabilities } from "~/actions/vulnAction";
 import { IArtifact } from "~/interfaces/Artifact";
 import FormItem from "~/components/common/FormItem";
+import { getArtifact } from "~/actions/artifactAction";
 const type = ["image", "log", "source code", "executable", "library"];
 interface CreateArtifactFormProps {
   phaseId: string;
-  artifact: IArtifact;
+  artifactId: string | undefined;
   setCloseDialog: () => void;
 }
 export default function UpdateArtifactForm({
   phaseId,
-  artifact,
+  artifactId,
   setCloseDialog,
 }: CreateArtifactFormProps) {
+  if (artifactId === undefined) {
+    return <></>;
+  }
   const { enqueueSnackbar } = useSnackbar();
   const queryClient = useQueryClient();
   const [selectedType, setSelectedType] = React.useState(type[0]);
@@ -37,10 +41,29 @@ export default function UpdateArtifactForm({
   const threats =
     getThreatQuery.data === undefined ? [] : getThreatQuery.data.data;
   const vulns = getVulQuery.data === undefined ? [] : getVulQuery.data.data;
+  const getArtifactQuery = useQuery(["artifact", artifactId], () =>
+    getArtifact(artifactId)
+  );
+  const artifact = getArtifactQuery.data?.data;
+  if (artifact === undefined) {
+    return <></>;
+  }
+  const defaultValueThreats = threats.filter((threat) =>
+    artifact.threatList.some((x) => x._id === threat._id)
+  );
+  const defaultValueVulns = vulns.filter((vuln) =>
+    artifact.vulnerabilityList.some((x) => x._id === vuln._id)
+  );
   const selectType = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedType((event.target as HTMLInputElement).value);
   };
   const submit = async (data: IArtifact) => {
+    if (data.threatList === undefined) {
+      data.threatList = defaultValueThreats;
+    }
+    if (data.vulnerabilityList === undefined) {
+      data.vulnerabilityList = defaultValueVulns;
+    }
     const threatIds =
       data.threatList === undefined
         ? []
@@ -62,6 +85,7 @@ export default function UpdateArtifactForm({
     const response = await updateArtifact(phaseId, artifact._id, sendObject);
     if (response.status === "success") {
       queryClient.invalidateQueries(["phase", phaseId]);
+      queryClient.invalidateQueries(["artifact", artifact._id]);
       setCloseDialog();
       enqueueSnackbar("Artifact updated successfully", { variant: "success" });
     } else {
@@ -135,6 +159,7 @@ export default function UpdateArtifactForm({
               <Autocomplete
                 multiple
                 options={vulns}
+                defaultValue={defaultValueVulns}
                 onChange={(event, newValue) => onChange(newValue)}
                 getOptionLabel={(option) => option.cveId}
                 renderInput={(params) => (
@@ -152,6 +177,7 @@ export default function UpdateArtifactForm({
               <Autocomplete
                 multiple
                 options={threats}
+                defaultValue={defaultValueThreats}
                 onChange={(event, newValue) => onChange(newValue)}
                 getOptionLabel={(option) => option.name}
                 renderInput={(params) => (

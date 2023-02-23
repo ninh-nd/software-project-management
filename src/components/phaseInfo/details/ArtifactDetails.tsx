@@ -13,10 +13,9 @@ import {
   GridColumns,
   GridRowId,
 } from "@mui/x-data-grid";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useSnackbar } from "notistack";
 import React from "react";
-import { getArtifact } from "~/actions/artifactAction";
 import { removeArtifactFromPhase } from "~/actions/phaseAction";
 import { IPhase } from "~/interfaces/Phase";
 import FormWrapper from "../../common/FormWrapper";
@@ -32,7 +31,9 @@ export default function ArtifactDetails({ phase }: ArtifactDetailsProps) {
   const queryClient = useQueryClient();
   const [openArtCreateDialog, setOpenArtCreateDialog] = React.useState(false);
   const [openArtUpdateDialog, setOpenArtUpdateDialog] = React.useState(false);
-  const [selectedArtifact, setSelectedArtifact] = React.useState("");
+  const [selectedArtifact, setSelectedArtifact] = React.useState<
+    string | undefined
+  >(undefined);
   const [confirmModal, setConfirmModal] = React.useState(false);
   const transformedArtifacts = phase.artifacts.map((item) => {
     const { _id, name, content, type, url, version } = item;
@@ -40,10 +41,6 @@ export default function ArtifactDetails({ phase }: ArtifactDetailsProps) {
     const vulns = item.vulnerabilityList.map((vuln) => vuln.cveId).join(", ");
     return { _id, name, content, type, url, version, threats, vulns };
   });
-  const getArtifactQuery = useQuery(["artifact"], () =>
-    getArtifact(selectedArtifact)
-  );
-  const artifact = getArtifactQuery.data?.data;
   const handleUpdateSelectedArtifact = (id: GridRowId) => () => {
     setSelectedArtifact(id as string);
     setOpenArtUpdateDialog(true);
@@ -87,6 +84,7 @@ export default function ArtifactDetails({ phase }: ArtifactDetailsProps) {
     },
   ];
   const removeArtifact = async () => {
+    if (!selectedArtifact) return;
     const response = await removeArtifactFromPhase(phase._id, selectedArtifact);
     if (response.status === "success") {
       enqueueSnackbar("Artifact removed from phase", { variant: "success" });
@@ -137,18 +135,16 @@ export default function ArtifactDetails({ phase }: ArtifactDetailsProps) {
           fullWidth
           maxWidth="lg"
         >
-          {artifact === undefined ? null : (
-            <FormWrapper
-              title="Update artifact"
-              closeDialogFunction={() => setOpenArtUpdateDialog(false)}
-            >
-              <UpdateArtifactForm
-                phaseId={phase._id}
-                artifact={artifact}
-                setCloseDialog={() => setOpenArtUpdateDialog(false)}
-              />
-            </FormWrapper>
-          )}
+          <FormWrapper
+            title="Update artifact"
+            closeDialogFunction={() => setOpenArtUpdateDialog(false)}
+          >
+            <UpdateArtifactForm
+              phaseId={phase._id}
+              artifactId={selectedArtifact}
+              setCloseDialog={() => setOpenArtUpdateDialog(false)}
+            />
+          </FormWrapper>
         </Dialog>
       </CardActions>
       <ConfirmDeleteModal
