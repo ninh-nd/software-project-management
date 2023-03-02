@@ -22,8 +22,8 @@ export default function PhaseInfo() {
   const phaseQuery = useQuery(["phaseList", currentProject], () =>
     getProjectInfo(currentProject)
   );
-  const phaseList =
-    phaseQuery.data === undefined ? [] : phaseQuery.data.data.phaseList;
+  const phaseList = phaseQuery.data?.data.phaseList;
+  if (phaseList === undefined) return <></>;
   if (phaseList.length === 0) return <CreatePhaseModel />;
   return (
     <Box flexGrow={1} height="100vh">

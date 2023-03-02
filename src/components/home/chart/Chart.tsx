@@ -23,7 +23,7 @@ const Chart = ({ commits, prs }: ChartProps): JSX.Element => {
         <BarChart
           width={500}
           height={300}
-          data={commits === undefined ? [] : commits?.contribution}
+          data={commits === undefined ? [] : commits.contribution}
           margin={{
             top: 5,
             right: 30,
@@ -43,7 +43,7 @@ const Chart = ({ commits, prs }: ChartProps): JSX.Element => {
         <BarChart
           width={500}
           height={300}
-          data={prs === undefined ? [] : prs?.contribution}
+          data={prs === undefined ? [] : prs.contribution}
           margin={{
             top: 5,
             right: 30,

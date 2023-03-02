@@ -11,7 +11,7 @@ export default function TotalCommits({
     <InfoPaper>
       <Title>Total commits</Title>
       <Typography component="p" variant="h4">
-        {commits === undefined ? 0 : commits?.total}
+        {commits === undefined ? 0 : commits.total}
       </Typography>
     </InfoPaper>
   );

@@ -27,8 +27,8 @@ export default function MemberCard() {
       <TableContainer>
         <Table>
           <TableBody>
-            {memberList.map((member) => (
-              <TableRow>
+            {memberList.map((member, index) => (
+              <TableRow key={index}>
                 <TableCell>
                   <AccountCircle sx={{ mr: 2 }} />
                   <Link

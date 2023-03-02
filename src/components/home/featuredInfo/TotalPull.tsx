@@ -11,7 +11,7 @@ export default function TotalPullRequests({
     <InfoPaper>
       <Title>Total pull requests</Title>
       <Typography component="p" variant="h4">
-        {prs === undefined ? 0 : prs?.total}
+        {prs === undefined ? 0 : prs.total}
       </Typography>
     </InfoPaper>
   );

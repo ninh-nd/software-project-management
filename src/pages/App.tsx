@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { SnackbarProvider } from "notistack";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import DashboardLayout from "~/layouts/DashboardLayout";
 import AccountInfo from "./AccountInfo";
 import Home from "./Home";
@@ -45,6 +45,7 @@ export default function App() {
           <Route element={<DashboardLayout />} path="/user/:username">
             <Route path="" element={<AccountInfo />} />
           </Route>
+          <Route path="*" element={<Navigate to="/login" />} />
         </Routes>
       </SnackbarProvider>
     </QueryClientProvider>
