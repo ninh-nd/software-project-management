@@ -14,7 +14,7 @@ export default function MemberInfoCard({ member }: { member: IMember }) {
     <Box display="flex" flexDirection="column">
       <Box
         component="img"
-        sx={{ height: 300, width: 300, borderRadius: 50, mb: 2 }}
+        sx={{ height: "auto", maxWidth: "100%", borderRadius: 50, mb: 2 }}
         src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541"
         alt="avatar"
       />
