@@ -1,4 +1,4 @@
-import { GitHub } from "@mui/icons-material";
+import { GitHub, Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -8,6 +8,7 @@ import {
   CardMedia,
   Dialog,
   Grid,
+  IconButton,
   Paper,
   SxProps,
   TextField,
@@ -28,6 +29,7 @@ const accountPageStyle: SxProps = {
   justifyContent: "space-evenly",
 };
 const renderGithub = (github: IThirdParty | undefined) => {
+  const [isTokenShown, setIsTokenShown] = React.useState(false);
   const {
     register,
     handleSubmit,
@@ -59,16 +61,21 @@ const renderGithub = (github: IThirdParty | undefined) => {
             sx={{ p: "20px" }}
             onSubmit={handleSubmit(onSubmit)}
           >
-            <TextField
-              label="Github access token"
-              defaultValue={github.accessToken}
-              fullWidth
-              {...register("accessToken", {
-                required: "Access token is required",
-              })}
-              error={errors.accessToken !== undefined}
-              helperText={errors.accessToken?.message}
-            />
+            <Box display="flex" justifyContent="space-around">
+              <TextField
+                type={isTokenShown ? "text" : "password"}
+                label="Github access token"
+                defaultValue={github.accessToken}
+                {...register("accessToken", {
+                  required: "Access token is required",
+                })}
+                error={errors.accessToken !== undefined}
+                helperText={errors.accessToken?.message}
+              />
+              <IconButton onClick={() => setIsTokenShown(!isTokenShown)}>
+                {isTokenShown ? <Visibility /> : <VisibilityOff />}
+              </IconButton>
+            </Box>
             <Button fullWidth type="submit">
               Update
             </Button>
