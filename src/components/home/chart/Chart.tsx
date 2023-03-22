@@ -12,8 +12,8 @@ import Title from "~/components/common/Title";
 import { ICommits, IPullRequests } from "~/interfaces/GithubData";
 import InfoPaper from "../InfoPaper";
 type ChartProps = {
-  commits: ICommits | undefined;
-  prs: IPullRequests | undefined;
+  commits: ICommits | undefined | null;
+  prs: IPullRequests | undefined | null;
 };
 const Chart = ({ commits, prs }: ChartProps): JSX.Element => {
   return (
@@ -23,7 +23,13 @@ const Chart = ({ commits, prs }: ChartProps): JSX.Element => {
         <BarChart
           width={500}
           height={300}
-          data={commits === undefined ? [] : commits.contribution}
+          data={
+            commits === undefined
+              ? []
+              : commits === null
+              ? []
+              : commits.contribution
+          }
           margin={{
             top: 5,
             right: 30,
@@ -43,7 +49,7 @@ const Chart = ({ commits, prs }: ChartProps): JSX.Element => {
         <BarChart
           width={500}
           height={300}
-          data={prs === undefined ? [] : prs.contribution}
+          data={prs === undefined ? [] : prs === null ? [] : prs.contribution}
           margin={{
             top: 5,
             right: 30,
