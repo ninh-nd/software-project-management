@@ -8,7 +8,9 @@ import ProjectInfo from "~/components/home/featuredInfo/ProjectInfo";
 import { useParams } from "react-router-dom";
 import FullPageSkeleton from "~/components/common/FullPageSkeleton";
 import MemberCard from "~/components/home/featuredInfo/MemberCard";
+import { useSnackbar } from "notistack";
 const Home = (): JSX.Element => {
+  const { enqueueSnackbar } = useSnackbar();
   const { currentProject } = useParams();
   if (currentProject === undefined) return <></>;
   const commitsQuery = useQuery(["commits", currentProject], () =>
@@ -20,18 +22,21 @@ const Home = (): JSX.Element => {
   if (commitsQuery.isLoading || pullRequestsQuery.isLoading) {
     return <FullPageSkeleton />;
   }
-  const commits = commitsQuery.data?.data;
-  const pullRequests = pullRequestsQuery.data?.data;
+  const commits = commitsQuery.data;
+  const pullRequests = pullRequestsQuery.data;
+  if (commits?.status === "error" || pullRequests?.status === "error") {
+    enqueueSnackbar(commits?.message, { variant: "error" });
+  }
   return (
     <Box sx={{ flexGrow: 1, height: "100vh" }}>
       <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
         <Grid container spacing={2}>
           <Grid container item spacing={2} xs={6}>
             <Grid item xs={6}>
-              <TotalCommits commits={commits} />
+              <TotalCommits commits={commits?.data} />
             </Grid>
             <Grid item xs={6}>
-              <TotalPullRequests prs={pullRequests} />
+              <TotalPullRequests prs={pullRequests?.data} />
             </Grid>
             <Grid item xs={12}>
               <MemberCard />
@@ -43,7 +48,7 @@ const Home = (): JSX.Element => {
             </Grid>
           </Grid>
           <Grid item xs={12}>
-            <Chart commits={commits} prs={pullRequests} />
+            <Chart commits={commits?.data} prs={pullRequests?.data} />
           </Grid>
         </Grid>
       </Container>
