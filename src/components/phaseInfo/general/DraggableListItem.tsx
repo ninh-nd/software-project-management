@@ -18,23 +18,23 @@ export type DraggableListItemProps = {
   items: IPhaseCreate[];
 };
 
-const DraggableListItem = ({
+export default function DraggableListItem({
   item,
   index,
   deletePhase,
   setPhases,
   items,
-}: DraggableListItemProps) => {
-  const updateName = (e: React.ChangeEvent<HTMLInputElement>) => {
+}: DraggableListItemProps) {
+  function updateName(e: React.ChangeEvent<HTMLInputElement>) {
     const newPhases = [...items];
     newPhases[index].name = e.target.value;
     setPhases(newPhases);
-  };
-  const updateDesc = (e: React.ChangeEvent<HTMLInputElement>) => {
+  }
+  function updateDesc(e: React.ChangeEvent<HTMLInputElement>) {
     const newPhases = [...items];
     newPhases[index].description = e.target.value;
     setPhases(newPhases);
-  };
+  }
   return (
     <Draggable draggableId={item.order.toString()} index={index}>
       {(provided) => (
@@ -80,6 +80,4 @@ const DraggableListItem = ({
       )}
     </Draggable>
   );
-};
-
-export default DraggableListItem;
+}

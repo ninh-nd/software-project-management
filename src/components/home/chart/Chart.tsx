@@ -15,7 +15,7 @@ type ChartProps = {
   commits: ICommits | undefined | null;
   prs: IPullRequests | undefined | null;
 };
-const Chart = ({ commits, prs }: ChartProps): JSX.Element => {
+export default function Chart({ commits, prs }: ChartProps) {
   return (
     <InfoPaper>
       <Title>Activity history</Title>
@@ -67,5 +67,4 @@ const Chart = ({ commits, prs }: ChartProps): JSX.Element => {
       </ResponsiveContainer>
     </InfoPaper>
   );
-};
-export default Chart;
+}

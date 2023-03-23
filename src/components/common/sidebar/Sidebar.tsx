@@ -25,7 +25,7 @@ interface ItemProps {
   icon: JSX.Element;
   path: string;
 }
-const Item = ({ text, icon, path }: ItemProps) => {
+function Item({ text, icon, path }: ItemProps) {
   const navigate = useNavigate();
   return (
     <ListItem component={Link}>
@@ -35,8 +35,8 @@ const Item = ({ text, icon, path }: ItemProps) => {
       </ListItemButton>
     </ListItem>
   );
-};
-const Sidebar = (): JSX.Element => {
+}
+export default function Sidebar() {
   const currentProject = useProjectHook();
   return (
     <Box display="flex">
@@ -81,5 +81,4 @@ const Sidebar = (): JSX.Element => {
       </Drawer>
     </Box>
   );
-};
-export default Sidebar;
+}

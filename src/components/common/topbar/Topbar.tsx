@@ -22,31 +22,31 @@ const topbarWrapperStyle: SxProps = {
   alignItems: "center",
   flexDirection: "row-reverse",
 };
-const Topbar = (): JSX.Element => {
+export default function Topbar() {
   const theme = useThemeHook();
   const { setTheme } = useThemeActions();
   const navigate = useNavigate();
   const { currentProject } = useParams();
   const { setCurrentProject } = useProjectActions();
-  const handleLogOut = async () => {
+  async function handleLogOut() {
     logout();
     navigate("/login", { replace: true });
-  };
-  const changeTheme = () => {
+  }
+  function changeTheme() {
     if (theme.palette.mode === "light") {
       setTheme("dark");
     } else {
       setTheme("light");
     }
-  };
-  const redirectToAccountPage = async () => {
+  }
+  async function redirectToAccountPage() {
     const account = await getAccountInfo();
-    const {
-      data: { username },
-    } = account;
+    const { data } = account;
+    if (data === null) return;
+    const { username } = data;
     if (currentProject !== undefined) setCurrentProject(currentProject);
     navigate(`/user/${username}`);
-  };
+  }
   return (
     <AppBar sx={topBarStyle}>
       <Box sx={topbarWrapperStyle}>
@@ -70,5 +70,4 @@ const Topbar = (): JSX.Element => {
       </Box>
     </AppBar>
   );
-};
-export default Topbar;
+}

@@ -35,10 +35,16 @@ export default function CreateArtifactForm({
   const threats =
     getThreatQuery.data === undefined ? [] : getThreatQuery.data.data;
   const vulns = getVulQuery.data === undefined ? [] : getVulQuery.data.data;
-  const selectType = (event: React.ChangeEvent<HTMLInputElement>) => {
+  if (threats === null || vulns === null) {
+    enqueueSnackbar("Internal server error", {
+      variant: "error",
+    });
+    return <></>;
+  }
+  function selectType(event: React.ChangeEvent<HTMLInputElement>) {
     setSelectedType((event.target as HTMLInputElement).value);
-  };
-  const submit = async (data: IArtifact) => {
+  }
+  async function submit(data: IArtifact) {
     const threatIds =
       data.threatList === undefined
         ? []
@@ -66,7 +72,7 @@ export default function CreateArtifactForm({
       setCloseDialog();
       enqueueSnackbar(response.message, { variant: "error" });
     }
-  };
+  }
   return (
     <Stack spacing={2} sx={{ p: 4 }}>
       <Box component="form" onSubmit={handleSubmit(submit)}>

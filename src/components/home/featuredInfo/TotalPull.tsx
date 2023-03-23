@@ -6,7 +6,7 @@ export default function TotalPullRequests({
   prs,
 }: {
   prs: IPullRequests | undefined | null;
-}): JSX.Element {
+}) {
   return (
     <InfoPaper>
       <Title>Total pull requests</Title>

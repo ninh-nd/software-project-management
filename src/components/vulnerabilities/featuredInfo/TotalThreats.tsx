@@ -3,7 +3,7 @@ import Title from "~/components/common/Title";
 import InfoPaper from "~/components/home/InfoPaper";
 
 interface Props {
-  total: number | undefined;
+  total: number;
 }
 export default function TotalThreats({ total }: Props) {
   return (

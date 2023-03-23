@@ -9,7 +9,7 @@ import { useParams } from "react-router-dom";
 import FullPageSkeleton from "~/components/common/FullPageSkeleton";
 import MemberCard from "~/components/home/featuredInfo/MemberCard";
 import { useSnackbar } from "notistack";
-const Home = (): JSX.Element => {
+export default function Home() {
   const { enqueueSnackbar } = useSnackbar();
   const { currentProject } = useParams();
   if (currentProject === undefined) return <></>;
@@ -54,5 +54,4 @@ const Home = (): JSX.Element => {
       </Container>
     </Box>
   );
-};
-export default Home;
+}

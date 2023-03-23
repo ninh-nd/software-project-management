@@ -37,7 +37,7 @@ interface EditToolbarProps {
 function EditToolbar(props: EditToolbarProps) {
   const { setRows, setRowModesModel } = props;
 
-  const addRecord = () => {
+  function addRecord() {
     const id = Date.now().toString(); // Generate a random id for frontend usage only
     setRows((oldRows) => [
       ...oldRows,
@@ -47,7 +47,7 @@ function EditToolbar(props: EditToolbarProps) {
       ...oldModel,
       [id]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
     }));
-  };
+  }
 
   return (
     <GridToolbarContainer>
@@ -58,7 +58,7 @@ function EditToolbar(props: EditToolbarProps) {
   );
 }
 
-const TaskInfo = (): JSX.Element => {
+export default function TaskInfo() {
   const [rows, setRows] = React.useState<GridRowsProp>([]);
   const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>(
     {}
@@ -71,53 +71,62 @@ const TaskInfo = (): JSX.Element => {
     const fetchData = async () => {
       const data = await getAvailableTasks(currentProject);
       const tasks = data.data;
-      setRows(tasks);
+      if (tasks === null) setRows([]);
+      else setRows(tasks);
     };
     fetchData();
   }, []);
-  const handleRowEditStart = (
+  function handleRowEditStart(
     params: GridRowParams,
     event: MuiEvent<MuiBaseEvent>
-  ) => {
+  ) {
     event.defaultMuiPrevented = true;
-  };
+  }
 
-  const handleRowEditStop = async (
+  async function handleRowEditStop(
     params: GridRowParams,
     event: MuiEvent<MuiBaseEvent>
-  ) => {
+  ) {
     event.defaultMuiPrevented = true;
-  };
+  }
 
-  const handleEditClick = (id: GridRowId) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
-  };
+  function handleEditClick(id: GridRowId) {
+    return () => {
+      setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+    };
+  }
 
-  const handleSaveClick = (id: GridRowId) => async () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
-  };
+  function handleSaveClick(id: GridRowId) {
+    return async () => {
+      setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+    };
+  }
 
-  const handleDeleteClick = (id: GridRowId) => async () => {
-    /* FRONTEND DELETE */
-    setRows(rows.filter((row) => row._id !== id));
-    /* BACKEND DELETE */
-    const idAsString = id as string;
-    await deleteTask(idAsString);
-  };
-
-  const handleCancelClick = (id: GridRowId) => () => {
-    setRowModesModel({
-      ...rowModesModel,
-      [id]: { mode: GridRowModes.View, ignoreModifications: true },
-    });
-
-    const editedRow = rows.find((row) => row._id === id);
-    if (editedRow?.isNew) {
+  function handleDeleteClick(id: GridRowId) {
+    return async () => {
+      /* FRONTEND DELETE */
       setRows(rows.filter((row) => row._id !== id));
-    }
-  };
+      /* BACKEND DELETE */
+      const idAsString = id as string;
+      await deleteTask(idAsString);
+    };
+  }
 
-  const processRowUpdate = async (newRow: GridRowModel) => {
+  function handleCancelClick(id: GridRowId) {
+    return () => {
+      setRowModesModel({
+        ...rowModesModel,
+        [id]: { mode: GridRowModes.View, ignoreModifications: true },
+      });
+
+      const editedRow = rows.find((row) => row._id === id);
+      if (editedRow?.isNew) {
+        setRows(rows.filter((row) => row._id !== id));
+      }
+    };
+  }
+
+  async function processRowUpdate(newRow: GridRowModel) {
     const updatedRow = { ...newRow, isNew: false };
     const username = localStorage.getItem("username") || "";
     /* Add a new row */
@@ -144,7 +153,7 @@ const TaskInfo = (): JSX.Element => {
     }
     setRows(rows.map((row) => (row._id === newRow._id ? updatedRow : row)));
     return updatedRow;
-  };
+  }
 
   const columns: GridColumns = [
     { field: "name", headerName: "Name", editable: true, flex: 0.3 },
@@ -225,5 +234,4 @@ const TaskInfo = (): JSX.Element => {
       </CardContent>
     </Card>
   );
-};
-export default TaskInfo;
+}

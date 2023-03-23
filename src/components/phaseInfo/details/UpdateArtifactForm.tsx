@@ -38,14 +38,20 @@ export default function UpdateArtifactForm({
   const { register, handleSubmit, control } = useForm<IArtifact>();
   const getVulQuery = useQuery(["vuln"], getVulnerabilities);
   const getThreatQuery = useQuery(["threat"], getThreats);
-  const threats =
-    getThreatQuery.data === undefined ? [] : getThreatQuery.data.data;
-  const vulns = getVulQuery.data === undefined ? [] : getVulQuery.data.data;
   const getArtifactQuery = useQuery(["artifact", artifactId], () =>
     getArtifact(artifactId)
   );
+  const threats =
+    getThreatQuery.data === undefined ? [] : getThreatQuery.data.data;
+  const vulns = getVulQuery.data === undefined ? [] : getVulQuery.data.data;
   const artifact = getArtifactQuery.data?.data;
-  if (artifact === undefined) {
+  if (
+    artifact === undefined ||
+    artifact === null ||
+    vulns === null ||
+    threats === null
+  ) {
+    enqueueSnackbar("Internal server error", { variant: "error" });
     return <></>;
   }
   const defaultValueThreats = threats.filter((threat) =>
@@ -54,10 +60,10 @@ export default function UpdateArtifactForm({
   const defaultValueVulns = vulns.filter((vuln) =>
     artifact.vulnerabilityList.some((x) => x._id === vuln._id)
   );
-  const selectType = (event: React.ChangeEvent<HTMLInputElement>) => {
+  function selectType(event: React.ChangeEvent<HTMLInputElement>) {
     setSelectedType((event.target as HTMLInputElement).value);
-  };
-  const submit = async (data: IArtifact) => {
+  }
+  async function submit(data: IArtifact) {
     if (data.threatList === undefined) {
       data.threatList = defaultValueThreats;
     }
@@ -92,7 +98,7 @@ export default function UpdateArtifactForm({
       setCloseDialog();
       enqueueSnackbar(response.message, { variant: "error" });
     }
-  };
+  }
   return (
     <Stack spacing={2} sx={{ p: 4 }}>
       <Box component="form" onSubmit={handleSubmit(submit)}>

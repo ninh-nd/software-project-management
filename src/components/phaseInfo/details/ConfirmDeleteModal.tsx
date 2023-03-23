@@ -18,13 +18,13 @@ export default function ConfirmDeleteModal({
   setOpen,
   deleteFunction,
 }: Props) {
-  const handleClose = () => {
+  function handleClose() {
     setOpen(false);
-  };
-  const confirmDelete = async () => {
+  }
+  async function confirmDelete() {
     setOpen(false);
     await deleteFunction();
-  };
+  }
   return (
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle>Are you sure?</DialogTitle>

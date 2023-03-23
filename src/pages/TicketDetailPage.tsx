@@ -84,12 +84,12 @@ function RightColumn({ ticket }: { ticket: ITicket }) {
 function MainContent({ ticket }: { ticket: ITicket }) {
   const { enqueueSnackbar } = useSnackbar();
   const queryClient = useQueryClient();
-  const closeTicket = () => {
+  function closeTicket() {
     ticketMutation.mutate({ ticketId: ticket._id, status: "closed" });
-  };
-  const reopenTicket = () => {
+  }
+  function reopenTicket() {
     ticketMutation.mutate({ ticketId: ticket._id, status: "open" });
-  };
+  }
   const ticketMutation = useMutation({
     mutationFn: ({
       ticketId,

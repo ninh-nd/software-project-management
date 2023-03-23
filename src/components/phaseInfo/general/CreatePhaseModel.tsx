@@ -2,7 +2,7 @@ import { Box, Button, Dialog, Typography } from "@mui/material";
 import React from "react";
 import FormWrapper from "~/components/common/FormWrapper";
 import CreatePhaseModelForm from "./CreatePhaseModelForm";
-const CreatePhaseModel = () => {
+export default function CreatePhaseModel() {
   const [open, setOpen] = React.useState(false);
   return (
     <Box
@@ -30,5 +30,4 @@ const CreatePhaseModel = () => {
       </Dialog>
     </Box>
   );
-};
-export default CreatePhaseModel;
+}

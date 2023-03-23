@@ -26,13 +26,13 @@ interface IFormInput {
   username: string;
   password: string;
 }
-const Login = (): JSX.Element => {
+export default function Login() {
   const { handleSubmit, register } = useForm<IFormInput>();
   const { setCurrentProject } = useProjectActions();
   const navigate = useNavigate();
   const [errorText, setErrorText] = React.useState("");
   const [error, setError] = React.useState(false);
-  const onSubmit = async (data: IFormInput) => {
+  async function onSubmit(data: IFormInput) {
     const { username, password } = data;
     let response;
     try {
@@ -49,7 +49,7 @@ const Login = (): JSX.Element => {
       setCurrentProject(currentProject);
       navigate(`/${currentProject}/`);
     }
-  };
+  }
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -122,5 +122,4 @@ const Login = (): JSX.Element => {
       </Container>
     </ThemeProvider>
   );
-};
-export default Login;
+}

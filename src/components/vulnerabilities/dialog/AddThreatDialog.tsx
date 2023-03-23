@@ -22,7 +22,7 @@ export default function AddThreatDialog({ open, setOpen }: Props) {
     handleSubmit,
     formState: { errors },
   } = useForm<Form>();
-  const submit = async (data: Form) => {
+  async function submit(data: Form) {
     const response = await createThreat(data);
     if (response.status === "success") {
       queryClient.invalidateQueries(["threat"]);
@@ -32,7 +32,7 @@ export default function AddThreatDialog({ open, setOpen }: Props) {
       setOpen(false);
       enqueueSnackbar(response.message, { variant: "error" });
     }
-  };
+  }
   return (
     <Dialog open={open} onClose={() => setOpen(false)}>
       <FormWrapper

@@ -40,8 +40,11 @@ export default function PhaseDetails({ phase }: PhaseDetailsProps) {
   const taskQuery = useQuery(["taskList", currentProject], () =>
     getAvailableTasks(currentProject)
   );
-  const availableTasks =
-    taskQuery.data === undefined ? [] : taskQuery.data.data;
+  let availableTasks = taskQuery.data === undefined ? [] : taskQuery.data.data;
+  if (availableTasks === null) {
+    enqueueSnackbar(taskQuery.data?.message, { variant: "error" });
+    availableTasks = [];
+  }
   const [openTaskDialog, setOpenTaskDialog] = React.useState(false);
   const addTaskMutation = useMutation({
     mutationFn: ({ phaseId, taskId }: AddOrRemoveTaskToPhaseParams) =>
@@ -62,22 +65,22 @@ export default function PhaseDetails({ phase }: PhaseDetailsProps) {
     },
   });
   const [selectedRows, setSelectedRows] = React.useState<string[]>([""]);
-  const handleDoubleClick = async (params: GridRowParams) => {
+  async function handleDoubleClick(params: GridRowParams) {
     const { id } = params;
     const phaseId = phase._id;
     const taskId = id.toString();
     addTaskMutation.mutate({ phaseId, taskId });
-  };
-  const handleDeleteSelectedTask = (id: string) => {
+  }
+  function handleDeleteSelectedTask(id: string) {
     const phaseId = id;
     selectedRows.forEach((taskId) => {
       removeTaskMutation.mutate({ phaseId, taskId });
     });
-  };
-  const onTaskRowSelect = (arrayOfIds: GridSelectionModel) => {
+  }
+  function onTaskRowSelect(arrayOfIds: GridSelectionModel) {
     const array = arrayOfIds as string[];
     setSelectedRows(array);
-  };
+  }
   return (
     <Card sx={{ width: "100%" }}>
       <CardContent sx={{ height: "30vh" }}>

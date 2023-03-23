@@ -9,20 +9,22 @@ import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { getProjectOwn } from "~/actions/projectManagerAction";
 import { useProjectActions, useProjectHook } from "~/hooks/project";
-const SelectProject = (): JSX.Element => {
+export default function SelectProject() {
   const { setCurrentProject } = useProjectActions();
   const currentProject = useProjectHook();
   if (currentProject === undefined) {
     return <></>;
   }
   const projectOwnQuery = useQuery(["projectOwn"], () => getProjectOwn());
-  const projects =
-    projectOwnQuery.data === undefined ? [] : projectOwnQuery.data.data;
+  let projects = projectOwnQuery.data?.data;
+  if (projects === undefined || projects === null) {
+    projects = [];
+  }
   const navigate = useNavigate();
-  const handleChange = (event: SelectChangeEvent<string>) => {
+  function handleChange(event: SelectChangeEvent<string>) {
     setCurrentProject(event.target.value);
     navigate(`/${event.target.value}/`);
-  };
+  }
   return (
     <>
       <Typography variant="caption">Select project</Typography>
@@ -39,5 +41,4 @@ const SelectProject = (): JSX.Element => {
       </FormControl>
     </>
   );
-};
-export default SelectProject;
+}

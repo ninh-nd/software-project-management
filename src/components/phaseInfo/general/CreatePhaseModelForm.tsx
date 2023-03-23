@@ -35,18 +35,15 @@ interface ConfirmPhaseModelProps {
   selectedModel: IPhaseCreate[];
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
-const SelectPresetOrCreate = ({
-  updateStep,
-  setSelection,
-}: SelectPresetProps) => {
-  const selectPreset = () => {
+function SelectPresetOrCreate({ updateStep, setSelection }: SelectPresetProps) {
+  function selectPreset() {
     updateStep();
     setSelection("preset");
-  };
-  const createNew = () => {
+  }
+  function createNew() {
     updateStep();
     setSelection("create");
-  };
+  }
   return (
     <Box
       sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
@@ -59,18 +56,16 @@ const SelectPresetOrCreate = ({
       </Button>
     </Box>
   );
-};
+}
 
-const SelectPreset = ({
-  updateStep,
-  setSelectedModel,
-}: CreatePhaseModelProps) => {
+function SelectPreset({ updateStep, setSelectedModel }: CreatePhaseModelProps) {
   const presetQuery = useQuery(["preset"], () => getPhasePresets());
   const presets = presetQuery.data === undefined ? [] : presetQuery.data.data;
-  const selectPreset = (preset: IPhasePreset) => {
+  if (presets === null) return <></>;
+  function selectPreset(preset: IPhasePreset) {
     updateStep();
     setSelectedModel(preset.phases);
-  };
+  }
   return (
     <Box sx={{ display: "flex" }}>
       {presets.map((preset: IPhasePreset) => {
@@ -97,29 +92,29 @@ const SelectPreset = ({
       })}
     </Box>
   );
-};
-const CreateNew = ({ updateStep, setSelectedModel }: CreatePhaseModelProps) => {
-  const onDragEnd = ({ destination, source }: DropResult) => {
+}
+function CreateNew({ updateStep, setSelectedModel }: CreatePhaseModelProps) {
+  function onDragEnd({ destination, source }: DropResult) {
     if (!destination) return;
     const result = Array.from(phases);
     const [removed] = result.splice(source.index, 1);
     result.splice(destination.index, 0, removed);
     setPhases(result);
-  };
-  const addPhase = () => {
+  }
+  function addPhase() {
     const newPhases = [...phases];
     newPhases.push({ name: "", description: "", order: 0 });
     setPhases(newPhases);
-  };
-  const deletePhase = (index: number) => {
+  }
+  function deletePhase(index: number) {
     const newPhases = [...phases];
     newPhases.splice(index, 1);
     setPhases(newPhases);
-  };
-  const nextStep = () => {
+  }
+  function nextStep() {
     updateStep();
     setSelectedModel(phases);
-  };
+  }
   const [phases, setPhases] = React.useState<IPhaseCreate[]>([
     { name: "", description: "", order: 0 },
     { name: "", description: "", order: 1 },
@@ -147,19 +142,16 @@ const CreateNew = ({ updateStep, setSelectedModel }: CreatePhaseModelProps) => {
       </Button>
     </Box>
   );
-};
+}
 
-const ConfirmPhaseModel = ({
-  selectedModel,
-  setOpen,
-}: ConfirmPhaseModelProps) => {
+function ConfirmPhaseModel({ selectedModel, setOpen }: ConfirmPhaseModelProps) {
   const { currentProject } = useParams();
-  const onSubmit = async () => {
+  async function onSubmit() {
     if (currentProject !== undefined) {
       await createPhaseModel(currentProject, selectedModel);
       setOpen(false);
     }
-  };
+  }
   return (
     <Box
       sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
@@ -203,11 +195,13 @@ const ConfirmPhaseModel = ({
       </Button>
     </Box>
   );
-};
+}
 interface CreatePhaseModelFormProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
-const CreatePhaseModelForm = ({ setOpen }: CreatePhaseModelFormProps) => {
+export default function CreatePhaseModelForm({
+  setOpen,
+}: CreatePhaseModelFormProps) {
   const [activeStep, setActiveStep] = React.useState(0);
   const steps = ["Step 1", "Step 2", "Step 3"];
   const [selection, setSelection] = React.useState<"preset" | "create">(
@@ -216,10 +210,10 @@ const CreatePhaseModelForm = ({ setOpen }: CreatePhaseModelFormProps) => {
   const [selectedModel, setSelectedModel] = React.useState<
     IPhaseCreate[] | undefined
   >(undefined);
-  const increaseStep = () => {
+  function increaseStep() {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
-  };
-  const conditionalRender = () => {
+  }
+  function conditionalRender() {
     switch (activeStep) {
       case 0:
         return (
@@ -253,7 +247,7 @@ const CreatePhaseModelForm = ({ setOpen }: CreatePhaseModelFormProps) => {
           );
         return <></>;
     }
-  };
+  }
   return (
     <Box>
       <Box component="form" sx={{ minWidth: "500px", minHeight: "500px" }}>
@@ -270,5 +264,4 @@ const CreatePhaseModelForm = ({ setOpen }: CreatePhaseModelFormProps) => {
       </Stepper>
     </Box>
   );
-};
-export default CreatePhaseModelForm;
+}

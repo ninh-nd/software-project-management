@@ -28,21 +28,21 @@ const accountPageStyle: SxProps = {
   height: "60vh",
   justifyContent: "space-evenly",
 };
-const renderGithub = (github: IThirdParty | undefined) => {
+function renderGithub(github: IThirdParty | undefined) {
   const [isTokenShown, setIsTokenShown] = React.useState(false);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<{ accessToken: string }>();
-  const updateAccessTokenGithub = () => {
+  function updateAccessTokenGithub() {
     setOpen(true);
     if (github === undefined) return;
-  };
-  const onSubmit = (data: { accessToken: string }) => {
+  }
+  function onSubmit(data: { accessToken: string }) {
     // Update access token
     setOpen(false);
-  };
+  }
   const [open, setOpen] = React.useState(false);
   if (github === undefined) {
     return <Button>Connect to Github</Button>;
@@ -84,9 +84,9 @@ const renderGithub = (github: IThirdParty | undefined) => {
       </Dialog>
     </Box>
   );
-};
+}
 
-const AccountInfo = () => {
+export default function AccountInfo() {
   const accountInfoQuery = useQuery(["accountInfo"], () => getAccountInfo());
   const accountInfo =
     accountInfoQuery.data === undefined
@@ -140,5 +140,4 @@ const AccountInfo = () => {
       </Card>
     </Box>
   );
-};
-export default AccountInfo;
+}

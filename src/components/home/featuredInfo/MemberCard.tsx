@@ -13,7 +13,9 @@ import { getMembersOfProject } from "~/actions/memberAction";
 import Title from "~/components/common/Title";
 import InfoPaper from "../InfoPaper";
 import { Link as RouterLink } from "react-router-dom";
+import { useSnackbar } from "notistack";
 export default function MemberCard() {
+  const { enqueueSnackbar } = useSnackbar();
   const { currentProject } = useParams();
   if (currentProject === undefined) return <></>;
   const memberListQuery = useQuery(["memberList", currentProject], () =>
@@ -21,6 +23,10 @@ export default function MemberCard() {
   );
   const memberList =
     memberListQuery.data === undefined ? [] : memberListQuery.data.data;
+  if (memberList === null) {
+    enqueueSnackbar(memberListQuery.data?.message, { variant: "error" });
+    return <></>;
+  }
   return (
     <InfoPaper>
       <Title>Members</Title>

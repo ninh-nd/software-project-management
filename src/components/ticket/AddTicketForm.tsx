@@ -36,10 +36,11 @@ export default function AddTicketForm({
   const vulns = vulnQuery.data === undefined ? [] : vulnQuery.data.data;
   const memberInfo =
     memberInfoQuery.data === undefined ? [] : memberInfoQuery.data.data;
-  const accountInfo =
-    accountInfoQuery.data === undefined
-      ? undefined
-      : accountInfoQuery.data.data;
+  const accountInfo = accountInfoQuery.data?.data;
+  if (vulns === null || memberInfo === null || accountInfo === null) {
+    enqueueSnackbar("Internal server error", { variant: "error" });
+    return <></>;
+  }
   const {
     register,
     handleSubmit,
@@ -49,12 +50,12 @@ export default function AddTicketForm({
   const [selectedPriority, setSelectedPriority] = React.useState<
     "Low" | "Medium" | "High"
   >("Low");
-  const selectPriority = (event: React.ChangeEvent<HTMLInputElement>) => {
+  function selectPriority(event: React.ChangeEvent<HTMLInputElement>) {
     setSelectedPriority(
       (event.target as HTMLInputElement).value as "Low" | "Medium" | "High"
     );
-  };
-  const submit = async (data: ITicketCreate) => {
+  }
+  async function submit(data: ITicketCreate) {
     const assigner = accountInfo === undefined ? "" : accountInfo._id;
     const assignee = data.assignee.map((item) => item._id);
     const vulnerability = data.targetedVulnerability.map((item) => item._id);
@@ -79,7 +80,7 @@ export default function AddTicketForm({
       setCloseDialog();
       enqueueSnackbar(response.message, { variant: "error" });
     }
-  };
+  }
   return (
     <Stack spacing={2} sx={{ p: 4 }}>
       <Box component="form" onSubmit={handleSubmit(submit)}>

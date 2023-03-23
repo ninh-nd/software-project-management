@@ -41,14 +41,18 @@ export default function ArtifactDetails({ phase }: ArtifactDetailsProps) {
     const vulns = item.vulnerabilityList.map((vuln) => vuln.cveId).join(", ");
     return { _id, name, content, type, url, version, threats, vulns };
   });
-  const handleUpdateSelectedArtifact = (id: GridRowId) => () => {
-    setSelectedArtifact(id as string);
-    setOpenArtUpdateDialog(true);
-  };
-  const handleDeleteSelectedArtifact = (id: GridRowId) => () => {
-    setSelectedArtifact(id as string);
-    setConfirmModal(true);
-  };
+  function handleUpdateSelectedArtifact(id: GridRowId) {
+    return () => {
+      setSelectedArtifact(id as string);
+      setOpenArtUpdateDialog(true);
+    };
+  }
+  function handleDeleteSelectedArtifact(id: GridRowId) {
+    return () => {
+      setSelectedArtifact(id as string);
+      setConfirmModal(true);
+    };
+  }
   const artifactColumn: GridColumns = [
     { field: "name", headerName: "Name" },
     { field: "type", headerName: "Type" },
@@ -83,7 +87,7 @@ export default function ArtifactDetails({ phase }: ArtifactDetailsProps) {
       ],
     },
   ];
-  const removeArtifact = async () => {
+  async function removeArtifact() {
     if (!selectedArtifact) return;
     const response = await removeArtifactFromPhase(phase._id, selectedArtifact);
     if (response.status === "success") {
@@ -94,7 +98,7 @@ export default function ArtifactDetails({ phase }: ArtifactDetailsProps) {
         variant: "error",
       });
     }
-  };
+  }
   return (
     <Card sx={{ width: "100%" }}>
       <CardContent sx={{ height: "30vh" }}>

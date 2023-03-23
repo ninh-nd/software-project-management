@@ -11,7 +11,7 @@ import FormWrapper from "../common/FormWrapper";
 import Title from "../common/Title";
 import InfoPaper from "../home/InfoPaper";
 
-const ButtonRowBox = ({ children }: { children: JSX.Element[] }) => {
+function ButtonRowBox({ children }: { children: JSX.Element[] }) {
   return (
     <Box
       sx={{
@@ -23,7 +23,7 @@ const ButtonRowBox = ({ children }: { children: JSX.Element[] }) => {
       {children}
     </Box>
   );
-};
+}
 
 interface AssignTaskParams {
   taskId: string;
@@ -36,27 +36,31 @@ interface MarkTaskParams {
 
 export default function TaskCard({ member }: { member: IMember }) {
   const { currentProject } = useParams();
+  const { enqueueSnackbar } = useSnackbar();
   if (currentProject === undefined) return <></>;
   const taskQuery = useQuery(["taskList", currentProject], () =>
     getAllTasks(currentProject)
   );
-  const taskList = taskQuery.data === undefined ? [] : taskQuery.data.data;
+  let taskList = taskQuery.data === undefined ? [] : taskQuery.data.data;
+  if (taskList === null) {
+    taskList = [];
+    enqueueSnackbar(taskQuery.data?.message, { variant: "error" });
+  }
   const [selectedRows, setSelectedRows] = React.useState<string[]>([""]);
   const [open, setOpen] = React.useState(false);
-  const { enqueueSnackbar } = useSnackbar();
   const queryClient = useQueryClient();
   const taskColumns = [
     { field: "name", headerName: "Name", width: 200 },
     { field: "status", headerName: "Status" },
     { field: "description", headerName: "Description", minWidth: 400, flex: 1 },
   ];
-  const handleClose = () => {
+  function handleClose() {
     setOpen(false);
-  };
-  const getSelection = (arrayOfIds: GridSelectionModel) => {
+  }
+  function getSelection(arrayOfIds: GridSelectionModel) {
     const array = arrayOfIds as string[];
     setSelectedRows(array);
-  };
+  }
   const assignTaskMutation = useMutation({
     mutationFn: ({ taskId, memberId }: AssignTaskParams) =>
       assignTask(taskId, memberId),
@@ -73,17 +77,19 @@ export default function TaskCard({ member }: { member: IMember }) {
       queryClient.invalidateQueries(["member", member._id]);
     },
   });
-  const handleAssignTask = async (params: GridRowParams) => {
+
+  async function handleAssignTask(params: GridRowParams) {
     const { id } = params;
     const memberId = member._id;
     assignTaskMutation.mutate({ taskId: id.toString(), memberId });
-  };
-  const markAsComplete = async () => {
+  }
+
+  async function markAsComplete() {
     markTaskMutation.mutate({ taskIdArray: selectedRows, status: "complete" });
-  };
-  const markAsIncomplete = async () => {
+  }
+  async function markAsIncomplete() {
     markTaskMutation.mutate({ taskIdArray: selectedRows, status: "active" });
-  };
+  }
 
   return (
     <InfoPaper>

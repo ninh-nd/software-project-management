@@ -8,10 +8,12 @@ import {
   TableRow,
 } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
+import { useSnackbar } from "notistack";
 import { useParams } from "react-router-dom";
 import { getProjectInfo } from "~/actions/projectAction";
 import InfoPaper from "../InfoPaper";
-const ProjectInfo = (): JSX.Element => {
+export default function ProjectInfo() {
+  const { enqueueSnackbar } = useSnackbar();
   const { currentProject } = useParams();
   if (currentProject === undefined) return <></>;
   const projectInfoQuery = useQuery(["projectInfo", currentProject], () =>
@@ -31,6 +33,10 @@ const ProjectInfo = (): JSX.Element => {
           phaseList: [],
         }
       : projectInfoQuery.data.data;
+  if (projectInfo === null) {
+    enqueueSnackbar(projectInfoQuery.data?.message, { variant: "error" });
+    return <></>;
+  }
   const createdAt = Intl.DateTimeFormat("en-Us", {
     year: "numeric",
     month: "long",
@@ -85,5 +91,4 @@ const ProjectInfo = (): JSX.Element => {
       </TableContainer>
     </InfoPaper>
   );
-};
-export default ProjectInfo;
+}

@@ -6,7 +6,7 @@ export default function TotalCommits({
   commits,
 }: {
   commits: ICommits | undefined | null;
-}): JSX.Element {
+}) {
   return (
     <InfoPaper>
       <Title>Total commits</Title>

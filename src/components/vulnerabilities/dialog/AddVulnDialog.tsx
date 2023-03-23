@@ -39,7 +39,7 @@ export default function AddVulnDialog({
     cwes: [],
   });
   const { product, version, vendor, score, cwes } = cve;
-  const searchCve = async ({ cveId }: { cveId: string }) => {
+  async function searchCve({ cveId }: { cveId: string }) {
     const { data } = await getCVE(cveId);
     if (data === null) {
       setError(true);
@@ -67,8 +67,8 @@ export default function AddVulnDialog({
       score,
       cwes,
     });
-  };
-  const importSingleCve = async () => {
+  }
+  async function importSingleCve() {
     if (error) {
       return;
     }
@@ -81,8 +81,8 @@ export default function AddVulnDialog({
       enqueueSnackbar(response.message, { variant: "error" });
       setOpen(false);
     }
-  };
-  const importMultipleCve = async ({ cveIds }: { cveIds: string }) => {
+  }
+  async function importMultipleCve({ cveIds }: { cveIds: string }) {
     const response = await createCVEs(cveIds);
     if (response.status === "success") {
       queryClient.invalidateQueries(["vuln"]);
@@ -92,7 +92,7 @@ export default function AddVulnDialog({
       enqueueSnackbar(response.message, { variant: "error" });
       setOpen(false);
     }
-  };
+  }
   return (
     <Dialog open={open} onClose={() => setOpen(false)}>
       <FormWrapper
