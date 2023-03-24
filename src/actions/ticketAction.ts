@@ -1,6 +1,6 @@
 import api from "~/api";
 import { PromiseServer } from "~/interfaces/ServerResponse";
-import { ITicket, ITicketCreate } from "~/interfaces/Ticket";
+import { ITicket, ITicketCreateSent } from "~/interfaces/Ticket";
 
 export async function getTickets(
   projectName: string
@@ -11,15 +11,6 @@ export async function getTickets(
     },
   });
   return response.data;
-}
-interface ITicketCreateSent {
-  title: string;
-  description: string;
-  priority: "low" | "medium" | "high";
-  assignee: string[];
-  assigner: string;
-  targetedVulnerability: string[];
-  projectName: string;
 }
 export async function createTicket(
   ticket: ITicketCreateSent

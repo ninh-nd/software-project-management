@@ -1,10 +1,7 @@
-import { Box, Dialog, Stack, TextField, Button } from "@mui/material";
-import { useQueryClient } from "@tanstack/react-query";
-import { useSnackbar } from "notistack";
-import React from "react";
+import { Box, Button, Dialog, Stack, TextField } from "@mui/material";
 import { useForm } from "react-hook-form";
-import { createThreat } from "~/actions/threatActions";
 import FormWrapper from "~/components/common/FormWrapper";
+import { useCreateThreatMutation } from "~/hooks/query";
 
 interface Props {
   open: boolean;
@@ -15,23 +12,15 @@ interface Form {
   description: string;
 }
 export default function AddThreatDialog({ open, setOpen }: Props) {
-  const { enqueueSnackbar } = useSnackbar();
-  const queryClient = useQueryClient();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<Form>();
+  const createThreatMutation = useCreateThreatMutation();
   async function submit(data: Form) {
-    const response = await createThreat(data);
-    if (response.status === "success") {
-      queryClient.invalidateQueries(["threat"]);
-      setOpen(false);
-      enqueueSnackbar("Threat created", { variant: "success" });
-    } else {
-      setOpen(false);
-      enqueueSnackbar(response.message, { variant: "error" });
-    }
+    createThreatMutation.mutate(data);
+    setOpen(false);
   }
   return (
     <Dialog open={open} onClose={() => setOpen(false)}>

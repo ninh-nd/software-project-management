@@ -15,13 +15,12 @@ import { Link as RouterLink, useParams } from "react-router-dom";
 import { getProjectInfo } from "~/actions/projectAction";
 import CreatePhaseModel from "~/components/phaseInfo/general/CreatePhaseModel";
 import TaskInfo from "~/components/phaseInfo/general/TaskInfo";
+import { useProjectInfoQuery } from "~/hooks/query";
 
 export default function PhaseInfo() {
   const { currentProject } = useParams();
   if (currentProject === undefined) return <></>;
-  const phaseQuery = useQuery(["phaseList", currentProject], () =>
-    getProjectInfo(currentProject)
-  );
+  const phaseQuery = useProjectInfoQuery(currentProject);
   const phaseList = phaseQuery.data?.data.phaseList;
   if (phaseList === undefined) return <></>;
   if (phaseList.length === 0) return <CreatePhaseModel />;

@@ -7,12 +7,11 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useQueryClient } from "@tanstack/react-query";
-import { useSnackbar } from "notistack";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { createCVE, createCVEs, getCVE } from "~/actions/vulnAction";
+import { getCVE } from "~/actions/vulnAction";
 import FormWrapper from "~/components/common/FormWrapper";
+import { useCreateCVEMutation, useCreateCVEsMutation } from "~/hooks/query";
 import { IVulnerabilityCreate } from "~/interfaces/Vulnerability";
 
 export default function AddVulnDialog({
@@ -22,8 +21,6 @@ export default function AddVulnDialog({
   open: boolean;
   setOpen: (open: boolean) => void;
 }) {
-  const { enqueueSnackbar } = useSnackbar();
-  const queryClient = useQueryClient();
   const { register, handleSubmit } = useForm<{ cveId: string }>();
   const { register: registerMultiple, handleSubmit: handleSubmitMultiple } =
     useForm<{ cveIds: string }>();
@@ -68,30 +65,18 @@ export default function AddVulnDialog({
       cwes,
     });
   }
+  const importOneCveMutation = useCreateCVEMutation();
+  const importMultipleCvesMutation = useCreateCVEsMutation();
   async function importSingleCve() {
     if (error) {
       return;
     }
-    const response = await createCVE(cve.cveId);
-    if (response.status === "success") {
-      queryClient.invalidateQueries(["vuln"]);
-      enqueueSnackbar("Vulnerability created", { variant: "success" });
-      setOpen(false);
-    } else {
-      enqueueSnackbar(response.message, { variant: "error" });
-      setOpen(false);
-    }
+    importOneCveMutation.mutate({ cveId: cve.cveId });
+    setOpen(false);
   }
   async function importMultipleCve({ cveIds }: { cveIds: string }) {
-    const response = await createCVEs(cveIds);
-    if (response.status === "success") {
-      queryClient.invalidateQueries(["vuln"]);
-      enqueueSnackbar("Vulnerabilities created", { variant: "success" });
-      setOpen(false);
-    } else {
-      enqueueSnackbar(response.message, { variant: "error" });
-      setOpen(false);
-    }
+    importMultipleCvesMutation.mutate({ cveIds });
+    setOpen(false);
   }
   return (
     <Dialog open={open} onClose={() => setOpen(false)}>

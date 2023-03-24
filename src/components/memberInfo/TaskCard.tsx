@@ -1,11 +1,13 @@
 import { Box, Button, Dialog } from "@mui/material";
 import { DataGrid, GridRowParams, GridSelectionModel } from "@mui/x-data-grid";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSnackbar } from "notistack";
 import React from "react";
 import { useParams } from "react-router-dom";
-import { assignTask, markTask } from "~/actions/memberAction";
-import { getAllTasks } from "~/actions/taskAction";
+import {
+  useAssignTaskMutation,
+  useMarkTaskMutation,
+  useTasksQuery,
+} from "~/hooks/query";
 import { IMember } from "~/interfaces/Member";
 import FormWrapper from "../common/FormWrapper";
 import Title from "../common/Title";
@@ -25,22 +27,11 @@ function ButtonRowBox({ children }: { children: JSX.Element[] }) {
   );
 }
 
-interface AssignTaskParams {
-  taskId: string;
-  memberId: string;
-}
-interface MarkTaskParams {
-  taskIdArray: string[];
-  status: string;
-}
-
 export default function TaskCard({ member }: { member: IMember }) {
   const { currentProject } = useParams();
   const { enqueueSnackbar } = useSnackbar();
   if (currentProject === undefined) return <></>;
-  const taskQuery = useQuery(["taskList", currentProject], () =>
-    getAllTasks(currentProject)
-  );
+  const taskQuery = useTasksQuery(currentProject);
   let taskList = taskQuery.data === undefined ? [] : taskQuery.data.data;
   if (taskList === null) {
     taskList = [];
@@ -48,7 +39,6 @@ export default function TaskCard({ member }: { member: IMember }) {
   }
   const [selectedRows, setSelectedRows] = React.useState<string[]>([""]);
   const [open, setOpen] = React.useState(false);
-  const queryClient = useQueryClient();
   const taskColumns = [
     { field: "name", headerName: "Name", width: 200 },
     { field: "status", headerName: "Status" },
@@ -61,34 +51,30 @@ export default function TaskCard({ member }: { member: IMember }) {
     const array = arrayOfIds as string[];
     setSelectedRows(array);
   }
-  const assignTaskMutation = useMutation({
-    mutationFn: ({ taskId, memberId }: AssignTaskParams) =>
-      assignTask(taskId, memberId),
-    onSuccess: () => {
-      enqueueSnackbar("Task assigned", { variant: "success" });
-      queryClient.invalidateQueries(["member", member._id]);
-    },
-  });
-  const markTaskMutation = useMutation({
-    mutationFn: ({ taskIdArray, status }: MarkTaskParams) =>
-      markTask(taskIdArray, status),
-    onSuccess: () => {
-      enqueueSnackbar("Task marked", { variant: "success" });
-      queryClient.invalidateQueries(["member", member._id]);
-    },
-  });
+
+  const markTaskMutation = useMarkTaskMutation();
+
+  const assignTaskMutation = useAssignTaskMutation();
 
   async function handleAssignTask(params: GridRowParams) {
     const { id } = params;
     const memberId = member._id;
-    assignTaskMutation.mutate({ taskId: id.toString(), memberId });
+    assignTaskMutation.mutate({ taskId: id, memberId });
   }
 
-  async function markAsComplete() {
-    markTaskMutation.mutate({ taskIdArray: selectedRows, status: "complete" });
+  function markAsComplete() {
+    markTaskMutation.mutate({
+      taskIdArray: selectedRows,
+      status: "complete",
+      memberId: member._id,
+    });
   }
-  async function markAsIncomplete() {
-    markTaskMutation.mutate({ taskIdArray: selectedRows, status: "active" });
+  function markAsIncomplete() {
+    markTaskMutation.mutate({
+      taskIdArray: selectedRows,
+      status: "active",
+      memberId: member._id,
+    });
   }
 
   return (

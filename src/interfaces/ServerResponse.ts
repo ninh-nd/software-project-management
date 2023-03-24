@@ -1,9 +1,9 @@
-type ISuccessResponse<T> = {
+export type ISuccessResponse<T> = {
   status: "success";
   data: T;
   message: string;
 };
-type IErrorResponse = {
+export type IErrorResponse = {
   status: "error";
   data: null;
   message: string;

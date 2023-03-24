@@ -7,18 +7,15 @@ import {
   TableContainer,
   TableRow,
 } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
 import { useSnackbar } from "notistack";
 import { useParams } from "react-router-dom";
-import { getProjectInfo } from "~/actions/projectAction";
+import { useProjectInfoQuery } from "~/hooks/query";
 import InfoPaper from "../InfoPaper";
 export default function ProjectInfo() {
   const { enqueueSnackbar } = useSnackbar();
   const { currentProject } = useParams();
   if (currentProject === undefined) return <></>;
-  const projectInfoQuery = useQuery(["projectInfo", currentProject], () =>
-    getProjectInfo(currentProject)
-  );
+  const projectInfoQuery = useProjectInfoQuery(currentProject);
   if (projectInfoQuery.isLoading) {
     return <Skeleton variant="rounded" className="paper" height={200} />;
   }

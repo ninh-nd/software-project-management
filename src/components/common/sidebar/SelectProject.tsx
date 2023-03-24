@@ -1,21 +1,20 @@
 import {
-  Typography,
-  Select,
   FormControl,
   MenuItem,
+  Select,
   SelectChangeEvent,
+  Typography,
 } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import { getProjectOwn } from "~/actions/projectManagerAction";
 import { useProjectActions, useProjectHook } from "~/hooks/project";
+import { useProjectOwnQuery } from "~/hooks/query";
 export default function SelectProject() {
   const { setCurrentProject } = useProjectActions();
   const currentProject = useProjectHook();
   if (currentProject === undefined) {
     return <></>;
   }
-  const projectOwnQuery = useQuery(["projectOwn"], () => getProjectOwn());
+  const projectOwnQuery = useProjectOwnQuery();
   let projects = projectOwnQuery.data?.data;
   if (projects === undefined || projects === null) {
     projects = [];

@@ -8,16 +8,17 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSnackbar } from "notistack";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
-import { updateArtifact } from "~/actions/phaseAction";
-import { getThreats } from "~/actions/threatActions";
-import { getVulnerabilities } from "~/actions/vulnAction";
-import { IArtifact } from "~/interfaces/Artifact";
 import FormItem from "~/components/common/FormItem";
-import { getArtifact } from "~/actions/artifactAction";
+import {
+  useArtifactQuery,
+  useThreatsQuery,
+  useUpdateArtifactMutation,
+  useVulnsQuery,
+} from "~/hooks/query";
+import { IArtifact } from "~/interfaces/Artifact";
 const type = ["image", "log", "source code", "executable", "library"];
 interface CreateArtifactFormProps {
   phaseId: string;
@@ -33,14 +34,12 @@ export default function UpdateArtifactForm({
     return <></>;
   }
   const { enqueueSnackbar } = useSnackbar();
-  const queryClient = useQueryClient();
   const [selectedType, setSelectedType] = React.useState(type[0]);
   const { register, handleSubmit, control } = useForm<IArtifact>();
-  const getVulQuery = useQuery(["vuln"], getVulnerabilities);
-  const getThreatQuery = useQuery(["threat"], getThreats);
-  const getArtifactQuery = useQuery(["artifact", artifactId], () =>
-    getArtifact(artifactId)
-  );
+  const getVulQuery = useVulnsQuery();
+  const getThreatQuery = useThreatsQuery();
+  const getArtifactQuery = useArtifactQuery(artifactId);
+  const updateArtifactMutation = useUpdateArtifactMutation();
   const threats =
     getThreatQuery.data === undefined ? [] : getThreatQuery.data.data;
   const vulns = getVulQuery.data === undefined ? [] : getVulQuery.data.data;
@@ -88,16 +87,12 @@ export default function UpdateArtifactForm({
       threatList: threatIds,
       vulnerabilityList: vulnIds,
     };
-    const response = await updateArtifact(phaseId, artifact._id, sendObject);
-    if (response.status === "success") {
-      queryClient.invalidateQueries(["phase", phaseId]);
-      queryClient.invalidateQueries(["artifact", artifact._id]);
-      setCloseDialog();
-      enqueueSnackbar("Artifact updated successfully", { variant: "success" });
-    } else {
-      setCloseDialog();
-      enqueueSnackbar(response.message, { variant: "error" });
-    }
+    updateArtifactMutation.mutate({
+      phaseId,
+      artifactId,
+      artifact: sendObject,
+    });
+    setCloseDialog();
   }
   return (
     <Stack spacing={2} sx={{ p: 4 }}>

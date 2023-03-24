@@ -18,6 +18,7 @@ import { DropResult } from "react-beautiful-dnd";
 import { useParams } from "react-router-dom";
 import { getPhasePresets } from "~/actions/phaseAction";
 import { createPhaseModel } from "~/actions/projectAction";
+import { useCreatePhaseModelMutation } from "~/hooks/query";
 import { IPhaseCreate, IPhasePreset } from "~/interfaces/PhasePreset";
 import DraggableList from "./DraggableList";
 
@@ -146,9 +147,13 @@ function CreateNew({ updateStep, setSelectedModel }: CreatePhaseModelProps) {
 
 function ConfirmPhaseModel({ selectedModel, setOpen }: ConfirmPhaseModelProps) {
   const { currentProject } = useParams();
+  const createPhaseModelMutation = useCreatePhaseModelMutation();
   async function onSubmit() {
     if (currentProject !== undefined) {
-      await createPhaseModel(currentProject, selectedModel);
+      createPhaseModelMutation.mutate({
+        model: selectedModel,
+        projectId: currentProject,
+      });
       setOpen(false);
     }
   }

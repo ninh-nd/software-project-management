@@ -9,14 +9,12 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
 import React from "react";
-import { useParams } from "react-router-dom";
-import { getTickets } from "~/actions/ticketAction";
+import { Link as RouterLink, useParams } from "react-router-dom";
 import FormWrapper from "~/components/common/FormWrapper";
 import AddTicketForm from "~/components/ticket/AddTicketForm";
+import { useTicketsQuery } from "~/hooks/query";
 import { ITicket } from "~/interfaces/Ticket";
-import { Link as RouterLink } from "react-router-dom";
 interface TabProps {
   title: string;
   ticketList: ITicket[];
@@ -82,7 +80,7 @@ export default function TicketPage() {
   const [open, setOpen] = React.useState(false);
   const { currentProject } = useParams();
   if (currentProject === undefined) return <></>;
-  const ticketQuery = useQuery(["ticket"], () => getTickets(currentProject));
+  const ticketQuery = useTicketsQuery(currentProject);
   const tickets = ticketQuery.data === undefined ? [] : ticketQuery.data.data;
   const openTickets = tickets.filter((ticket) => ticket.status === "open");
   const closeTickets = tickets.filter((ticket) => ticket.status === "closed");

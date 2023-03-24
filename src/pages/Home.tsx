@@ -9,16 +9,13 @@ import { useParams } from "react-router-dom";
 import FullPageSkeleton from "~/components/common/FullPageSkeleton";
 import MemberCard from "~/components/home/featuredInfo/MemberCard";
 import { useSnackbar } from "notistack";
+import { useCommitsQuery, usePullRequestsQuery } from "~/hooks/query";
 export default function Home() {
   const { enqueueSnackbar } = useSnackbar();
   const { currentProject } = useParams();
   if (currentProject === undefined) return <></>;
-  const commitsQuery = useQuery(["commits", currentProject], () =>
-    getCommits(currentProject)
-  );
-  const pullRequestsQuery = useQuery(["pullRequests", currentProject], () =>
-    getPullRequests(currentProject)
-  );
+  const commitsQuery = useCommitsQuery(currentProject);
+  const pullRequestsQuery = usePullRequestsQuery(currentProject);
   if (commitsQuery.isLoading || pullRequestsQuery.isLoading) {
     return <FullPageSkeleton />;
   }

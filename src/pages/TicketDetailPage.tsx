@@ -15,10 +15,8 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useSnackbar } from "notistack";
 import { useParams } from "react-router-dom";
-import { getTicket, markTicket } from "~/actions/ticketAction";
+import { useMarkTicketMutation, useTicketQuery } from "~/hooks/query";
 import { ITicket } from "~/interfaces/Ticket";
 
 function Headline({ ticket }: { ticket: ITicket }) {
@@ -82,37 +80,13 @@ function RightColumn({ ticket }: { ticket: ITicket }) {
 }
 
 function MainContent({ ticket }: { ticket: ITicket }) {
-  const { enqueueSnackbar } = useSnackbar();
-  const queryClient = useQueryClient();
+  const ticketMutation = useMarkTicketMutation();
   function closeTicket() {
     ticketMutation.mutate({ ticketId: ticket._id, status: "closed" });
   }
   function reopenTicket() {
     ticketMutation.mutate({ ticketId: ticket._id, status: "open" });
   }
-  const ticketMutation = useMutation({
-    mutationFn: ({
-      ticketId,
-      status,
-    }: {
-      ticketId: string;
-      status: "open" | "closed";
-    }) => markTicket(ticketId, status),
-    onSuccess: (res, { status }) => {
-      if (res.status === "success") {
-        if (status === "open") {
-          enqueueSnackbar("Ticket reopened successfully", {
-            variant: "success",
-          });
-        } else {
-          enqueueSnackbar("Ticket closed successfully", { variant: "success" });
-        }
-        queryClient.invalidateQueries(["ticket", res.data._id]);
-      } else {
-        enqueueSnackbar(res.message, { variant: "error" });
-      }
-    },
-  });
   return (
     <Stack spacing={5}>
       <Box>
@@ -172,7 +146,7 @@ function renderPriority(priority: string) {
 export default function TicketDetailPage() {
   const { ticketId } = useParams();
   if (ticketId === undefined) return <></>;
-  const ticketQuery = useQuery(["ticket", ticketId], () => getTicket(ticketId));
+  const ticketQuery = useTicketQuery(ticketId);
   const ticket = ticketQuery.data?.data;
   if (ticket === undefined) return <></>;
   return (

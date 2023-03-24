@@ -12,24 +12,21 @@ import {
   GridRowParams,
   GridSelectionModel,
 } from "@mui/x-data-grid";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSnackbar } from "notistack";
 import React from "react";
 import { useParams } from "react-router-dom";
-import { addTaskToPhase, removeTaskFromPhase } from "~/actions/phaseAction";
-import { getAvailableTasks } from "~/actions/taskAction";
-import { IPhase } from "~/interfaces/Phase";
 import FormWrapper from "~/components/common/FormWrapper";
-interface AddOrRemoveTaskToPhaseParams {
-  phaseId: string;
-  taskId: string;
-}
+import {
+  useAddTaskToPhaseMutation,
+  useAvailableTasksQuery,
+  useRemoveTaskFromPhaseMutation,
+} from "~/hooks/query";
+import { IPhase } from "~/interfaces/Phase";
 interface PhaseDetailsProps {
   phase: IPhase;
 }
 export default function PhaseDetails({ phase }: PhaseDetailsProps) {
   const { enqueueSnackbar } = useSnackbar();
-  const queryClient = useQueryClient();
   const taskColumn: GridColumns = [
     { field: "name", headerName: "Name", width: 200 },
     { field: "status", headerName: "Status" },
@@ -37,44 +34,26 @@ export default function PhaseDetails({ phase }: PhaseDetailsProps) {
   ];
   const { currentProject } = useParams();
   if (currentProject === undefined) return <></>;
-  const taskQuery = useQuery(["taskList", currentProject], () =>
-    getAvailableTasks(currentProject)
-  );
+  const taskQuery = useAvailableTasksQuery(currentProject);
   let availableTasks = taskQuery.data === undefined ? [] : taskQuery.data.data;
   if (availableTasks === null) {
     enqueueSnackbar(taskQuery.data?.message, { variant: "error" });
     availableTasks = [];
   }
   const [openTaskDialog, setOpenTaskDialog] = React.useState(false);
-  const addTaskMutation = useMutation({
-    mutationFn: ({ phaseId, taskId }: AddOrRemoveTaskToPhaseParams) =>
-      addTaskToPhase(phaseId, taskId),
-    onSuccess: () => {
-      enqueueSnackbar("Task added to phase", { variant: "success" });
-      queryClient.invalidateQueries(["phase", phase._id]);
-      queryClient.invalidateQueries(["taskList", currentProject]);
-    },
-  });
-  const removeTaskMutation = useMutation({
-    mutationFn: ({ phaseId, taskId }: AddOrRemoveTaskToPhaseParams) =>
-      removeTaskFromPhase(phaseId, taskId),
-    onSuccess: () => {
-      enqueueSnackbar("Task removed from phase", { variant: "success" });
-      queryClient.invalidateQueries(["phase", phase._id]);
-      queryClient.invalidateQueries(["taskList", currentProject]);
-    },
-  });
+  const addTaskMutation = useAddTaskToPhaseMutation();
+  const removeTaskMutation = useRemoveTaskFromPhaseMutation();
   const [selectedRows, setSelectedRows] = React.useState<string[]>([""]);
   async function handleDoubleClick(params: GridRowParams) {
     const { id } = params;
     const phaseId = phase._id;
     const taskId = id.toString();
-    addTaskMutation.mutate({ phaseId, taskId });
+    addTaskMutation.mutate({ phaseId, taskId, currentProject });
   }
   function handleDeleteSelectedTask(id: string) {
     const phaseId = id;
     selectedRows.forEach((taskId) => {
-      removeTaskMutation.mutate({ phaseId, taskId });
+      removeTaskMutation.mutate({ phaseId, taskId, currentProject });
     });
   }
   function onTaskRowSelect(arrayOfIds: GridSelectionModel) {

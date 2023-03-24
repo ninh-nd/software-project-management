@@ -1,38 +1,37 @@
 import {
   Autocomplete,
   Box,
+  Button,
   FormControlLabel,
   Radio,
   RadioGroup,
   Stack,
   TextField,
-  Button,
 } from "@mui/material";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useSnackbar } from "notistack";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
-import { getAccountInfo } from "~/actions/accountAction";
+import {
+  useAccountInfoQuery,
+  useCreateTicketMutation,
+  useMembersQuery,
+  useVulnsQuery,
+} from "~/hooks/query";
 import { ITicketCreate } from "~/interfaces/Ticket";
 import FormItem from "../common/FormItem";
-import { getMembersOfProject } from "~/actions/memberAction";
-import { getVulnerabilities } from "~/actions/vulnAction";
-import { createTicket } from "~/actions/ticketAction";
-import { useSnackbar } from "notistack";
 export default function AddTicketForm({
   setCloseDialog,
 }: {
   setCloseDialog: () => void;
 }) {
-  const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
   const { currentProject } = useParams();
   if (currentProject === undefined) return <></>;
-  const vulnQuery = useQuery(["vuln"], getVulnerabilities);
-  const accountInfoQuery = useQuery(["accountInfo"], getAccountInfo);
-  const memberInfoQuery = useQuery(["memberList", currentProject], () =>
-    getMembersOfProject(currentProject)
-  );
+  const vulnQuery = useVulnsQuery();
+  const accountInfoQuery = useAccountInfoQuery();
+  const memberInfoQuery = useMembersQuery(currentProject);
+  const createTicketMutation = useCreateTicketMutation();
   const vulns = vulnQuery.data === undefined ? [] : vulnQuery.data.data;
   const memberInfo =
     memberInfoQuery.data === undefined ? [] : memberInfoQuery.data.data;
@@ -71,15 +70,8 @@ export default function AddTicketForm({
       projectName: currentProject,
       targetedVulnerability: vulnerability,
     };
-    const response = await createTicket(ticket);
-    if (response.status === "success") {
-      queryClient.invalidateQueries(["ticket"]);
-      setCloseDialog();
-      enqueueSnackbar("Create ticket successfully", { variant: "success" });
-    } else {
-      setCloseDialog();
-      enqueueSnackbar(response.message, { variant: "error" });
-    }
+    createTicketMutation.mutate(ticket);
+    setCloseDialog();
   }
   return (
     <Stack spacing={2} sx={{ p: 4 }}>

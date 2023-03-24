@@ -13,10 +13,8 @@ import {
   GridColumns,
   GridRowId,
 } from "@mui/x-data-grid";
-import { useQueryClient } from "@tanstack/react-query";
-import { useSnackbar } from "notistack";
 import React from "react";
-import { removeArtifactFromPhase } from "~/actions/phaseAction";
+import { useRemoveArtifactFromPhaseMutation } from "~/hooks/query";
 import { IPhase } from "~/interfaces/Phase";
 import FormWrapper from "../../common/FormWrapper";
 import ConfirmDeleteModal from "./ConfirmDeleteModal";
@@ -27,13 +25,9 @@ interface ArtifactDetailsProps {
   phase: IPhase;
 }
 export default function ArtifactDetails({ phase }: ArtifactDetailsProps) {
-  const { enqueueSnackbar } = useSnackbar();
-  const queryClient = useQueryClient();
   const [openArtCreateDialog, setOpenArtCreateDialog] = React.useState(false);
   const [openArtUpdateDialog, setOpenArtUpdateDialog] = React.useState(false);
-  const [selectedArtifact, setSelectedArtifact] = React.useState<
-    string | undefined
-  >(undefined);
+  const [selectedArtifact, setSelectedArtifact] = React.useState("");
   const [confirmModal, setConfirmModal] = React.useState(false);
   const transformedArtifacts = phase.artifacts.map((item) => {
     const { _id, name, content, type, url, version } = item;
@@ -87,17 +81,13 @@ export default function ArtifactDetails({ phase }: ArtifactDetailsProps) {
       ],
     },
   ];
+  const removeArtifactMutation = useRemoveArtifactFromPhaseMutation();
   async function removeArtifact() {
-    if (!selectedArtifact) return;
-    const response = await removeArtifactFromPhase(phase._id, selectedArtifact);
-    if (response.status === "success") {
-      enqueueSnackbar("Artifact removed from phase", { variant: "success" });
-      queryClient.invalidateQueries(["phase", phase._id]);
-    } else {
-      enqueueSnackbar(response.message, {
-        variant: "error",
-      });
-    }
+    if (selectedArtifact === "") return;
+    removeArtifactMutation.mutate({
+      phaseId: phase._id,
+      artifactId: selectedArtifact,
+    });
   }
   return (
     <Card sx={{ width: "100%" }}>

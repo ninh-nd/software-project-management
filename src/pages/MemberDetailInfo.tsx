@@ -5,13 +5,12 @@ import { getMemberById } from "~/actions/memberAction";
 import ActivityHistoryCard from "~/components/memberInfo/ActivityHistoryCard";
 import MemberInfoCard from "~/components/memberInfo/MemberInfoCard";
 import TaskCard from "~/components/memberInfo/TaskCard";
+import { useMemberQuery } from "~/hooks/query";
 
 export default function MemberDetailInfo() {
   const { memberId } = useParams();
   if (memberId === undefined) return <></>;
-  const memberQuery = useQuery(["member", memberId], () =>
-    getMemberById(memberId)
-  );
+  const memberQuery = useMemberQuery(memberId);
   const member = memberQuery.data?.data;
   if (member === undefined) return <></>;
 

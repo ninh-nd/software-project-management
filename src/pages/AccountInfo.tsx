@@ -18,7 +18,9 @@ import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { getAccountInfo } from "~/actions/accountAction";
+import FormItem from "~/components/common/FormItem";
 import FormWrapper from "~/components/common/FormWrapper";
+import { useAccountInfoQuery } from "~/hooks/query";
 import { IThirdParty } from "~/interfaces/ThirdParty";
 const accountPageStyle: SxProps = {
   display: "flex",
@@ -35,7 +37,7 @@ function renderGithub(github: IThirdParty | undefined) {
     handleSubmit,
     formState: { errors },
   } = useForm<{ accessToken: string }>();
-  function updateAccessTokenGithub() {
+  function updateGithubConfig() {
     setOpen(true);
     if (github === undefined) return;
   }
@@ -50,32 +52,31 @@ function renderGithub(github: IThirdParty | undefined) {
   return (
     <Box sx={{ display: "flex" }}>
       <Button disabled>Connected to Github</Button>
-      <Button onClick={updateAccessTokenGithub}>Update access token</Button>
-      <Dialog open={open} onClose={() => setOpen(false)}>
+      <Button onClick={updateGithubConfig}>Update Github config</Button>
+      <Dialog open={open} onClose={() => setOpen(false)} maxWidth="lg">
         <FormWrapper
-          title="Update access token"
+          title="Update Github config"
           closeDialogFunction={() => setOpen(false)}
         >
-          <Box
-            component="form"
-            sx={{ p: "20px" }}
-            onSubmit={handleSubmit(onSubmit)}
-          >
-            <Box display="flex" justifyContent="space-around">
+          <Box component="form" sx={{ p: 4 }} onSubmit={handleSubmit(onSubmit)}>
+            <FormItem label="Access token">
               <TextField
                 type={isTokenShown ? "text" : "password"}
-                label="Github access token"
                 defaultValue={github.accessToken}
                 {...register("accessToken", {
                   required: "Access token is required",
                 })}
                 error={errors.accessToken !== undefined}
                 helperText={errors.accessToken?.message}
+                fullWidth
               />
               <IconButton onClick={() => setIsTokenShown(!isTokenShown)}>
                 {isTokenShown ? <Visibility /> : <VisibilityOff />}
               </IconButton>
-            </Box>
+            </FormItem>
+            <FormItem label="URL">
+              <TextField fullWidth />
+            </FormItem>
             <Button fullWidth type="submit">
               Update
             </Button>
@@ -87,7 +88,7 @@ function renderGithub(github: IThirdParty | undefined) {
 }
 
 export default function AccountInfo() {
-  const accountInfoQuery = useQuery(["accountInfo"], () => getAccountInfo());
+  const accountInfoQuery = useAccountInfoQuery();
   const accountInfo =
     accountInfoQuery.data === undefined
       ? { username: "", email: "", thirdParty: [] }
