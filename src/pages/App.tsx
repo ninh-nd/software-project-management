@@ -1,4 +1,8 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+  QueryCache,
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query";
 import { SnackbarProvider } from "notistack";
 import { Routes, Route, Navigate } from "react-router-dom";
 import DashboardLayout from "~/layouts/DashboardLayout";

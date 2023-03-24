@@ -1,39 +1,29 @@
+import { Box, Container, Grid } from "@mui/material";
+import { useParams } from "react-router-dom";
 import Chart from "~/components/home/chart/Chart";
-import { getCommits, getPullRequests } from "~/actions/activityHistoryAction";
-import { useQuery } from "@tanstack/react-query";
-import { Box, Container, Grid, Skeleton } from "@mui/material";
+import MemberCard from "~/components/home/featuredInfo/MemberCard";
+import ProjectInfo from "~/components/home/featuredInfo/ProjectInfo";
 import TotalCommits from "~/components/home/featuredInfo/TotalCommits";
 import TotalPullRequests from "~/components/home/featuredInfo/TotalPull";
-import ProjectInfo from "~/components/home/featuredInfo/ProjectInfo";
-import { useParams } from "react-router-dom";
-import FullPageSkeleton from "~/components/common/FullPageSkeleton";
-import MemberCard from "~/components/home/featuredInfo/MemberCard";
-import { useSnackbar } from "notistack";
 import { useCommitsQuery, usePullRequestsQuery } from "~/hooks/query";
+import { ICommits, IPullRequests } from "~/interfaces/GithubData";
 export default function Home() {
-  const { enqueueSnackbar } = useSnackbar();
   const { currentProject } = useParams();
-  if (currentProject === undefined) return <></>;
+  if (!currentProject) return <></>;
   const commitsQuery = useCommitsQuery(currentProject);
   const pullRequestsQuery = usePullRequestsQuery(currentProject);
-  if (commitsQuery.isLoading || pullRequestsQuery.isLoading) {
-    return <FullPageSkeleton />;
-  }
-  const commits = commitsQuery.data;
-  const pullRequests = pullRequestsQuery.data;
-  if (commits?.status === "error" || pullRequests?.status === "error") {
-    enqueueSnackbar(commits?.message, { variant: "error" });
-  }
+  const commits = commitsQuery.data?.data ?? ({} as ICommits);
+  const pullRequests = pullRequestsQuery.data?.data ?? ({} as IPullRequests);
   return (
     <Box sx={{ flexGrow: 1, height: "100vh" }}>
       <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
         <Grid container spacing={2}>
           <Grid container item spacing={2} xs={6}>
             <Grid item xs={6}>
-              <TotalCommits commits={commits?.data} />
+              <TotalCommits commits={commits} />
             </Grid>
             <Grid item xs={6}>
-              <TotalPullRequests prs={pullRequests?.data} />
+              <TotalPullRequests prs={pullRequests} />
             </Grid>
             <Grid item xs={12}>
               <MemberCard />
@@ -45,7 +35,7 @@ export default function Home() {
             </Grid>
           </Grid>
           <Grid item xs={12}>
-            <Chart commits={commits?.data} prs={pullRequests?.data} />
+            <Chart commits={commits} prs={pullRequests} />
           </Grid>
         </Grid>
       </Container>

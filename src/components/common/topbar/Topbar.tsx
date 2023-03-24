@@ -42,7 +42,7 @@ export default function Topbar() {
   async function redirectToAccountPage() {
     const account = await getAccountInfo();
     const { data } = account;
-    if (data === null) return;
+    if (!data) return;
     const { username } = data;
     if (currentProject !== undefined) setCurrentProject(currentProject);
     navigate(`/user/${username}`);

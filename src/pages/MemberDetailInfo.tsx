@@ -1,19 +1,17 @@
 import { Box, Grid, Stack } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
-import { getMemberById } from "~/actions/memberAction";
 import ActivityHistoryCard from "~/components/memberInfo/ActivityHistoryCard";
 import MemberInfoCard from "~/components/memberInfo/MemberInfoCard";
 import TaskCard from "~/components/memberInfo/TaskCard";
 import { useMemberQuery } from "~/hooks/query";
+import { IMember } from "~/interfaces/Member";
 
 export default function MemberDetailInfo() {
   const { memberId } = useParams();
-  if (memberId === undefined) return <></>;
+  if (!memberId) return <></>;
   const memberQuery = useMemberQuery(memberId);
   const member = memberQuery.data?.data;
-  if (member === undefined) return <></>;
-
+  if (!member) return <></>;
   return (
     <Box flexGrow={1} height="100vh" sx={{ p: 10 }}>
       <Grid container spacing={3}>

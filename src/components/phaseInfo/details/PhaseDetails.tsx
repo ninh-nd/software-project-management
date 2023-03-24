@@ -12,7 +12,6 @@ import {
   GridRowParams,
   GridSelectionModel,
 } from "@mui/x-data-grid";
-import { useSnackbar } from "notistack";
 import React from "react";
 import { useParams } from "react-router-dom";
 import FormWrapper from "~/components/common/FormWrapper";
@@ -26,20 +25,15 @@ interface PhaseDetailsProps {
   phase: IPhase;
 }
 export default function PhaseDetails({ phase }: PhaseDetailsProps) {
-  const { enqueueSnackbar } = useSnackbar();
   const taskColumn: GridColumns = [
     { field: "name", headerName: "Name", width: 200 },
     { field: "status", headerName: "Status" },
     { field: "description", headerName: "Description", minWidth: 400, flex: 1 },
   ];
   const { currentProject } = useParams();
-  if (currentProject === undefined) return <></>;
+  if (!currentProject) return <></>;
   const taskQuery = useAvailableTasksQuery(currentProject);
-  let availableTasks = taskQuery.data === undefined ? [] : taskQuery.data.data;
-  if (availableTasks === null) {
-    enqueueSnackbar(taskQuery.data?.message, { variant: "error" });
-    availableTasks = [];
-  }
+  const availableTasks = taskQuery.data?.data ?? [];
   const [openTaskDialog, setOpenTaskDialog] = React.useState(false);
   const addTaskMutation = useAddTaskToPhaseMutation();
   const removeTaskMutation = useRemoveTaskFromPhaseMutation();
@@ -48,10 +42,12 @@ export default function PhaseDetails({ phase }: PhaseDetailsProps) {
     const { id } = params;
     const phaseId = phase._id;
     const taskId = id.toString();
+    if (!currentProject) return;
     addTaskMutation.mutate({ phaseId, taskId, currentProject });
   }
   function handleDeleteSelectedTask(id: string) {
     const phaseId = id;
+    if (!currentProject) return;
     selectedRows.forEach((taskId) => {
       removeTaskMutation.mutate({ phaseId, taskId, currentProject });
     });

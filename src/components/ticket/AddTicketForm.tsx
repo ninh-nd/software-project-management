@@ -8,7 +8,6 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
-import { useSnackbar } from "notistack";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
@@ -25,19 +24,16 @@ export default function AddTicketForm({
 }: {
   setCloseDialog: () => void;
 }) {
-  const { enqueueSnackbar } = useSnackbar();
   const { currentProject } = useParams();
-  if (currentProject === undefined) return <></>;
+  if (!currentProject) return <></>;
   const vulnQuery = useVulnsQuery();
   const accountInfoQuery = useAccountInfoQuery();
   const memberInfoQuery = useMembersQuery(currentProject);
   const createTicketMutation = useCreateTicketMutation();
-  const vulns = vulnQuery.data === undefined ? [] : vulnQuery.data.data;
-  const memberInfo =
-    memberInfoQuery.data === undefined ? [] : memberInfoQuery.data.data;
+  const vulns = vulnQuery.data?.data ?? [];
+  const memberInfo = memberInfoQuery.data?.data ?? [];
   const accountInfo = accountInfoQuery.data?.data;
-  if (vulns === null || memberInfo === null || accountInfo === null) {
-    enqueueSnackbar("Internal server error", { variant: "error" });
+  if (!accountInfo) {
     return <></>;
   }
   const {
@@ -55,7 +51,8 @@ export default function AddTicketForm({
     );
   }
   async function submit(data: ITicketCreate) {
-    const assigner = accountInfo === undefined ? "" : accountInfo._id;
+    if (!accountInfo || !currentProject) return;
+    const assigner = accountInfo._id;
     const assignee = data.assignee.map((item) => item._id);
     const vulnerability = data.targetedVulnerability.map((item) => item._id);
     const priority = selectedPriority.toLowerCase() as

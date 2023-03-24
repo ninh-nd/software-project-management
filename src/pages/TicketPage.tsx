@@ -79,9 +79,9 @@ function Tab({ title, ticketList }: TabProps) {
 export default function TicketPage() {
   const [open, setOpen] = React.useState(false);
   const { currentProject } = useParams();
-  if (currentProject === undefined) return <></>;
+  if (!currentProject) return <></>;
   const ticketQuery = useTicketsQuery(currentProject);
-  const tickets = ticketQuery.data === undefined ? [] : ticketQuery.data.data;
+  const tickets = ticketQuery.data?.data ?? [];
   const openTickets = tickets.filter((ticket) => ticket.status === "open");
   const closeTickets = tickets.filter((ticket) => ticket.status === "closed");
   return (

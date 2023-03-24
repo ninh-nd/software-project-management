@@ -1,39 +1,20 @@
 import {
   Link,
-  Skeleton,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableRow,
 } from "@mui/material";
-import { useSnackbar } from "notistack";
 import { useParams } from "react-router-dom";
 import { useProjectInfoQuery } from "~/hooks/query";
 import InfoPaper from "../InfoPaper";
 export default function ProjectInfo() {
-  const { enqueueSnackbar } = useSnackbar();
   const { currentProject } = useParams();
-  if (currentProject === undefined) return <></>;
+  if (!currentProject) return <></>;
   const projectInfoQuery = useProjectInfoQuery(currentProject);
-  if (projectInfoQuery.isLoading) {
-    return <Skeleton variant="rounded" className="paper" height={200} />;
-  }
-  const projectInfo =
-    projectInfoQuery.data === undefined
-      ? {
-          name: "",
-          url: "",
-          status: "",
-          createdAt: "",
-          updatedAt: "",
-          phaseList: [],
-        }
-      : projectInfoQuery.data.data;
-  if (projectInfo === null) {
-    enqueueSnackbar(projectInfoQuery.data?.message, { variant: "error" });
-    return <></>;
-  }
+  const projectInfo = projectInfoQuery.data?.data;
+  if (!projectInfo) return <></>;
   const createdAt = Intl.DateTimeFormat("en-Us", {
     year: "numeric",
     month: "long",

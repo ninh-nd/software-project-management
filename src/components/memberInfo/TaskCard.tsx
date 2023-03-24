@@ -1,6 +1,5 @@
 import { Box, Button, Dialog } from "@mui/material";
 import { DataGrid, GridRowParams, GridSelectionModel } from "@mui/x-data-grid";
-import { useSnackbar } from "notistack";
 import React from "react";
 import { useParams } from "react-router-dom";
 import {
@@ -29,14 +28,9 @@ function ButtonRowBox({ children }: { children: JSX.Element[] }) {
 
 export default function TaskCard({ member }: { member: IMember }) {
   const { currentProject } = useParams();
-  const { enqueueSnackbar } = useSnackbar();
-  if (currentProject === undefined) return <></>;
+  if (!currentProject) return <></>;
   const taskQuery = useTasksQuery(currentProject);
-  let taskList = taskQuery.data === undefined ? [] : taskQuery.data.data;
-  if (taskList === null) {
-    taskList = [];
-    enqueueSnackbar(taskQuery.data?.message, { variant: "error" });
-  }
+  const taskList = taskQuery.data?.data ?? [];
   const [selectedRows, setSelectedRows] = React.useState<string[]>([""]);
   const [open, setOpen] = React.useState(false);
   const taskColumns = [
@@ -57,7 +51,8 @@ export default function TaskCard({ member }: { member: IMember }) {
   const assignTaskMutation = useAssignTaskMutation();
 
   async function handleAssignTask(params: GridRowParams) {
-    const { id } = params;
+    let { id } = params;
+    id = id.toString();
     const memberId = member._id;
     assignTaskMutation.mutate({ taskId: id, memberId });
   }

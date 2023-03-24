@@ -2,16 +2,12 @@ import { Typography } from "@mui/material";
 import { IPullRequests } from "~/interfaces/GithubData";
 import Title from "~/components/common/Title";
 import InfoPaper from "../InfoPaper";
-export default function TotalPullRequests({
-  prs,
-}: {
-  prs: IPullRequests | undefined | null;
-}) {
+export default function TotalPullRequests({ prs }: { prs: IPullRequests }) {
   return (
     <InfoPaper>
       <Title>Total pull requests</Title>
       <Typography component="p" variant="h4">
-        {prs === undefined ? 0 : prs === null ? 0 : prs.total}
+        {prs.total}
       </Typography>
     </InfoPaper>
   );

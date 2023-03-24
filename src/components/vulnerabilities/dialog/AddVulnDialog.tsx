@@ -38,7 +38,7 @@ export default function AddVulnDialog({
   const { product, version, vendor, score, cwes } = cve;
   async function searchCve({ cveId }: { cveId: string }) {
     const { data } = await getCVE(cveId);
-    if (data === null) {
+    if (!data) {
       setError(true);
       setErrorText("CVE-ID not found");
       return;

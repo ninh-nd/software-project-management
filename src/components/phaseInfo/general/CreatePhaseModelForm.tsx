@@ -61,8 +61,8 @@ function SelectPresetOrCreate({ updateStep, setSelection }: SelectPresetProps) {
 
 function SelectPreset({ updateStep, setSelectedModel }: CreatePhaseModelProps) {
   const presetQuery = useQuery(["preset"], () => getPhasePresets());
-  const presets = presetQuery.data === undefined ? [] : presetQuery.data.data;
-  if (presets === null) return <></>;
+  const presets = presetQuery.data?.data ?? [];
+  if (!presets) return <></>;
   function selectPreset(preset: IPhasePreset) {
     updateStep();
     setSelectedModel(preset.phases);

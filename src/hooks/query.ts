@@ -19,6 +19,7 @@ import {
   addTaskToPhase,
   getPhase,
   removeArtifactFromPhase,
+  removeTaskFromPhase,
   updateArtifact,
 } from "~/actions/phaseAction";
 import { createPhaseModel, getProjectInfo } from "~/actions/projectAction";
@@ -141,7 +142,7 @@ export function useRemoveTaskFromPhaseMutation() {
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
   return useMutation<any, any, ActionTaskToPhaseParams, any>({
-    mutationFn: ({ phaseId, taskId }) => addTaskToPhase(phaseId, taskId),
+    mutationFn: ({ phaseId, taskId }) => removeTaskFromPhase(phaseId, taskId),
     onSuccess: (response, { phaseId, currentProject }) => {
       toast(response, enqueueSnackbar, () => {
         queryClient.invalidateQueries(["phase", phaseId]);
@@ -271,9 +272,9 @@ export function useMarkTicketMutation() {
   const { enqueueSnackbar } = useSnackbar();
   return useMutation<any, any, MarkTicketParams, any>({
     mutationFn: ({ id, status }) => markTicket(id, status),
-    onSuccess: (response) => {
+    onSuccess: (response, { id }) => {
       toast(response, enqueueSnackbar, () => {
-        queryClient.invalidateQueries(["tickets"]);
+        queryClient.invalidateQueries(["ticket", id]);
       });
     },
   });

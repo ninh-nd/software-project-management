@@ -9,15 +9,12 @@ import {
   Dialog,
   Grid,
   IconButton,
-  Paper,
   SxProps,
   TextField,
   Typography,
 } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { getAccountInfo } from "~/actions/accountAction";
 import FormItem from "~/components/common/FormItem";
 import FormWrapper from "~/components/common/FormWrapper";
 import { useAccountInfoQuery } from "~/hooks/query";
@@ -39,14 +36,14 @@ function renderGithub(github: IThirdParty | undefined) {
   } = useForm<{ accessToken: string }>();
   function updateGithubConfig() {
     setOpen(true);
-    if (github === undefined) return;
+    if (!github) return;
   }
   function onSubmit(data: { accessToken: string }) {
     // Update access token
     setOpen(false);
   }
   const [open, setOpen] = React.useState(false);
-  if (github === undefined) {
+  if (!github) {
     return <Button>Connect to Github</Button>;
   }
   return (
@@ -89,10 +86,8 @@ function renderGithub(github: IThirdParty | undefined) {
 
 export default function AccountInfo() {
   const accountInfoQuery = useAccountInfoQuery();
-  const accountInfo =
-    accountInfoQuery.data === undefined
-      ? { username: "", email: "", thirdParty: [] }
-      : accountInfoQuery.data.data;
+  const accountInfo = accountInfoQuery.data?.data;
+  if (!accountInfo) return <></>;
   const github = accountInfo.thirdParty.find(
     (thirdParty: IThirdParty) => thirdParty.name === "Github"
   );

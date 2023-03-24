@@ -1,18 +1,17 @@
 import { Box, Container, Grid } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
-import { getPhase } from "~/actions/phaseAction";
 import ArtifactDetails from "~/components/phaseInfo/details/ArtifactDetails";
 import PhaseDetails from "~/components/phaseInfo/details/PhaseDetails";
+import { usePhaseQuery } from "~/hooks/query";
 
 export default function PhaseDetailInfo() {
   const { phaseId } = useParams();
-  if (phaseId === undefined) {
+  if (!phaseId) {
     return <></>;
   }
-  const getPhaseQuery = useQuery(["phase", phaseId], () => getPhase(phaseId));
+  const getPhaseQuery = usePhaseQuery(phaseId);
   const phase = getPhaseQuery.data?.data;
-  if (phase === undefined) return <></>;
+  if (!phase) return <></>;
   return (
     <Box flexGrow={1} height="100vh">
       <Container maxWidth="lg">

@@ -5,24 +5,23 @@ import {
   CardActions,
   CardContent,
   Container,
+  Link,
   Paper,
   Stack,
   Typography,
-  Link,
 } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
 import { Link as RouterLink, useParams } from "react-router-dom";
-import { getProjectInfo } from "~/actions/projectAction";
 import CreatePhaseModel from "~/components/phaseInfo/general/CreatePhaseModel";
 import TaskInfo from "~/components/phaseInfo/general/TaskInfo";
 import { useProjectInfoQuery } from "~/hooks/query";
 
 export default function PhaseInfo() {
   const { currentProject } = useParams();
-  if (currentProject === undefined) return <></>;
-  const phaseQuery = useProjectInfoQuery(currentProject);
-  const phaseList = phaseQuery.data?.data.phaseList;
-  if (phaseList === undefined) return <></>;
+  if (!currentProject) return <></>;
+  const projectQuery = useProjectInfoQuery(currentProject);
+  const project = projectQuery.data?.data;
+  if (!project) return <></>;
+  const { phaseList } = project;
   if (phaseList.length === 0) return <CreatePhaseModel />;
   return (
     <Box flexGrow={1} height="100vh">

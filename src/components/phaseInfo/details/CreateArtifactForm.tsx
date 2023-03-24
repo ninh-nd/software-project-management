@@ -8,7 +8,6 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
-import { useSnackbar } from "notistack";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import FormItem from "~/components/common/FormItem";
@@ -27,20 +26,12 @@ export default function CreateArtifactForm({
   phaseId,
   setCloseDialog,
 }: CreateArtifactFormProps) {
-  const { enqueueSnackbar } = useSnackbar();
   const [selectedType, setSelectedType] = React.useState(type[0]);
   const { register, handleSubmit, control } = useForm<IArtifact>();
   const getVulQuery = useVulnsQuery();
   const getThreatQuery = useThreatsQuery();
-  const threats =
-    getThreatQuery.data === undefined ? [] : getThreatQuery.data.data;
-  const vulns = getVulQuery.data === undefined ? [] : getVulQuery.data.data;
-  if (threats === null || vulns === null) {
-    enqueueSnackbar("Internal server error", {
-      variant: "error",
-    });
-    return <></>;
-  }
+  const threats = getThreatQuery.data?.data ?? [];
+  const vulns = getVulQuery.data?.data ?? [];
   function selectType(event: React.ChangeEvent<HTMLInputElement>) {
     setSelectedType((event.target as HTMLInputElement).value);
   }

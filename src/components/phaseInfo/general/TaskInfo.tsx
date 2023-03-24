@@ -64,14 +64,14 @@ export default function TaskInfo() {
     {}
   );
   const { currentProject } = useParams();
-  if (currentProject === undefined) {
+  if (!currentProject) {
     return <></>;
   }
   React.useEffect(() => {
     const fetchData = async () => {
       const data = await getAvailableTasks(currentProject);
       const tasks = data.data;
-      if (tasks === null) setRows([]);
+      if (!tasks) setRows([]);
       else setRows(tasks);
     };
     fetchData();
@@ -129,13 +129,14 @@ export default function TaskInfo() {
   async function processRowUpdate(newRow: GridRowModel) {
     const updatedRow = { ...newRow, isNew: false };
     const username = localStorage.getItem("username") || "";
+    if (!currentProject) return;
     /* Add a new row */
     if (newRow.isNew) {
       // Update row to the server
       const task = {
         name: newRow.name,
         description: newRow.description,
-        status: newRow.status,
+        status: "active",
         createdBy: username,
         projectName: currentProject,
       };
@@ -157,7 +158,10 @@ export default function TaskInfo() {
 
   const columns: GridColumns = [
     { field: "name", headerName: "Name", editable: true, flex: 0.3 },
-    { field: "status", headerName: "Status", editable: true },
+    {
+      field: "status",
+      headerName: "Status",
+    },
     {
       field: "description",
       headerName: "Description",

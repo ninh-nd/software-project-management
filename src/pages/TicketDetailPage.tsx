@@ -82,10 +82,10 @@ function RightColumn({ ticket }: { ticket: ITicket }) {
 function MainContent({ ticket }: { ticket: ITicket }) {
   const ticketMutation = useMarkTicketMutation();
   function closeTicket() {
-    ticketMutation.mutate({ ticketId: ticket._id, status: "closed" });
+    ticketMutation.mutate({ id: ticket._id, status: "closed" });
   }
   function reopenTicket() {
-    ticketMutation.mutate({ ticketId: ticket._id, status: "open" });
+    ticketMutation.mutate({ id: ticket._id, status: "open" });
   }
   return (
     <Stack spacing={5}>
@@ -145,10 +145,10 @@ function renderPriority(priority: string) {
 
 export default function TicketDetailPage() {
   const { ticketId } = useParams();
-  if (ticketId === undefined) return <></>;
+  if (!ticketId) return <></>;
   const ticketQuery = useTicketQuery(ticketId);
   const ticket = ticketQuery.data?.data;
-  if (ticket === undefined) return <></>;
+  if (!ticket) return <></>;
   return (
     <Box flexGrow={1} height="100vh">
       <Container maxWidth="lg">
