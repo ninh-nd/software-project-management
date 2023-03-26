@@ -25,13 +25,13 @@ export default function PhaseInfo() {
   if (phaseList.length === 0) return <CreatePhaseModel />;
   return (
     <Box flexGrow={1} height="100vh">
-      <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+      <Container sx={{ mt: 4, mb: 4 }}>
         <Stack spacing={4}>
           <Box display="flex" justifyContent="space-evenly">
             {phaseList.map((phase, index) => (
               <Box key={index}>
                 <Box component={Paper} sx={{ ml: 2, mr: 2 }}>
-                  <Card sx={{ minWidth: "15vw" }}>
+                  <Card>
                     <CardContent>
                       <Typography variant="h5" component="div">
                         {phase.name}

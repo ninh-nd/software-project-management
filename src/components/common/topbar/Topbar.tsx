@@ -3,24 +3,26 @@ import {
   Brightness4,
   Brightness7,
   AccountCircle,
+  Menu,
 } from "@mui/icons-material";
-import { IconButton, Tooltip, Box, AppBar, SxProps } from "@mui/material";
+import {
+  IconButton,
+  Tooltip,
+  Box,
+  AppBar,
+  SxProps,
+  Toolbar,
+  Theme,
+} from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import { getAccountInfo, logout } from "~/actions/accountAction";
 import { useProjectActions } from "~/hooks/project";
-import { useThemeActions, useThemeHook } from "~/hooks/theme";
-const topBarStyle: SxProps = {
-  width: "100%",
+import { useIsDrawerOpen, useThemeActions, useThemeHook } from "~/hooks/theme";
+const topBarStyle = {
   height: "50px",
-  position: "sticky",
+  position: "fixed",
   top: "0",
-};
-const topbarWrapperStyle: SxProps = {
-  display: "flex",
-  height: "100%",
-  p: "0px 20px",
-  alignItems: "center",
-  flexDirection: "row-reverse",
+  zIndex: (theme: Theme) => theme.zIndex.drawer + 1,
 };
 export default function Topbar() {
   const theme = useThemeHook();
@@ -47,12 +49,29 @@ export default function Topbar() {
     if (currentProject !== undefined) setCurrentProject(currentProject);
     navigate(`/user/${username}`);
   }
+  const isDrawerOpen = useIsDrawerOpen();
+  const { setIsDrawerOpen } = useThemeActions();
+  function handleDrawerToggle() {
+    setIsDrawerOpen(!isDrawerOpen);
+  }
   return (
     <AppBar sx={topBarStyle}>
-      <Box sx={topbarWrapperStyle}>
-        <Tooltip title="Logout">
-          <IconButton onClick={handleLogOut}>
-            <Logout />
+      <Toolbar sx={{ pb: 1 }}>
+        <IconButton
+          onClick={handleDrawerToggle}
+          sx={{
+            mr: 2,
+            display: {
+              lg: "none",
+            },
+          }}
+        >
+          <Menu />
+        </IconButton>
+        <Box sx={{ flexGrow: 1 }} />
+        <Tooltip title="Account">
+          <IconButton onClick={redirectToAccountPage}>
+            <AccountCircle />
           </IconButton>
         </Tooltip>
         <Tooltip
@@ -62,12 +81,12 @@ export default function Topbar() {
             {theme.palette.mode === "light" ? <Brightness4 /> : <Brightness7 />}
           </IconButton>
         </Tooltip>
-        <Tooltip title="Account">
-          <IconButton onClick={redirectToAccountPage}>
-            <AccountCircle />
+        <Tooltip title="Logout">
+          <IconButton onClick={handleLogOut}>
+            <Logout />
           </IconButton>
         </Tooltip>
-      </Box>
+      </Toolbar>
     </AppBar>
   );
 }

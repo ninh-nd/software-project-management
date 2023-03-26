@@ -14,10 +14,12 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Toolbar,
   Typography,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useProjectHook } from "~/hooks/project";
+import { useIsDrawerOpen, useThemeActions } from "~/hooks/theme";
 import SelectProject from "./SelectProject";
 const drawerWidth = 240;
 interface ItemProps {
@@ -27,58 +29,92 @@ interface ItemProps {
 }
 function Item({ text, icon, path }: ItemProps) {
   const navigate = useNavigate();
+  const { setIsDrawerOpen } = useThemeActions();
   return (
     <ListItem component={Link}>
-      <ListItemButton onClick={() => navigate(path)}>
+      <ListItemButton
+        onClick={() => {
+          setIsDrawerOpen(false);
+          navigate(path);
+        }}
+      >
         <ListItemIcon>{icon}</ListItemIcon>
         <ListItemText primary={text} />
       </ListItemButton>
     </ListItem>
   );
 }
-export default function Sidebar() {
+function DrawerContent() {
   const currentProject = useProjectHook();
   return (
-    <Box display="flex">
+    <Box>
+      <List>
+        <Item
+          text="Home"
+          icon={<HomeOutlined />}
+          path={`/${currentProject}/`}
+        />
+        <Item
+          text="Phase"
+          icon={<AssessmentOutlined />}
+          path={`/${currentProject}/phases`}
+        />
+        <Item
+          text="Tickets"
+          icon={<InfoOutlined />}
+          path={`/${currentProject}/tickets`}
+        />
+        <Divider />
+        <ListItem>
+          <SelectProject />
+        </ListItem>
+        <Divider />
+        <Typography variant="body2" sx={{ m: "5px" }}>
+          General
+        </Typography>
+        <Item
+          text="Vulnerabilities database"
+          icon={<SecurityOutlined />}
+          path={"/vulnerabilities"}
+        />
+      </List>
+    </Box>
+  );
+}
+export default function Sidebar() {
+  const isDrawerOpen = useIsDrawerOpen();
+  const { setIsDrawerOpen } = useThemeActions();
+  function handleDrawerToggle() {
+    setIsDrawerOpen(!isDrawerOpen);
+  }
+  return (
+    <>
       <Drawer
         variant="permanent"
         sx={{
+          display: {
+            xs: "none",
+            md: "block",
+          },
           width: drawerWidth,
           flexShrink: 0,
           "& .MuiDrawer-paper": { width: drawerWidth, boxSizing: "border-box" },
         }}
       >
-        <List>
-          <Item
-            text="Home"
-            icon={<HomeOutlined />}
-            path={`/${currentProject}/`}
-          />
-          <Item
-            text="Phase"
-            icon={<AssessmentOutlined />}
-            path={`/${currentProject}/phases`}
-          />
-          <Item
-            text="Tickets"
-            icon={<InfoOutlined />}
-            path={`/${currentProject}/tickets`}
-          />
-          <Divider />
-          <ListItem>
-            <SelectProject />
-          </ListItem>
-          <Divider />
-          <Typography variant="body2" sx={{ m: "5px" }}>
-            General
-          </Typography>
-          <Item
-            text="Vulnerabilities database"
-            icon={<SecurityOutlined />}
-            path={"/vulnerabilities"}
-          />
-        </List>
+        <Toolbar />
+        <DrawerContent />
       </Drawer>
-    </Box>
+      <Drawer
+        variant="temporary"
+        sx={{ display: { xs: "block", md: "none" } }}
+        open={isDrawerOpen}
+        onClose={handleDrawerToggle}
+        anchor="top"
+        disableScrollLock={true}
+      >
+        <Toolbar />
+        <DrawerContent />
+      </Drawer>
+    </>
   );
 }

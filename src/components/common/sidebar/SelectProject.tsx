@@ -5,20 +5,17 @@ import {
   SelectChangeEvent,
   Typography,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useProjectActions, useProjectHook } from "~/hooks/project";
 import { useProjectOwnQuery } from "~/hooks/query";
 export default function SelectProject() {
   const { setCurrentProject } = useProjectActions();
-  const currentProject = useProjectHook();
-  if (currentProject === undefined) {
+  const currentProject = useParams();
+  if (!currentProject) {
     return <></>;
   }
   const projectOwnQuery = useProjectOwnQuery();
-  let projects = projectOwnQuery.data?.data;
-  if (projects === undefined || projects === null) {
-    projects = [];
-  }
+  const projects = projectOwnQuery.data?.data ?? [];
   const navigate = useNavigate();
   function handleChange(event: SelectChangeEvent<string>) {
     setCurrentProject(event.target.value);

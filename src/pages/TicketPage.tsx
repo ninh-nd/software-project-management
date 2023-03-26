@@ -85,20 +85,28 @@ export default function TicketPage() {
   const openTickets = tickets.filter((ticket) => ticket.status === "open");
   const closeTickets = tickets.filter((ticket) => ticket.status === "closed");
   return (
-    <Box flexGrow={1} sx={{ m: 10 }}>
+    <Box
+      flexGrow={1}
+      sx={{
+        m: {
+          xs: 2,
+          sm: 4,
+        },
+      }}
+    >
       <Grid container spacing={1} justifyContent="center">
-        <Grid item xs={3}>
+        <Grid item xs={12} sm={6} md={5} lg={3}>
           <Button variant="contained" onClick={() => setOpen(true)}>
             Add Ticket
           </Button>
         </Grid>
-        <Grid item xs={3} />
+        <Grid item xs={12} sm={6} md={5} lg={3} />
       </Grid>
       <Grid container spacing={1} justifyContent="center">
-        <Grid item xs={3}>
+        <Grid item xs={12} sm={6} md={5} lg={3}>
           <Tab title="Open" ticketList={openTickets} />
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={12} sm={6} md={5} lg={3}>
           <Tab title="Closed" ticketList={closeTickets} />
         </Grid>
       </Grid>

@@ -16,20 +16,20 @@ export default function Home() {
   const pullRequests = pullRequestsQuery.data?.data ?? ({} as IPullRequests);
   return (
     <Box sx={{ flexGrow: 1, height: "100vh" }}>
-      <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+      <Container sx={{ mt: 4, mb: 4 }}>
         <Grid container spacing={2}>
-          <Grid container item spacing={2} xs={6}>
-            <Grid item xs={6}>
+          <Grid container item spacing={2} xs={12} sm={12} md={6}>
+            <Grid item xs={12} sm={6}>
               <TotalCommits commits={commits} />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={12} sm={6}>
               <TotalPullRequests prs={pullRequests} />
             </Grid>
             <Grid item xs={12}>
               <MemberCard />
             </Grid>
           </Grid>
-          <Grid container item spacing={2} xs={6}>
+          <Grid container item spacing={2} xs={12} sm={12} md={6}>
             <Grid item xs={12}>
               <ProjectInfo />
             </Grid>
