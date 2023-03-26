@@ -9,6 +9,11 @@ export default function InfoPaper({
     p: "16px",
     display: "flex",
     flexDirection: "column",
+    minHeight: {
+      md: 100,
+      lg: 150,
+    },
+    height: "100%",
   };
   return <Paper sx={style}>{children}</Paper>;
 }
