@@ -58,7 +58,7 @@ function toast(
   }
 }
 export function useAccountInfoQuery() {
-  return useQuery(["accountInfo"], getAccountInfo);
+  return useQuery(["accountInfo"], () => getAccountInfo());
 }
 
 export function usePullRequestsQuery(project: string) {
