@@ -21,12 +21,15 @@ import { login } from "~/actions/accountAction";
 import { getProjectOwn } from "~/actions/projectManagerAction";
 import { useProjectActions } from "~/hooks/project";
 import { useForm } from "react-hook-form";
+import { GitHub } from "@mui/icons-material";
+import { useSnackbar } from "notistack";
 const theme = createTheme();
 interface IFormInput {
   username: string;
   password: string;
 }
 export default function Login() {
+  const { enqueueSnackbar } = useSnackbar();
   const { handleSubmit, register } = useForm<IFormInput>();
   const { setCurrentProject } = useProjectActions();
   const navigate = useNavigate();
@@ -45,6 +48,12 @@ export default function Login() {
       setError(false);
       setErrorText("");
       const { data } = await getProjectOwn();
+      if (!data) {
+        enqueueSnackbar("Can't get list of project owned", {
+          variant: "error",
+        });
+        return;
+      }
       const currentProject = data[0].name;
       setCurrentProject(currentProject);
       navigate(`/${currentProject}/`);
@@ -93,10 +102,10 @@ export default function Login() {
               autoFocus
               label="Password"
             />
-            <FormControlLabel
+            {/* <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
-            />
+            /> */}
             <Button
               type="submit"
               fullWidth
@@ -104,6 +113,14 @@ export default function Login() {
               sx={{ mt: 3, mb: 2 }}
             >
               Sign In
+            </Button>
+            {/* <Button
+              fullWidth
+              variant="outlined"
+              sx={{ mb: 2 }}
+              endIcon={<GitHub />}
+            >
+              Sign In with Github
             </Button>
             <Grid container>
               <Grid item xs>
@@ -113,10 +130,10 @@ export default function Login() {
               </Grid>
               <Grid item>
                 <Link href="/signup" variant="body2">
-                  Don&apost have an account? Sign Up
+                  Don't have an account? Sign Up
                 </Link>
               </Grid>
-            </Grid>
+            </Grid> */}
           </Box>
         </Box>
       </Container>
