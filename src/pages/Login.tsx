@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import { login } from "~/actions/accountAction";
+import { login } from "~/actions/authAction";
 import { getProjectOwn } from "~/actions/projectManagerAction";
 import { useProjectActions } from "~/hooks/project";
 import { useForm } from "react-hook-form";
