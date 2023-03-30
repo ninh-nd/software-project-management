@@ -15,7 +15,8 @@ import {
   Theme,
 } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
-import { getAccountInfo, logout } from "~/actions/accountAction";
+import { logout } from "~/actions/authAction";
+import { getAccountInfo } from "~/actions/accountAction";
 import { useProjectActions } from "~/hooks/project";
 import { useIsDrawerOpen, useThemeActions, useThemeHook } from "~/hooks/theme";
 const topBarStyle = {
