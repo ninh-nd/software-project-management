@@ -27,8 +27,9 @@ const accountPageStyle: SxProps = {
   height: "60vh",
   justifyContent: "space-evenly",
 };
-function renderGithub(github: IThirdParty | undefined) {
+function Github({ data: github }: { data: IThirdParty | undefined }) {
   const [isTokenShown, setIsTokenShown] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
   const {
     register,
     handleSubmit,
@@ -42,7 +43,6 @@ function renderGithub(github: IThirdParty | undefined) {
     // Update access token
     setOpen(false);
   }
-  const [open, setOpen] = React.useState(false);
   if (!github) {
     return <Button>Connect to Github</Button>;
   }
@@ -129,7 +129,7 @@ export default function AccountInfo() {
               <GitHub />
             </Grid>
             <Grid item xs={10}>
-              {renderGithub(github)}
+              <Github data={github} />
             </Grid>
           </Grid>
         </CardContent>
