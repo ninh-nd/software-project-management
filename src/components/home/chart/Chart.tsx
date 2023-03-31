@@ -14,8 +14,8 @@ import { useThemeHook } from "~/hooks/theme";
 import { ICommits, IPullRequests } from "~/interfaces/GithubData";
 import InfoPaper from "../InfoPaper";
 type ChartProps = {
-  commits: ICommits;
-  prs: IPullRequests;
+  commits: ICommits | null | undefined;
+  prs: IPullRequests | null | undefined;
 };
 function mergeContributions(commits: ICommits, prs: IPullRequests) {
   const merged = [];
@@ -33,6 +33,7 @@ function mergeContributions(commits: ICommits, prs: IPullRequests) {
   return merged;
 }
 export default function Chart({ commits, prs }: ChartProps) {
+  if (!commits || !prs) return <></>;
   const theme = useThemeHook();
   const lessThanMedium = useMediaQuery(theme.breakpoints.down("md"));
   const merged = mergeContributions(commits, prs);

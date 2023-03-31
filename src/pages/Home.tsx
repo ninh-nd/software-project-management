@@ -6,14 +6,13 @@ import ProjectInfo from "~/components/home/featuredInfo/ProjectInfo";
 import TotalCommits from "~/components/home/featuredInfo/TotalCommits";
 import TotalPullRequests from "~/components/home/featuredInfo/TotalPull";
 import { useCommitsQuery, usePullRequestsQuery } from "~/hooks/query";
-import { ICommits, IPullRequests } from "~/interfaces/GithubData";
 export default function Home() {
   const { currentProject } = useParams();
   if (!currentProject) return <></>;
   const commitsQuery = useCommitsQuery(currentProject);
   const pullRequestsQuery = usePullRequestsQuery(currentProject);
-  const commits = commitsQuery.data?.data ?? ({} as ICommits);
-  const pullRequests = pullRequestsQuery.data?.data ?? ({} as IPullRequests);
+  const commits = commitsQuery.data?.data;
+  const pullRequests = pullRequestsQuery.data?.data;
   return (
     <Box sx={{ flexGrow: 1, height: "100vh" }}>
       <Container sx={{ mt: 4, mb: 4 }}>
