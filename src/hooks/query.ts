@@ -8,6 +8,7 @@ import {
 import { getAccountInfo } from "~/actions/accountAction";
 import { getCommits, getPullRequests } from "~/actions/activityHistoryAction";
 import { getArtifact } from "~/actions/artifactAction";
+import { getImportProjects } from "~/actions/githubAction";
 import {
   assignTask,
   getMemberById,
@@ -89,8 +90,9 @@ interface MarkTaskParams {
 export function useMarkTaskMutation() {
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
-  return useMutation<any, any, MarkTaskParams, any>({
-    mutationFn: ({ taskIdArray, status }) => markTask(taskIdArray, status),
+  return useMutation({
+    mutationFn: ({ taskIdArray, status }: MarkTaskParams) =>
+      markTask(taskIdArray, status),
     onSuccess: (response, { memberId }) => {
       toast(response, enqueueSnackbar, () =>
         queryClient.invalidateQueries(["member", memberId])
@@ -106,8 +108,9 @@ interface AssignTaskParams {
 export function useAssignTaskMutation() {
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
-  return useMutation<any, any, AssignTaskParams, any>({
-    mutationFn: ({ taskId, memberId }) => assignTask(taskId, memberId),
+  return useMutation({
+    mutationFn: ({ taskId, memberId }: AssignTaskParams) =>
+      assignTask(taskId, memberId),
     onSuccess: (response, { memberId }) => {
       toast(response, enqueueSnackbar, () =>
         queryClient.invalidateQueries(["member", memberId])
@@ -128,8 +131,9 @@ interface ActionTaskToPhaseParams {
 export function useAddTaskToPhaseMutation() {
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
-  return useMutation<any, any, ActionTaskToPhaseParams, any>({
-    mutationFn: ({ phaseId, taskId }) => addTaskToPhase(phaseId, taskId),
+  return useMutation({
+    mutationFn: ({ phaseId, taskId }: ActionTaskToPhaseParams) =>
+      addTaskToPhase(phaseId, taskId),
     onSuccess: (response, { phaseId, currentProject }) => {
       toast(response, enqueueSnackbar, () => {
         queryClient.invalidateQueries(["phase", phaseId]);
@@ -141,8 +145,9 @@ export function useAddTaskToPhaseMutation() {
 export function useRemoveTaskFromPhaseMutation() {
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
-  return useMutation<any, any, ActionTaskToPhaseParams, any>({
-    mutationFn: ({ phaseId, taskId }) => removeTaskFromPhase(phaseId, taskId),
+  return useMutation({
+    mutationFn: ({ phaseId, taskId }: ActionTaskToPhaseParams) =>
+      removeTaskFromPhase(phaseId, taskId),
     onSuccess: (response, { phaseId, currentProject }) => {
       toast(response, enqueueSnackbar, () => {
         queryClient.invalidateQueries(["phase", phaseId]);
@@ -160,8 +165,8 @@ export function useAddArtifactToPhaseMutation() {
   type AddArtifactToPhase = Omit<ActionArtifactToPhase, "artifactId">;
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
-  return useMutation<any, any, AddArtifactToPhase, any>({
-    mutationFn: ({ phaseId, artifact }) =>
+  return useMutation({
+    mutationFn: ({ phaseId, artifact }: AddArtifactToPhase) =>
       addArtifactToPhase(phaseId, artifact),
     onSuccess: (response, { phaseId }) => {
       toast(response, enqueueSnackbar, () =>
@@ -174,8 +179,8 @@ export function useRemoveArtifactFromPhaseMutation() {
   type RemoveArtifactFromPhase = Omit<ActionArtifactToPhase, "artifact">;
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
-  return useMutation<any, any, RemoveArtifactFromPhase, any>({
-    mutationFn: ({ phaseId, artifactId }) =>
+  return useMutation({
+    mutationFn: ({ phaseId, artifactId }: RemoveArtifactFromPhase) =>
       removeArtifactFromPhase(phaseId, artifactId),
     onSuccess: (response, { phaseId }) => {
       toast(response, enqueueSnackbar, () =>
@@ -187,8 +192,8 @@ export function useRemoveArtifactFromPhaseMutation() {
 export function useUpdateArtifactMutation() {
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
-  return useMutation<any, any, ActionArtifactToPhase, any>({
-    mutationFn: ({ phaseId, artifactId, artifact }) =>
+  return useMutation({
+    mutationFn: ({ phaseId, artifactId, artifact }: ActionArtifactToPhase) =>
       updateArtifact(phaseId, artifactId, artifact),
     onSuccess: (response, { artifactId, phaseId }) => {
       toast(response, enqueueSnackbar, () => {
@@ -210,8 +215,9 @@ interface CreatePhaseModelParams {
 export function useCreatePhaseModelMutation() {
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
-  return useMutation<any, any, CreatePhaseModelParams, any>({
-    mutationFn: ({ projectId, model }) => createPhaseModel(projectId, model),
+  return useMutation({
+    mutationFn: ({ projectId, model }: CreatePhaseModelParams) =>
+      createPhaseModel(projectId, model),
     onSuccess: (response, { projectId }) => {
       toast(response, enqueueSnackbar, () =>
         queryClient.invalidateQueries(["projectInfo", projectId])
@@ -236,8 +242,8 @@ export function useThreatsQuery() {
 export function useCreateThreatMutation() {
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
-  return useMutation<any, any, IThreatCreate, any>({
-    mutationFn: (threat) => createThreat(threat),
+  return useMutation({
+    mutationFn: (threat: IThreatCreate) => createThreat(threat),
     onSuccess: (response) => {
       toast(response, enqueueSnackbar, () =>
         queryClient.invalidateQueries(["threats"])
@@ -251,8 +257,8 @@ export function useTicketsQuery(projectName: string) {
 export function useCreateTicketMutation() {
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
-  return useMutation<any, any, ITicketCreateSent, any>({
-    mutationFn: (ticket) => createTicket(ticket),
+  return useMutation({
+    mutationFn: (ticket: ITicketCreateSent) => createTicket(ticket),
     onSuccess: (response) => {
       toast(response, enqueueSnackbar, () => {
         queryClient.invalidateQueries(["tickets"]);
@@ -270,8 +276,8 @@ interface MarkTicketParams {
 export function useMarkTicketMutation() {
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
-  return useMutation<any, any, MarkTicketParams, any>({
-    mutationFn: ({ id, status }) => markTicket(id, status),
+  return useMutation({
+    mutationFn: ({ id, status }: MarkTicketParams) => markTicket(id, status),
     onSuccess: (response, { id }) => {
       toast(response, enqueueSnackbar, () => {
         queryClient.invalidateQueries(["ticket", id]);
@@ -285,8 +291,8 @@ interface CreateCVEParams {
 export function useCreateCVEMutation() {
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
-  return useMutation<any, any, CreateCVEParams, any>({
-    mutationFn: ({ cveId }) => createCVE(cveId),
+  return useMutation({
+    mutationFn: ({ cveId }: CreateCVEParams) => createCVE(cveId),
     onSuccess: (response) => {
       toast(response, enqueueSnackbar, () =>
         queryClient.invalidateQueries(["vulns"])
@@ -300,8 +306,8 @@ interface CreateCVEsParams {
 export function useCreateCVEsMutation() {
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
-  return useMutation<any, any, CreateCVEsParams, any>({
-    mutationFn: ({ cveIds }) => createCVEs(cveIds),
+  return useMutation({
+    mutationFn: ({ cveIds }: CreateCVEsParams) => createCVEs(cveIds),
     onSuccess: (response) => {
       toast(response, enqueueSnackbar, () =>
         queryClient.invalidateQueries(["vulns"])
@@ -311,4 +317,12 @@ export function useCreateCVEsMutation() {
 }
 export function useVulnsQuery() {
   return useQuery(["vulns"], getVulnerabilities);
+}
+export function useGetImportProjectsQuery(
+  username: string,
+  accessToken: string
+) {
+  return useQuery(["importProjects"], () =>
+    getImportProjects(username, accessToken)
+  );
 }
