@@ -15,7 +15,7 @@ import {
 } from "@mui/x-data-grid";
 import React from "react";
 import { useRemoveArtifactFromPhaseMutation } from "~/hooks/query";
-import { IPhase } from "~/interfaces/Phase";
+import { IPhase } from "~/interfaces/Entity";
 import FormWrapper from "../../common/FormWrapper";
 import ConfirmDeleteModal from "./ConfirmDeleteModal";
 import CreateArtifactForm from "./CreateArtifactForm";

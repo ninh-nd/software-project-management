@@ -1,9 +1,6 @@
 import api from "~/api";
 import { PromiseServer } from "~/interfaces/ServerResponse";
-import {
-  IVulnerability,
-  IVulnerabilityCreate,
-} from "~/interfaces/Vulnerability";
+import { IVulnerability, IVulnerabilityCreate } from "~/interfaces/Entity";
 
 export async function getCVE(cveId: string): PromiseServer<IVulnerability> {
   const response = await api.get(`/vuln/search/${cveId}`);

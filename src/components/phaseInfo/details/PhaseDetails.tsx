@@ -20,7 +20,7 @@ import {
   useAvailableTasksQuery,
   useRemoveTaskFromPhaseMutation,
 } from "~/hooks/query";
-import { IPhase } from "~/interfaces/Phase";
+import { IPhase } from "~/interfaces/Entity";
 interface PhaseDetailsProps {
   phase: IPhase;
 }

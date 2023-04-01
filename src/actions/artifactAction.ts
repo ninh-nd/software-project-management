@@ -1,5 +1,5 @@
 import api from "~/api";
-import { IArtifact } from "~/interfaces/Artifact";
+import { IArtifact } from "~/interfaces/Entity";
 import { PromiseServer } from "~/interfaces/ServerResponse";
 export async function getArtifact(
   artifactId: string

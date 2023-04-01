@@ -14,7 +14,7 @@ import { Link as RouterLink, useParams } from "react-router-dom";
 import FormWrapper from "~/components/common/FormWrapper";
 import AddTicketForm from "~/components/ticket/AddTicketForm";
 import { useTicketsQuery } from "~/hooks/query";
-import { ITicket } from "~/interfaces/Ticket";
+import { ITicket } from "~/interfaces/Entity";
 interface TabProps {
   title: string;
   ticketList: ITicket[];

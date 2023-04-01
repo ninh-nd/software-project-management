@@ -7,14 +7,14 @@ import {
 } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import { useProjectActions, useProjectHook } from "~/hooks/project";
-import { useProjectOwnQuery } from "~/hooks/query";
+import { useProjectInQuery } from "~/hooks/query";
 export default function SelectProject() {
   const { setCurrentProject } = useProjectActions();
   const currentProject = useParams();
   if (!currentProject) {
     return <></>;
   }
-  const projectOwnQuery = useProjectOwnQuery();
+  const projectOwnQuery = useProjectInQuery();
   const projects = projectOwnQuery.data?.data ?? [];
   const navigate = useNavigate();
   function handleChange(event: SelectChangeEvent<string>) {

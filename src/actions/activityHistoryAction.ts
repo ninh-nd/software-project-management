@@ -1,5 +1,5 @@
 import api from "~/api";
-import { ICommits, IPullRequests } from "~/interfaces/GithubData";
+import { ICommits, IPullRequests } from "~/interfaces/Entity";
 import { PromiseServer } from "~/interfaces/ServerResponse";
 export async function getCommits(projectName: string): PromiseServer<ICommits> {
   const response = await api.get(`/activity/github/${projectName}/commit`);

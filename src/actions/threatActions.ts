@@ -1,6 +1,6 @@
 import { PromiseServer } from "~/interfaces/ServerResponse";
 import api from "~/api";
-import { IThreat, IThreatCreate } from "~/interfaces/Threat";
+import { IThreat, IThreatCreate } from "~/interfaces/Entity";
 
 export async function getThreats(): PromiseServer<IThreat[]> {
   const response = await api.get("/threat");

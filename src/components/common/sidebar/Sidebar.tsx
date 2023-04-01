@@ -20,6 +20,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useProjectHook } from "~/hooks/project";
 import { useIsDrawerOpen, useThemeActions } from "~/hooks/theme";
+import ImportProject from "./ImportProject";
 import SelectProject from "./SelectProject";
 const drawerWidth = 240;
 interface ItemProps {
@@ -67,6 +68,9 @@ function DrawerContent() {
         <Divider />
         <ListItem>
           <SelectProject />
+        </ListItem>
+        <ListItem>
+          <ImportProject />
         </ListItem>
         <Divider />
         <Typography variant="body2" sx={{ m: "5px" }}>

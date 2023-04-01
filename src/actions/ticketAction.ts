@@ -1,6 +1,6 @@
 import api from "~/api";
 import { PromiseServer } from "~/interfaces/ServerResponse";
-import { ITicket, ITicketCreateSent } from "~/interfaces/Ticket";
+import { ITicket, ITicketCreateSent } from "~/interfaces/Entity";
 
 export async function getTickets(
   projectName: string

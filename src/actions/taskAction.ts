@@ -1,6 +1,6 @@
 import api from "~/api";
 import { PromiseServer } from "~/interfaces/ServerResponse";
-import { ITaskUpdate, ITask } from "~/interfaces/Task";
+import { ITaskUpdate, ITask } from "~/interfaces/Entity";
 export async function getAllTasks(projectName: string): PromiseServer<ITask[]> {
   const response = await api.get(`/task`, {
     params: {

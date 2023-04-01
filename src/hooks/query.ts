@@ -14,7 +14,8 @@ import {
   getMemberById,
   getMembersOfProject,
   markTask,
-} from "~/actions/memberAction";
+  getProjectIn,
+} from "~/actions/userAction";
 import {
   addArtifactToPhase,
   addTaskToPhase,
@@ -24,7 +25,6 @@ import {
   updateArtifact,
 } from "~/actions/phaseAction";
 import { createPhaseModel, getProjectInfo } from "~/actions/projectAction";
-import { getProjectOwn } from "~/actions/projectManagerAction";
 import { getAllTasks, getAvailableTasks } from "~/actions/taskAction";
 import { createThreat, getThreats } from "~/actions/threatActions";
 import {
@@ -38,11 +38,13 @@ import {
   createCVEs,
   getVulnerabilities,
 } from "~/actions/vulnAction";
-import { IArtifactCreate } from "~/interfaces/Artifact";
-import { IPhaseCreate } from "~/interfaces/PhasePreset";
+import {
+  IArtifactCreate,
+  IPhaseCreate,
+  IThreatCreate,
+  ITicketCreateSent,
+} from "~/interfaces/Entity";
 import { IErrorResponse, ISuccessResponse } from "~/interfaces/ServerResponse";
-import { IThreatCreate } from "~/interfaces/Threat";
-import { ITicketCreateSent } from "~/interfaces/Ticket";
 function toast(
   response: ISuccessResponse<any> | IErrorResponse,
   enqueueSnackbar: (
@@ -225,8 +227,8 @@ export function useCreatePhaseModelMutation() {
     },
   });
 }
-export function useProjectOwnQuery() {
-  return useQuery(["projectOwn"], getProjectOwn);
+export function useProjectInQuery() {
+  return useQuery(["projectIn"], getProjectIn);
 }
 export function useTasksQuery(projectName: string) {
   return useQuery(["taskList", projectName], () => getAllTasks(projectName));
@@ -322,7 +324,11 @@ export function useGetImportProjectsQuery(
   username: string,
   accessToken: string
 ) {
-  return useQuery(["importProjects"], () =>
-    getImportProjects(username, accessToken)
+  return useQuery(
+    ["importProjects"],
+    () => getImportProjects(username, accessToken),
+    {
+      enabled: !!username && !!accessToken,
+    }
   );
 }

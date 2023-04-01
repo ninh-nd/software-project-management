@@ -18,7 +18,7 @@ import { useForm } from "react-hook-form";
 import FormItem from "~/components/common/FormItem";
 import FormWrapper from "~/components/common/FormWrapper";
 import { useAccountInfoQuery } from "~/hooks/query";
-import { IThirdParty } from "~/interfaces/ThirdParty";
+import { IThirdParty } from "~/interfaces/Entity";
 const accountPageStyle: SxProps = {
   display: "flex",
   flexDirection: "column",

@@ -1,6 +1,5 @@
 import api from "~/api";
-import { IPhaseCreate } from "~/interfaces/PhasePreset";
-import { IProject } from "~/interfaces/Project";
+import { IPhaseCreate, IProject } from "~/interfaces/Entity";
 import { PromiseServer } from "~/interfaces/ServerResponse";
 export async function getProjectInfo(
   projectName: string

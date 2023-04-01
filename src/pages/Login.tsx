@@ -17,12 +17,12 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import { login } from "~/actions/authAction";
-import { getProjectOwn } from "~/actions/projectManagerAction";
+import { githubLogin, login } from "~/actions/authAction";
 import { useProjectActions } from "~/hooks/project";
 import { useForm } from "react-hook-form";
 import { GitHub } from "@mui/icons-material";
 import { useSnackbar } from "notistack";
+import { getProjectIn } from "~/actions/userAction";
 const theme = createTheme();
 interface IFormInput {
   username: string;
@@ -35,6 +35,9 @@ export default function Login() {
   const navigate = useNavigate();
   const [errorText, setErrorText] = React.useState("");
   const [error, setError] = React.useState(false);
+  function githubLogin() {
+    window.open("http://localhost:3001/auth/github", "_self");
+  }
   async function onSubmit(data: IFormInput) {
     const { username, password } = data;
     let response;
@@ -47,7 +50,7 @@ export default function Login() {
     if (response?.status === 200) {
       setError(false);
       setErrorText("");
-      const { data } = await getProjectOwn();
+      const { data } = await getProjectIn();
       if (!data) {
         enqueueSnackbar("Can't get list of project owned", {
           variant: "error",
@@ -114,15 +117,21 @@ export default function Login() {
             >
               Sign In
             </Button>
-            {/* <Button
+            <Button
               fullWidth
-              variant="outlined"
-              sx={{ mb: 2 }}
+              variant="contained"
+              sx={{
+                mb: 2,
+                color: "white",
+                backgroundColor: "#24292e",
+                "&:hover": { backgroundColor: "#24292e" },
+              }}
               endIcon={<GitHub />}
+              onClick={githubLogin}
             >
               Sign In with Github
             </Button>
-            <Grid container>
+            {/* <Grid container>
               <Grid item xs>
                 <Link href="/forgetpwd" variant="body2">
                   Forgot password?

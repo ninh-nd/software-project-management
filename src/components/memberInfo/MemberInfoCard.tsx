@@ -1,6 +1,6 @@
 import { GitHub } from "@mui/icons-material";
 import { Box, Typography } from "@mui/material";
-import { IMember } from "~/interfaces/Member";
+import { IUser } from "~/interfaces/User";
 import { IThirdParty } from "~/interfaces/ThirdParty";
 
 function displayBadge(thirdPartyList: IThirdParty[]) {
@@ -9,7 +9,7 @@ function displayBadge(thirdPartyList: IThirdParty[]) {
   });
 }
 
-export default function MemberInfoCard({ member }: { member: IMember }) {
+export default function MemberInfoCard({ member }: { member: IUser }) {
   return (
     <Box display="flex" flexDirection="column">
       <Box

@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { getProjectOwn } from "~/actions/projectManagerAction";
+import { getProjectIn } from "~/actions/userAction";
 
 interface ProjectStore {
   currentProject: string;
@@ -8,7 +8,7 @@ interface ProjectStore {
   };
 }
 const useProjectStore = create<ProjectStore>((set) => {
-  getProjectOwn().then((data) => set({ currentProject: data.data[0].name }));
+  getProjectIn().then((data) => set({ currentProject: data.data[0].name }));
   return {
     currentProject: "",
     actions: {
