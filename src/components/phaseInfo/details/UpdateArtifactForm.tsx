@@ -1,14 +1,12 @@
-import {
-  Autocomplete,
-  Box,
-  Button,
-  FormControlLabel,
-  Radio,
-  RadioGroup,
-  Stack,
-  TextField,
-} from "@mui/material";
-import React from "react";
+import Autocomplete from "@mui/material/Autocomplete";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import Stack from "@mui/material/Stack";
+import TextField from "@mui/material/TextField";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import FormItem from "~/components/common/FormItem";
 import {
@@ -17,7 +15,7 @@ import {
   useUpdateArtifactMutation,
   useVulnsQuery,
 } from "~/hooks/query";
-import { IArtifact } from "~/interfaces/Artifact";
+import { IArtifact } from "~/interfaces/Entity";
 const type = ["image", "log", "source code", "executable", "library"];
 interface CreateArtifactFormProps {
   phaseId: string;
@@ -32,7 +30,7 @@ export default function UpdateArtifactForm({
   if (!artifactId) {
     return <></>;
   }
-  const [selectedType, setSelectedType] = React.useState(type[0]);
+  const [selectedType, setSelectedType] = useState(type[0]);
   const { register, handleSubmit, control } = useForm<IArtifact>();
   const getVulQuery = useVulnsQuery();
   const getThreatQuery = useThreatsQuery();

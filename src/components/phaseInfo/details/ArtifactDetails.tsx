@@ -1,34 +1,33 @@
-import { CreateOutlined, DeleteOutlined } from "@mui/icons-material";
-import {
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  Dialog,
-  Typography,
-} from "@mui/material";
+import CreateOutlined from "@mui/icons-material/CreateOutlined";
+import DeleteOutlined from "@mui/icons-material/DeleteOutlined";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import Dialog from "@mui/material/Dialog";
+import Typography from "@mui/material/Typography";
 import {
   DataGrid,
   GridActionsCellItem,
   GridColumns,
   GridRowId,
 } from "@mui/x-data-grid";
-import React from "react";
 import { useRemoveArtifactFromPhaseMutation } from "~/hooks/query";
 import { IPhase } from "~/interfaces/Entity";
 import FormWrapper from "../../common/FormWrapper";
 import ConfirmDeleteModal from "./ConfirmDeleteModal";
 import CreateArtifactForm from "./CreateArtifactForm";
 import UpdateArtifactForm from "./UpdateArtifactForm";
+import { useState } from "react";
 
 interface ArtifactDetailsProps {
   phase: IPhase;
 }
 export default function ArtifactDetails({ phase }: ArtifactDetailsProps) {
-  const [openArtCreateDialog, setOpenArtCreateDialog] = React.useState(false);
-  const [openArtUpdateDialog, setOpenArtUpdateDialog] = React.useState(false);
-  const [selectedArtifact, setSelectedArtifact] = React.useState("");
-  const [confirmModal, setConfirmModal] = React.useState(false);
+  const [openArtCreateDialog, setOpenArtCreateDialog] = useState(false);
+  const [openArtUpdateDialog, setOpenArtUpdateDialog] = useState(false);
+  const [selectedArtifact, setSelectedArtifact] = useState("");
+  const [confirmModal, setConfirmModal] = useState(false);
   const transformedArtifacts = phase.artifacts.map((item) => {
     const { _id, name, content, type, url, version } = item;
     const threats = item.threatList.map((threat) => threat.name).join(", ");

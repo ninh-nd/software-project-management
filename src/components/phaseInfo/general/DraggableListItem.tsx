@@ -1,20 +1,19 @@
-import {
-  ListItem,
-  Card,
-  CardContent,
-  TextField,
-  Typography,
-  Button,
-  Grid,
-} from "@mui/material";
+import ListItem from "@mui/material/ListItem";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid";
 import { Draggable } from "react-beautiful-dnd";
-import { IPhaseCreate } from "~/interfaces/PhasePreset";
+import { IPhaseCreate } from "~/interfaces/Entity";
+import { ChangeEvent, Dispatch, SetStateAction } from "react";
 
 export type DraggableListItemProps = {
   item: IPhaseCreate;
   index: number;
   deletePhase: (index: number) => void;
-  setPhases: React.Dispatch<React.SetStateAction<IPhaseCreate[]>>;
+  setPhases: Dispatch<SetStateAction<IPhaseCreate[]>>;
   items: IPhaseCreate[];
 };
 
@@ -25,12 +24,12 @@ export default function DraggableListItem({
   setPhases,
   items,
 }: DraggableListItemProps) {
-  function updateName(e: React.ChangeEvent<HTMLInputElement>) {
+  function updateName(e: ChangeEvent<HTMLInputElement>) {
     const newPhases = [...items];
     newPhases[index].name = e.target.value;
     setPhases(newPhases);
   }
-  function updateDesc(e: React.ChangeEvent<HTMLInputElement>) {
+  function updateDesc(e: ChangeEvent<HTMLInputElement>) {
     const newPhases = [...items];
     newPhases[index].description = e.target.value;
     setPhases(newPhases);

@@ -27,7 +27,9 @@ import {
   updateTask,
 } from "~/actions/taskAction";
 import { useParams } from "react-router-dom";
-import { Card, CardContent, CardHeader } from "@mui/material";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
 interface EditToolbarProps {
   setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
   setRowModesModel: (

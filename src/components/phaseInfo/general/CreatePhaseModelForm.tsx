@@ -1,40 +1,36 @@
-import { ArrowForward } from "@mui/icons-material";
-import {
-  Stepper,
-  Box,
-  Button,
-  Step,
-  StepLabel,
-  Card,
-  CardContent,
-  Typography,
-  CardActions,
-  ListItem,
-  TextField,
-} from "@mui/material";
+import ArrowForward from "@mui/icons-material/ArrowForward";
+import Stepper from "@mui/material/Stepper";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Step from "@mui/material/Step";
+import StepLabel from "@mui/material/StepLabel";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Typography from "@mui/material/Typography";
+import CardActions from "@mui/material/CardActions";
+import ListItem from "@mui/material/ListItem";
+import TextField from "@mui/material/TextField";
 import { useQuery } from "@tanstack/react-query";
-import React from "react";
 import { DropResult } from "react-beautiful-dnd";
 import { useParams } from "react-router-dom";
 import { getPhasePresets } from "~/actions/phaseAction";
 import { createPhaseModel } from "~/actions/projectAction";
 import { useCreatePhaseModelMutation } from "~/hooks/query";
-import { IPhaseCreate, IPhasePreset } from "~/interfaces/PhasePreset";
+import { IPhaseCreate, IPhasePreset } from "~/interfaces/Entity";
 import DraggableList from "./DraggableList";
+import { Dispatch, SetStateAction, useState } from "react";
 
 interface SelectPresetProps {
-  setSelection: React.Dispatch<React.SetStateAction<"preset" | "create">>;
+  setSelection: Dispatch<SetStateAction<"preset" | "create">>;
   updateStep: () => void;
 }
 interface CreatePhaseModelProps {
   updateStep: () => void;
-  setSelectedModel: React.Dispatch<
-    React.SetStateAction<IPhaseCreate[] | undefined>
-  >;
+  setSelectedModel: Dispatch<SetStateAction<IPhaseCreate[] | undefined>>;
 }
 interface ConfirmPhaseModelProps {
   selectedModel: IPhaseCreate[];
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setOpen: Dispatch<SetStateAction<boolean>>;
 }
 function SelectPresetOrCreate({ updateStep, setSelection }: SelectPresetProps) {
   function selectPreset() {
@@ -116,7 +112,7 @@ function CreateNew({ updateStep, setSelectedModel }: CreatePhaseModelProps) {
     updateStep();
     setSelectedModel(phases);
   }
-  const [phases, setPhases] = React.useState<IPhaseCreate[]>([
+  const [phases, setPhases] = useState<IPhaseCreate[]>([
     { name: "", description: "", order: 0 },
     { name: "", description: "", order: 1 },
     { name: "", description: "", order: 2 },
@@ -202,17 +198,15 @@ function ConfirmPhaseModel({ selectedModel, setOpen }: ConfirmPhaseModelProps) {
   );
 }
 interface CreatePhaseModelFormProps {
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setOpen: Dispatch<SetStateAction<boolean>>;
 }
 export default function CreatePhaseModelForm({
   setOpen,
 }: CreatePhaseModelFormProps) {
-  const [activeStep, setActiveStep] = React.useState(0);
+  const [activeStep, setActiveStep] = useState(0);
   const steps = ["Step 1", "Step 2", "Step 3"];
-  const [selection, setSelection] = React.useState<"preset" | "create">(
-    "preset"
-  );
-  const [selectedModel, setSelectedModel] = React.useState<
+  const [selection, setSelection] = useState<"preset" | "create">("preset");
+  const [selectedModel, setSelectedModel] = useState<
     IPhaseCreate[] | undefined
   >(undefined);
   function increaseStep() {

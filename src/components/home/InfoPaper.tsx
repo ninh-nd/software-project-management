@@ -1,5 +1,5 @@
-import { SxProps, Paper } from "@mui/material";
-
+import { SxProps } from "@mui/material";
+import Paper from "@mui/material/Paper";
 export default function InfoPaper({
   children,
 }: {

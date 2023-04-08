@@ -1,9 +1,9 @@
-import * as React from "react";
+import { ReactNode } from "react";
 import Typography from "@mui/material/Typography";
 import { SxProps } from "@mui/material";
 
 interface TitleProps {
-  children?: React.ReactNode;
+  children?: ReactNode;
   sx?: SxProps;
 }
 

@@ -1,10 +1,8 @@
-import {
-  FormControl,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  Typography,
-} from "@mui/material";
+import FormControl from "@mui/material/FormControl";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import Typography from "@mui/material/Typography";
+import { SelectChangeEvent } from "@mui/material/Select";
 import { useNavigate, useParams } from "react-router-dom";
 import { useProjectActions, useProjectHook } from "~/hooks/project";
 import { useProjectInQuery } from "~/hooks/query";

@@ -1,22 +1,18 @@
-import {
-  AssessmentOutlined,
-  HomeOutlined,
-  InfoOutlined,
-  SecurityOutlined,
-} from "@mui/icons-material";
-import {
-  Box,
-  Divider,
-  Drawer,
-  Link,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Toolbar,
-  Typography,
-} from "@mui/material";
+import AssessmentOutlinedIcon from "@mui/icons-material/AssessmentOutlined";
+import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
+import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
+import Drawer from "@mui/material/Drawer";
+import Link from "@mui/material/Link";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
 import { useNavigate } from "react-router-dom";
 import { useProjectHook } from "~/hooks/project";
 import { useIsDrawerOpen, useThemeActions } from "~/hooks/theme";
@@ -52,17 +48,17 @@ function DrawerContent() {
       <List>
         <Item
           text="Home"
-          icon={<HomeOutlined />}
+          icon={<HomeOutlinedIcon />}
           path={`/${currentProject}/`}
         />
         <Item
           text="Phase"
-          icon={<AssessmentOutlined />}
+          icon={<AssessmentOutlinedIcon />}
           path={`/${currentProject}/phases`}
         />
         <Item
           text="Tickets"
-          icon={<InfoOutlined />}
+          icon={<InfoOutlinedIcon />}
           path={`/${currentProject}/tickets`}
         />
         <Divider />
@@ -78,7 +74,7 @@ function DrawerContent() {
         </Typography>
         <Item
           text="Vulnerabilities database"
-          icon={<SecurityOutlined />}
+          icon={<SecurityOutlinedIcon />}
           path={"/vulnerabilities"}
         />
       </List>

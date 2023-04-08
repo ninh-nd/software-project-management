@@ -1,20 +1,20 @@
-import * as React from "react";
+import { Dispatch, SetStateAction, memo } from "react";
 import DraggableListItem from "./DraggableListItem";
 import {
   DragDropContext,
   Droppable,
   OnDragEndResponder,
 } from "react-beautiful-dnd";
-import { IPhaseCreate } from "~/interfaces/PhasePreset";
+import { IPhaseCreate } from "~/interfaces/Entity";
 
 export type DraggableListProps = {
   items: IPhaseCreate[];
   onDragEnd: OnDragEndResponder;
   deletePhase: (index: number) => void;
-  setPhases: React.Dispatch<React.SetStateAction<IPhaseCreate[]>>;
+  setPhases: Dispatch<SetStateAction<IPhaseCreate[]>>;
 };
 
-const DraggableList = React.memo(
+const DraggableList = memo(
   ({ items, onDragEnd, deletePhase, setPhases }: DraggableListProps) => {
     return (
       <DragDropContext onDragEnd={onDragEnd}>

@@ -1,18 +1,16 @@
-import {
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  Dialog,
-  Typography,
-} from "@mui/material";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import Dialog from "@mui/material/Dialog";
+import Typography from "@mui/material/Typography";
 import {
   DataGrid,
   GridColumns,
   GridRowParams,
   GridSelectionModel,
 } from "@mui/x-data-grid";
-import React from "react";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import FormWrapper from "~/components/common/FormWrapper";
 import {
@@ -34,10 +32,10 @@ export default function PhaseDetails({ phase }: PhaseDetailsProps) {
   if (!currentProject) return <></>;
   const taskQuery = useAvailableTasksQuery(currentProject);
   const availableTasks = taskQuery.data?.data ?? [];
-  const [openTaskDialog, setOpenTaskDialog] = React.useState(false);
+  const [openTaskDialog, setOpenTaskDialog] = useState(false);
   const addTaskMutation = useAddTaskToPhaseMutation();
   const removeTaskMutation = useRemoveTaskFromPhaseMutation();
-  const [selectedRows, setSelectedRows] = React.useState<string[]>([""]);
+  const [selectedRows, setSelectedRows] = useState<string[]>([""]);
   async function handleDoubleClick(params: GridRowParams) {
     const { id } = params;
     const phaseId = phase._id;

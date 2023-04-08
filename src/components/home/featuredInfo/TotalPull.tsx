@@ -1,5 +1,5 @@
-import { Typography } from "@mui/material";
-import { IPullRequests } from "~/interfaces/GithubData";
+import Typography from "@mui/material/Typography";
+import { IPullRequests } from "~/interfaces/Entity";
 import Title from "~/components/common/Title";
 import InfoPaper from "../InfoPaper";
 export default function TotalPullRequests({

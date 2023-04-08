@@ -1,18 +1,16 @@
-import {
-  Box,
-  Button,
-  Dialog,
-  Divider,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
-import React from "react";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import Divider from "@mui/material/Divider";
+import Stack from "@mui/material/Stack";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { getCVE } from "~/actions/vulnAction";
 import FormWrapper from "~/components/common/FormWrapper";
 import { useCreateCVEMutation, useCreateCVEsMutation } from "~/hooks/query";
-import { IVulnerabilityCreate } from "~/interfaces/Vulnerability";
+import { IVulnerabilityCreate } from "~/interfaces/Entity";
 
 export default function AddVulnDialog({
   open,
@@ -24,9 +22,9 @@ export default function AddVulnDialog({
   const { register, handleSubmit } = useForm<{ cveId: string }>();
   const { register: registerMultiple, handleSubmit: handleSubmitMultiple } =
     useForm<{ cveIds: string }>();
-  const [error, setError] = React.useState(false);
-  const [errorText, setErrorText] = React.useState("");
-  const [cve, setCve] = React.useState<IVulnerabilityCreate>({
+  const [error, setError] = useState(false);
+  const [errorText, setErrorText] = useState("");
+  const [cve, setCve] = useState<IVulnerabilityCreate>({
     cveId: "",
     description: "",
     product: "",

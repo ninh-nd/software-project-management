@@ -1,5 +1,5 @@
 import { DataGrid } from "@mui/x-data-grid";
-import { IUser } from "~/interfaces/User";
+import { IUser } from "~/interfaces/Entity";
 import Title from "../common/Title";
 import InfoPaper from "../home/InfoPaper";
 

@@ -11,7 +11,7 @@ import {
 } from "recharts";
 import Title from "~/components/common/Title";
 import { useThemeHook } from "~/hooks/theme";
-import { ICommits, IPullRequests } from "~/interfaces/GithubData";
+import { ICommits, IPullRequests } from "~/interfaces/Entity";
 import InfoPaper from "../InfoPaper";
 type ChartProps = {
   commits: ICommits | null | undefined;

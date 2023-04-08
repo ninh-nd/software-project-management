@@ -1,6 +1,7 @@
-import { Box, Button, Dialog } from "@mui/material";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
 import { DataGrid, GridRowParams, GridSelectionModel } from "@mui/x-data-grid";
-import React from "react";
 import { useParams } from "react-router-dom";
 import {
   useAssignTaskMutation,
@@ -11,6 +12,7 @@ import { IUser } from "~/interfaces/Entity";
 import FormWrapper from "../common/FormWrapper";
 import Title from "../common/Title";
 import InfoPaper from "../home/InfoPaper";
+import { useState } from "react";
 
 function ButtonRowBox({ children }: { children: JSX.Element[] }) {
   return (
@@ -31,8 +33,8 @@ export default function TaskCard({ member }: { member: IUser }) {
   if (!currentProject) return <></>;
   const taskQuery = useTasksQuery(currentProject);
   const taskList = taskQuery.data?.data ?? [];
-  const [selectedRows, setSelectedRows] = React.useState<string[]>([""]);
-  const [open, setOpen] = React.useState(false);
+  const [selectedRows, setSelectedRows] = useState<string[]>([""]);
+  const [open, setOpen] = useState(false);
   const taskColumns = [
     { field: "name", headerName: "Name", width: 200 },
     { field: "status", headerName: "Status" },

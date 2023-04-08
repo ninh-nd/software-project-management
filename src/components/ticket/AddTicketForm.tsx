@@ -1,14 +1,11 @@
-import {
-  Autocomplete,
-  Box,
-  Button,
-  FormControlLabel,
-  Radio,
-  RadioGroup,
-  Stack,
-  TextField,
-} from "@mui/material";
-import React from "react";
+import Autocomplete from "@mui/material/Autocomplete";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import Stack from "@mui/material/Stack";
+import TextField from "@mui/material/TextField";
 import { Controller, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import {
@@ -17,8 +14,9 @@ import {
   useMembersQuery,
   useVulnsQuery,
 } from "~/hooks/query";
-import { ITicketCreate } from "~/interfaces/Ticket";
+import { ITicketCreate } from "~/interfaces/Entity";
 import FormItem from "../common/FormItem";
+import { ChangeEvent, useState } from "react";
 export default function AddTicketForm({
   setCloseDialog,
 }: {
@@ -42,10 +40,10 @@ export default function AddTicketForm({
     formState: { errors },
     control,
   } = useForm<ITicketCreate>();
-  const [selectedPriority, setSelectedPriority] = React.useState<
+  const [selectedPriority, setSelectedPriority] = useState<
     "Low" | "Medium" | "High"
   >("Low");
-  function selectPriority(event: React.ChangeEvent<HTMLInputElement>) {
+  function selectPriority(event: ChangeEvent<HTMLInputElement>) {
     setSelectedPriority(
       (event.target as HTMLInputElement).value as "Low" | "Medium" | "High"
     );

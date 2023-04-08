@@ -1,4 +1,5 @@
-import { Box, Typography } from "@mui/material";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 import Title from "~/components/common/Title";
 import InfoPaper from "~/components/home/InfoPaper";
 
