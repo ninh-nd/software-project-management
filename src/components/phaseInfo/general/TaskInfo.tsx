@@ -1,35 +1,28 @@
 /* Not type-safe component */
-import * as React from "react";
-import Button from "@mui/material/Button";
-import AddIcon from "@mui/icons-material/Add";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/DeleteOutlined";
-import SaveIcon from "@mui/icons-material/Save";
-import CancelIcon from "@mui/icons-material/Close";
+import { Add, Cancel, Delete, Edit, Save } from "@mui/icons-material";
+import { Button, Card, CardContent, CardHeader } from "@mui/material";
 import {
-  GridRowModes,
   DataGrid,
-  GridToolbarContainer,
   GridActionsCellItem,
-  GridRowsProp,
-  GridRowModesModel,
-  GridRowParams,
+  GridColumns,
   GridRowId,
   GridRowModel,
-  MuiEvent,
+  GridRowModes,
+  GridRowModesModel,
+  GridRowParams,
+  GridRowsProp,
+  GridToolbarContainer,
   MuiBaseEvent,
-  GridColumns,
+  MuiEvent,
 } from "@mui/x-data-grid";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import {
   createTask,
   deleteTask,
   getAvailableTasks,
   updateTask,
 } from "~/actions/taskAction";
-import { useParams } from "react-router-dom";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardHeader from "@mui/material/CardHeader";
 interface EditToolbarProps {
   setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
   setRowModesModel: (
@@ -53,7 +46,7 @@ function EditToolbar(props: EditToolbarProps) {
 
   return (
     <GridToolbarContainer>
-      <Button color="primary" startIcon={<AddIcon />} onClick={addRecord}>
+      <Button color="primary" startIcon={<Add />} onClick={addRecord}>
         Add record
       </Button>
     </GridToolbarContainer>
@@ -61,15 +54,13 @@ function EditToolbar(props: EditToolbarProps) {
 }
 
 export default function TaskInfo() {
-  const [rows, setRows] = React.useState<GridRowsProp>([]);
-  const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>(
-    {}
-  );
+  const [rows, setRows] = useState<GridRowsProp>([]);
+  const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
   const { currentProject } = useParams();
   if (!currentProject) {
     return <></>;
   }
-  React.useEffect(() => {
+  useEffect(() => {
     const fetchData = async () => {
       const data = await getAvailableTasks(currentProject);
       const tasks = data.data;
@@ -182,12 +173,12 @@ export default function TaskInfo() {
         if (isInEditMode) {
           return [
             <GridActionsCellItem
-              icon={<SaveIcon />}
+              icon={<Save />}
               label="Save"
               onClick={handleSaveClick(id)}
             />,
             <GridActionsCellItem
-              icon={<CancelIcon />}
+              icon={<Cancel />}
               label="Cancel"
               className="textPrimary"
               onClick={handleCancelClick(id)}
@@ -198,14 +189,14 @@ export default function TaskInfo() {
 
         return [
           <GridActionsCellItem
-            icon={<EditIcon />}
+            icon={<Edit />}
             label="Edit"
             className="textPrimary"
             onClick={handleEditClick(id)}
             color="inherit"
           />,
           <GridActionsCellItem
-            icon={<DeleteIcon />}
+            icon={<Delete />}
             label="Delete"
             onClick={handleDeleteClick(id)}
             color="inherit"

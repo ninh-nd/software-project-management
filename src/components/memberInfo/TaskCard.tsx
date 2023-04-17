@@ -1,7 +1,6 @@
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
+import { Box, Button, Dialog } from "@mui/material";
 import { DataGrid, GridRowParams, GridSelectionModel } from "@mui/x-data-grid";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import {
   useAssignTaskMutation,
@@ -12,7 +11,6 @@ import { IUser } from "~/interfaces/Entity";
 import FormWrapper from "../common/FormWrapper";
 import Title from "../common/Title";
 import InfoPaper from "../home/InfoPaper";
-import { useState } from "react";
 
 function ButtonRowBox({ children }: { children: JSX.Element[] }) {
   return (

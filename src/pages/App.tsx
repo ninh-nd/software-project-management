@@ -1,17 +1,18 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { SnackbarProvider } from "notistack";
 import { Navigate, Route, Routes } from "react-router-dom";
-import { lazy, Suspense } from "react";
-const DashboardLayout = lazy(() => import("~/layouts/DashboardLayout"));
-const AccountInfo = lazy(() => import("./AccountInfo"));
-const Home = lazy(() => import("./Home"));
-const MemberDetailInfo = lazy(() => import("./MemberDetailInfo"));
-const PhaseDetailInfo = lazy(() => import("./PhaseDetailInfo"));
-const PhaseInfo = lazy(() => import("./PhaseInfo"));
-const TicketDetailPage = lazy(() => import("./TicketDetailPage"));
-const TicketPage = lazy(() => import("./TicketPage"));
-const VulnerabilityPage = lazy(() => import("./VulnerabilityPage"));
-const Login = lazy(() => import("./Login"));
+import DashboardLayout from "~/layouts/DashboardLayout";
+import AdminLayout from "~/layouts/AdminLayout";
+import VulnerabilityPage from "./VulnerabilityPage";
+import Home from "./Home";
+import PhaseInfo from "./PhaseInfo";
+import PhaseDetailInfo from "./PhaseDetailInfo";
+import TicketPage from "./TicketPage";
+import TicketDetailPage from "./TicketDetailPage";
+import MemberDetailInfo from "./MemberDetailInfo";
+import Login from "./Login";
+import AdminAccountManagement from "./AdminAccountManagement";
+import AccountInfo from "./AccountInfo";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -25,110 +26,29 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <SnackbarProvider autoHideDuration={2000}>
         <Routes>
-          <Route
-            element={
-              <Suspense fallback={<></>}>
-                <DashboardLayout />
-              </Suspense>
-            }
-            path="/vulnerabilities"
-          >
-            <Route
-              path=""
-              element={
-                <Suspense fallback={<></>}>
-                  <VulnerabilityPage />
-                </Suspense>
-              }
-            />
+          <Route element={<DashboardLayout />} path="/vulnerabilities">
+            <Route path="" element={<VulnerabilityPage />} />
           </Route>
-          <Route
-            element={
-              <Suspense fallback={<></>}>
-                <DashboardLayout />
-              </Suspense>
-            }
-            path="/:currentProject"
-          >
-            <Route
-              path=""
-              element={
-                <Suspense fallback={<></>}>
-                  <Home />
-                </Suspense>
-              }
-            />
+          <Route element={<DashboardLayout />} path="/:currentProject">
+            <Route path="" element={<Home />} />
             <Route path="phases">
-              <Route
-                path=""
-                element={
-                  <Suspense fallback={<></>}>
-                    <PhaseInfo />
-                  </Suspense>
-                }
-              />
-              <Route
-                path=":phaseId"
-                element={
-                  <Suspense fallback={<></>}>
-                    <PhaseDetailInfo />
-                  </Suspense>
-                }
-              />
+              <Route path="" element={<PhaseInfo />} />
+              <Route path=":phaseId" element={<PhaseDetailInfo />} />
             </Route>
             <Route path="tickets">
-              <Route
-                path=""
-                element={
-                  <Suspense fallback={<></>}>
-                    <TicketPage />
-                  </Suspense>
-                }
-              />
-              <Route
-                path=":ticketId"
-                element={
-                  <Suspense fallback={<></>}>
-                    <TicketDetailPage />
-                  </Suspense>
-                }
-              />
+              <Route path="" element={<TicketPage />} />
+              <Route path=":ticketId" element={<TicketDetailPage />} />
             </Route>
             <Route path="memberInfo">
-              <Route
-                path=":memberId"
-                element={
-                  <Suspense fallback={<></>}>
-                    <MemberDetailInfo />
-                  </Suspense>
-                }
-              />
+              <Route path=":memberId" element={<MemberDetailInfo />} />
             </Route>
           </Route>
-          <Route
-            path="/login"
-            element={
-              <Suspense fallback={<></>}>
-                <Login />
-              </Suspense>
-            }
-          />
-          <Route
-            element={
-              <Suspense fallback={<></>}>
-                <DashboardLayout />
-              </Suspense>
-            }
-            path="/user/:username"
-          >
-            <Route
-              path=""
-              element={
-                <Suspense fallback={<></>}>
-                  <AccountInfo />
-                </Suspense>
-              }
-            />
+          <Route path="/login" element={<Login />} />
+          <Route element={<DashboardLayout />} path="/user/:username">
+            <Route path="" element={<AccountInfo />} />
+          </Route>
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route path="accounts" element={<AdminAccountManagement />} />
           </Route>
           <Route path="*" element={<Navigate to="/login" />} />
         </Routes>

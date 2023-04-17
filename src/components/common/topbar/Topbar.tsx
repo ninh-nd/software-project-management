@@ -1,19 +1,23 @@
-import Logout from "@mui/icons-material/Logout";
-import Brightness4 from "@mui/icons-material/Brightness4";
-import Brightness7 from "@mui/icons-material/Brightness7";
-import AccountCircle from "@mui/icons-material/AccountCircle";
-import Menu from "@mui/icons-material/Menu";
-import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
-import Box from "@mui/material/Box";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
+import {
+  AccountCircle,
+  Brightness4,
+  Brightness7,
+  Logout,
+  Menu,
+} from "@mui/icons-material";
+import {
+  AppBar,
+  Box,
+  IconButton,
+  Theme,
+  Toolbar,
+  Tooltip,
+} from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
-import { logout } from "~/actions/authAction";
 import { getAccountInfo } from "~/actions/accountAction";
+import { logout } from "~/actions/authAction";
 import { useProjectActions } from "~/hooks/project";
 import { useIsDrawerOpen, useThemeActions, useThemeHook } from "~/hooks/theme";
-import { Theme } from "@mui/material";
 const topBarStyle = {
   height: "50px",
   position: "fixed",

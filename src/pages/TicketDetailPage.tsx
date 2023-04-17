@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { useMarkTicketMutation, useTicketQuery } from "~/hooks/query";
-import { ITicket } from "~/interfaces/Ticket";
+import { ITicket } from "~/interfaces/Entity";
 
 function Headline({ ticket }: { ticket: ITicket }) {
   const createdAt = Intl.DateTimeFormat("en-Us", {

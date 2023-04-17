@@ -1,4 +1,4 @@
-import Typography from "@mui/material/Typography";
+import { Typography } from "@mui/material";
 import { ICommits } from "~/interfaces/Entity";
 import Title from "~/components/common/Title";
 import InfoPaper from "../InfoPaper";

@@ -1,7 +1,6 @@
-import GitHub from "@mui/icons-material/GitHub";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import { IUser, IThirdParty } from "~/interfaces/Entity";
+import { GitHub } from "@mui/icons-material";
+import { Box, Typography } from "@mui/material";
+import { IThirdParty, IUser } from "~/interfaces/Entity";
 
 function displayBadge(thirdPartyList: IThirdParty[]) {
   return thirdPartyList.map((thirdParty, index) => {

@@ -1,7 +1,4 @@
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import Typography from "@mui/material/Typography";
+import { Box, Button, Dialog, Typography } from "@mui/material";
 import { useState } from "react";
 import FormWrapper from "~/components/common/FormWrapper";
 import CreatePhaseModelForm from "./CreatePhaseModelForm";

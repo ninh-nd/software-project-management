@@ -1,24 +1,25 @@
-import CreateOutlined from "@mui/icons-material/CreateOutlined";
-import DeleteOutlined from "@mui/icons-material/DeleteOutlined";
-import Button from "@mui/material/Button";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import Dialog from "@mui/material/Dialog";
-import Typography from "@mui/material/Typography";
+import { CreateOutlined, DeleteOutlined } from "@mui/icons-material";
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  Dialog,
+  Typography,
+} from "@mui/material";
 import {
   DataGrid,
   GridActionsCellItem,
   GridColumns,
   GridRowId,
 } from "@mui/x-data-grid";
+import { useState } from "react";
 import { useRemoveArtifactFromPhaseMutation } from "~/hooks/query";
 import { IPhase } from "~/interfaces/Entity";
 import FormWrapper from "../../common/FormWrapper";
 import ConfirmDeleteModal from "./ConfirmDeleteModal";
 import CreateArtifactForm from "./CreateArtifactForm";
 import UpdateArtifactForm from "./UpdateArtifactForm";
-import { useState } from "react";
 
 interface ArtifactDetailsProps {
   phase: IPhase;

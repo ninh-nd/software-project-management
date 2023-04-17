@@ -1,11 +1,11 @@
 import { Dispatch, SetStateAction, memo } from "react";
-import DraggableListItem from "./DraggableListItem";
 import {
   DragDropContext,
   Droppable,
   OnDragEndResponder,
 } from "react-beautiful-dnd";
 import { IPhaseCreate } from "~/interfaces/Entity";
+import DraggableListItem from "./DraggableListItem";
 
 export type DraggableListProps = {
   items: IPhaseCreate[];

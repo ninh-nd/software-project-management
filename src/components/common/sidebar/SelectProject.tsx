@@ -1,10 +1,7 @@
-import FormControl from "@mui/material/FormControl";
-import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
-import Typography from "@mui/material/Typography";
+import { FormControl, MenuItem, Select, Typography } from "@mui/material";
 import { SelectChangeEvent } from "@mui/material/Select";
 import { useNavigate, useParams } from "react-router-dom";
-import { useProjectActions, useProjectHook } from "~/hooks/project";
+import { useProjectActions } from "~/hooks/project";
 import { useProjectInQuery } from "~/hooks/query";
 export default function SelectProject() {
   const { setCurrentProject } = useProjectActions();

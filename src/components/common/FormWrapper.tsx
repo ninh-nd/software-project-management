@@ -1,9 +1,5 @@
-import CloseOutlined from "@mui/icons-material/CloseOutlined";
-import Box from "@mui/material/Box";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
-import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
+import { CloseOutlined } from "@mui/icons-material";
+import { Box, Divider, IconButton, Stack, Typography } from "@mui/material";
 interface FormWrapperProps {
   title: string;
   children: React.ReactNode;
