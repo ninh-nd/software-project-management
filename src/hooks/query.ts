@@ -5,7 +5,13 @@ import {
   SnackbarMessage,
   useSnackbar,
 } from "notistack";
-import { getAccountInfo } from "~/actions/accountAction";
+import {
+  deleteAccount,
+  getAccountById,
+  getAccountInfo,
+  getAllAccounts,
+  updateAccount,
+} from "~/actions/accountAction";
 import { getCommits, getPullRequests } from "~/actions/activityHistoryAction";
 import { getArtifact } from "~/actions/artifactAction";
 import { getImportProjects } from "~/actions/githubAction";
@@ -39,12 +45,16 @@ import {
   getVulnerabilities,
 } from "~/actions/vulnAction";
 import {
+  IAccountUpdate,
   IArtifactCreate,
   IPhaseCreate,
   IThreatCreate,
   ITicketCreateSent,
 } from "~/interfaces/Entity";
 import { IErrorResponse, ISuccessResponse } from "~/interfaces/ServerResponse";
+import { login } from "~/actions/authAction";
+import { useNavigate } from "react-router-dom";
+import { useProjectActions } from "./project";
 function toast(
   response: ISuccessResponse<any> | IErrorResponse,
   enqueueSnackbar: (
@@ -287,14 +297,11 @@ export function useMarkTicketMutation() {
     },
   });
 }
-interface CreateCVEParams {
-  cveId: string;
-}
 export function useCreateCVEMutation() {
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
   return useMutation({
-    mutationFn: ({ cveId }: CreateCVEParams) => createCVE(cveId),
+    mutationFn: ({ cveId }: { cveId: string }) => createCVE(cveId),
     onSuccess: (response) => {
       toast(response, enqueueSnackbar, () =>
         queryClient.invalidateQueries(["vulns"])
@@ -302,14 +309,11 @@ export function useCreateCVEMutation() {
     },
   });
 }
-interface CreateCVEsParams {
-  cveIds: string;
-}
 export function useCreateCVEsMutation() {
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
   return useMutation({
-    mutationFn: ({ cveIds }: CreateCVEsParams) => createCVEs(cveIds),
+    mutationFn: ({ cveIds }: { cveIds: string }) => createCVEs(cveIds),
     onSuccess: (response) => {
       toast(response, enqueueSnackbar, () =>
         queryClient.invalidateQueries(["vulns"])
@@ -331,4 +335,72 @@ export function useGetImportProjectsQuery(
       enabled: !!username && !!accessToken,
     }
   );
+}
+export function useAccountsQuery() {
+  return useQuery(["accounts"], getAllAccounts);
+}
+export function useAccountByIdQuery(id: string) {
+  return useQuery(["account", id], () => getAccountById(id));
+}
+interface AccountUpdateParams {
+  id: string;
+  updateData: IAccountUpdate;
+}
+export function useAccountUpdateMutation() {
+  const queryClient = useQueryClient();
+  const { enqueueSnackbar } = useSnackbar();
+  return useMutation({
+    mutationFn: ({ id, updateData }: AccountUpdateParams) =>
+      updateAccount(id, updateData),
+    onSuccess: (response) => {
+      toast(response, enqueueSnackbar, () => {
+        queryClient.invalidateQueries(["accounts"]);
+      });
+    },
+  });
+}
+interface LoginParams {
+  username: string;
+  password: string;
+}
+export function useLoginMutation() {
+  const { setCurrentProject } = useProjectActions();
+  const { enqueueSnackbar } = useSnackbar();
+  const navigate = useNavigate();
+  return useMutation({
+    mutationFn: ({ username, password }: LoginParams) =>
+      login(username, password),
+    onSuccess: async () => {
+      const { data } = await getAccountInfo();
+      if (data) {
+        const { role } = data;
+        if (role === "admin") {
+          navigate("/admin/accounts");
+        } else {
+          const { data } = await getProjectIn();
+          if (!data) {
+            enqueueSnackbar("Can't get list of project owned", {
+              variant: "error",
+            });
+            return;
+          }
+          const currentProject = data[0].name;
+          setCurrentProject(currentProject);
+          navigate(`/${currentProject}/`);
+        }
+      }
+    },
+  });
+}
+export function useDeleteAccountMutation() {
+  const queryClient = useQueryClient();
+  const { enqueueSnackbar } = useSnackbar();
+  return useMutation({
+    mutationFn: (id: string) => deleteAccount(id),
+    onSuccess: (response) => {
+      toast(response, enqueueSnackbar, () => {
+        queryClient.invalidateQueries(["accounts"]);
+      });
+    },
+  });
 }

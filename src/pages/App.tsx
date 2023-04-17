@@ -13,6 +13,7 @@ import MemberDetailInfo from "./MemberDetailInfo";
 import Login from "./Login";
 import AdminAccountManagement from "./AdminAccountManagement";
 import AccountInfo from "./AccountInfo";
+import AdminThirdPartyManagement from "./AdminThirdPartyManagement";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -49,6 +50,10 @@ export default function App() {
           </Route>
           <Route path="/admin" element={<AdminLayout />}>
             <Route path="accounts" element={<AdminAccountManagement />} />
+            <Route
+              path="third-parties"
+              element={<AdminThirdPartyManagement />}
+            />
           </Route>
           <Route path="*" element={<Navigate to="/login" />} />
         </Routes>

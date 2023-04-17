@@ -3,6 +3,7 @@ export interface IAccount {
   username: string;
   email: string;
   thirdParty: IThirdParty[];
+  role: "admin" | "manager" | "member";
 }
 
 export interface IActivity {
@@ -145,3 +146,7 @@ export interface IVulnerability {
   vendor: string;
 }
 export type IVulnerabilityCreate = Omit<IVulnerability, "_id" | "severity">;
+export interface IAccountUpdate {
+  email: string;
+  role: "manager" | "member";
+}

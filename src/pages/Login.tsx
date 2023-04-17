@@ -1,66 +1,35 @@
-import React from "react";
+import { GitHub } from "@mui/icons-material";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import {
+  Avatar,
   Box,
   Button,
-  Checkbox,
-  Grid,
-  Link,
   Container,
-  createTheme,
   CssBaseline,
-  ThemeProvider,
-  Avatar,
-  Typography,
   TextField,
-  FormControlLabel,
-  Input,
+  ThemeProvider,
+  Typography,
+  createTheme,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import { githubLogin, login } from "~/actions/authAction";
-import { useProjectActions } from "~/hooks/project";
 import { useForm } from "react-hook-form";
-import { GitHub } from "@mui/icons-material";
-import { useSnackbar } from "notistack";
-import { getProjectIn } from "~/actions/userAction";
+import { useLoginMutation } from "~/hooks/query";
 const theme = createTheme();
 interface IFormInput {
   username: string;
   password: string;
 }
 export default function Login() {
-  const { enqueueSnackbar } = useSnackbar();
-  const { handleSubmit, register } = useForm<IFormInput>();
-  const { setCurrentProject } = useProjectActions();
-  const navigate = useNavigate();
-  const [errorText, setErrorText] = React.useState("");
-  const [error, setError] = React.useState(false);
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useForm<IFormInput>();
+  const loginMutation = useLoginMutation();
   function githubLogin() {
     window.open("http://localhost:3001/auth/github", "_self");
   }
   async function onSubmit(data: IFormInput) {
-    const { username, password } = data;
-    let response;
-    try {
-      response = await login(username, password);
-    } catch (error) {
-      setErrorText("Invalid username or password");
-      setError(true);
-    }
-    if (response?.status === 200) {
-      setError(false);
-      setErrorText("");
-      const { data } = await getProjectIn();
-      if (!data) {
-        enqueueSnackbar("Can't get list of project owned", {
-          variant: "error",
-        });
-        return;
-      }
-      const currentProject = data[0].name;
-      setCurrentProject(currentProject);
-      navigate(`/${currentProject}/`);
-    }
+    loginMutation.mutate(data);
   }
   return (
     <ThemeProvider theme={theme}>
@@ -88,21 +57,25 @@ export default function Login() {
           >
             <TextField
               margin="normal"
-              required
               fullWidth
-              {...register("username")}
+              {...register("username", {
+                required: "Username is required",
+              })}
               autoFocus
-              helperText={errorText}
-              error={error}
               label="Username"
+              error={!!errors.username}
+              helperText={errors.username?.message}
             />
             <TextField
               margin="normal"
               type="password"
-              required
               fullWidth
-              {...register("password")}
+              {...register("password", {
+                required: "Password is required",
+              })}
               autoFocus
+              error={!!errors.password}
+              helperText={errors.password?.message}
               label="Password"
             />
             {/* <FormControlLabel
