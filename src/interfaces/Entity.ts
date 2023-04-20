@@ -150,3 +150,9 @@ export interface IAccountUpdate {
   email: string;
   role: "manager" | "member";
 }
+export interface IAccountRegister {
+  username: string;
+  email: string;
+  confirmPassword: string;
+  password: string;
+}
