@@ -6,19 +6,21 @@ import {
   Button,
   Container,
   CssBaseline,
+  Grid,
+  Link,
   TextField,
   ThemeProvider,
   Typography,
-  createTheme,
 } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useLoginMutation } from "~/hooks/query";
-const theme = createTheme();
+import { useThemeHook } from "~/hooks/theme";
 interface IFormInput {
   username: string;
   password: string;
 }
 export default function Login() {
+  const theme = useThemeHook();
   const {
     handleSubmit,
     register,
@@ -104,18 +106,18 @@ export default function Login() {
             >
               Sign In with Github
             </Button>
-            {/* <Grid container>
+            <Grid container>
               <Grid item xs>
-                <Link href="/forgetpwd" variant="body2">
+                <Link href="/forgetpwd" variant="body2" underline="hover">
                   Forgot password?
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="/signup" variant="body2">
+                <Link href="/signup" variant="body2" underline="hover">
                   Don't have an account? Sign Up
                 </Link>
               </Grid>
-            </Grid> */}
+            </Grid>
           </Box>
         </Box>
       </Container>
