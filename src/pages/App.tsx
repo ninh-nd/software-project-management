@@ -14,6 +14,7 @@ import Login from "./Login";
 import AdminAccountManagement from "./AdminAccountManagement";
 import AccountInfo from "./AccountInfo";
 import AdminThirdPartyManagement from "./AdminThirdPartyManagement";
+import SignUpPage from "./SignUpPage";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -44,6 +45,7 @@ export default function App() {
               <Route path=":memberId" element={<MemberDetailInfo />} />
             </Route>
           </Route>
+          <Route path="/signup" element={<SignUpPage />} />
           <Route path="/login" element={<Login />} />
           <Route element={<DashboardLayout />} path="/user/:username">
             <Route path="" element={<AccountInfo />} />

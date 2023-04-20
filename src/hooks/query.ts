@@ -45,6 +45,7 @@ import {
   getVulnerabilities,
 } from "~/actions/vulnAction";
 import {
+  IAccountRegister,
   IAccountUpdate,
   IArtifactCreate,
   IPhaseCreate,
@@ -52,7 +53,7 @@ import {
   ITicketCreateSent,
 } from "~/interfaces/Entity";
 import { IErrorResponse, ISuccessResponse } from "~/interfaces/ServerResponse";
-import { login } from "~/actions/authAction";
+import { login, register } from "~/actions/authAction";
 import { useNavigate } from "react-router-dom";
 import { useProjectActions } from "./project";
 function toast(
@@ -400,6 +401,18 @@ export function useDeleteAccountMutation() {
     onSuccess: (response) => {
       toast(response, enqueueSnackbar, () => {
         queryClient.invalidateQueries(["accounts"]);
+      });
+    },
+  });
+}
+export function useCreateAccountMutation() {
+  const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
+  return useMutation({
+    mutationFn: (account: IAccountRegister) => register(account),
+    onSuccess: (response) => {
+      toast(response, enqueueSnackbar, () => {
+        navigate("/login");
       });
     },
   });
