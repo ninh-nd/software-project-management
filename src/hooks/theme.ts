@@ -9,10 +9,9 @@ interface ThemeStore {
   };
 }
 const useThemeStore = create<ThemeStore>((set) => {
-  const theme =
-    localStorage.getItem("theme") === null
-      ? "light"
-      : (localStorage.getItem("theme") as "light" | "dark");
+  const theme = !localStorage.getItem("theme")
+    ? "light"
+    : (localStorage.getItem("theme") as "light" | "dark");
   return {
     theme: createTheme({ palette: { mode: theme } }),
     isDrawerOpen: false,
