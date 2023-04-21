@@ -16,7 +16,7 @@ import {
 import { useNavigate, useParams } from "react-router-dom";
 import { getAccountInfo } from "~/actions/accountAction";
 import { logout } from "~/actions/authAction";
-import { useProjectActions } from "~/hooks/project";
+import { useProjectActions } from "~/hooks/general";
 import { useIsDrawerOpen, useThemeActions, useThemeHook } from "~/hooks/theme";
 const topBarStyle = {
   height: "50px",

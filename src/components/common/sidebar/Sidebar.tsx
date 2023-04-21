@@ -18,7 +18,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useProjectHook } from "~/hooks/project";
+import { useProjectHook } from "~/hooks/general";
 import { useIsDrawerOpen, useThemeActions } from "~/hooks/theme";
 import ImportProject from "./ImportProject";
 import SelectProject from "./SelectProject";
