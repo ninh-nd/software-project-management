@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { getProjectIn } from "~/actions/userAction";
+import { useAccountInfoQuery } from "./query";
 
 interface ProjectStore {
   currentProject: string;
@@ -8,7 +9,9 @@ interface ProjectStore {
   };
 }
 const useProjectStore = create<ProjectStore>((set) => {
-  getProjectIn().then((data) => set({ currentProject: data.data[0].name }));
+  getProjectIn().then((data) =>
+    set({ currentProject: data.data ? data.data[0].name : undefined })
+  );
   return {
     currentProject: "",
     actions: {
@@ -22,3 +25,9 @@ export const useProjectHook = () =>
   useProjectStore((state) => state.currentProject);
 export const useProjectActions = () =>
   useProjectStore((state) => state.actions);
+export const usePermissionHook = () => {
+  const accountInfoQuery = useAccountInfoQuery();
+  const accountInfo = accountInfoQuery.data?.data;
+  if (!accountInfo) return [];
+  return accountInfo.permission;
+};
