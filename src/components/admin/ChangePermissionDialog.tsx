@@ -57,7 +57,7 @@ export default function ChangePermissionDialog({
           <Box display="flex" flexWrap="wrap">
             {permissionList.map((permission) => {
               return (
-                <FormControl>
+                <FormControl key={permission}>
                   <FormControlLabel
                     labelPlacement="end"
                     control={
