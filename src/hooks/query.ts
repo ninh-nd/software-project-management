@@ -10,7 +10,9 @@ import {
   getAccountById,
   getAccountInfo,
   getAllAccounts,
+  getPermissions,
   updateAccount,
+  updatePermission,
 } from "~/actions/accountAction";
 import { getCommits, getPullRequests } from "~/actions/activityHistoryAction";
 import { getArtifact } from "~/actions/artifactAction";
@@ -55,7 +57,7 @@ import {
 import { IErrorResponse, ISuccessResponse } from "~/interfaces/ServerResponse";
 import { login, register } from "~/actions/authAction";
 import { useNavigate } from "react-router-dom";
-import { useProjectActions } from "./project";
+import { useProjectActions } from "./general";
 function toast(
   response: ISuccessResponse<any> | IErrorResponse,
   enqueueSnackbar: (
@@ -391,6 +393,9 @@ export function useLoginMutation() {
         }
       }
     },
+    onError: () => {
+      enqueueSnackbar("Wrong username/password", { variant: "error" });
+    },
   });
 }
 export function useDeleteAccountMutation() {
@@ -413,6 +418,27 @@ export function useCreateAccountMutation() {
     onSuccess: (response) => {
       toast(response, enqueueSnackbar, () => {
         navigate("/login");
+      });
+    },
+  });
+}
+export function usePermissionListQuery() {
+  return useQuery(["permissions"], getPermissions);
+}
+interface UpdatePermissionParams {
+  id: string;
+  permission: string[];
+}
+export function useUpdatePermissionMutation() {
+  const queryClient = useQueryClient();
+  const { enqueueSnackbar } = useSnackbar();
+  return useMutation({
+    mutationFn: ({ id, permission }: UpdatePermissionParams) =>
+      updatePermission(id, permission),
+    onSuccess: (response, { id }) => {
+      toast(response, enqueueSnackbar, () => {
+        queryClient.invalidateQueries(["permissions"]);
+        queryClient.invalidateQueries(["account", id]);
       });
     },
   });

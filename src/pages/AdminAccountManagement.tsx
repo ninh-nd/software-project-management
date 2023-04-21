@@ -1,4 +1,4 @@
-import { Delete, Edit } from "@mui/icons-material";
+import { Delete, Edit, ManageAccounts } from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -9,10 +9,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  MenuItem,
-  Select,
-  Stack,
-  TextField,
+  Tooltip,
 } from "@mui/material";
 import {
   DataGrid,
@@ -22,14 +19,9 @@ import {
   GridToolbar,
 } from "@mui/x-data-grid";
 import { useState } from "react";
-import { Controller, useForm } from "react-hook-form";
-import {
-  useAccountByIdQuery,
-  useAccountUpdateMutation,
-  useAccountsQuery,
-  useDeleteAccountMutation,
-} from "~/hooks/query";
-import { IAccountUpdate } from "~/interfaces/Entity";
+import ChangePermissionDialog from "~/components/admin/ChangePermissionDialog";
+import EditAccountDialog from "~/components/admin/EditAccountDialog";
+import { useAccountsQuery, useDeleteAccountMutation } from "~/hooks/query";
 function renderChip(role: "admin" | "manager" | "member") {
   switch (role) {
     case "admin":
@@ -44,83 +36,6 @@ interface DialogProps {
   id: GridRowId;
   open: boolean;
   handleClose: () => void;
-}
-function EditAccountDialog({ id, open, handleClose }: DialogProps) {
-  const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors },
-  } = useForm<IAccountUpdate>();
-  const accountUpdateMutation = useAccountUpdateMutation();
-  function onSubmit(data: IAccountUpdate) {
-    accountUpdateMutation.mutate({
-      id: id as string,
-      updateData: data,
-    });
-    handleClose();
-  }
-  // Stop TS from complaining about id not being a string
-  if (typeof id !== "string") return null;
-  const accountQuery = useAccountByIdQuery(id);
-  const account = accountQuery.data?.data;
-  if (!account) return <></>;
-  return (
-    <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>Edit Account</DialogTitle>
-      <Box component="form" onSubmit={handleSubmit(onSubmit)}>
-        <DialogContent>
-          <DialogContentText>
-            To edit this account, please enter the new information here.
-          </DialogContentText>
-          <Stack spacing={2} sx={{ mt: 2 }}>
-            <TextField label="Username" value={account.username} disabled />
-            <TextField
-              label="Email"
-              defaultValue={account.email}
-              {...register("email", {
-                required: "Email is required",
-                pattern: {
-                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                  message: "invalid email address",
-                },
-              })}
-              error={!!errors.email}
-              helperText={errors.email?.message}
-            />
-            <Controller
-              name="role"
-              control={control}
-              render={({ field }) => {
-                if (account.role === "admin") {
-                  return (
-                    <Select
-                      label="Role"
-                      disabled
-                      {...field}
-                      value={account.role}
-                    >
-                      <MenuItem value="admin">Admin</MenuItem>
-                    </Select>
-                  );
-                }
-                return (
-                  <Select {...field} label="Role" defaultValue={account.role}>
-                    <MenuItem value="manager">Manager</MenuItem>
-                    <MenuItem value="member">Member</MenuItem>
-                  </Select>
-                );
-              }}
-            />
-          </Stack>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit">Save</Button>
-        </DialogActions>
-      </Box>
-    </Dialog>
-  );
 }
 function ConfirmDeleteDialog({ id, open, handleClose }: DialogProps) {
   const deleteAccountMutation = useDeleteAccountMutation();
@@ -145,6 +60,7 @@ function ConfirmDeleteDialog({ id, open, handleClose }: DialogProps) {
 }
 export default function AdminAccountManagement() {
   const [open, setOpen] = useState(false);
+  const [openPermissionEdit, setOpenPermissionEdit] = useState(false);
   const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
   const [id, setId] = useState<GridRowId>("");
   function handleCloseEditDialog() {
@@ -152,6 +68,9 @@ export default function AdminAccountManagement() {
   }
   function handleCloseConfirmDeleteDialog() {
     setOpenConfirmDelete(false);
+  }
+  function handleClosePermissionEditDialog() {
+    setOpenPermissionEdit(false);
   }
   function handleEditClick(id: GridRowId) {
     return async () => {
@@ -163,6 +82,12 @@ export default function AdminAccountManagement() {
     return async () => {
       setId(id);
       setOpenConfirmDelete(true);
+    };
+  }
+  function handleChangePermissionClick(id: GridRowId) {
+    return async () => {
+      setId(id);
+      setOpenPermissionEdit(true);
     };
   }
   const columns: GridColumns = [
@@ -192,14 +117,33 @@ export default function AdminAccountManagement() {
       renderCell: ({ id }) => {
         return [
           <GridActionsCellItem
-            icon={<Edit />}
+            icon={
+              <Tooltip title="Edit">
+                <Edit />
+              </Tooltip>
+            }
             label="Edit"
             className="textPrimary"
             onClick={handleEditClick(id)}
             color="inherit"
           />,
           <GridActionsCellItem
-            icon={<Delete />}
+            icon={
+              <Tooltip title="Change permission">
+                <ManageAccounts />
+              </Tooltip>
+            }
+            label="Change permision"
+            className="textPrimary"
+            onClick={handleChangePermissionClick(id)}
+            color="inherit"
+          />,
+          <GridActionsCellItem
+            icon={
+              <Tooltip title="Delete">
+                <Delete />
+              </Tooltip>
+            }
             label="Delete"
             onClick={handleDeleteClick(id)}
             color="inherit"
@@ -241,6 +185,11 @@ export default function AdminAccountManagement() {
         id={id}
         open={openConfirmDelete}
         handleClose={handleCloseConfirmDeleteDialog}
+      />
+      <ChangePermissionDialog
+        id={id}
+        open={openPermissionEdit}
+        handleClose={handleClosePermissionEditDialog}
       />
     </Box>
   );
