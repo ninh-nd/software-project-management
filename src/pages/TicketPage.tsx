@@ -7,12 +7,14 @@ import {
   Link,
   Paper,
   Stack,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import React from "react";
 import { Link as RouterLink, useParams } from "react-router-dom";
 import FormWrapper from "~/components/common/FormWrapper";
 import AddTicketForm from "~/components/ticket/AddTicketForm";
+import { usePermissionHook } from "~/hooks/general";
 import { useTicketsQuery } from "~/hooks/query";
 import { ITicket } from "~/interfaces/Entity";
 interface TabProps {
@@ -77,6 +79,8 @@ function Tab({ title, ticketList }: TabProps) {
 }
 
 export default function TicketPage() {
+  const permission = usePermissionHook();
+  const createTicketPermission = permission.includes("ticket:create");
   const [open, setOpen] = React.useState(false);
   const { currentProject } = useParams();
   if (!currentProject) return <></>;
@@ -96,9 +100,19 @@ export default function TicketPage() {
     >
       <Grid container spacing={1} justifyContent="center">
         <Grid item xs={12} sm={6} md={5} lg={3}>
-          <Button variant="contained" onClick={() => setOpen(true)}>
-            Add Ticket
-          </Button>
+          {createTicketPermission ? (
+            <Button variant="contained" onClick={() => setOpen(true)}>
+              Add Ticket
+            </Button>
+          ) : (
+            <Tooltip title="You don't have permission to create a ticket">
+              <span>
+                <Button variant="contained" disabled>
+                  Add Ticket
+                </Button>
+              </span>
+            </Tooltip>
+          )}
         </Grid>
         <Grid item xs={12} sm={6} md={5} lg={3} />
       </Grid>
