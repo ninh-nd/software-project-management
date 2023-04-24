@@ -8,7 +8,6 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
-import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import FormItem from "~/components/common/FormItem";
 import {
@@ -32,7 +31,6 @@ export default function UpdateArtifactForm({
   if (!artifactId) {
     return <></>;
   }
-  const [selectedType, setSelectedType] = useState(type[0]);
   const { register, handleSubmit, control } = useForm<IArtifact>();
   const getVulQuery = useVulnsQuery();
   const getThreatQuery = useThreatsQuery();
@@ -48,9 +46,6 @@ export default function UpdateArtifactForm({
   const defaultValueVulns = vulns.filter((vuln) =>
     artifact.vulnerabilityList.some((x) => x._id === vuln._id)
   );
-  function selectType(event: React.ChangeEvent<HTMLInputElement>) {
-    setSelectedType((event.target as HTMLInputElement).value);
-  }
   async function submit(data: IArtifact) {
     if (!data.threatList) {
       data.threatList = defaultValueThreats;
@@ -95,24 +90,27 @@ export default function UpdateArtifactForm({
           />
         </FormItem>
         <FormItem label="Type">
-          <RadioGroup
-            row
-            value={selectedType}
-            onChange={selectType}
+          <Controller
+            control={control}
+            name="type"
             defaultValue={artifact.type}
-          >
-            {type.map((t) => (
-              <FormControlLabel
-                {...register("type")}
-                value={t}
-                control={<Radio />}
-                label={t}
-                key={t}
-              />
-            ))}
-          </RadioGroup>
+            render={({ field }) => (
+              <RadioGroup {...field} row>
+                {type.map((t) => (
+                  <FormControlLabel
+                    {...register("type")}
+                    value={t}
+                    control={<Radio />}
+                    label={t}
+                    key={t}
+                    disabled
+                  />
+                ))}
+              </RadioGroup>
+            )}
+          />
         </FormItem>
-        {selectedType === "log" ? (
+        {artifact.type === "log" ? (
           <>
             <FormItem label="Content" />
             <TextField

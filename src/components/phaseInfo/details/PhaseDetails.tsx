@@ -58,11 +58,12 @@ export default function PhaseDetails({ phase }: PhaseDetailsProps) {
   }
   return (
     <Card sx={{ width: "100%" }}>
-      <CardContent sx={{ height: "30vh" }}>
+      <CardContent sx={{ minHeight: "30vh" }}>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
           {phase.name}
         </Typography>
         <DataGrid
+          autoHeight
           rows={phase.tasks}
           getRowId={(row) => row._id}
           columns={taskColumn}

@@ -13,6 +13,7 @@ export default function Home() {
   const pullRequestsQuery = usePullRequestsQuery(currentProject);
   const commits = commitsQuery.data?.data;
   const pullRequests = pullRequestsQuery.data?.data;
+  if (!commits || !pullRequests) return <></>;
   return (
     <Box sx={{ flexGrow: 1, height: "100vh" }}>
       <Container sx={{ mt: 4, mb: 4 }}>

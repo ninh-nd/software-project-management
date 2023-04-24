@@ -1,4 +1,4 @@
-import { Box, Container, Grid } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import { useParams } from "react-router-dom";
 import ArtifactDetails from "~/components/phaseInfo/details/ArtifactDetails";
 import PhaseDetails from "~/components/phaseInfo/details/PhaseDetails";
@@ -13,17 +13,15 @@ export default function PhaseDetailInfo() {
   const phase = getPhaseQuery.data?.data;
   if (!phase) return <></>;
   return (
-    <Box flexGrow={1} height="100vh">
-      <Container maxWidth="lg">
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <PhaseDetails phase={phase} />
-          </Grid>
-          <Grid item xs={12}>
-            <ArtifactDetails phase={phase} />
-          </Grid>
+    <Box flexGrow={1} height="100vh" sx={{ m: 2 }}>
+      <Grid container spacing={3}>
+        <Grid item xs={12} lg={6}>
+          <PhaseDetails phase={phase} />
         </Grid>
-      </Container>
+        <Grid item xs={12} lg={6}>
+          <ArtifactDetails phase={phase} />
+        </Grid>
+      </Grid>
     </Box>
   );
 }
