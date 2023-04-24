@@ -1,65 +1,74 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { SnackbarProvider } from "notistack";
+import {
+  QueryCache,
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query";
+import { useSnackbar } from "notistack";
 import { Navigate, Route, Routes } from "react-router-dom";
-import DashboardLayout from "~/layouts/DashboardLayout";
 import AdminLayout from "~/layouts/AdminLayout";
-import VulnerabilityPage from "./VulnerabilityPage";
-import Home from "./Home";
-import PhaseInfo from "./PhaseInfo";
-import PhaseDetailInfo from "./PhaseDetailInfo";
-import TicketPage from "./TicketPage";
-import TicketDetailPage from "./TicketDetailPage";
-import MemberDetailInfo from "./MemberDetailInfo";
-import Login from "./Login";
-import AdminAccountManagement from "./AdminAccountManagement";
+import DashboardLayout from "~/layouts/DashboardLayout";
 import AccountInfo from "./AccountInfo";
+import AdminAccountManagement from "./AdminAccountManagement";
 import AdminThirdPartyManagement from "./AdminThirdPartyManagement";
+import Home from "./Home";
+import Login from "./Login";
+import MemberDetailInfo from "./MemberDetailInfo";
+import PhaseDetailInfo from "./PhaseDetailInfo";
+import PhaseInfo from "./PhaseInfo";
 import SignUpPage from "./SignUpPage";
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: false,
-      refetchOnWindowFocus: false,
-    },
-  },
-});
+import TicketDetailPage from "./TicketDetailPage";
+import TicketPage from "./TicketPage";
+import VulnerabilityPage from "./VulnerabilityPage";
+import { ISuccessResponse, IErrorResponse } from "~/interfaces/ServerResponse";
 export default function App() {
+  const { enqueueSnackbar } = useSnackbar();
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: false,
+        refetchOnWindowFocus: false,
+      },
+    },
+    queryCache: new QueryCache({
+      // @ts-ignore
+      onSuccess: (data: ISuccessResponse<any> | IErrorResponse) => {
+        if (data.status === "error") {
+          enqueueSnackbar(data.message, { variant: "error" });
+        }
+      },
+    }),
+  });
   return (
     <QueryClientProvider client={queryClient}>
-      <SnackbarProvider autoHideDuration={2000}>
-        <Routes>
-          <Route element={<DashboardLayout />} path="/vulnerabilities">
-            <Route path="" element={<VulnerabilityPage />} />
+      <Routes>
+        <Route element={<DashboardLayout />} path="/vulnerabilities">
+          <Route path="" element={<VulnerabilityPage />} />
+        </Route>
+        <Route element={<DashboardLayout />} path="/:currentProject">
+          <Route path="" element={<Home />} />
+          <Route path="phases">
+            <Route path="" element={<PhaseInfo />} />
+            <Route path=":phaseId" element={<PhaseDetailInfo />} />
           </Route>
-          <Route element={<DashboardLayout />} path="/:currentProject">
-            <Route path="" element={<Home />} />
-            <Route path="phases">
-              <Route path="" element={<PhaseInfo />} />
-              <Route path=":phaseId" element={<PhaseDetailInfo />} />
-            </Route>
-            <Route path="tickets">
-              <Route path="" element={<TicketPage />} />
-              <Route path=":ticketId" element={<TicketDetailPage />} />
-            </Route>
-            <Route path="memberInfo">
-              <Route path=":memberId" element={<MemberDetailInfo />} />
-            </Route>
+          <Route path="tickets">
+            <Route path="" element={<TicketPage />} />
+            <Route path=":ticketId" element={<TicketDetailPage />} />
           </Route>
-          <Route path="/signup" element={<SignUpPage />} />
-          <Route path="/login" element={<Login />} />
-          <Route element={<DashboardLayout />} path="/user/:username">
-            <Route path="" element={<AccountInfo />} />
+          <Route path="memberInfo">
+            <Route path=":memberId" element={<MemberDetailInfo />} />
           </Route>
-          <Route path="/admin" element={<AdminLayout />}>
-            <Route path="accounts" element={<AdminAccountManagement />} />
-            <Route
-              path="third-parties"
-              element={<AdminThirdPartyManagement />}
-            />
-          </Route>
-          <Route path="*" element={<Navigate to="/login" />} />
-        </Routes>
-      </SnackbarProvider>
+        </Route>
+        <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/login" element={<Login />} />
+        <Route element={<DashboardLayout />} path="/user/:username">
+          <Route path="" element={<AccountInfo />} />
+        </Route>
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route path="accounts" element={<AdminAccountManagement />} />
+          <Route path="third-parties" element={<AdminThirdPartyManagement />} />
+        </Route>
+        <Route path="*" element={<Navigate to="/login" />} />
+      </Routes>
     </QueryClientProvider>
   );
 }
