@@ -60,7 +60,7 @@ export default function TaskCard({ member }: { member: IUser }) {
   function markAsComplete() {
     markTaskMutation.mutate({
       taskIdArray: selectedRows,
-      status: "complete",
+      status: "completed",
       memberId: member._id,
     });
   }

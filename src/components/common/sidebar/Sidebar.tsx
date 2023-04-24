@@ -73,9 +73,6 @@ function DrawerContent() {
           <ImportProject />
         </ListItem>
         <Divider />
-        <Typography variant="body2" sx={{ m: "5px" }}>
-          General
-        </Typography>
         <Item
           text="Vulnerabilities database"
           icon={<SecurityOutlined />}

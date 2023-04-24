@@ -109,14 +109,21 @@ export default function ArtifactDetails({ phase }: ArtifactDetailsProps) {
   }
   return (
     <Card sx={{ width: "100%" }}>
-      <CardContent sx={{ minHeight: "30vh" }}>
+      <CardContent
+        sx={{
+          minHeight: {
+            md: 100,
+            lg: 150,
+          },
+        }}
+      >
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
           Artifacts
         </Typography>
         <Box display="flex" flexWrap="wrap">
           {transformedArtifacts.length > 0 ? (
             transformedArtifacts.map((item) => (
-              <Card key={item._id} sx={{ width: "25%", m: 2 }}>
+              <Card key={item._id} sx={{ minWidth: "10%", m: 2 }}>
                 <CardContent>
                   <Typography variant="h6" component="div">
                     {item.name}

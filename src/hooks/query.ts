@@ -99,7 +99,7 @@ export function useMemberQuery(memberId: string) {
 
 interface MarkTaskParams {
   taskIdArray: string[];
-  status: "complete" | "active";
+  status: "completed" | "active";
   memberId: string;
 }
 export function useMarkTaskMutation() {

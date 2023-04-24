@@ -1,7 +1,15 @@
 import { GitHub } from "@mui/icons-material";
-import { Autocomplete, Box, Button, Dialog, TextField } from "@mui/material";
+import {
+  Autocomplete,
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+} from "@mui/material";
 import { useState } from "react";
-import FormWrapper from "~/components/common/FormWrapper";
 import { useAccountInfoQuery, useGetImportProjectsQuery } from "~/hooks/query";
 
 export default function ImportProject() {
@@ -37,33 +45,28 @@ export default function ImportProject() {
         Import Project
       </Button>
       <Dialog open={open} onClose={closeDialog} maxWidth="sm" fullWidth>
-        <Box sx={{ p: 2 }}>
-          <FormWrapper title="Import project" closeDialogFunction={closeDialog}>
-            <Autocomplete
-              options={importProjectList}
-              getOptionLabel={(option) => option.name}
-              renderOption={(props, option) => (
-                <Box {...props} component="li" sx={{ "& > svg": { mr: 2 } }}>
-                  <GitHub />
-                  {option.name}
-                </Box>
-              )}
-              renderInput={(params) => (
-                <Box>
-                  <TextField {...params} label="Choose a project" />
-                </Box>
-              )}
-            />
-          </FormWrapper>
-          <Button
-            fullWidth
-            variant="contained"
-            sx={{ mt: 2 }}
-            onClick={importProject}
-          >
-            Import
-          </Button>
-        </Box>
+        <DialogTitle>Import project from Github</DialogTitle>
+        <DialogContent>
+          <Autocomplete
+            options={importProjectList}
+            getOptionLabel={(option) => option.name}
+            renderOption={(props, option) => (
+              <Box {...props} component="li" sx={{ "& > svg": { mr: 2 } }}>
+                <GitHub />
+                {option.name}
+              </Box>
+            )}
+            renderInput={(params) => (
+              <Box>
+                <TextField {...params} label="Choose a project" />
+              </Box>
+            )}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeDialog}>Cancel</Button>
+          <Button onClick={importProject}>Import</Button>
+        </DialogActions>
       </Dialog>
     </>
   );

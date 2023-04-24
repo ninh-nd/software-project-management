@@ -1,14 +1,13 @@
-import { FormControl, MenuItem, Select, Typography } from "@mui/material";
+import { MenuItem, Select } from "@mui/material";
 import { SelectChangeEvent } from "@mui/material/Select";
-import { useNavigate, useParams } from "react-router-dom";
-import { useProjectActions } from "~/hooks/general";
+import { Controller, useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { useProjectActions, useProjectHook } from "~/hooks/general";
 import { useProjectInQuery } from "~/hooks/query";
 export default function SelectProject() {
+  const { control } = useForm();
   const { setCurrentProject } = useProjectActions();
-  const currentProject = useParams();
-  if (!currentProject) {
-    return <></>;
-  }
+  const currentProject = useProjectHook();
   const projectOwnQuery = useProjectInQuery();
   const projects = projectOwnQuery.data?.data ?? [];
   const navigate = useNavigate();
@@ -16,11 +15,16 @@ export default function SelectProject() {
     setCurrentProject(event.target.value);
     navigate(`/${event.target.value}/`);
   }
+  if (!currentProject) {
+    return <></>;
+  }
   return (
-    <>
-      <Typography variant="caption">Select project</Typography>
-      <FormControl fullWidth>
-        <Select label="Project" onChange={handleChange} value={currentProject}>
+    <Controller
+      name="project"
+      control={control}
+      defaultValue={currentProject}
+      render={({ field: { onChange } }) => (
+        <Select label="Project" fullWidth onChange={handleChange}>
           {projects.map((project) => {
             return (
               <MenuItem value={project.name} key={project.name}>
@@ -29,7 +33,7 @@ export default function SelectProject() {
             );
           })}
         </Select>
-      </FormControl>
-    </>
+      )}
+    />
   );
 }

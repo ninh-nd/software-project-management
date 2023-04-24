@@ -58,9 +58,16 @@ export default function PhaseDetails({ phase }: PhaseDetailsProps) {
   }
   return (
     <Card sx={{ width: "100%" }}>
-      <CardContent sx={{ minHeight: "30vh" }}>
+      <CardContent
+        sx={{
+          minHeight: {
+            md: 100,
+            lg: 150,
+          },
+        }}
+      >
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          {phase.name}
+          Tasks
         </Typography>
         <DataGrid
           autoHeight
