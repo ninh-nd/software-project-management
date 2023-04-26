@@ -15,6 +15,7 @@ import {
 import { useForm } from "react-hook-form";
 import { useLoginMutation } from "~/hooks/query";
 import { useThemeHook } from "~/hooks/theme";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 interface IFormInput {
   username: string;
   password: string;
@@ -28,7 +29,7 @@ export default function Login() {
   } = useForm<IFormInput>();
   const loginMutation = useLoginMutation();
   function githubLogin() {
-    window.open("http://localhost:3001/auth/github", "_self");
+    window.open(`${API_BASE_URL}auth/github`, "_self");
   }
   async function onSubmit(data: IFormInput) {
     loginMutation.mutate(data);
