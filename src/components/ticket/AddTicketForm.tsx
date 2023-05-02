@@ -2,11 +2,15 @@ import {
   Autocomplete,
   Box,
   Button,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   FormControlLabel,
   Radio,
   RadioGroup,
   Stack,
   TextField,
+  Typography,
 } from "@mui/material";
 import { ChangeEvent, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -18,7 +22,6 @@ import {
   useVulnsQuery,
 } from "~/hooks/query";
 import { ITicketCreate } from "~/interfaces/Entity";
-import FormItem from "../common/FormItem";
 export default function AddTicketForm({
   setCloseDialog,
 }: {
@@ -71,48 +74,56 @@ export default function AddTicketForm({
     setCloseDialog();
   }
   return (
-    <Stack spacing={2} sx={{ p: 4 }}>
-      <Box component="form" onSubmit={handleSubmit(submit)}>
-        <FormItem label="Title">
-          <TextField {...register("title")} label="Title" />
-        </FormItem>
-        <FormItem label="Description" />
-        <TextField
-          {...register("description")}
-          label="Description"
-          fullWidth
-          multiline
-          minRows={5}
-        />
-        <FormItem label="Priority">
-          <RadioGroup row value={selectedPriority} onChange={selectPriority}>
-            {["Low", "Medium", "High"].map((p) => (
-              <FormControlLabel
-                {...register("priority")}
-                value={p}
-                control={<Radio />}
-                label={
-                  p === "Low" ? (
-                    <Box color="green">Low</Box>
-                  ) : p === "Medium" ? (
-                    <Box color="orange">Medium</Box>
-                  ) : (
-                    <Box color="red">High</Box>
-                  )
-                }
-                key={p}
-              />
-            ))}
-          </RadioGroup>
-        </FormItem>
-        <FormItem label="Assigner">
+    <Box component="form" onSubmit={handleSubmit(submit)}>
+      <DialogTitle>Create a new ticket</DialogTitle>
+      <DialogContent>
+        <Stack spacing={2}>
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Typography variant="body1">Title</Typography>
+            <TextField {...register("title")} label="Title" />
+          </Box>
+          <TextField
+            {...register("description")}
+            label="Description"
+            fullWidth
+            multiline
+            minRows={5}
+          />
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Typography variant="body1">Priority</Typography>
+            <RadioGroup row value={selectedPriority} onChange={selectPriority}>
+              {["Low", "Medium", "High"].map((p) => (
+                <FormControlLabel
+                  {...register("priority")}
+                  value={p}
+                  control={<Radio />}
+                  label={
+                    p === "Low" ? (
+                      <Box color="green">Low</Box>
+                    ) : p === "Medium" ? (
+                      <Box color="orange">Medium</Box>
+                    ) : (
+                      <Box color="red">High</Box>
+                    )
+                  }
+                  key={p}
+                />
+              ))}
+            </RadioGroup>
+          </Box>
           <TextField
             label="Assigner"
             defaultValue={accountInfo?.username}
             disabled
           />
-        </FormItem>
-        <FormItem label="Assignee">
           <Controller
             control={control}
             name="assignee"
@@ -128,8 +139,6 @@ export default function AddTicketForm({
               />
             )}
           />
-        </FormItem>
-        <FormItem label="Vulnerability">
           <Controller
             control={control}
             name="targetedVulnerability"
@@ -145,17 +154,12 @@ export default function AddTicketForm({
               />
             )}
           />
-        </FormItem>
-        <Box display="flex" justifyContent="center">
-          <Button
-            type="submit"
-            variant="contained"
-            sx={{ width: "40%", height: "40%", m: 2 }}
-          >
-            Create new ticket
-          </Button>
-        </Box>
-      </Box>
-    </Stack>
+        </Stack>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={setCloseDialog}>Cancel</Button>
+        <Button type="submit">Create</Button>
+      </DialogActions>
+    </Box>
   );
 }

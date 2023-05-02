@@ -7,16 +7,18 @@ import {
   CardContent,
   CardMedia,
   Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   Grid,
   IconButton,
+  Stack,
   SxProps,
   TextField,
   Typography,
 } from "@mui/material";
 import React from "react";
 import { useForm } from "react-hook-form";
-import FormItem from "~/components/common/FormItem";
-import FormWrapper from "~/components/common/FormWrapper";
 import { useAccountInfoQuery } from "~/hooks/query";
 import { IThirdParty } from "~/interfaces/Entity";
 const accountPageStyle: SxProps = {
@@ -50,35 +52,35 @@ function Github({ data: github }: { data: IThirdParty | undefined }) {
     <Box sx={{ display: "flex" }}>
       <Button disabled>Connected to Github</Button>
       <Button onClick={updateGithubConfig}>Update Github config</Button>
-      <Dialog open={open} onClose={() => setOpen(false)} maxWidth="lg">
-        <FormWrapper
-          title="Update Github config"
-          closeDialogFunction={() => setOpen(false)}
-        >
-          <Box component="form" sx={{ p: 4 }} onSubmit={handleSubmit(onSubmit)}>
-            <FormItem label="Access token">
-              <TextField
-                type={isTokenShown ? "text" : "password"}
-                defaultValue={github.accessToken}
-                {...register("accessToken", {
-                  required: "Access token is required",
-                })}
-                error={errors.accessToken !== undefined}
-                helperText={errors.accessToken?.message}
-                fullWidth
-              />
-              <IconButton onClick={() => setIsTokenShown(!isTokenShown)}>
-                {isTokenShown ? <Visibility /> : <VisibilityOff />}
-              </IconButton>
-            </FormItem>
-            <FormItem label="URL">
-              <TextField fullWidth />
-            </FormItem>
-            <Button fullWidth type="submit">
-              Update
-            </Button>
-          </Box>
-        </FormWrapper>
+      <Dialog open={open} onClose={() => setOpen(false)} fullWidth>
+        <Box component="form" onSubmit={handleSubmit(onSubmit)}>
+          <DialogTitle>Update Github configuration</DialogTitle>
+          <DialogContent>
+            <Stack spacing={2}>
+              <Box display="flex" alignItems="center" justifyContent="center">
+                <TextField
+                  type={isTokenShown ? "text" : "password"}
+                  defaultValue={github.accessToken}
+                  {...register("accessToken", {
+                    required: "Access token is required",
+                  })}
+                  error={errors.accessToken !== undefined}
+                  helperText={errors.accessToken?.message}
+                  fullWidth
+                  label="Access token"
+                />
+                <IconButton onClick={() => setIsTokenShown(!isTokenShown)}>
+                  {isTokenShown ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+              </Box>
+              <TextField fullWidth label="URL" />
+            </Stack>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setOpen(false)}>Cancel</Button>
+            <Button type="submit">Update</Button>
+          </DialogActions>
+        </Box>
       </Dialog>
     </Box>
   );

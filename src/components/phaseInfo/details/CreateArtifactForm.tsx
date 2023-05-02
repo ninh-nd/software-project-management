@@ -2,20 +2,23 @@ import {
   Autocomplete,
   Box,
   Button,
+  Chip,
+  CircularProgress,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   FormControlLabel,
   Radio,
   RadioGroup,
   Stack,
   TextField,
+  Typography,
 } from "@mui/material";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import FormItem from "~/components/common/FormItem";
-import {
-  useAddArtifactToPhaseMutation,
-  useThreatsQuery,
-  useVulnsQuery,
-} from "~/hooks/query";
-import { IArtifact } from "~/interfaces/Entity";
+import { getCVEs } from "~/actions/vulnAction";
+import { useThemeHook } from "~/hooks/theme";
+import { IArtifact, IVulnerability } from "~/interfaces/Entity";
 const type = ["image", "log", "source code", "executable", "library"];
 interface CreateArtifactFormProps {
   phaseId: string;
@@ -25,125 +28,91 @@ export default function CreateArtifactForm({
   phaseId,
   setCloseDialog,
 }: CreateArtifactFormProps) {
-  const { register, handleSubmit, control, watch } = useForm<IArtifact>();
-  const getVulQuery = useVulnsQuery();
-  const getThreatQuery = useThreatsQuery();
-  const threats = getThreatQuery.data?.data ?? [];
-  const vulns = getVulQuery.data?.data ?? [];
-  const addArtifactToPhaseMutation = useAddArtifactToPhaseMutation();
-  async function submit(data: IArtifact) {
-    const threatIds =
-      data.threatList === undefined
-        ? []
-        : data.threatList.map((threat) => threat._id);
-    const vulnIds =
-      data.vulnerabilityList === undefined
-        ? []
-        : data.vulnerabilityList.map((vuln) => vuln._id);
-    const { name, type, content, url, version } = data;
-    const sendObject = {
-      name,
-      type,
-      content,
-      url,
-      version,
-      threatList: threatIds,
-      vulnerabilityList: vulnIds,
-    };
-    addArtifactToPhaseMutation.mutate({ phaseId, artifact: sendObject });
-    setCloseDialog();
+  const {
+    register,
+    handleSubmit,
+    control,
+    getValues,
+    formState: { errors },
+  } = useForm<IArtifact>();
+  const [importedCves, setImportedCves] = useState<IVulnerability[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const theme = useThemeHook();
+  async function searchCVEs() {
+    setIsLoading(true);
+    const value = getValues("cpe") ?? "";
+    const { data } = await getCVEs(value);
+    if (data) {
+      setImportedCves(data);
+      setIsLoading(false);
+    }
   }
+  async function submit(data) {}
   return (
-    <Stack spacing={2} sx={{ p: 4 }}>
-      <Box component="form" onSubmit={handleSubmit(submit)}>
-        <FormItem label="Artifact's name">
-          <TextField {...register("name")} label="Name" />
-        </FormItem>
-        <FormItem label="Type">
-          <Controller
-            control={control}
-            name="type"
-            defaultValue="image"
-            render={({ field }) => (
-              <RadioGroup {...field} row>
-                {type.map((t) => (
-                  <FormControlLabel
-                    {...register("type")}
-                    value={t}
-                    control={<Radio />}
-                    label={t}
-                    key={t}
-                  />
-                ))}
-              </RadioGroup>
-            )}
+    <Box component="form" onSubmit={handleSubmit(submit)}>
+      <DialogTitle>Add a new artifact</DialogTitle>
+      <DialogContent>
+        <Stack spacing={2}>
+          <TextField
+            {...register("name", { required: "Name is required" })}
+            label="Name"
+            error={!!errors.name}
+            helperText={errors.name?.message}
           />
-        </FormItem>
-        {watch("type") === "log" ? (
-          <>
-            <FormItem label="Content" />
-            <TextField
-              {...register("content")}
-              label="Content"
-              multiline
-              minRows={5}
-              fullWidth
-            />
-          </>
-        ) : (
-          <>
-            <FormItem label="URL">
-              <TextField {...register("url")} label="URL" />
-            </FormItem>
-            <FormItem label="Version">
-              <TextField {...register("version")} label="Version" />
-            </FormItem>
-          </>
-        )}
-        <FormItem label="Vulnerabilities">
-          <Controller
-            control={control}
-            name="vulnerabilityList"
-            render={({ field: { onChange, value } }) => (
-              <Autocomplete
-                multiple
-                options={vulns}
-                onChange={(event, newValue) => onChange(newValue)}
-                getOptionLabel={(option) => option.cveId}
-                renderInput={(params) => (
-                  <TextField {...params} label="Vulnerabilities" />
-                )}
-              />
-            )}
+          <TextField
+            {...register("url", { required: "Url is required" })}
+            label="URL"
+            error={!!errors.url}
+            helperText={errors.url?.message}
           />
-        </FormItem>
-        <FormItem label="Threats">
-          <Controller
-            control={control}
-            name="threatList"
-            render={({ field: { onChange, value } }) => (
-              <Autocomplete
-                multiple
-                options={threats}
-                onChange={(event, newValue) => onChange(newValue)}
-                getOptionLabel={(option) => option.name}
-                renderInput={(params) => (
-                  <TextField {...params} label="Threats" />
-                )}
-              />
-            )}
+          <TextField
+            {...register("cpe")}
+            label="CPE string"
+            helperText="A CPE is a Common Platform Enumaration, used as a naming scheme for software and packages. For example: cpe:2.3:a:apache:tomcat:3.0:*:*:*:*:*:*:* is a CPE string for Apache Tomcat 3.0. This string will be used to automatically import vulnerabilities from the NVD."
           />
-        </FormItem>
-        <Box display="flex" justifyContent="center">
-          <Button
-            type="submit"
-            variant="contained"
-            sx={{ width: "40%", height: "40%", m: 2 }}
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
           >
-            Create
-          </Button>
-        </Box>
-      </Box>
-    </Stack>
+            <Typography variant="body2">Type</Typography>
+            <Controller
+              name="type"
+              control={control}
+              defaultValue="image"
+              render={({ field }) => (
+                <RadioGroup {...field} row>
+                  {type.map((item) => (
+                    <FormControlLabel
+                      key={item}
+                      value={item}
+                      control={<Radio />}
+                      label={item}
+                    />
+                  ))}
+                </RadioGroup>
+              )}
+            />
+          </Box>
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Button variant="outlined" onClick={searchCVEs}>
+              Import vulnerabilities using CPE
+            </Button>
+            <Typography variant="body1" color={theme.palette.error.main}>
+              {isLoading ? <CircularProgress size={20} sx={{ mr: 1 }} /> : null}
+              {`Found ${importedCves.length} vulnerabilities`}
+            </Typography>
+          </Box>
+        </Stack>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={setCloseDialog}>Cancel</Button>
+        <Button type="submit">Create</Button>
+      </DialogActions>
+    </Box>
   );
 }

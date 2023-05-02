@@ -12,7 +12,6 @@ import {
 } from "@mui/material";
 import React from "react";
 import { Link as RouterLink, useParams } from "react-router-dom";
-import FormWrapper from "~/components/common/FormWrapper";
 import AddTicketForm from "~/components/ticket/AddTicketForm";
 import { usePermissionHook } from "~/hooks/general";
 import { useTicketsQuery } from "~/hooks/query";
@@ -124,18 +123,8 @@ export default function TicketPage() {
           <Tab title="Closed" ticketList={closeTickets} />
         </Grid>
       </Grid>
-      <Dialog
-        open={open}
-        onClose={() => setOpen(false)}
-        fullWidth
-        maxWidth="sm"
-      >
-        <FormWrapper
-          title="Add Ticket"
-          closeDialogFunction={() => setOpen(false)}
-        >
-          <AddTicketForm setCloseDialog={() => setOpen(false)} />
-        </FormWrapper>
+      <Dialog open={open} onClose={() => setOpen(false)} fullWidth>
+        <AddTicketForm setCloseDialog={() => setOpen(false)} />
       </Dialog>
     </Box>
   );

@@ -21,10 +21,8 @@ import {
 import { useState } from "react";
 import { useRemoveArtifactFromPhaseMutation } from "~/hooks/query";
 import { IPhase } from "~/interfaces/Entity";
-import FormWrapper from "../../common/FormWrapper";
 import ConfirmDeleteModal from "./ConfirmDeleteModal";
 import CreateArtifactForm from "./CreateArtifactForm";
-import UpdateArtifactForm from "./UpdateArtifactForm";
 function renderType({
   type,
 }: {
@@ -81,12 +79,6 @@ export default function ArtifactDetails({ phase }: ArtifactDetailsProps) {
   const [openArtUpdateDialog, setOpenArtUpdateDialog] = useState(false);
   const [selectedArtifact, setSelectedArtifact] = useState("");
   const [confirmModal, setConfirmModal] = useState(false);
-  const transformedArtifacts = phase.artifacts.map((item) => {
-    const { _id, name, content, type, url, version } = item;
-    const threats = item.threatList.map((threat) => threat.name).join(", ");
-    const vulns = item.vulnerabilityList.map((vuln) => vuln.cveId).join(", ");
-    return { _id, name, content, type, url, version, threats, vulns };
-  });
   function handleUpdateSelectedArtifact(id: string) {
     return () => {
       setSelectedArtifact(id);
@@ -121,8 +113,8 @@ export default function ArtifactDetails({ phase }: ArtifactDetailsProps) {
           Artifacts
         </Typography>
         <Box display="flex" flexWrap="wrap">
-          {transformedArtifacts.length > 0 ? (
-            transformedArtifacts.map((item) => (
+          {phase.artifacts.length > 0 ? (
+            phase.artifacts.map((item) => (
               <Card key={item._id} sx={{ minWidth: "10%", m: 2 }}>
                 <CardContent>
                   <Typography variant="h6" component="div">
@@ -159,34 +151,22 @@ export default function ArtifactDetails({ phase }: ArtifactDetailsProps) {
           open={openArtCreateDialog}
           onClose={() => setOpenArtCreateDialog(false)}
           fullWidth
-          maxWidth="lg"
         >
-          <FormWrapper
-            title="Add artifact"
-            closeDialogFunction={() => setOpenArtCreateDialog(false)}
-          >
-            <CreateArtifactForm
-              phaseId={phase._id}
-              setCloseDialog={() => setOpenArtCreateDialog(false)}
-            />
-          </FormWrapper>
+          <CreateArtifactForm
+            phaseId={phase._id}
+            setCloseDialog={() => setOpenArtCreateDialog(false)}
+          />
         </Dialog>
         <Dialog
           open={openArtUpdateDialog}
           onClose={() => setOpenArtCreateDialog(false)}
           fullWidth
-          maxWidth="lg"
         >
-          <FormWrapper
-            title="Update artifact"
-            closeDialogFunction={() => setOpenArtUpdateDialog(false)}
-          >
-            <UpdateArtifactForm
+          {/* <UpdateArtifactForm
               phaseId={phase._id}
               artifactId={selectedArtifact}
               setCloseDialog={() => setOpenArtUpdateDialog(false)}
-            />
-          </FormWrapper>
+            /> */}
         </Dialog>
       </CardActions>
       <ConfirmDeleteModal
