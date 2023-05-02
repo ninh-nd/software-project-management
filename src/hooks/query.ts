@@ -41,11 +41,7 @@ import {
   getTickets,
   markTicket,
 } from "~/actions/ticketAction";
-import {
-  createCVE,
-  createCVEs,
-  getVulnerabilities,
-} from "~/actions/vulnAction";
+import { getCVEs, getVulnerabilities } from "~/actions/vulnAction";
 import {
   IAccountRegister,
   IAccountUpdate,
@@ -297,30 +293,6 @@ export function useMarkTicketMutation() {
       toast(response, enqueueSnackbar, () => {
         queryClient.invalidateQueries(["ticket", id]);
       });
-    },
-  });
-}
-export function useCreateCVEMutation() {
-  const queryClient = useQueryClient();
-  const { enqueueSnackbar } = useSnackbar();
-  return useMutation({
-    mutationFn: ({ cveId }: { cveId: string }) => createCVE(cveId),
-    onSuccess: (response) => {
-      toast(response, enqueueSnackbar, () =>
-        queryClient.invalidateQueries(["vulns"])
-      );
-    },
-  });
-}
-export function useCreateCVEsMutation() {
-  const queryClient = useQueryClient();
-  const { enqueueSnackbar } = useSnackbar();
-  return useMutation({
-    mutationFn: ({ cveIds }: { cveIds: string }) => createCVEs(cveIds),
-    onSuccess: (response) => {
-      toast(response, enqueueSnackbar, () =>
-        queryClient.invalidateQueries(["vulns"])
-      );
     },
   });
 }

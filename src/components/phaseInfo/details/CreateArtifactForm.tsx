@@ -34,7 +34,7 @@ export default function CreateArtifactForm({
     control,
     getValues,
     formState: { errors },
-  } = useForm<IArtifact>();
+  } = useForm<IArtifact>({ mode: "onChange" });
   const [importedCves, setImportedCves] = useState<IVulnerability[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const theme = useThemeHook();
@@ -66,9 +66,17 @@ export default function CreateArtifactForm({
             helperText={errors.url?.message}
           />
           <TextField
-            {...register("cpe")}
+            {...register("cpe", {
+              pattern:
+                /cpe:2\.3:[aho\*\-](:(((\?*|\*?)([a-zA-Z0-9\-\._]|(\\[\\\*\?!"#$$%&'\(\)\+,/:;<=>@\[\]\^`\{\|}~]))+(\?*|\*?))|[\*\-])){5}(:(([a-zA-Z]{2,3}(-([a-zA-Z]{2}|[0-9]{3}))?)|[\*\-]))(:(((\?*|\*?)([a-zA-Z0-9\-\._]|(\\[\\\*\?!"#$$%&'\(\)\+,/:;<=>@\[\]\^`\{\|}~]))+(\?*|\*?))|[\*\-])){4}/,
+            })}
             label="CPE string"
-            helperText="A CPE is a Common Platform Enumaration, used as a naming scheme for software and packages. For example: cpe:2.3:a:apache:tomcat:3.0:*:*:*:*:*:*:* is a CPE string for Apache Tomcat 3.0. This string will be used to automatically import vulnerabilities from the NVD."
+            helperText={
+              errors.cpe
+                ? "Invalid CPE string"
+                : "A CPE is a Common Platform Enumaration, used as a naming scheme for software and packages. For example: cpe:2.3:a:apache:tomcat:3.0:*:*:*:*:*:*:* is a CPE string for Apache Tomcat 3.0. This string will be used to automatically import vulnerabilities from the NVD."
+            }
+            error={!!errors.cpe}
           />
           <Box
             display="flex"

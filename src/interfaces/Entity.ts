@@ -18,12 +18,11 @@ export interface IActivity {
 export interface IArtifact {
   _id: string;
   name: string;
-  content: string;
   type: "image" | "log" | "source code" | "executable" | "library";
   url: string;
-  version: string;
   threatList: IThreat[];
   vulnerabilityList: IVulnerability[];
+  cpe?: string;
 }
 
 export interface IArtifactCreate {
