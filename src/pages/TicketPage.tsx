@@ -124,7 +124,7 @@ export default function TicketPage() {
         </Grid>
       </Grid>
       <Dialog open={open} onClose={() => setOpen(false)} fullWidth>
-        <AddTicketForm setCloseDialog={() => setOpen(false)} />
+        {/* <AddTicketForm setCloseDialog={() => setOpen(false)} /> */}
       </Dialog>
     </Box>
   );

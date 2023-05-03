@@ -7,3 +7,9 @@ export async function getArtifact(
   const response = await api.get(`/artifact/${artifactId}`);
   return response.data;
 }
+export async function getAllArtifacts(
+  projectName: string
+): PromiseServer<IArtifact[]> {
+  const response = await api.get("/artifact", { params: { projectName } });
+  return response.data;
+}

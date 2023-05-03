@@ -130,17 +130,16 @@ export interface IUser {
   account: IAccount;
 }
 export interface IVulnerability {
-  _id: string;
   cveId: string;
   description: string;
   score: number;
-  severity: "High" | "Medium" | "Low";
+  severity: "HIGH" | "MEDIUM" | "LOW";
   cwes: string[];
-  product: string;
-  version: string[];
-  vendor: string;
+  availabilityImpact: "COMPLETE" | "PARTIAL" | "NONE";
+  confidentialityImpact: "COMPLETE" | "PARTIAL" | "NONE";
+  integrityImpact: "COMPLETE" | "PARTIAL" | "NONE";
+  _id: string;
 }
-export type IVulnerabilityCreate = Omit<IVulnerability, "_id" | "severity">;
 export interface IAccountUpdate {
   email: string;
   role: "manager" | "member";
@@ -150,4 +149,16 @@ export interface IAccountRegister {
   email: string;
   confirmPassword: string;
   password: string;
+}
+export interface ICWE {
+  _id: string;
+  cweId: string;
+  name: string;
+  description: string;
+  modesOfIntroduction: string[];
+  likelihood: string;
+  mitigation: string[];
+  consequences: string[];
+  detectionMethods: string[];
+  __v: number;
 }

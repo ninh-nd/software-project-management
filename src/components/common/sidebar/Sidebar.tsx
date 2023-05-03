@@ -74,7 +74,7 @@ function DrawerContent() {
         </ListItem>
         <Divider />
         <Item
-          text="Vulnerabilities database"
+          text="Vulnerabilities dashboard"
           icon={<SecurityOutlined />}
           path={"/vulnerabilities"}
         />

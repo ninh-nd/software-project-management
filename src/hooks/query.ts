@@ -5,6 +5,7 @@ import {
   SnackbarMessage,
   useSnackbar,
 } from "notistack";
+import { useNavigate } from "react-router-dom";
 import {
   deleteAccount,
   getAccountById,
@@ -15,15 +16,9 @@ import {
   updatePermission,
 } from "~/actions/accountAction";
 import { getCommits, getPullRequests } from "~/actions/activityHistoryAction";
-import { getArtifact } from "~/actions/artifactAction";
+import { getAllArtifacts, getArtifact } from "~/actions/artifactAction";
+import { login, register } from "~/actions/authAction";
 import { getImportProjects } from "~/actions/githubAction";
-import {
-  assignTask,
-  getMemberById,
-  getMembersOfProject,
-  markTask,
-  getProjectIn,
-} from "~/actions/userAction";
 import {
   addArtifactToPhase,
   addTaskToPhase,
@@ -41,7 +36,13 @@ import {
   getTickets,
   markTicket,
 } from "~/actions/ticketAction";
-import { getCVEs, getVulnerabilities } from "~/actions/vulnAction";
+import {
+  assignTask,
+  getMemberById,
+  getMembersOfProject,
+  getProjectIn,
+  markTask,
+} from "~/actions/userAction";
 import {
   IAccountRegister,
   IAccountUpdate,
@@ -51,9 +52,8 @@ import {
   ITicketCreateSent,
 } from "~/interfaces/Entity";
 import { IErrorResponse, ISuccessResponse } from "~/interfaces/ServerResponse";
-import { login, register } from "~/actions/authAction";
-import { useNavigate } from "react-router-dom";
 import { useProjectActions } from "./general";
+import { getCWE } from "~/actions/cweAction";
 function toast(
   response: ISuccessResponse<any> | IErrorResponse,
   enqueueSnackbar: (
@@ -296,9 +296,6 @@ export function useMarkTicketMutation() {
     },
   });
 }
-export function useVulnsQuery() {
-  return useQuery(["vulns"], getVulnerabilities);
-}
 export function useGetImportProjectsQuery(
   username: string,
   accessToken: string
@@ -414,4 +411,12 @@ export function useUpdatePermissionMutation() {
       });
     },
   });
+}
+export function useArtifactsQuery(projectName: string) {
+  return useQuery(["artifacts", projectName], () =>
+    getAllArtifacts(projectName)
+  );
+}
+export function useCWEQuery(id: string) {
+  return useQuery(["cwe", id], () => getCWE(id));
 }
