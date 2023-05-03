@@ -9,7 +9,6 @@ import {
   TextField,
 } from "@mui/material";
 import { useForm } from "react-hook-form";
-import FormWrapper from "~/components/common/FormWrapper";
 import { useCreateThreatMutation } from "~/hooks/query";
 
 interface Props {
@@ -62,7 +61,9 @@ export default function AddThreatDialog({ open, setOpen }: Props) {
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => setOpen(false)}>Cancel</Button>
+        <Button onClick={() => setOpen(false)} color="inherit">
+          Cancel
+        </Button>
         <Button type="submit">Create</Button>
       </DialogActions>
     </Dialog>

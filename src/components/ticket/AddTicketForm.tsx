@@ -157,7 +157,9 @@ export default function AddTicketForm({
         </Stack>
       </DialogContent>
       <DialogActions>
-        <Button onClick={setCloseDialog}>Cancel</Button>
+        <Button onClick={setCloseDialog} color="inherit">
+          Cancel
+        </Button>
         <Button type="submit">Create</Button>
       </DialogActions>
     </Box>

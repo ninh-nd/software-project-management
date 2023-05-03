@@ -25,15 +25,10 @@ export interface IArtifact {
   cpe?: string;
 }
 
-export interface IArtifactCreate {
-  name: string;
-  content: string;
-  type: "image" | "log" | "source code" | "executable" | "library";
-  url: string;
-  version: string;
-  threatList: string[];
-  vulnerabilityList: string[];
-}
+export type IArtifactCreate = Omit<
+  IArtifact,
+  "_id" | "threatList" | "vulnerabilityList"
+>;
 interface IIndividualContribution {
   author: string;
   total: number;

@@ -1,6 +1,5 @@
 import { Box, Button, Dialog, Typography } from "@mui/material";
 import { useState } from "react";
-import FormWrapper from "~/components/common/FormWrapper";
 import CreatePhaseModelForm from "./CreatePhaseModelForm";
 export default function CreatePhaseModel() {
   const [open, setOpen] = useState(false);
@@ -21,12 +20,7 @@ export default function CreatePhaseModel() {
         </Button>
       </Box>
       <Dialog open={open} onClose={() => setOpen(false)}>
-        <FormWrapper
-          title="Create phase model"
-          closeDialogFunction={() => setOpen(false)}
-        >
-          <CreatePhaseModelForm setOpen={setOpen} />
-        </FormWrapper>
+        <CreatePhaseModelForm setOpen={setOpen} />
       </Dialog>
     </Box>
   );

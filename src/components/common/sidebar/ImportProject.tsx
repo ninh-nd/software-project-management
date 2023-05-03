@@ -64,7 +64,9 @@ export default function ImportProject() {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={closeDialog}>Cancel</Button>
+          <Button onClick={closeDialog} color="inherit">
+            Cancel
+          </Button>
           <Button onClick={importProject}>Import</Button>
         </DialogActions>
       </Dialog>

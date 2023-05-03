@@ -1,8 +1,6 @@
 import {
-  Autocomplete,
   Box,
   Button,
-  Chip,
   CircularProgress,
   DialogActions,
   DialogContent,
@@ -17,8 +15,9 @@ import {
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { getCVEs } from "~/actions/vulnAction";
+import { useAddArtifactToPhaseMutation } from "~/hooks/query";
 import { useThemeHook } from "~/hooks/theme";
-import { IArtifact, IVulnerability } from "~/interfaces/Entity";
+import { IArtifactCreate, IVulnerability } from "~/interfaces/Entity";
 const type = ["image", "log", "source code", "executable", "library"];
 interface CreateArtifactFormProps {
   phaseId: string;
@@ -34,7 +33,8 @@ export default function CreateArtifactForm({
     control,
     getValues,
     formState: { errors },
-  } = useForm<IArtifact>({ mode: "onChange" });
+  } = useForm<IArtifactCreate>({ mode: "onChange" });
+  const createArtifactMutation = useAddArtifactToPhaseMutation();
   const [importedCves, setImportedCves] = useState<IVulnerability[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const theme = useThemeHook();
@@ -47,7 +47,10 @@ export default function CreateArtifactForm({
       setIsLoading(false);
     }
   }
-  async function submit(data) {}
+  async function submit(data: IArtifactCreate) {
+    createArtifactMutation.mutate({ artifact: data, phaseId });
+    setCloseDialog();
+  }
   return (
     <Box component="form" onSubmit={handleSubmit(submit)}>
       <DialogTitle>Add a new artifact</DialogTitle>
@@ -58,12 +61,22 @@ export default function CreateArtifactForm({
             label="Name"
             error={!!errors.name}
             helperText={errors.name?.message}
+            required
           />
           <TextField
-            {...register("url", { required: "Url is required" })}
+            {...register("url", {
+              required: "Url is required",
+              pattern:
+                /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/,
+            })}
             label="URL"
             error={!!errors.url}
-            helperText={errors.url?.message}
+            helperText={
+              errors.url?.type === "pattern"
+                ? "Invalid URL"
+                : errors.url?.message
+            }
+            required
           />
           <TextField
             {...register("cpe", {
@@ -118,7 +131,9 @@ export default function CreateArtifactForm({
         </Stack>
       </DialogContent>
       <DialogActions>
-        <Button onClick={setCloseDialog}>Cancel</Button>
+        <Button onClick={setCloseDialog} color="inherit">
+          Cancel
+        </Button>
         <Button type="submit">Create</Button>
       </DialogActions>
     </Box>

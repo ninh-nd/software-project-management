@@ -84,7 +84,9 @@ export default function ChangePermissionDialog({
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleClose} color="inherit">
+            Cancel
+          </Button>
           <Button type="submit" disabled={account.role === "admin"}>
             Save
           </Button>

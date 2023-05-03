@@ -4,6 +4,10 @@ import {
   CardActions,
   CardContent,
   Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Typography,
 } from "@mui/material";
 import {
@@ -14,7 +18,6 @@ import {
 } from "@mui/x-data-grid";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import FormWrapper from "~/components/common/FormWrapper";
 import {
   useAddTaskToPhaseMutation,
   useAvailableTasksQuery,
@@ -67,7 +70,7 @@ export default function PhaseDetails({ phase }: PhaseDetailsProps) {
         }}
       >
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          Tasks
+          List of tasks to be done in this phase
         </Typography>
         <DataGrid
           autoHeight
@@ -81,23 +84,25 @@ export default function PhaseDetails({ phase }: PhaseDetailsProps) {
         />
       </CardContent>
       <CardActions>
-        <Button onClick={() => setOpenTaskDialog(true)}>Add task</Button>
+        <Button onClick={() => setOpenTaskDialog(true)}>Add new tasks</Button>
         <Button
           color="error"
           onClick={() => handleDeleteSelectedTask(phase._id)}
         >
-          Delete selected task
+          Remove selected tasks from phase
         </Button>
         <Dialog
           open={openTaskDialog}
           onClose={() => setOpenTaskDialog(false)}
           fullWidth
-          maxWidth="lg"
         >
-          <FormWrapper
-            title="Add task"
-            closeDialogFunction={() => setOpenTaskDialog(false)}
-          >
+          <DialogTitle>
+            Adding tasks to phase: <b>{phase.name}</b>
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Double click on a task to add it to this phase
+            </DialogContentText>
             <DataGrid
               rows={availableTasks}
               columns={taskColumn}
@@ -105,7 +110,12 @@ export default function PhaseDetails({ phase }: PhaseDetailsProps) {
               onRowDoubleClick={handleDoubleClick}
               getRowId={(row) => row._id}
             />
-          </FormWrapper>
+          </DialogContent>
+          <DialogActions>
+            <Button color="inherit" onClick={() => setOpenTaskDialog(false)}>
+              Close
+            </Button>
+          </DialogActions>
         </Dialog>
       </CardActions>
     </Card>

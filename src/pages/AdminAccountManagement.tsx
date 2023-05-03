@@ -52,7 +52,9 @@ function ConfirmDeleteDialog({ id, open, handleClose }: DialogProps) {
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
+        <Button onClick={handleClose} color="inherit">
+          Cancel
+        </Button>
         <Button onClick={onDelete}>Delete</Button>
       </DialogActions>
     </Dialog>

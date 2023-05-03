@@ -47,7 +47,7 @@ function EditToolbar(props: EditToolbarProps) {
   return (
     <GridToolbarContainer>
       <Button color="primary" startIcon={<Add />} onClick={addRecord}>
-        Add record
+        Add a new task
       </Button>
     </GridToolbarContainer>
   );
@@ -208,7 +208,7 @@ export default function TaskInfo() {
 
   return (
     <Card>
-      <CardHeader title="Unassigned tasks" />
+      <CardHeader title="Tasks ready to be assigned" />
       <CardContent>
         <DataGrid
           sx={{ minHeight: 500 }}

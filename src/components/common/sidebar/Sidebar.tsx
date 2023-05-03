@@ -61,7 +61,7 @@ function DrawerContent() {
           path={`/${currentProject}/phases`}
         />
         <Item
-          text="Tickets"
+          text="Ticket"
           icon={<InfoOutlined />}
           path={`/${currentProject}/tickets`}
         />

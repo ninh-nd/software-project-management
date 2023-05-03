@@ -94,7 +94,9 @@ export default function EditAccountDialog({
           </Stack>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleClose} color="inherit">
+            Cancel
+          </Button>
           <Button type="submit">Save</Button>
         </DialogActions>
       </Box>

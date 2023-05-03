@@ -110,7 +110,7 @@ export default function ArtifactDetails({ phase }: ArtifactDetailsProps) {
         }}
       >
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          Artifacts
+          Phase's artifacts
         </Typography>
         <Box display="flex" flexWrap="wrap">
           {phase.artifacts.length > 0 ? (
@@ -145,7 +145,7 @@ export default function ArtifactDetails({ phase }: ArtifactDetailsProps) {
       </CardContent>
       <CardActions>
         <Button onClick={() => setOpenArtCreateDialog(true)}>
-          Add artifact
+          Add a new artifact
         </Button>
         <Dialog
           open={openArtCreateDialog}

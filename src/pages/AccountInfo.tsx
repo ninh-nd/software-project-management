@@ -77,7 +77,9 @@ function Github({ data: github }: { data: IThirdParty | undefined }) {
             </Stack>
           </DialogContent>
           <DialogActions>
-            <Button onClick={() => setOpen(false)}>Cancel</Button>
+            <Button onClick={() => setOpen(false)} color="inherit">
+              Cancel
+            </Button>
             <Button type="submit">Update</Button>
           </DialogActions>
         </Box>

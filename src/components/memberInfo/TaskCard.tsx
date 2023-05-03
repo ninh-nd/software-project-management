@@ -1,4 +1,11 @@
-import { Box, Button, Dialog } from "@mui/material";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from "@mui/material";
 import { DataGrid, GridRowParams, GridSelectionModel } from "@mui/x-data-grid";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
@@ -8,7 +15,6 @@ import {
   useTasksQuery,
 } from "~/hooks/query";
 import { IUser } from "~/interfaces/Entity";
-import FormWrapper from "../common/FormWrapper";
 import Title from "../common/Title";
 import InfoPaper from "../home/InfoPaper";
 
@@ -88,8 +94,12 @@ export default function TaskCard({ member }: { member: IUser }) {
         </Box>
         <ButtonRowBox>
           <Button onClick={() => setOpen(true)}>Assign task</Button>
-          <Dialog open={open} onClose={handleClose} fullWidth maxWidth="lg">
-            <FormWrapper title="Assign task" closeDialogFunction={handleClose}>
+          <Dialog open={open} onClose={handleClose} fullWidth>
+            <DialogTitle>Assign task</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                Double click on a task to assign it to {member.name}
+              </DialogContentText>
               <DataGrid
                 rows={taskList}
                 getRowId={(row) => row._id}
@@ -97,7 +107,7 @@ export default function TaskCard({ member }: { member: IUser }) {
                 autoHeight
                 onRowDoubleClick={handleAssignTask}
               />
-            </FormWrapper>
+            </DialogContent>
           </Dialog>
           <Button onClick={markAsComplete}>
             Mark selected tasks as completed
