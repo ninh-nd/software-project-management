@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Dialog,
+  DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
@@ -108,6 +109,11 @@ export default function TaskCard({ member }: { member: IUser }) {
                 onRowDoubleClick={handleAssignTask}
               />
             </DialogContent>
+            <DialogActions>
+              <Button onClick={handleClose} color="inherit">
+                Close
+              </Button>
+            </DialogActions>
           </Dialog>
           <Button onClick={markAsComplete}>
             Mark selected tasks as completed
