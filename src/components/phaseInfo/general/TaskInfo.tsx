@@ -220,10 +220,10 @@ export default function TaskInfo() {
           onRowEditStart={handleRowEditStart}
           onRowEditStop={handleRowEditStop}
           processRowUpdate={processRowUpdate}
-          components={{
-            Toolbar: EditToolbar,
+          slots={{
+            toolbar: EditToolbar,
           }}
-          componentsProps={{
+          slotProps={{
             toolbar: { setRows, setRowModesModel },
           }}
           experimentalFeatures={{ newEditingApi: true }}

@@ -167,8 +167,8 @@ export default function AdminAccountManagement() {
           disableColumnFilter
           disableColumnSelector
           disableDensitySelector
-          components={{ Toolbar: GridToolbar }}
-          componentsProps={{
+          slots={{ toolbar: GridToolbar }}
+          slotProps={{
             toolbar: {
               showQuickFilter: true,
               quickFilterProps: {
