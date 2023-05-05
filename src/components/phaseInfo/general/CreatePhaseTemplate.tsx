@@ -1,7 +1,7 @@
 import { Box, Button, Dialog, Typography } from "@mui/material";
 import { useState } from "react";
-import CreatePhaseModelForm from "./CreatePhaseModelForm";
-export default function CreatePhaseModel() {
+import CreatePhaseTemplateForm from "./CreatePhaseModelForm";
+export default function CreatePhaseTemplate() {
   const [open, setOpen] = useState(false);
   return (
     <Box
@@ -9,18 +9,18 @@ export default function CreatePhaseModel() {
     >
       <Box sx={{ p: "30px", display: "flex" }}>
         <Typography variant="h4">
-          You haven't created a phase model yet. Do it now?
+          You haven't created a phase template yet. Do it now?
         </Typography>
         <Button
           variant="contained"
           sx={{ ml: "20px" }}
           onClick={() => setOpen(true)}
         >
-          Create a phase model
+          Create a phase template
         </Button>
       </Box>
-      <Dialog open={open} onClose={() => setOpen(false)}>
-        <CreatePhaseModelForm setOpen={setOpen} />
+      <Dialog open={open} onClose={() => setOpen(false)} fullWidth>
+        <CreatePhaseTemplateForm setOpen={setOpen} />
       </Dialog>
     </Box>
   );

@@ -1,5 +1,10 @@
 import api from "~/api";
-import { IArtifactCreate, IPhase, IPhasePreset } from "~/interfaces/Entity";
+import {
+  IArtifactCreate,
+  IPhase,
+  IPhaseTemplate,
+  IPhaseTemplateCreate,
+} from "~/interfaces/Entity";
 import { PromiseServer } from "~/interfaces/ServerResponse";
 export async function getPhase(id: string): PromiseServer<IPhase> {
   const response = await api.get(`/phase/${id}`);
@@ -19,8 +24,18 @@ export async function removeTaskFromPhase(
   const response = await api.patch(`/phase/${phaseId}/task/delete/${taskId}`);
   return response.data;
 }
-export async function getPhasePresets(): PromiseServer<IPhasePreset[]> {
-  const response = await api.get(`/phase/presets`);
+export async function getPhaseTemplates(): PromiseServer<IPhaseTemplate[]> {
+  const response = await api.get(`/phase/templates`);
+  return response.data;
+}
+export async function createPhasesFromTemplate(
+  projectName: string,
+  data: IPhaseTemplateCreate
+): PromiseServer<IPhaseTemplate> {
+  const response = await api.post(`/phase/templates`, {
+    projectName,
+    data,
+  });
   return response.data;
 }
 export async function addArtifactToPhase(

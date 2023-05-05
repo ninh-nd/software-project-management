@@ -50,7 +50,8 @@ export interface IPhase {
   createdAt?: string;
   updatedAt?: string;
 }
-export interface IPhasePreset {
+export interface IPhaseTemplate {
+  _id: string;
   name: string;
   description: string;
   phases: [
@@ -60,12 +61,10 @@ export interface IPhasePreset {
       order: number;
     }
   ];
+  isPrivate: boolean;
+  createdBy: string;
 }
-export interface IPhaseCreate {
-  name: string;
-  description: string;
-  order: number;
-}
+export type IPhaseTemplateCreate = Omit<IPhaseTemplate, "_id" | "createdBy">;
 export interface IProject {
   _id: string;
   name: string;

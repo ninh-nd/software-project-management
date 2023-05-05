@@ -5,83 +5,71 @@ import {
   Card,
   CardActions,
   CardContent,
-  ListItem,
+  Checkbox,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  FormControlLabel,
+  Stack,
   Step,
-  StepLabel,
+  StepButton,
   Stepper,
+  Tab,
+  Tabs,
   TextField,
   Typography,
 } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
-import { Dispatch, SetStateAction, useState } from "react";
-import { DropResult } from "react-beautiful-dnd";
+import {
+  Dispatch,
+  SetStateAction,
+  createContext,
+  useContext,
+  useState,
+} from "react";
+import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
-import { getPhasePresets } from "~/actions/phaseAction";
-import { useCreatePhaseModelMutation } from "~/hooks/query";
-import { IPhaseCreate, IPhasePreset } from "~/interfaces/Entity";
-import DraggableList from "./DraggableList";
+import { getPhaseTemplates } from "~/actions/phaseAction";
+import {
+  useCreatePhasesFromTemplateMutation,
+  usePhaseTemplatesQuery,
+} from "~/hooks/query";
+import { IPhaseTemplate } from "~/interfaces/Entity";
 
-interface SelectPresetProps {
-  setSelection: Dispatch<SetStateAction<"preset" | "create">>;
-  updateStep: () => void;
+interface TabPanelProps {
+  templateList: IPhaseTemplate[];
+  value: number;
+  index: number;
+  selectTemplate: (template: IPhaseTemplate) => void;
 }
-interface CreatePhaseModelProps {
-  updateStep: () => void;
-  setSelectedModel: Dispatch<SetStateAction<IPhaseCreate[] | undefined>>;
+interface ContextType {
+  data: IPhaseTemplate | undefined;
+  setData: Dispatch<SetStateAction<IPhaseTemplate | undefined>>;
 }
-interface ConfirmPhaseModelProps {
-  selectedModel: IPhaseCreate[];
-  setOpen: Dispatch<SetStateAction<boolean>>;
-}
-function SelectPresetOrCreate({ updateStep, setSelection }: SelectPresetProps) {
-  function selectPreset() {
-    updateStep();
-    setSelection("preset");
-  }
-  function createNew() {
-    updateStep();
-    setSelection("create");
-  }
-  return (
-    <Box
-      sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
-    >
-      <Button variant="contained" sx={{ mt: "20px" }} onClick={selectPreset}>
-        Select a preset
-      </Button>
-      <Button variant="contained" sx={{ mt: "20px" }} onClick={createNew}>
-        Create a new one
-      </Button>
-    </Box>
-  );
-}
+const PhaseTemplateContext = createContext<ContextType>({
+  data: undefined,
+  setData: () => {},
+});
 
-function SelectPreset({ updateStep, setSelectedModel }: CreatePhaseModelProps) {
-  const presetQuery = useQuery(["preset"], () => getPhasePresets());
-  const presets = presetQuery.data?.data ?? [];
-  if (!presets) return <></>;
-  function selectPreset(preset: IPhasePreset) {
-    updateStep();
-    setSelectedModel(preset.phases);
-  }
+function TabPanel(props: TabPanelProps) {
+  const { templateList, value, index, selectTemplate } = props;
+  if (value !== index) return <></>;
   return (
-    <Box sx={{ display: "flex" }}>
-      {presets.map((preset: IPhasePreset) => {
+    <Box>
+      {templateList.map((temp) => {
         return (
-          <Card
-            sx={{ width: "200px", height: "200px", margin: "10px" }}
-            key={preset.name}
-          >
+          <Card sx={{ m: 1 }} key={temp.name}>
             <CardContent>
               <Typography gutterBottom variant="h5" component="div">
-                {preset.name}
+                {temp.name}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                {preset.description}
+                {temp.description}
               </Typography>
             </CardContent>
             <CardActions>
-              <Button size="small" onClick={() => selectPreset(preset)}>
+              <Button size="small" onClick={() => selectTemplate(temp)}>
                 Select
               </Button>
             </CardActions>
@@ -91,177 +79,334 @@ function SelectPreset({ updateStep, setSelectedModel }: CreatePhaseModelProps) {
     </Box>
   );
 }
-function CreateNew({ updateStep, setSelectedModel }: CreatePhaseModelProps) {
-  function onDragEnd({ destination, source }: DropResult) {
-    if (!destination) return;
-    const result = Array.from(phases);
-    const [removed] = result.splice(source.index, 1);
-    result.splice(destination.index, 0, removed);
-    setPhases(result);
-  }
-  function addPhase() {
-    const newPhases = [...phases];
-    newPhases.push({ name: "", description: "", order: 0 });
-    setPhases(newPhases);
-  }
-  function deletePhase(index: number) {
-    const newPhases = [...phases];
-    newPhases.splice(index, 1);
-    setPhases(newPhases);
-  }
-  function nextStep() {
-    updateStep();
-    setSelectedModel(phases);
-  }
-  const [phases, setPhases] = useState<IPhaseCreate[]>([
-    { name: "", description: "", order: 0 },
-    { name: "", description: "", order: 1 },
-    { name: "", description: "", order: 2 },
-  ]);
-  return (
-    <Box sx={{ display: "flex", flexDirection: "column" }}>
-      <DraggableList
-        items={phases}
-        onDragEnd={onDragEnd}
-        deletePhase={deletePhase}
-        setPhases={setPhases}
-      />
-      <Button variant="contained" sx={{ m: "10px 10px" }} onClick={addPhase}>
-        Add phase
-      </Button>
-      <Button
-        variant="contained"
-        sx={{ m: "10px 10px" }}
-        onClick={nextStep}
-        color="success"
-        endIcon={<ArrowForward />}
-      >
-        Next
-      </Button>
-    </Box>
-  );
-}
 
-function ConfirmPhaseModel({ selectedModel, setOpen }: ConfirmPhaseModelProps) {
-  const { currentProject } = useParams();
-  const createPhaseModelMutation = useCreatePhaseModelMutation();
-  async function onSubmit() {
-    if (currentProject !== undefined) {
-      createPhaseModelMutation.mutate({
-        model: selectedModel,
-        projectId: currentProject,
-      });
-      setOpen(false);
-    }
+interface SelectTemplateProps {
+  setSelection: Dispatch<SetStateAction<"template" | "create">>;
+  updateStep: () => void;
+}
+interface CreatePhaseTemplateProps {
+  updateStep: () => void;
+}
+function SelectTemplateOrCreate({
+  updateStep,
+  setSelection,
+}: SelectTemplateProps) {
+  function selectTemplate() {
+    updateStep();
+    setSelection("template");
+  }
+  function createNew() {
+    updateStep();
+    setSelection("create");
   }
   return (
     <Box
       sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
     >
-      {selectedModel.map((phase: IPhaseCreate, index) => {
-        return (
-          <ListItem key={index}>
-            <Card>
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                  Phase {index + 1}
-                </Typography>
-                <TextField
-                  label="Name"
-                  fullWidth
-                  margin="normal"
-                  value={phase.name}
-                  disabled
-                />
-                <TextField
-                  label="Description"
-                  fullWidth
-                  margin="normal"
-                  value={phase.description}
-                  disabled
-                />
-              </CardContent>
-            </Card>
-          </ListItem>
-        );
-      })}
-      <Button
-        variant="contained"
-        color="success"
-        sx={{ m: "20px" }}
-        endIcon={<ArrowForward />}
-        type="submit"
-        onClick={onSubmit}
-      >
-        Confirm
+      <Button variant="contained" sx={{ mt: 2 }} onClick={selectTemplate}>
+        Select a template
+      </Button>
+      <Button variant="contained" sx={{ mt: 2 }} onClick={createNew}>
+        Create a new one
       </Button>
     </Box>
   );
 }
-interface CreatePhaseModelFormProps {
+
+function SelectTemplate({ updateStep }: CreatePhaseTemplateProps) {
+  const { setData } = useContext(PhaseTemplateContext);
+  const [value, setValue] = useState(0);
+  const templatesQuery = usePhaseTemplatesQuery();
+  const templates = templatesQuery.data?.data ?? [];
+  const publicTemplates = templates.filter((x) => x.isPrivate === false);
+  const privateTemplates = templates.filter((x) => x.isPrivate === true);
+  function selectTemplate(template: IPhaseTemplate) {
+    updateStep();
+    setData(template);
+  }
+  function handleChangeTab(event: React.SyntheticEvent, newValue: number) {
+    setValue(newValue);
+  }
+  return (
+    <>
+      <Box sx={{ display: "flex" }}>
+        <Tabs value={value} onChange={handleChangeTab}>
+          <Tab label="Public templates" />
+          <Tab label="Private templates" />
+        </Tabs>
+      </Box>
+      <TabPanel
+        index={0}
+        templateList={publicTemplates}
+        value={value}
+        selectTemplate={selectTemplate}
+      />
+      <TabPanel
+        index={1}
+        templateList={privateTemplates}
+        value={value}
+        selectTemplate={selectTemplate}
+      />
+    </>
+  );
+}
+function CreateNew({ updateStep }: CreatePhaseTemplateProps) {
+  const { setData, data } = useContext(PhaseTemplateContext);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    control,
+  } = useForm<IPhaseTemplate>({
+    defaultValues: data ?? {
+      name: "",
+      description: "",
+      isPrivate: false,
+      phases: [
+        {
+          name: "",
+          description: "",
+          order: 0,
+        },
+      ],
+    },
+  });
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "phases",
+  });
+  async function onSubmit(data: IPhaseTemplate) {
+    updateStep();
+    setData(data);
+  }
+  return (
+    <Box component="form" onSubmit={handleSubmit(onSubmit)}>
+      <Stack spacing={1} alignItems="center">
+        <FormControlLabel
+          control={
+            <Controller
+              name="isPrivate"
+              control={control}
+              defaultValue={false}
+              render={({ field }) => <Checkbox {...field} />}
+            />
+          }
+          label="Make this template private"
+        />
+        <TextField
+          label="Template's name"
+          variant="outlined"
+          fullWidth
+          {...register("name", { required: "Name is required" })}
+          error={!!errors.name}
+          helperText={errors.name?.message}
+        />
+        <TextField
+          label="Template's description"
+          variant="outlined"
+          multiline
+          rows={4}
+          fullWidth
+          {...register("description", { required: "Description is required" })}
+          error={!!errors.name}
+          helperText={errors.description?.message}
+        />
+        {fields.map((field, index) => (
+          <Card sx={{ m: 1 }} key={field.id}>
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="div">
+                Phase {index + 1}
+              </Typography>
+              <TextField
+                label="Name"
+                fullWidth
+                {...register(`phases.${index}.name` as const, {
+                  required: "Name is required",
+                })}
+                error={!!errors.phases?.[index]?.name}
+                helperText={errors.phases?.[index]?.name?.message}
+                sx={{ mb: 1 }}
+              />
+              <TextField
+                label="Description"
+                fullWidth
+                multiline
+                rows={4}
+                {...register(`phases.${index}.description` as const, {
+                  required: "Description is required",
+                })}
+                error={!!errors.phases?.[index]?.description}
+                helperText={errors.phases?.[index]?.description?.message}
+              />
+            </CardContent>
+            <CardActions>
+              <Button size="small" onClick={() => remove(index)}>
+                Remove
+              </Button>
+            </CardActions>
+          </Card>
+        ))}
+        <Button
+          variant="contained"
+          sx={{ m: 1, p: 1 }}
+          onClick={() =>
+            append({ name: "", description: "", order: fields.length })
+          }
+          fullWidth
+        >
+          Add phase
+        </Button>
+        <Button
+          fullWidth
+          variant="contained"
+          sx={{ m: 1, p: 1 }}
+          color="success"
+          endIcon={<ArrowForward />}
+          type="submit"
+        >
+          Next
+        </Button>
+      </Stack>
+    </Box>
+  );
+}
+
+function ConfirmPhaseTemplate() {
+  const { data } = useContext(PhaseTemplateContext);
+  return (
+    <Stack spacing={1} alignItems="center">
+      <FormControlLabel
+        control={<Checkbox defaultChecked={data?.isPrivate} />}
+        label="Private template"
+        disabled
+      />
+      <TextField
+        label="Template's name"
+        variant="outlined"
+        fullWidth
+        disabled
+        defaultValue={data?.name}
+      />
+      <TextField
+        label="Template's description"
+        variant="outlined"
+        multiline
+        rows={4}
+        fullWidth
+        disabled
+        defaultValue={data?.description}
+      />
+      {data?.phases.map((field, index) => (
+        <Card sx={{ m: 1 }} key={index}>
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="div">
+              Phase {index + 1}
+            </Typography>
+            <TextField
+              label="Name"
+              fullWidth
+              sx={{ mb: 1 }}
+              disabled
+              defaultValue={field.name}
+            />
+            <TextField
+              label="Description"
+              fullWidth
+              multiline
+              rows={4}
+              disabled
+              defaultValue={field.description}
+            />
+          </CardContent>
+        </Card>
+      ))}
+    </Stack>
+  );
+}
+interface CreatePhaseTemplateFormProps {
   setOpen: Dispatch<SetStateAction<boolean>>;
 }
-export default function CreatePhaseModelForm({
+export default function CreatePhaseTemplateForm({
   setOpen,
-}: CreatePhaseModelFormProps) {
+}: CreatePhaseTemplateFormProps) {
+  const { currentProject } = useParams();
+  const createPhasesFromTemplateMutation =
+    useCreatePhasesFromTemplateMutation();
   const [activeStep, setActiveStep] = useState(0);
   const steps = ["Step 1", "Step 2", "Step 3"];
-  const [selection, setSelection] = useState<"preset" | "create">("preset");
-  const [selectedModel, setSelectedModel] = useState<
-    IPhaseCreate[] | undefined
-  >(undefined);
+  const [selection, setSelection] = useState<"template" | "create">("template");
+  const [data, setData] = useState<IPhaseTemplate>();
   function increaseStep() {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  }
+  function handleStepChange(step: number) {
+    return () => {
+      setActiveStep(step);
+    };
   }
   function conditionalRender() {
     switch (activeStep) {
       case 0:
         return (
-          <SelectPresetOrCreate
+          <SelectTemplateOrCreate
             updateStep={increaseStep}
             setSelection={setSelection}
           />
         );
       case 1:
-        if (selection === "preset") {
-          return (
-            <SelectPreset
-              updateStep={increaseStep}
-              setSelectedModel={setSelectedModel}
-            />
-          );
+        if (selection === "template") {
+          return <SelectTemplate updateStep={increaseStep} />;
         }
-        return (
-          <CreateNew
-            updateStep={increaseStep}
-            setSelectedModel={setSelectedModel}
-          />
-        );
+        return <CreateNew updateStep={increaseStep} />;
       case 2:
-        if (selectedModel !== undefined)
-          return (
-            <ConfirmPhaseModel
-              selectedModel={selectedModel}
-              setOpen={setOpen}
-            />
-          );
+        if (data !== undefined) return <ConfirmPhaseTemplate />;
         return <></>;
     }
   }
+  function createPhasesFromTemplate() {
+    if (data && currentProject) {
+      createPhasesFromTemplateMutation.mutate({
+        projectName: currentProject,
+        data,
+      });
+      setOpen(false);
+    }
+  }
   return (
-    <Box>
-      <Box component="form" sx={{ minWidth: "500px", minHeight: "500px" }}>
-        {conditionalRender()}
+    <PhaseTemplateContext.Provider value={{ data, setData }}>
+      <Box>
+        <DialogTitle>
+          {activeStep === 0
+            ? "Create a new phase template"
+            : activeStep === 1
+            ? "Fill in the information"
+            : "Confirmation"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            This wizard will help you create a new phase template. Tip: You can
+            always click on the steps to go back.
+          </DialogContentText>
+          <Box>{conditionalRender()}</Box>
+          <Stepper activeStep={activeStep} sx={{ m: 4 }} nonLinear>
+            {steps.map((label, index) => {
+              return (
+                <Step key={label}>
+                  <StepButton onClick={handleStepChange(index)}>
+                    {label}
+                  </StepButton>
+                </Step>
+              );
+            })}
+          </Stepper>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpen(false)}>Cancel</Button>
+          {activeStep === 2 && (
+            <Button onClick={createPhasesFromTemplate}>Create</Button>
+          )}
+        </DialogActions>
       </Box>
-      <Stepper activeStep={activeStep} sx={{ mb: "20px" }}>
-        {steps.map((label) => {
-          return (
-            <Step key={label}>
-              <StepLabel>{label}</StepLabel>
-            </Step>
-          );
-        })}
-      </Stepper>
-    </Box>
+    </PhaseTemplateContext.Provider>
   );
 }

@@ -4,7 +4,6 @@ import { Button, Card, CardContent, CardHeader } from "@mui/material";
 import {
   DataGrid,
   GridActionsCellItem,
-  GridColumns,
   GridRowId,
   GridRowModel,
   GridRowModes,
@@ -149,7 +148,7 @@ export default function TaskInfo() {
     return updatedRow;
   }
 
-  const columns: GridColumns = [
+  const columns = [
     { field: "name", headerName: "Name", editable: true, flex: 0.3 },
     {
       field: "status",
@@ -226,7 +225,6 @@ export default function TaskInfo() {
           slotProps={{
             toolbar: { setRows, setRowModesModel },
           }}
-          experimentalFeatures={{ newEditingApi: true }}
         />
       </CardContent>
     </Card>

@@ -22,12 +22,14 @@ import { getImportProjects } from "~/actions/githubAction";
 import {
   addArtifactToPhase,
   addTaskToPhase,
+  createPhasesFromTemplate,
   getPhase,
+  getPhaseTemplates,
   removeArtifactFromPhase,
   removeTaskFromPhase,
   updateArtifact,
 } from "~/actions/phaseAction";
-import { createPhaseModel, getProjectInfo } from "~/actions/projectAction";
+import { createPhaseTemplate, getProjectInfo } from "~/actions/projectAction";
 import { getAllTasks, getAvailableTasks } from "~/actions/taskAction";
 import { createThreat, getThreats } from "~/actions/threatActions";
 import {
@@ -47,7 +49,7 @@ import {
   IAccountRegister,
   IAccountUpdate,
   IArtifactCreate,
-  IPhaseCreate,
+  IPhaseTemplateCreate,
   IThreatCreate,
   ITicketCreateSent,
 } from "~/interfaces/Entity";
@@ -218,23 +220,6 @@ export function useProjectInfoQuery(projectName: string) {
   return useQuery(["projectInfo", projectName], () =>
     getProjectInfo(projectName)
   );
-}
-interface CreatePhaseModelParams {
-  projectId: string;
-  model: IPhaseCreate[];
-}
-export function useCreatePhaseModelMutation() {
-  const queryClient = useQueryClient();
-  const { enqueueSnackbar } = useSnackbar();
-  return useMutation({
-    mutationFn: ({ projectId, model }: CreatePhaseModelParams) =>
-      createPhaseModel(projectId, model),
-    onSuccess: (response, { projectId }) => {
-      toast(response, enqueueSnackbar, () =>
-        queryClient.invalidateQueries(["projectInfo", projectId])
-      );
-    },
-  });
 }
 export function useProjectInQuery() {
   return useQuery(["projectIn"], getProjectIn);
@@ -419,4 +404,24 @@ export function useArtifactsQuery(projectName: string) {
 }
 export function useCWEQuery(id: string) {
   return useQuery(["cwe", id], () => getCWE(id));
+}
+export function usePhaseTemplatesQuery() {
+  return useQuery(["phaseTemplates"], getPhaseTemplates);
+}
+interface CreatePhasesFromTemplateParams {
+  projectName: string;
+  data: IPhaseTemplateCreate;
+}
+export function useCreatePhasesFromTemplateMutation() {
+  const queryClient = useQueryClient();
+  const { enqueueSnackbar } = useSnackbar();
+  return useMutation({
+    mutationFn: ({ projectName, data }: CreatePhasesFromTemplateParams) =>
+      createPhasesFromTemplate(projectName, data),
+    onSuccess: (response, { projectName }) => {
+      toast(response, enqueueSnackbar, () => {
+        queryClient.invalidateQueries(["projectInfo", projectName]);
+      });
+    },
+  });
 }

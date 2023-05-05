@@ -1,5 +1,5 @@
 import api from "~/api";
-import { IPhaseCreate, IProject } from "~/interfaces/Entity";
+import { IPhaseTemplateCreate, IProject } from "~/interfaces/Entity";
 import { PromiseServer } from "~/interfaces/ServerResponse";
 export async function getProjectInfo(
   projectName: string
@@ -7,12 +7,12 @@ export async function getProjectInfo(
   const response = await api.get(`/project/${projectName}`);
   return response.data;
 }
-export async function createPhaseModel(
+export async function createPhaseTemplate(
   projectName: string,
-  model: IPhaseCreate[]
+  template: IPhaseTemplateCreate
 ) {
   const response = await api.post(`/project/${projectName}`, {
-    data: model,
+    data: template,
   });
   return response.data;
 }
