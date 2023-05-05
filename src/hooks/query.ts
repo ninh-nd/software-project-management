@@ -12,6 +12,7 @@ import {
   getAccountInfo,
   getAllAccounts,
   getPermissions,
+  updateAccessToken,
   updateAccount,
   updatePermission,
 } from "~/actions/accountAction";
@@ -421,6 +422,23 @@ export function useCreatePhasesFromTemplateMutation() {
     onSuccess: (response, { projectName }) => {
       toast(response, enqueueSnackbar, () => {
         queryClient.invalidateQueries(["projectInfo", projectName]);
+      });
+    },
+  });
+}
+interface UpdateAccessTokenParams {
+  id: string;
+  accessToken: string;
+}
+export function useUpdateAccessTokenMutation() {
+  const queryClient = useQueryClient();
+  const { enqueueSnackbar } = useSnackbar();
+  return useMutation({
+    mutationFn: ({ id, accessToken }: UpdateAccessTokenParams) =>
+      updateAccessToken(id, accessToken),
+    onSuccess: (response) => {
+      toast(response, enqueueSnackbar, () => {
+        queryClient.invalidateQueries(["accountInfo"]);
       });
     },
   });

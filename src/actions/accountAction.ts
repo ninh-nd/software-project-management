@@ -39,3 +39,12 @@ export async function updatePermission(
   });
   return response.data;
 }
+export async function updateAccessToken(
+  id: string,
+  accessToken: string
+): PromiseServer<IAccount> {
+  const response = await api.patch(`/account/${id}/thirdParty/github`, {
+    data: accessToken,
+  });
+  return response.data;
+}

@@ -17,9 +17,12 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useAccountInfoQuery } from "~/hooks/query";
+import {
+  useAccountInfoQuery,
+  useUpdateAccessTokenMutation,
+} from "~/hooks/query";
 import { IThirdParty } from "~/interfaces/Entity";
 const accountPageStyle: SxProps = {
   display: "flex",
@@ -29,9 +32,16 @@ const accountPageStyle: SxProps = {
   height: "60vh",
   justifyContent: "space-evenly",
 };
-function Github({ data: github }: { data: IThirdParty | undefined }) {
-  const [isTokenShown, setIsTokenShown] = React.useState(false);
-  const [open, setOpen] = React.useState(false);
+function Github({
+  data,
+  accountId,
+}: {
+  data: IThirdParty | undefined;
+  accountId: string;
+}) {
+  const updateAccessTokenMutation = useUpdateAccessTokenMutation();
+  const [isTokenShown, setIsTokenShown] = useState(false);
+  const [open, setOpen] = useState(false);
   const {
     register,
     handleSubmit,
@@ -39,20 +49,23 @@ function Github({ data: github }: { data: IThirdParty | undefined }) {
   } = useForm<{ accessToken: string }>();
   function updateGithubConfig() {
     setOpen(true);
-    if (!github) return;
+    if (!data) return;
   }
-  function onSubmit(data: { accessToken: string }) {
-    // Update access token
+  async function onSubmit(data: { accessToken: string }) {
+    updateAccessTokenMutation.mutate({
+      id: accountId,
+      accessToken: data.accessToken,
+    });
     setOpen(false);
   }
-  if (!github) {
+  if (!data) {
     return <Button>Connect to Github</Button>;
   }
   return (
     <Box sx={{ display: "flex" }}>
       <Button disabled>Connected to Github</Button>
-      <Button onClick={updateGithubConfig}>Update Github config</Button>
-      <Dialog open={open} onClose={() => setOpen(false)} fullWidth>
+      <Button onClick={updateGithubConfig}>Update access token</Button>
+      <Dialog open={open} fullWidth>
         <Box component="form" onSubmit={handleSubmit(onSubmit)}>
           <DialogTitle>Update Github configuration</DialogTitle>
           <DialogContent>
@@ -60,7 +73,7 @@ function Github({ data: github }: { data: IThirdParty | undefined }) {
               <Box display="flex" alignItems="center" justifyContent="center">
                 <TextField
                   type={isTokenShown ? "text" : "password"}
-                  defaultValue={github.accessToken}
+                  defaultValue={data.accessToken}
                   {...register("accessToken", {
                     required: "Access token is required",
                   })}
@@ -73,7 +86,6 @@ function Github({ data: github }: { data: IThirdParty | undefined }) {
                   {isTokenShown ? <Visibility /> : <VisibilityOff />}
                 </IconButton>
               </Box>
-              <TextField fullWidth label="URL" />
             </Stack>
           </DialogContent>
           <DialogActions>
@@ -128,14 +140,10 @@ export default function AccountInfo() {
           <Typography gutterBottom variant="h5" component="div">
             Integration
           </Typography>
-          <Grid container spacing={4} alignItems="center">
-            <Grid item xs={2}>
-              <GitHub />
-            </Grid>
-            <Grid item xs={10}>
-              <Github data={github} />
-            </Grid>
-          </Grid>
+          <Box display="flex" justifyContent="space-around" alignItems="center">
+            <GitHub />
+            <Github data={github} accountId={accountInfo._id} />
+          </Box>
         </CardContent>
       </Card>
     </Box>
