@@ -41,11 +41,9 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <Routes>
-        <Route element={<DashboardLayout />} path="/vulnerabilities">
-          <Route path="" element={<VulnerabilityPage />} />
-        </Route>
         <Route element={<DashboardLayout />} path="/:currentProject">
           <Route path="" element={<Home />} />
+          <Route path="vulnerabilities" element={<VulnerabilityPage />} />
           <Route path="phases">
             <Route path="" element={<PhaseInfo />} />
             <Route path=":phaseId" element={<PhaseDetailInfo />} />

@@ -76,7 +76,7 @@ function DrawerContent() {
         <Item
           text="Vulnerabilities dashboard"
           icon={<SecurityOutlined />}
-          path={"/vulnerabilities"}
+          path={`/${currentProject}/vulnerabilities`}
         />
       </List>
     </Box>
