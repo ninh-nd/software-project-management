@@ -19,7 +19,7 @@ import {
 import { getCommits, getPullRequests } from "~/actions/activityHistoryAction";
 import { getAllArtifacts, getArtifact } from "~/actions/artifactAction";
 import { login, register } from "~/actions/authAction";
-import { getImportProjects } from "~/actions/githubAction";
+import { getGithubRepos } from "~/actions/githubAction";
 import {
   addArtifactToPhase,
   addTaskToPhase,
@@ -30,7 +30,11 @@ import {
   removeTaskFromPhase,
   updateArtifact,
 } from "~/actions/phaseAction";
-import { createPhaseTemplate, getProjectInfo } from "~/actions/projectAction";
+import {
+  createPhaseTemplate,
+  getProjectInfo,
+  importProject,
+} from "~/actions/projectAction";
 import { getAllTasks, getAvailableTasks } from "~/actions/taskAction";
 import { createThreat, getThreats } from "~/actions/threatActions";
 import {
@@ -47,12 +51,13 @@ import {
   markTask,
 } from "~/actions/userAction";
 import {
-  IAccountRegister,
-  IAccountUpdate,
-  IArtifactCreate,
-  IPhaseTemplateCreate,
-  IThreatCreate,
-  ITicketCreateSent,
+  GithubRepoImport,
+  AccountRegister,
+  AccountUpdate,
+  ArtifactCreate,
+  PhaseTemplateCreate,
+  ThreatCreate,
+  TicketCreateSent,
 } from "~/interfaces/Entity";
 import { IErrorResponse, ISuccessResponse } from "~/interfaces/ServerResponse";
 import { useProjectActions } from "./general";
@@ -173,7 +178,7 @@ export function useRemoveTaskFromPhaseMutation() {
 interface ActionArtifactToPhase {
   phaseId: string;
   artifactId: string;
-  artifact: IArtifactCreate;
+  artifact: ArtifactCreate;
 }
 export function useAddArtifactToPhaseMutation() {
   type AddArtifactToPhase = Omit<ActionArtifactToPhase, "artifactId">;
@@ -240,7 +245,7 @@ export function useCreateThreatMutation() {
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
   return useMutation({
-    mutationFn: (threat: IThreatCreate) => createThreat(threat),
+    mutationFn: (threat: ThreatCreate) => createThreat(threat),
     onSuccess: (response) => {
       toast(response, enqueueSnackbar, () =>
         queryClient.invalidateQueries(["threats"])
@@ -255,7 +260,7 @@ export function useCreateTicketMutation() {
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
   return useMutation({
-    mutationFn: (ticket: ITicketCreateSent) => createTicket(ticket),
+    mutationFn: (ticket: TicketCreateSent) => createTicket(ticket),
     onSuccess: (response) => {
       toast(response, enqueueSnackbar, () => {
         queryClient.invalidateQueries(["tickets"]);
@@ -282,17 +287,8 @@ export function useMarkTicketMutation() {
     },
   });
 }
-export function useGetImportProjectsQuery(
-  username: string,
-  accessToken: string
-) {
-  return useQuery(
-    ["importProjects"],
-    () => getImportProjects(username, accessToken),
-    {
-      enabled: !!username && !!accessToken,
-    }
-  );
+export function useGetGithubRepo() {
+  return useQuery(["repos"], getGithubRepos);
 }
 export function useAccountsQuery() {
   return useQuery(["accounts"], getAllAccounts);
@@ -302,7 +298,7 @@ export function useAccountByIdQuery(id: string) {
 }
 interface AccountUpdateParams {
   id: string;
-  updateData: IAccountUpdate;
+  updateData: AccountUpdate;
 }
 export function useAccountUpdateMutation() {
   const queryClient = useQueryClient();
@@ -369,7 +365,7 @@ export function useCreateAccountMutation() {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   return useMutation({
-    mutationFn: (account: IAccountRegister) => register(account),
+    mutationFn: (account: AccountRegister) => register(account),
     onSuccess: (response) => {
       toast(response, enqueueSnackbar, () => {
         navigate("/login");
@@ -411,7 +407,7 @@ export function usePhaseTemplatesQuery() {
 }
 interface CreatePhasesFromTemplateParams {
   projectName: string;
-  data: IPhaseTemplateCreate;
+  data: PhaseTemplateCreate;
 }
 export function useCreatePhasesFromTemplateMutation() {
   const queryClient = useQueryClient();
@@ -439,6 +435,23 @@ export function useUpdateAccessTokenMutation() {
     onSuccess: (response) => {
       toast(response, enqueueSnackbar, () => {
         queryClient.invalidateQueries(["accountInfo"]);
+      });
+    },
+  });
+}
+export function useImportProjectMutation() {
+  const queryClient = useQueryClient();
+  const { enqueueSnackbar } = useSnackbar();
+  const navigate = useNavigate();
+  return useMutation({
+    mutationFn: (data: GithubRepoImport) => importProject(data),
+    onSuccess: (response) => {
+      toast(response, enqueueSnackbar, () => {
+        queryClient.invalidateQueries(["projectIn"]);
+        const { data } = response;
+        if (data) {
+          navigate(`/${data.name}/`);
+        }
       });
     },
   });

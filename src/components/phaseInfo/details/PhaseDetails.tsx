@@ -23,9 +23,9 @@ import {
   useAvailableTasksQuery,
   useRemoveTaskFromPhaseMutation,
 } from "~/hooks/query";
-import { IPhase } from "~/interfaces/Entity";
+import { Phase } from "~/interfaces/Entity";
 interface PhaseDetailsProps {
-  phase: IPhase;
+  phase: Phase;
 }
 export default function PhaseDetails({ phase }: PhaseDetailsProps) {
   const taskColumn: GridColumns = [

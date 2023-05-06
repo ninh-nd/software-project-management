@@ -1,10 +1,8 @@
 import api from "~/api";
 import { PromiseServer } from "~/interfaces/ServerResponse";
-import { ITicket, ITicketCreateSent } from "~/interfaces/Entity";
+import { Ticket, TicketCreateSent } from "~/interfaces/Entity";
 
-export async function getTickets(
-  projectName: string
-): PromiseServer<ITicket[]> {
+export async function getTickets(projectName: string): PromiseServer<Ticket[]> {
   const response = await api.get("/ticket", {
     params: {
       projectName,
@@ -13,21 +11,21 @@ export async function getTickets(
   return response.data;
 }
 export async function createTicket(
-  ticket: ITicketCreateSent
-): PromiseServer<ITicket> {
+  ticket: TicketCreateSent
+): PromiseServer<Ticket> {
   const response = await api.post("/ticket", {
     data: ticket,
   });
   return response.data;
 }
-export async function getTicket(id: string): PromiseServer<ITicket> {
+export async function getTicket(id: string): PromiseServer<Ticket> {
   const response = await api.get(`/ticket/${id}`);
   return response.data;
 }
 export async function markTicket(
   id: string,
   status: "open" | "closed"
-): PromiseServer<ITicket> {
+): PromiseServer<Ticket> {
   const response = await api.patch(`/ticket/${id}`, {
     data: {
       status,

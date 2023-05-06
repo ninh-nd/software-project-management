@@ -21,7 +21,7 @@ import {
   useMembersQuery,
   useVulnsQuery,
 } from "~/hooks/query";
-import { ITicketCreate } from "~/interfaces/Entity";
+import { TicketCreate } from "~/interfaces/Entity";
 export default function AddTicketForm({
   setCloseDialog,
 }: {
@@ -44,7 +44,7 @@ export default function AddTicketForm({
     handleSubmit,
     formState: { errors },
     control,
-  } = useForm<ITicketCreate>();
+  } = useForm<TicketCreate>();
   const [selectedPriority, setSelectedPriority] = useState<
     "Low" | "Medium" | "High"
   >("Low");
@@ -53,7 +53,7 @@ export default function AddTicketForm({
       (event.target as HTMLInputElement).value as "Low" | "Medium" | "High"
     );
   }
-  async function submit(data: ITicketCreate) {
+  async function submit(data: TicketCreate) {
     if (!accountInfo || !currentProject) return;
     const assigner = accountInfo._id;
     const assignee = data.assignee.map((item) => item._id);

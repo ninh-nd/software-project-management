@@ -1,9 +1,9 @@
 import { DataGrid } from "@mui/x-data-grid";
-import { IUser } from "~/interfaces/Entity";
+import { User } from "~/interfaces/Entity";
 import Title from "../common/Title";
 import InfoPaper from "../home/InfoPaper";
 
-export default function ActivityHistoryCard({ member }: { member: IUser }) {
+export default function ActivityHistoryCard({ member }: { member: User }) {
   const activityHistoryColumns = [
     { field: "action", headerName: "Action", width: 200 },
     { field: "content", headerName: "Content", minWidth: 400, flex: 1 },

@@ -20,7 +20,6 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
 import {
   Dispatch,
   SetStateAction,
@@ -30,22 +29,21 @@ import {
 } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
-import { getPhaseTemplates } from "~/actions/phaseAction";
 import {
   useCreatePhasesFromTemplateMutation,
   usePhaseTemplatesQuery,
 } from "~/hooks/query";
-import { IPhaseTemplate } from "~/interfaces/Entity";
+import { PhaseTemplate } from "~/interfaces/Entity";
 
 interface TabPanelProps {
-  templateList: IPhaseTemplate[];
+  templateList: PhaseTemplate[];
   value: number;
   index: number;
-  selectTemplate: (template: IPhaseTemplate) => void;
+  selectTemplate: (template: PhaseTemplate) => void;
 }
 interface ContextType {
-  data: IPhaseTemplate | undefined;
-  setData: Dispatch<SetStateAction<IPhaseTemplate | undefined>>;
+  data: PhaseTemplate | undefined;
+  setData: Dispatch<SetStateAction<PhaseTemplate | undefined>>;
 }
 const PhaseTemplateContext = createContext<ContextType>({
   data: undefined,
@@ -120,7 +118,7 @@ function SelectTemplate({ updateStep }: CreatePhaseTemplateProps) {
   const templates = templatesQuery.data?.data ?? [];
   const publicTemplates = templates.filter((x) => x.isPrivate === false);
   const privateTemplates = templates.filter((x) => x.isPrivate === true);
-  function selectTemplate(template: IPhaseTemplate) {
+  function selectTemplate(template: PhaseTemplate) {
     updateStep();
     setData(template);
   }
@@ -157,7 +155,7 @@ function CreateNew({ updateStep }: CreatePhaseTemplateProps) {
     handleSubmit,
     formState: { errors },
     control,
-  } = useForm<IPhaseTemplate>({
+  } = useForm<PhaseTemplate>({
     defaultValues: data ?? {
       name: "",
       description: "",
@@ -175,7 +173,7 @@ function CreateNew({ updateStep }: CreatePhaseTemplateProps) {
     control,
     name: "phases",
   });
-  async function onSubmit(data: IPhaseTemplate) {
+  async function onSubmit(data: PhaseTemplate) {
     updateStep();
     setData(data);
   }
@@ -335,7 +333,7 @@ export default function CreatePhaseTemplateForm({
   const [activeStep, setActiveStep] = useState(0);
   const steps = ["Step 1", "Step 2", "Step 3"];
   const [selection, setSelection] = useState<"template" | "create">("template");
-  const [data, setData] = useState<IPhaseTemplate>();
+  const [data, setData] = useState<PhaseTemplate>();
   function increaseStep() {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   }

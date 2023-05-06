@@ -8,8 +8,8 @@ export default function SelectProject() {
   const { control } = useForm();
   const { setCurrentProject } = useProjectActions();
   const currentProject = useProjectHook();
-  const projectOwnQuery = useProjectInQuery();
-  const projects = projectOwnQuery.data?.data ?? [];
+  const projectInQuery = useProjectInQuery();
+  const projects = projectInQuery.data?.data ?? [];
   const navigate = useNavigate();
   function handleChange(event: SelectChangeEvent<string>) {
     setCurrentProject(event.target.value);

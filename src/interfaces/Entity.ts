@@ -1,13 +1,13 @@
-export interface IAccount {
+export interface Account {
   _id: string;
   username: string;
   email: string;
-  thirdParty: IThirdParty[];
+  thirdParty: ThirdParty[];
   role: "admin" | "manager" | "member";
   permission: string[];
 }
 
-export interface IActivity {
+export interface Activity {
   _id: string;
   action: string;
   content: string;
@@ -15,42 +15,42 @@ export interface IActivity {
   updatedAt: string;
 }
 
-export interface IArtifact {
+export interface Artifact {
   _id: string;
   name: string;
   type: "image" | "log" | "source code" | "executable" | "library";
   url: string;
-  threatList: IThreat[];
-  vulnerabilityList: IVulnerability[];
+  threatList: Threat[];
+  vulnerabilityList: Vulnerability[];
   cpe?: string;
 }
 
-export type IArtifactCreate = Omit<
-  IArtifact,
+export type ArtifactCreate = Omit<
+  Artifact,
   "_id" | "threatList" | "vulnerabilityList"
 >;
-interface IIndividualContribution {
+interface IndividualContribution {
   author: string;
   total: number;
 }
-export interface ICommits {
+export interface Commits {
   total: number;
-  contribution: IIndividualContribution[];
+  contribution: IndividualContribution[];
 }
-export interface IPullRequests {
+export interface PullRequests {
   total: number;
-  contribution: IIndividualContribution[];
+  contribution: IndividualContribution[];
 }
-export interface IPhase {
+export interface Phase {
   _id: string;
   name: string;
-  tasks: ITask[];
-  artifacts: IArtifact[];
+  tasks: Task[];
+  artifacts: Artifact[];
   description?: string;
   createdAt?: string;
   updatedAt?: string;
 }
-export interface IPhaseTemplate {
+export interface PhaseTemplate {
   _id: string;
   name: string;
   description: string;
@@ -62,17 +62,17 @@ export interface IPhaseTemplate {
   isPrivate: boolean;
   createdBy: string;
 }
-export type IPhaseTemplateCreate = Omit<IPhaseTemplate, "_id" | "createdBy">;
-export interface IProject {
+export type PhaseTemplateCreate = Omit<PhaseTemplate, "_id" | "createdBy">;
+export interface Project {
   _id: string;
   name: string;
   url: string;
   status: string;
   createdAt: string;
   updatedAt: string;
-  phaseList: IPhase[];
+  phaseList: Phase[];
 }
-export interface ITask {
+export interface Task {
   _id: string;
   name: string;
   description: string;
@@ -83,34 +83,34 @@ export interface ITask {
   projectName: string;
 }
 
-export type ITaskUpdate = Omit<ITask, "_id">;
-export interface IThirdParty {
+export type TaskUpdate = Omit<Task, "_id">;
+export interface ThirdParty {
   name: string;
   username: string;
   url: string;
   accessToken: string;
 }
-export interface IThreat {
+export interface Threat {
   _id: string;
   name: string;
   description: string;
 }
-export type IThreatCreate = Omit<IThreat, "_id">;
-export interface ITicket {
+export type ThreatCreate = Omit<Threat, "_id">;
+export interface Ticket {
   _id: string;
   status: "open" | "closed";
   title: string;
   description: string;
   priority: "low" | "medium" | "high";
-  assignee: IUser[];
-  assigner: IUser;
-  targetedVulnerability: IVulnerability[];
+  assignee: User[];
+  assigner: User;
+  targetedVulnerability: Vulnerability[];
   projectName: string;
   createdAt: string;
   updatedAt: string;
 }
-export type ITicketCreate = Omit<ITicket, "_id" | "createdAt" | "updatedAt">;
-export interface ITicketCreateSent {
+export type TicketCreate = Omit<Ticket, "_id" | "createdAt" | "updatedAt">;
+export interface TicketCreateSent {
   title: string;
   description: string;
   priority: "low" | "medium" | "high";
@@ -119,14 +119,14 @@ export interface ITicketCreateSent {
   targetedVulnerability: string[];
   projectName: string;
 }
-export interface IUser {
+export interface User {
   _id: string;
   name: string;
-  taskAssigned: ITask[];
-  activityHistory: IActivity[];
-  account: IAccount;
+  taskAssigned: Task[];
+  activityHistory: Activity[];
+  account: Account;
 }
-export interface IVulnerability {
+export interface Vulnerability {
   cveId: string;
   description: string;
   score: number;
@@ -137,17 +137,17 @@ export interface IVulnerability {
   integrityImpact: "COMPLETE" | "PARTIAL" | "NONE";
   _id: string;
 }
-export interface IAccountUpdate {
+export interface AccountUpdate {
   email: string;
   role: "manager" | "member";
 }
-export interface IAccountRegister {
+export interface AccountRegister {
   username: string;
   email: string;
   confirmPassword: string;
   password: string;
 }
-export interface ICWE {
+export interface CWE {
   _id: string;
   cweId: string;
   name: string;

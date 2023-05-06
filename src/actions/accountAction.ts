@@ -1,28 +1,28 @@
 import api from "~/api";
-import { IAccount, IAccountUpdate } from "~/interfaces/Entity";
+import { Account, AccountUpdate } from "~/interfaces/Entity";
 import { PromiseServer } from "~/interfaces/ServerResponse";
-export async function getAccountInfo(): PromiseServer<IAccount> {
+export async function getAccountInfo(): PromiseServer<Account> {
   const response = await api.get("/account/");
   return response.data;
 }
-export async function getAllAccounts(): PromiseServer<IAccount[]> {
+export async function getAllAccounts(): PromiseServer<Account[]> {
   const response = await api.get("/account/list");
   return response.data;
 }
-export async function getAccountById(id: string): PromiseServer<IAccount> {
+export async function getAccountById(id: string): PromiseServer<Account> {
   const response = await api.get(`/account/${id}`);
   return response.data;
 }
 export async function updateAccount(
   id: string,
-  updateData: IAccountUpdate
-): PromiseServer<IAccount> {
+  updateData: AccountUpdate
+): PromiseServer<Account> {
   const response = await api.patch(`/account/${id}`, {
     data: updateData,
   });
   return response.data;
 }
-export async function deleteAccount(id: string): PromiseServer<IAccount> {
+export async function deleteAccount(id: string): PromiseServer<Account> {
   const response = await api.delete(`/account/${id}`);
   return response.data;
 }
@@ -33,7 +33,7 @@ export async function getPermissions(): PromiseServer<string[]> {
 export async function updatePermission(
   id: string,
   updateData: string[]
-): PromiseServer<IAccount> {
+): PromiseServer<Account> {
   const response = await api.patch(`/account/${id}/permission`, {
     data: updateData,
   });
@@ -42,7 +42,7 @@ export async function updatePermission(
 export async function updateAccessToken(
   id: string,
   accessToken: string
-): PromiseServer<IAccount> {
+): PromiseServer<Account> {
   const response = await api.patch(`/account/${id}/thirdParty/github`, {
     data: accessToken,
   });

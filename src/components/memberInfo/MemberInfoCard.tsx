@@ -1,14 +1,14 @@
 import { GitHub } from "@mui/icons-material";
 import { Box, Typography } from "@mui/material";
-import { IThirdParty, IUser } from "~/interfaces/Entity";
+import { ThirdParty, User } from "~/interfaces/Entity";
 
-function displayBadge(thirdPartyList: IThirdParty[]) {
+function displayBadge(thirdPartyList: ThirdParty[]) {
   return thirdPartyList.map((thirdParty, index) => {
     if (thirdParty.name === "Github") return <GitHub key={index} />;
   });
 }
 
-export default function MemberInfoCard({ member }: { member: IUser }) {
+export default function MemberInfoCard({ member }: { member: User }) {
   return (
     <Box display="flex" flexDirection="column">
       <Box

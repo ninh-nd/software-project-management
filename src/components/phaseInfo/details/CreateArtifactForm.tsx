@@ -17,7 +17,7 @@ import { Controller, useForm } from "react-hook-form";
 import { getCVEs } from "~/actions/vulnAction";
 import { useAddArtifactToPhaseMutation } from "~/hooks/query";
 import { useThemeHook } from "~/hooks/theme";
-import { IArtifactCreate, IVulnerability } from "~/interfaces/Entity";
+import { ArtifactCreate, Vulnerability } from "~/interfaces/Entity";
 const type = ["image", "log", "source code", "executable", "library"];
 interface CreateArtifactFormProps {
   phaseId: string;
@@ -33,9 +33,9 @@ export default function CreateArtifactForm({
     control,
     getValues,
     formState: { errors },
-  } = useForm<IArtifactCreate>({ mode: "onChange" });
+  } = useForm<ArtifactCreate>({ mode: "onChange" });
   const createArtifactMutation = useAddArtifactToPhaseMutation();
-  const [importedCves, setImportedCves] = useState<IVulnerability[]>([]);
+  const [importedCves, setImportedCves] = useState<Vulnerability[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const theme = useThemeHook();
   async function searchCVEs() {
@@ -47,7 +47,7 @@ export default function CreateArtifactForm({
       setIsLoading(false);
     }
   }
-  async function submit(data: IArtifactCreate) {
+  async function submit(data: ArtifactCreate) {
     createArtifactMutation.mutate({ artifact: data, phaseId });
     setCloseDialog();
   }

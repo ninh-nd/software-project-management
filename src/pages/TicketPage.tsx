@@ -15,10 +15,10 @@ import { Link as RouterLink, useParams } from "react-router-dom";
 import AddTicketForm from "~/components/ticket/AddTicketForm";
 import { usePermissionHook } from "~/hooks/general";
 import { useTicketsQuery } from "~/hooks/query";
-import { ITicket } from "~/interfaces/Entity";
+import { Ticket } from "~/interfaces/Entity";
 interface TabProps {
   title: string;
-  ticketList: ITicket[];
+  ticketList: Ticket[];
 }
 function renderDate(date: string) {
   const dateObj = new Date(date);

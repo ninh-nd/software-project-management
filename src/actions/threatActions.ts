@@ -1,14 +1,14 @@
 import { PromiseServer } from "~/interfaces/ServerResponse";
 import api from "~/api";
-import { IThreat, IThreatCreate } from "~/interfaces/Entity";
+import { Threat, ThreatCreate } from "~/interfaces/Entity";
 
-export async function getThreats(): PromiseServer<IThreat[]> {
+export async function getThreats(): PromiseServer<Threat[]> {
   const response = await api.get("/threat");
   return response.data;
 }
 export async function createThreat(
-  threat: IThreatCreate
-): PromiseServer<IThreat> {
+  threat: ThreatCreate
+): PromiseServer<Threat> {
   const response = await api.post("/threat", {
     data: threat,
   });

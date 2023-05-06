@@ -12,10 +12,10 @@ import {
 import { useForm } from "react-hook-form";
 import { useCreateAccountMutation } from "~/hooks/query";
 import { useThemeHook } from "~/hooks/theme";
-import { IAccountRegister } from "~/interfaces/Entity";
+import { AccountRegister } from "~/interfaces/Entity";
 export default function SignUpPage() {
   const registerMutation = useCreateAccountMutation();
-  function onSubmit(data: IAccountRegister) {
+  function onSubmit(data: AccountRegister) {
     registerMutation.mutate(data);
   }
   const {
@@ -23,7 +23,7 @@ export default function SignUpPage() {
     handleSubmit,
     formState: { errors },
     watch,
-  } = useForm<IAccountRegister>();
+  } = useForm<AccountRegister>();
   const theme = useThemeHook();
   return (
     <ThemeProvider theme={theme}>

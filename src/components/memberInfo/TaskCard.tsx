@@ -15,7 +15,7 @@ import {
   useMarkTaskMutation,
   useTasksQuery,
 } from "~/hooks/query";
-import { IUser } from "~/interfaces/Entity";
+import { User } from "~/interfaces/Entity";
 import Title from "../common/Title";
 import InfoPaper from "../home/InfoPaper";
 
@@ -33,7 +33,7 @@ function ButtonRowBox({ children }: { children: JSX.Element[] }) {
   );
 }
 
-export default function TaskCard({ member }: { member: IUser }) {
+export default function TaskCard({ member }: { member: User }) {
   const { currentProject } = useParams();
   if (!currentProject) return <></>;
   const taskQuery = useTasksQuery(currentProject);

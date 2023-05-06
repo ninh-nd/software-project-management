@@ -20,7 +20,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { useRemoveArtifactFromPhaseMutation } from "~/hooks/query";
-import { IPhase } from "~/interfaces/Entity";
+import { Phase } from "~/interfaces/Entity";
 import ConfirmDeleteModal from "./ConfirmDeleteModal";
 import CreateArtifactForm from "./CreateArtifactForm";
 function renderType({
@@ -72,7 +72,7 @@ function renderType({
   }
 }
 interface ArtifactDetailsProps {
-  phase: IPhase;
+  phase: Phase;
 }
 export default function ArtifactDetails({ phase }: ArtifactDetailsProps) {
   const [openArtCreateDialog, setOpenArtCreateDialog] = useState(false);

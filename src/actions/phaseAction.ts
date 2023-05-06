@@ -1,37 +1,37 @@
 import api from "~/api";
 import {
-  IArtifactCreate,
-  IPhase,
-  IPhaseTemplate,
-  IPhaseTemplateCreate,
+  ArtifactCreate,
+  Phase,
+  PhaseTemplate,
+  PhaseTemplateCreate,
 } from "~/interfaces/Entity";
 import { PromiseServer } from "~/interfaces/ServerResponse";
-export async function getPhase(id: string): PromiseServer<IPhase> {
+export async function getPhase(id: string): PromiseServer<Phase> {
   const response = await api.get(`/phase/${id}`);
   return response.data;
 }
 export async function addTaskToPhase(
   phaseId: string,
   taskId: string
-): PromiseServer<IPhase> {
+): PromiseServer<Phase> {
   const response = await api.patch(`/phase/${phaseId}/task/add/${taskId}`);
   return response.data;
 }
 export async function removeTaskFromPhase(
   phaseId: string,
   taskId: string
-): PromiseServer<IPhase> {
+): PromiseServer<Phase> {
   const response = await api.patch(`/phase/${phaseId}/task/delete/${taskId}`);
   return response.data;
 }
-export async function getPhaseTemplates(): PromiseServer<IPhaseTemplate[]> {
+export async function getPhaseTemplates(): PromiseServer<PhaseTemplate[]> {
   const response = await api.get(`/phase/templates`);
   return response.data;
 }
 export async function createPhasesFromTemplate(
   projectName: string,
-  data: IPhaseTemplateCreate
-): PromiseServer<IPhaseTemplate> {
+  data: PhaseTemplateCreate
+): PromiseServer<PhaseTemplate> {
   const response = await api.post(`/phase/templates`, {
     projectName,
     data,
@@ -40,8 +40,8 @@ export async function createPhasesFromTemplate(
 }
 export async function addArtifactToPhase(
   phaseId: string,
-  artifact: IArtifactCreate
-): PromiseServer<IPhase> {
+  artifact: ArtifactCreate
+): PromiseServer<Phase> {
   const response = await api.patch(`/phase/${phaseId}/artifact/add`, {
     data: artifact,
   });
@@ -50,7 +50,7 @@ export async function addArtifactToPhase(
 export async function removeArtifactFromPhase(
   phaseId: string,
   artifactId: string
-): PromiseServer<IPhase> {
+): PromiseServer<Phase> {
   const response = await api.patch(
     `/phase/${phaseId}/artifact/delete/${artifactId}`
   );
@@ -59,8 +59,8 @@ export async function removeArtifactFromPhase(
 export async function updateArtifact(
   phaseId: string,
   artifactId: string,
-  artifact: IArtifactCreate
-): PromiseServer<IPhase> {
+  artifact: ArtifactCreate
+): PromiseServer<Phase> {
   const response = await api.patch(
     `/phase/${phaseId}/artifact/update/${artifactId}`,
     {

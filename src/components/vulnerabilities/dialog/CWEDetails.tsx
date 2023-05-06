@@ -12,7 +12,7 @@ import {
 import { useSearchParams } from "react-router-dom";
 import { useCWEQuery } from "~/hooks/query";
 import { useThemeHook } from "~/hooks/theme";
-import { ICWE } from "~/interfaces/Entity";
+import { CWE } from "~/interfaces/Entity";
 
 function renderEntry(entry: Array<any>) {
   if (entry.length === 0)
@@ -24,7 +24,7 @@ function renderEntry(entry: Array<any>) {
   ));
 }
 
-function renderCWE(cwe: ICWE | null | undefined) {
+function renderCWE(cwe: CWE | null | undefined) {
   const theme = useThemeHook();
   if (cwe === undefined) return <></>;
   else if (cwe === null) {

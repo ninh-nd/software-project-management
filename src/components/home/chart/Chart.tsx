@@ -11,13 +11,13 @@ import {
 } from "recharts";
 import Title from "~/components/common/Title";
 import { useThemeHook } from "~/hooks/theme";
-import { ICommits, IPullRequests } from "~/interfaces/Entity";
+import { Commits, PullRequests } from "~/interfaces/Entity";
 import InfoPaper from "../InfoPaper";
 type ChartProps = {
-  commits: ICommits | null | undefined;
-  prs: IPullRequests | null | undefined;
+  commits: Commits | null | undefined;
+  prs: PullRequests | null | undefined;
 };
-function mergeContributions(commits: ICommits, prs: IPullRequests) {
+function mergeContributions(commits: Commits, prs: PullRequests) {
   const merged = [];
   const contributions = commits.contribution.concat(prs.contribution);
   const authors = [...new Set(contributions.map((c) => c.author))];

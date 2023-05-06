@@ -1,10 +1,10 @@
 import { Box, Typography } from "@mui/material";
 import Title from "~/components/common/Title";
 import InfoPaper from "~/components/home/InfoPaper";
-import { IVulnerability } from "~/interfaces/Entity";
+import { Vulnerability } from "~/interfaces/Entity";
 
 interface Props {
-  vulnList: IVulnerability[];
+  vulnList: Vulnerability[];
 }
 export default function SeverityStatistics({ vulnList }: Props) {
   const lowCount = vulnList.filter((vuln) => vuln.severity === "LOW").length;

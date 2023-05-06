@@ -23,7 +23,7 @@ import {
   useAccountInfoQuery,
   useUpdateAccessTokenMutation,
 } from "~/hooks/query";
-import { IThirdParty } from "~/interfaces/Entity";
+import { ThirdParty } from "~/interfaces/Entity";
 const accountPageStyle: SxProps = {
   display: "flex",
   flexDirection: "column",
@@ -36,7 +36,7 @@ function Github({
   data,
   accountId,
 }: {
-  data: IThirdParty | undefined;
+  data: ThirdParty | undefined;
   accountId: string;
 }) {
   const updateAccessTokenMutation = useUpdateAccessTokenMutation();
@@ -105,7 +105,7 @@ export default function AccountInfo() {
   const accountInfo = accountInfoQuery.data?.data;
   if (!accountInfo) return <></>;
   const github = accountInfo.thirdParty.find(
-    (thirdParty: IThirdParty) => thirdParty.name === "Github"
+    (thirdParty: ThirdParty) => thirdParty.name === "Github"
   );
   return (
     <Box sx={accountPageStyle}>

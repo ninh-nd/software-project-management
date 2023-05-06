@@ -17,9 +17,9 @@ import {
 } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { useMarkTicketMutation, useTicketQuery } from "~/hooks/query";
-import { ITicket } from "~/interfaces/Entity";
+import { Ticket } from "~/interfaces/Entity";
 
-function Headline({ ticket }: { ticket: ITicket }) {
+function Headline({ ticket }: { ticket: Ticket }) {
   const createdAt = Intl.DateTimeFormat("en-Us", {
     year: "numeric",
     month: "long",
@@ -46,7 +46,7 @@ function Headline({ ticket }: { ticket: ITicket }) {
   );
 }
 
-function RightColumn({ ticket }: { ticket: ITicket }) {
+function RightColumn({ ticket }: { ticket: Ticket }) {
   return (
     <Stack spacing={1}>
       <Box>
@@ -79,7 +79,7 @@ function RightColumn({ ticket }: { ticket: ITicket }) {
   );
 }
 
-function MainContent({ ticket }: { ticket: ITicket }) {
+function MainContent({ ticket }: { ticket: Ticket }) {
   const ticketMutation = useMarkTicketMutation();
   function closeTicket() {
     ticketMutation.mutate({ id: ticket._id, status: "closed" });

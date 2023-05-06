@@ -1,11 +1,11 @@
 import { Typography } from "@mui/material";
-import { IPullRequests } from "~/interfaces/Entity";
+import { PullRequests } from "~/interfaces/Entity";
 import Title from "~/components/common/Title";
 import InfoPaper from "../InfoPaper";
 export default function TotalPullRequests({
   prs,
 }: {
-  prs: IPullRequests | null | undefined;
+  prs: PullRequests | null | undefined;
 }) {
   return (
     <InfoPaper>

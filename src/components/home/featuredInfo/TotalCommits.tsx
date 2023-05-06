@@ -1,11 +1,11 @@
 import { Typography } from "@mui/material";
-import { ICommits } from "~/interfaces/Entity";
+import { Commits } from "~/interfaces/Entity";
 import Title from "~/components/common/Title";
 import InfoPaper from "../InfoPaper";
 export default function TotalCommits({
   commits,
 }: {
-  commits: ICommits | null | undefined;
+  commits: Commits | null | undefined;
 }) {
   return (
     <InfoPaper>

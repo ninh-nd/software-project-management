@@ -1,11 +1,7 @@
 import api from "~/api";
+import { GithubRepoImport } from "~/interfaces/Entity";
 import { PromiseServer } from "~/interfaces/ServerResponse";
-export async function getImportProjects(
-  username: string,
-  accessToken: string
-): PromiseServer<Array<{ name: string; url: string }>> {
-  const response = await api.get("/thirdParty/github/projects", {
-    params: { username, accessToken },
-  });
+export async function getGithubRepos(): PromiseServer<GithubRepoImport[]> {
+  const response = await api.get("/thirdParty/github/repo");
   return response.data;
 }

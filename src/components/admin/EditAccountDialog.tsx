@@ -14,7 +14,7 @@ import {
 import { GridRowId } from "@mui/x-data-grid";
 import { Controller, useForm } from "react-hook-form";
 import { useAccountByIdQuery, useAccountUpdateMutation } from "~/hooks/query";
-import { IAccountUpdate } from "~/interfaces/Entity";
+import { AccountUpdate } from "~/interfaces/Entity";
 interface DialogProps {
   id: GridRowId;
   open: boolean;
@@ -30,9 +30,9 @@ export default function EditAccountDialog({
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<IAccountUpdate>();
+  } = useForm<AccountUpdate>();
   const accountUpdateMutation = useAccountUpdateMutation();
-  function onSubmit(data: IAccountUpdate) {
+  function onSubmit(data: AccountUpdate) {
     accountUpdateMutation.mutate({
       id: id as string,
       updateData: data,

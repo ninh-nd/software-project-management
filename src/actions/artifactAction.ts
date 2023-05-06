@@ -1,15 +1,13 @@
 import api from "~/api";
-import { IArtifact } from "~/interfaces/Entity";
+import { Artifact } from "~/interfaces/Entity";
 import { PromiseServer } from "~/interfaces/ServerResponse";
-export async function getArtifact(
-  artifactId: string
-): PromiseServer<IArtifact> {
+export async function getArtifact(artifactId: string): PromiseServer<Artifact> {
   const response = await api.get(`/artifact/${artifactId}`);
   return response.data;
 }
 export async function getAllArtifacts(
   projectName: string
-): PromiseServer<IArtifact[]> {
+): PromiseServer<Artifact[]> {
   const response = await api.get("/artifact", { params: { projectName } });
   return response.data;
 }
