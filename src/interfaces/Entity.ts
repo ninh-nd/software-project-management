@@ -54,13 +54,11 @@ export interface IPhaseTemplate {
   _id: string;
   name: string;
   description: string;
-  phases: [
-    {
-      name: string;
-      description: string;
-      order: number;
-    }
-  ];
+  phases: {
+    name: string;
+    description: string;
+    order: number;
+  }[];
   isPrivate: boolean;
   createdBy: string;
 }
@@ -160,4 +158,10 @@ export interface ICWE {
   consequences: string[];
   detectionMethods: string[];
   __v: number;
+}
+export interface GithubRepoImport {
+  name: string;
+  url: string;
+  status: "private" | "public";
+  owner: string;
 }
