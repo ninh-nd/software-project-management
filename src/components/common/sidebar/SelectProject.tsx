@@ -1,39 +1,36 @@
-import { MenuItem, Select } from "@mui/material";
-import { SelectChangeEvent } from "@mui/material/Select";
-import { Controller, useForm } from "react-hook-form";
+import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { useProjectActions, useProjectHook } from "~/hooks/general";
 import { useProjectInQuery } from "~/hooks/query";
 export default function SelectProject() {
-  const { control } = useForm();
-  const { setCurrentProject } = useProjectActions();
-  const currentProject = useProjectHook();
+  const [value, setValue] = useState("");
+  const { getValues, register } = useForm<{ projectName: string }>();
   const projectInQuery = useProjectInQuery();
   const projects = projectInQuery.data?.data ?? [];
   const navigate = useNavigate();
-  function handleChange(event: SelectChangeEvent<string>) {
-    setCurrentProject(event.target.value);
-    navigate(`/${event.target.value}/`);
-  }
-  if (!currentProject) {
-    return <></>;
+  function handleChange() {
+    const project = getValues("projectName");
+    navigate(`/${project}/`);
+    setValue("");
   }
   return (
-    <Controller
-      name="project"
-      control={control}
-      defaultValue={currentProject}
-      render={({ field: { onChange } }) => (
-        <Select label="Project" fullWidth onChange={handleChange}>
-          {projects.map((project) => {
-            return (
-              <MenuItem value={project.name} key={project.name}>
-                {project.name}
-              </MenuItem>
-            );
-          })}
-        </Select>
-      )}
-    />
+    <FormControl fullWidth>
+      <InputLabel>Select a project</InputLabel>
+      <Select
+        {...register("projectName", { onChange: (e) => handleChange() })}
+        label="Project"
+        value={value}
+        fullWidth
+      >
+        {projects.map((project, index) => {
+          return (
+            <MenuItem value={project.name} key={index}>
+              {project.name}
+            </MenuItem>
+          );
+        })}
+      </Select>
+    </FormControl>
   );
 }

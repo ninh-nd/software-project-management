@@ -15,13 +15,13 @@ import {
   ListItemIcon,
   ListItemText,
   Toolbar,
-  Typography,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import { useProjectHook } from "~/hooks/general";
+import { useNavigate, useParams } from "react-router-dom";
 import { useIsDrawerOpen, useThemeActions } from "~/hooks/theme";
 import ImportProject from "./ImportProject";
 import SelectProject from "./SelectProject";
+import { getProjectIn } from "~/actions/userAction";
+import { useProjectInQuery } from "~/hooks/query";
 const drawerWidth = 240;
 interface ItemProps {
   text: string;
@@ -46,7 +46,14 @@ function Item({ text, icon, path }: ItemProps) {
   );
 }
 function DrawerContent() {
-  const currentProject = useProjectHook();
+  const projectInQuery = useProjectInQuery();
+  const projects = projectInQuery.data?.data;
+  if (!projects) return <></>;
+  const firstProject = projects[0].name;
+  let { currentProject } = useParams();
+  if (!currentProject) {
+    currentProject = firstProject;
+  }
   return (
     <Box>
       <List>

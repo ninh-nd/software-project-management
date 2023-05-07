@@ -60,7 +60,6 @@ import {
   TicketCreateSent,
 } from "~/interfaces/Entity";
 import { IErrorResponse, ISuccessResponse } from "~/interfaces/ServerResponse";
-import { useProjectActions } from "./general";
 import { getCWE } from "~/actions/cweAction";
 function toast(
   response: ISuccessResponse<any> | IErrorResponse,
@@ -318,7 +317,6 @@ interface LoginParams {
   password: string;
 }
 export function useLoginMutation() {
-  const { setCurrentProject } = useProjectActions();
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
   return useMutation({
@@ -339,7 +337,6 @@ export function useLoginMutation() {
             return;
           }
           const currentProject = data[0].name;
-          setCurrentProject(currentProject);
           navigate(`/${currentProject}/`);
         }
       }

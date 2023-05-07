@@ -16,7 +16,6 @@ import {
 import { useNavigate, useParams } from "react-router-dom";
 import { getAccountInfo } from "~/actions/accountAction";
 import { logout } from "~/actions/authAction";
-import { useProjectActions } from "~/hooks/general";
 import { useIsDrawerOpen, useThemeActions, useThemeHook } from "~/hooks/theme";
 const topBarStyle = {
   height: "50px",
@@ -29,7 +28,6 @@ export default function Topbar() {
   const { setTheme } = useThemeActions();
   const navigate = useNavigate();
   const { currentProject } = useParams();
-  const { setCurrentProject } = useProjectActions();
   async function handleLogOut() {
     logout();
     navigate("/login", { replace: true });
@@ -46,7 +44,6 @@ export default function Topbar() {
     const { data } = account;
     if (!data) return;
     const { username } = data;
-    if (currentProject !== undefined) setCurrentProject(currentProject);
     navigate(`/user/${username}`);
   }
   const isDrawerOpen = useIsDrawerOpen();
