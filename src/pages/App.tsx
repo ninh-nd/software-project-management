@@ -4,22 +4,122 @@ import {
   QueryClientProvider,
 } from "@tanstack/react-query";
 import { useSnackbar } from "notistack";
-import { Navigate, Route, Routes } from "react-router-dom";
-import AdminLayout from "~/layouts/AdminLayout";
-import DashboardLayout from "~/layouts/DashboardLayout";
-import AccountInfo from "./AccountInfo";
-import AdminAccountManagement from "./AdminAccountManagement";
-import AdminThirdPartyManagement from "./AdminThirdPartyManagement";
-import Home from "./Home";
-import Login from "./Login";
-import MemberDetailInfo from "./MemberDetailInfo";
-import PhaseDetailInfo from "./PhaseDetailInfo";
-import PhaseInfo from "./PhaseInfo";
-import SignUpPage from "./SignUpPage";
-import TicketDetailPage from "./TicketDetailPage";
-import TicketPage from "./TicketPage";
-import VulnerabilityPage from "./VulnerabilityPage";
-import { ISuccessResponse, IErrorResponse } from "~/interfaces/ServerResponse";
+import { Suspense, lazy } from "react";
+import {
+  Navigate,
+  RouterProvider,
+  createBrowserRouter,
+} from "react-router-dom";
+import { IErrorResponse, ISuccessResponse } from "~/interfaces/ServerResponse";
+const AdminLayout = lazy(() => import("~/layouts/AdminLayout"));
+const DashboardLayout = lazy(() => import("~/layouts/DashboardLayout"));
+const AccountInfo = lazy(() => import("./AccountInfo"));
+const AdminAccountManagement = lazy(() => import("./AdminAccountManagement"));
+const AdminThirdPartyManagement = lazy(
+  () => import("./AdminThirdPartyManagement")
+);
+const Home = lazy(() => import("./Home"));
+const Login = lazy(() => import("./Login"));
+const MemberDetailInfo = lazy(() => import("./MemberDetailInfo"));
+const PhaseDetailInfo = lazy(() => import("./PhaseDetailInfo"));
+const PhaseInfo = lazy(() => import("./PhaseInfo"));
+const SignUpPage = lazy(() => import("./SignUpPage"));
+const TicketDetailPage = lazy(() => import("./TicketDetailPage"));
+const TicketPage = lazy(() => import("./TicketPage"));
+const VulnerabilityPage = lazy(() => import("./VulnerabilityPage"));
+function GlobalSuspense({ element }: { element: JSX.Element }) {
+  return <Suspense fallback={<></>}>{element}</Suspense>;
+}
+const managerRoutes = {
+  path: "/:currentProject",
+  element: <GlobalSuspense element={<DashboardLayout />} />,
+  children: [
+    {
+      path: "",
+      element: <GlobalSuspense element={<Home />} />,
+    },
+    {
+      path: "vulnerabilities",
+      element: <GlobalSuspense element={<VulnerabilityPage />} />,
+    },
+    {
+      path: "phases",
+      children: [
+        {
+          path: "",
+          element: <GlobalSuspense element={<PhaseInfo />} />,
+        },
+        {
+          path: ":phaseId",
+          element: <GlobalSuspense element={<PhaseDetailInfo />} />,
+        },
+      ],
+    },
+    {
+      path: "tickets",
+      children: [
+        {
+          path: "",
+          element: <GlobalSuspense element={<TicketPage />} />,
+        },
+        {
+          path: ":ticketId",
+          element: <GlobalSuspense element={<TicketDetailPage />} />,
+        },
+      ],
+    },
+    {
+      path: "memberInfo",
+      children: [
+        {
+          path: ":memberId",
+          element: <GlobalSuspense element={<MemberDetailInfo />} />,
+        },
+      ],
+    },
+  ],
+};
+const adminRoutes = {
+  path: "/admin",
+  element: <GlobalSuspense element={<AdminLayout />} />,
+  children: [
+    {
+      path: "accounts",
+      element: <GlobalSuspense element={<AdminAccountManagement />} />,
+    },
+    {
+      path: "third-parties",
+      element: <GlobalSuspense element={<AdminThirdPartyManagement />} />,
+    },
+  ],
+};
+const router = createBrowserRouter([
+  adminRoutes,
+  managerRoutes,
+  {
+    path: "/signup",
+    element: <GlobalSuspense element={<SignUpPage />} />,
+  },
+  {
+    path: "/login",
+    element: <GlobalSuspense element={<Login />} />,
+  },
+  {
+    path: "/user/:username",
+    element: <GlobalSuspense element={<DashboardLayout />} />,
+    children: [
+      {
+        path: "",
+        element: <GlobalSuspense element={<AccountInfo />} />,
+      },
+    ],
+  },
+
+  {
+    path: "*",
+    element: <Navigate to="/login" />,
+  },
+]);
 export default function App() {
   const { enqueueSnackbar } = useSnackbar();
   const queryClient = new QueryClient({
@@ -40,33 +140,7 @@ export default function App() {
   });
   return (
     <QueryClientProvider client={queryClient}>
-      <Routes>
-        <Route element={<DashboardLayout />} path="/:currentProject">
-          <Route path="" element={<Home />} />
-          <Route path="vulnerabilities" element={<VulnerabilityPage />} />
-          <Route path="phases">
-            <Route path="" element={<PhaseInfo />} />
-            <Route path=":phaseId" element={<PhaseDetailInfo />} />
-          </Route>
-          <Route path="tickets">
-            <Route path="" element={<TicketPage />} />
-            <Route path=":ticketId" element={<TicketDetailPage />} />
-          </Route>
-          <Route path="memberInfo">
-            <Route path=":memberId" element={<MemberDetailInfo />} />
-          </Route>
-        </Route>
-        <Route path="/signup" element={<SignUpPage />} />
-        <Route path="/login" element={<Login />} />
-        <Route element={<DashboardLayout />} path="/user/:username">
-          <Route path="" element={<AccountInfo />} />
-        </Route>
-        <Route path="/admin" element={<AdminLayout />}>
-          <Route path="accounts" element={<AdminAccountManagement />} />
-          <Route path="third-parties" element={<AdminThirdPartyManagement />} />
-        </Route>
-        <Route path="*" element={<Navigate to="/login" />} />
-      </Routes>
+      <RouterProvider router={router} />
     </QueryClientProvider>
   );
 }
