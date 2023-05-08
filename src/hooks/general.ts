@@ -8,6 +8,6 @@ export const usePermissionHook = () => {
 export const useUserRole = () => {
   const accountInfoQuery = useAccountInfoQuery();
   const accountInfo = accountInfoQuery.data?.data;
-  if (!accountInfo) return [];
+  if (!accountInfo) return "member"; // Default role
   return accountInfo.role;
 };
