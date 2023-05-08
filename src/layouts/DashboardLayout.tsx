@@ -3,6 +3,19 @@ import Topbar from "~/components/common/topbar/Topbar";
 import { Outlet } from "react-router-dom";
 import { Box, CssBaseline, ThemeProvider } from "@mui/material";
 import { useCustomTheme } from "~/hooks/theme";
+import { useUserRole } from "~/hooks/general";
+import MemberSidebar from "~/components/member/MemberSidebar";
+function SidebarWithRole() {
+  const role = useUserRole();
+  switch (role) {
+    case "manager":
+      return <Sidebar />;
+    case "member":
+      return <MemberSidebar />;
+    default:
+      return <></>;
+  }
+}
 export default function DashboardLayout() {
   const theme = useCustomTheme();
   return (
@@ -10,7 +23,7 @@ export default function DashboardLayout() {
       <CssBaseline />
       <Topbar />
       <Box sx={{ display: "flex", mt: "100px" }}>
-        <Sidebar />
+        <SidebarWithRole />
         <Outlet />
       </Box>
     </ThemeProvider>
