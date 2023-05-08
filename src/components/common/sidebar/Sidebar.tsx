@@ -17,11 +17,10 @@ import {
   Toolbar,
 } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
+import { useProjectInQuery } from "~/hooks/query";
 import { useIsDrawerOpen, useThemeActions } from "~/hooks/theme";
 import ImportProject from "./ImportProject";
 import SelectProject from "./SelectProject";
-import { getProjectIn } from "~/actions/userAction";
-import { useProjectInQuery } from "~/hooks/query";
 const drawerWidth = 240;
 interface ItemProps {
   text: string;
