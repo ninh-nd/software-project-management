@@ -14,7 +14,7 @@ import {
 import {
   DataGrid,
   GridActionsCellItem,
-  GridColumns,
+  GridColDef,
   GridRowId,
   GridToolbar,
 } from "@mui/x-data-grid";
@@ -92,7 +92,7 @@ export default function AdminAccountManagement() {
       setOpenPermissionEdit(true);
     };
   }
-  const columns: GridColumns = [
+  const columns: GridColDef[] = [
     {
       field: "username",
       headerName: "Username",

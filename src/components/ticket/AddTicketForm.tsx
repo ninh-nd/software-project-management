@@ -19,7 +19,6 @@ import {
   useAccountInfoQuery,
   useCreateTicketMutation,
   useMembersQuery,
-  useVulnsQuery,
 } from "~/hooks/query";
 import { TicketCreate } from "~/interfaces/Entity";
 export default function AddTicketForm({
@@ -29,11 +28,9 @@ export default function AddTicketForm({
 }) {
   const { currentProject } = useParams();
   if (!currentProject) return <></>;
-  const vulnQuery = useVulnsQuery();
   const accountInfoQuery = useAccountInfoQuery();
   const memberInfoQuery = useMembersQuery(currentProject);
   const createTicketMutation = useCreateTicketMutation();
-  const vulns = vulnQuery.data?.data ?? [];
   const memberInfo = memberInfoQuery.data?.data ?? [];
   const accountInfo = accountInfoQuery.data?.data;
   if (!accountInfo) {

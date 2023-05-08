@@ -12,9 +12,9 @@ import {
 } from "@mui/material";
 import {
   DataGrid,
-  GridColumns,
+  GridColDef,
   GridRowParams,
-  GridSelectionModel,
+  GridRowSelectionModel,
 } from "@mui/x-data-grid";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
@@ -28,7 +28,7 @@ interface PhaseDetailsProps {
   phase: Phase;
 }
 export default function PhaseDetails({ phase }: PhaseDetailsProps) {
-  const taskColumn: GridColumns = [
+  const taskColumn: GridColDef[] = [
     { field: "name", headerName: "Name", width: 200 },
     { field: "status", headerName: "Status" },
     { field: "description", headerName: "Description", minWidth: 400, flex: 1 },
@@ -55,7 +55,7 @@ export default function PhaseDetails({ phase }: PhaseDetailsProps) {
       removeTaskMutation.mutate({ phaseId, taskId, currentProject });
     });
   }
-  function onTaskRowSelect(arrayOfIds: GridSelectionModel) {
+  function onTaskRowSelect(arrayOfIds: GridRowSelectionModel) {
     const array = arrayOfIds as string[];
     setSelectedRows(array);
   }
@@ -77,10 +77,14 @@ export default function PhaseDetails({ phase }: PhaseDetailsProps) {
           rows={phase.tasks}
           getRowId={(row) => row._id}
           columns={taskColumn}
-          pageSize={5}
-          rowsPerPageOptions={[5]}
+          initialState={{
+            pagination: {
+              paginationModel: { pageSize: 5, page: 0 },
+            },
+          }}
+          pageSizeOptions={[5, 10]}
           checkboxSelection
-          onSelectionModelChange={onTaskRowSelect}
+          onRowSelectionModelChange={onTaskRowSelect}
         />
       </CardContent>
       <CardActions>

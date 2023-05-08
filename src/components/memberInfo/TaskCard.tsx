@@ -7,7 +7,11 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@mui/material";
-import { DataGrid, GridRowParams, GridSelectionModel } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  GridRowParams,
+  GridRowSelectionModel,
+} from "@mui/x-data-grid";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import {
@@ -48,9 +52,9 @@ export default function TaskCard({ member }: { member: User }) {
   function handleClose() {
     setOpen(false);
   }
-  function getSelection(arrayOfIds: GridSelectionModel) {
-    const array = arrayOfIds as string[];
-    setSelectedRows(array);
+  function getSelection(arrayOfIds: GridRowSelectionModel) {
+    const ids = arrayOfIds as string[];
+    setSelectedRows(ids);
   }
 
   const markTaskMutation = useMarkTaskMutation();
@@ -90,7 +94,7 @@ export default function TaskCard({ member }: { member: User }) {
             columns={taskColumns}
             autoHeight
             checkboxSelection
-            onSelectionModelChange={getSelection}
+            onRowSelectionModelChange={getSelection}
           />
         </Box>
         <ButtonRowBox>

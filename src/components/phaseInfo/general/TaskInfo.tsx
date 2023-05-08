@@ -4,6 +4,7 @@ import { Button, Card, CardContent, CardHeader } from "@mui/material";
 import {
   DataGrid,
   GridActionsCellItem,
+  GridColDef,
   GridRowId,
   GridRowModel,
   GridRowModes,
@@ -148,7 +149,7 @@ export default function TaskInfo() {
     return updatedRow;
   }
 
-  const columns = [
+  const columns: GridColDef[] = [
     { field: "name", headerName: "Name", editable: true, flex: 0.3 },
     {
       field: "status",
