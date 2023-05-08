@@ -30,10 +30,10 @@ export default function App() {
       },
     },
     queryCache: new QueryCache({
-      // @ts-ignore
-      onSuccess: (data: ISuccessResponse<any> | IErrorResponse) => {
-        if (data.status === "error") {
-          enqueueSnackbar(data.message, { variant: "error" });
+      onSuccess: (data) => {
+        const dataResponse = data as ISuccessResponse<any> | IErrorResponse;
+        if (dataResponse.status === "error") {
+          enqueueSnackbar(dataResponse.message, { variant: "error" });
         }
       },
     }),
