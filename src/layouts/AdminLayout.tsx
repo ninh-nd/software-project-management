@@ -3,7 +3,7 @@ import AdminSidebar from "~/components/admin/AdminSidebar";
 import { Outlet } from "react-router-dom";
 import { Box, CssBaseline, ThemeProvider } from "@mui/material";
 import { useCustomTheme } from "~/hooks/theme";
-export default function DashboardLayout() {
+export default function AdminLayout() {
   const theme = useCustomTheme();
   return (
     <ThemeProvider theme={theme}>
