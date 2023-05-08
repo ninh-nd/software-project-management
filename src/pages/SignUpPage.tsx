@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useCreateAccountMutation } from "~/hooks/query";
-import { useThemeHook } from "~/hooks/theme";
+import { useCustomTheme } from "~/hooks/theme";
 import { AccountRegister } from "~/interfaces/Entity";
 export default function SignUpPage() {
   const registerMutation = useCreateAccountMutation();
@@ -24,7 +24,7 @@ export default function SignUpPage() {
     formState: { errors },
     watch,
   } = useForm<AccountRegister>();
-  const theme = useThemeHook();
+  const theme = useCustomTheme();
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">

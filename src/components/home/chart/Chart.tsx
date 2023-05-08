@@ -10,7 +10,7 @@ import {
   YAxis,
 } from "recharts";
 import Title from "~/components/common/Title";
-import { useThemeHook } from "~/hooks/theme";
+import { useCustomTheme } from "~/hooks/theme";
 import { Commits, PullRequests } from "~/interfaces/Entity";
 import InfoPaper from "../InfoPaper";
 type ChartProps = {
@@ -34,7 +34,7 @@ function mergeContributions(commits: Commits, prs: PullRequests) {
 }
 export default function Chart({ commits, prs }: ChartProps) {
   if (!commits || !prs) return <></>;
-  const theme = useThemeHook();
+  const theme = useCustomTheme();
   const lessThanMedium = useMediaQuery(theme.breakpoints.down("md"));
   const merged = mergeContributions(commits, prs);
   return (

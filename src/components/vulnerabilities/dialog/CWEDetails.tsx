@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { useSearchParams } from "react-router-dom";
 import { useCWEQuery } from "~/hooks/query";
-import { useThemeHook } from "~/hooks/theme";
+import { useCustomTheme } from "~/hooks/theme";
 import { CWE } from "~/interfaces/Entity";
 
 function renderEntry(entry: Array<any>) {
@@ -25,7 +25,7 @@ function renderEntry(entry: Array<any>) {
 }
 
 function renderCWE(cwe: CWE | null | undefined) {
-  const theme = useThemeHook();
+  const theme = useCustomTheme();
   if (cwe === undefined) return <></>;
   else if (cwe === null) {
     return (

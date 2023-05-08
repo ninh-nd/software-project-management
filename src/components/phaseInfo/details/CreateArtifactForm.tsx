@@ -16,7 +16,7 @@ import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { getCVEs } from "~/actions/vulnAction";
 import { useAddArtifactToPhaseMutation } from "~/hooks/query";
-import { useThemeHook } from "~/hooks/theme";
+import { useCustomTheme } from "~/hooks/theme";
 import { ArtifactCreate, Vulnerability } from "~/interfaces/Entity";
 const type = ["image", "log", "source code", "executable", "library"];
 interface CreateArtifactFormProps {
@@ -37,7 +37,7 @@ export default function CreateArtifactForm({
   const createArtifactMutation = useAddArtifactToPhaseMutation();
   const [importedCves, setImportedCves] = useState<Vulnerability[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const theme = useThemeHook();
+  const theme = useCustomTheme();
   async function searchCVEs() {
     setIsLoading(true);
     const value = getValues("cpe") ?? "";

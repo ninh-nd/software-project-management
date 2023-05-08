@@ -26,7 +26,7 @@ const useThemeStore = create<ThemeStore>((set) => {
     },
   };
 });
-export const useThemeHook = () => useThemeStore((state) => state.theme);
+export const useCustomTheme = () => useThemeStore((state) => state.theme);
 export const useThemeActions = () => useThemeStore((state) => state.actions);
 export const useIsDrawerOpen = () =>
   useThemeStore((state) => state.isDrawerOpen);

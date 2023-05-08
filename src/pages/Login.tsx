@@ -14,14 +14,14 @@ import {
 } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useLoginMutation } from "~/hooks/query";
-import { useThemeHook } from "~/hooks/theme";
+import { useCustomTheme } from "~/hooks/theme";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 interface IFormInput {
   username: string;
   password: string;
 }
 export default function Login() {
-  const theme = useThemeHook();
+  const theme = useCustomTheme();
   const {
     handleSubmit,
     register,

@@ -16,7 +16,11 @@ import {
 import { useNavigate, useParams } from "react-router-dom";
 import { getAccountInfo } from "~/actions/accountAction";
 import { logout } from "~/actions/authAction";
-import { useIsDrawerOpen, useThemeActions, useThemeHook } from "~/hooks/theme";
+import {
+  useIsDrawerOpen,
+  useThemeActions,
+  useCustomTheme,
+} from "~/hooks/theme";
 const topBarStyle = {
   height: "50px",
   position: "fixed",
@@ -24,7 +28,7 @@ const topBarStyle = {
   zIndex: (theme: Theme) => theme.zIndex.drawer + 1,
 };
 export default function Topbar() {
-  const theme = useThemeHook();
+  const theme = useCustomTheme();
   const { setTheme } = useThemeActions();
   const navigate = useNavigate();
   const { currentProject } = useParams();
