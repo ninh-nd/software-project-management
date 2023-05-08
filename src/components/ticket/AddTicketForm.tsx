@@ -136,7 +136,7 @@ export default function AddTicketForm({
               />
             )}
           />
-          <Controller
+          {/* <Controller
             control={control}
             name="targetedVulnerability"
             render={({ field: { onChange, value } }) => (
@@ -150,7 +150,7 @@ export default function AddTicketForm({
                 getOptionLabel={(option) => option.cveId}
               />
             )}
-          />
+          /> */}
         </Stack>
       </DialogContent>
       <DialogActions>
