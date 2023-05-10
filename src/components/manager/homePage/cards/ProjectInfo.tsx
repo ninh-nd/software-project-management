@@ -7,8 +7,8 @@ import {
   TableRow,
 } from "@mui/material";
 import { useParams } from "react-router-dom";
+import InfoPaper from "~/components/common/styledComponents/InfoPaper";
 import { useProjectInfoQuery } from "~/hooks/query";
-import InfoPaper from "../../common/styledComponents/InfoPaper";
 export default function ProjectInfo() {
   const { currentProject } = useParams();
   if (!currentProject) return <></>;

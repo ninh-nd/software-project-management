@@ -1,7 +1,7 @@
 import { DataGrid } from "@mui/x-data-grid";
+import InfoPaper from "~/components/common/styledComponents/InfoPaper";
+import Title from "~/components/common/styledComponents/Title";
 import { User } from "~/interfaces/Entity";
-import Title from "../../../common/styledComponents/Title";
-import InfoPaper from "../../../common/styledComponents/InfoPaper";
 
 export default function ActivityHistoryCard({ member }: { member: User }) {
   const activityHistoryColumns = [

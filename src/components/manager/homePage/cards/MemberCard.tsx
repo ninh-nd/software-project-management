@@ -8,9 +8,9 @@ import {
   TableRow,
 } from "@mui/material";
 import { Link as RouterLink, useParams } from "react-router-dom";
+import InfoPaper from "~/components/common/styledComponents/InfoPaper";
 import Title from "~/components/common/styledComponents/Title";
 import { useMembersQuery } from "~/hooks/query";
-import InfoPaper from "../../common/styledComponents/InfoPaper";
 export default function MemberCard() {
   const { currentProject } = useParams();
   if (!currentProject) return <></>;

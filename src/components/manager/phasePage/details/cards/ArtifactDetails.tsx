@@ -21,8 +21,8 @@ import {
 import { useState } from "react";
 import { useRemoveArtifactFromPhaseMutation } from "~/hooks/query";
 import { Phase } from "~/interfaces/Entity";
-import ConfirmDeleteModal from "./ConfirmDeleteModal";
-import CreateArtifactForm from "./CreateArtifactForm";
+import CreateArtifactForm from "../forms/CreateArtifactForm";
+import ConfirmDeleteModal from "../forms/ConfirmDeleteModal";
 function renderType({
   type,
 }: {

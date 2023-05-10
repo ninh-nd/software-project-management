@@ -12,7 +12,7 @@ import {
 import Title from "~/components/common/styledComponents/Title";
 import { useCustomTheme } from "~/hooks/theme";
 import { Commits, PullRequests } from "~/interfaces/Entity";
-import InfoPaper from "../../common/styledComponents/InfoPaper";
+import InfoPaper from "~/components/common/styledComponents/InfoPaper";
 type ChartProps = {
   commits: Commits | null | undefined;
   prs: PullRequests | null | undefined;

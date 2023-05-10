@@ -20,7 +20,7 @@ import {
 } from "@mui/x-data-grid";
 import { useState } from "react";
 import ChangePermissionDialog from "~/components/admin/accountPage/forms/ChangePermissionDialog";
-import EditAccountDialog from "~/components/admin/accountPage/EditAccountDialog";
+import EditAccountDialog from "~/components/admin/accountPage/forms/EditAccountDialog";
 import { useAccountsQuery, useDeleteAccountMutation } from "~/hooks/query";
 function renderChip(role: "admin" | "manager" | "member") {
   switch (role) {

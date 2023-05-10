@@ -1,7 +1,7 @@
 import { Typography } from "@mui/material";
 import { Commits } from "~/interfaces/Entity";
 import Title from "~/components/common/styledComponents/Title";
-import InfoPaper from "../../common/styledComponents/InfoPaper";
+import InfoPaper from "~/components/common/styledComponents/InfoPaper";
 export default function TotalCommits({
   commits,
 }: {
