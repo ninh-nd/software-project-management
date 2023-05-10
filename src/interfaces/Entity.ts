@@ -7,12 +7,15 @@ export interface Account {
   permission: string[];
 }
 
-export interface Activity {
+export interface ActivityHistory {
   _id: string;
-  action: string;
+  id: string;
+  action: "pr" | "commit";
   content: string;
-  createdAt: string;
-  updatedAt: string;
+  createdBy: string;
+  projectId: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface Artifact {
@@ -123,7 +126,7 @@ export interface User {
   _id: string;
   name: string;
   taskAssigned: Task[];
-  activityHistory: Activity[];
+  activityHistory: ActivityHistory[];
   account: Account;
 }
 export interface Vulnerability {

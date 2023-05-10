@@ -1,17 +1,12 @@
 import { Typography } from "@mui/material";
-import { Commits } from "~/interfaces/Entity";
-import Title from "~/components/common/styledComponents/Title";
 import InfoPaper from "~/components/common/styledComponents/InfoPaper";
-export default function TotalCommits({
-  commits,
-}: {
-  commits: Commits | null | undefined;
-}) {
+import Title from "~/components/common/styledComponents/Title";
+export default function TotalCommits({ total }: { total: number }) {
   return (
     <InfoPaper>
       <Title>Total commits</Title>
       <Typography component="p" variant="h4">
-        {commits?.total ?? 0}
+        {total}
       </Typography>
     </InfoPaper>
   );

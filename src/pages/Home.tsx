@@ -6,15 +6,15 @@ import ProjectInfo from "~/components/manager/homePage/cards/ProjectInfo";
 import TotalCommits from "~/components/manager/homePage/cards/TotalCommits";
 import TotalPullRequests from "~/components/manager/homePage/cards/TotalPull";
 import { useUserRole } from "~/hooks/general";
-import { useCommitsQuery, usePullRequestsQuery } from "~/hooks/query";
+import { useActivityHistoryQuery } from "~/hooks/query";
 function HomePageBasedOnRole({ role }: { role: string }) {
   const { currentProject } = useParams();
   if (!currentProject) return <></>;
-  const commitsQuery = useCommitsQuery(currentProject);
-  const pullRequestsQuery = usePullRequestsQuery(currentProject);
-  const commits = commitsQuery.data?.data;
-  const pullRequests = pullRequestsQuery.data?.data;
-  if (!commits || !pullRequests) return <></>;
+  const actHistQuery = useActivityHistoryQuery(currentProject);
+  const actHist = actHistQuery.data?.data;
+  if (!actHist) return <></>;
+  const commits = actHist.filter((x) => x.action === "commit");
+  const pullRequests = actHist.filter((x) => x.action === "pr");
   switch (role) {
     case "manager":
       return (
@@ -23,10 +23,10 @@ function HomePageBasedOnRole({ role }: { role: string }) {
             <Grid container spacing={2}>
               <Grid container item spacing={2} xs={12} sm={12} md={6}>
                 <Grid item xs={12} sm={6}>
-                  <TotalCommits commits={commits} />
+                  <TotalCommits total={commits.length} />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <TotalPullRequests prs={pullRequests} />
+                  <TotalPullRequests total={pullRequests.length} />
                 </Grid>
                 <Grid item xs={12}>
                   <MemberCard />
@@ -38,14 +38,20 @@ function HomePageBasedOnRole({ role }: { role: string }) {
                 </Grid>
               </Grid>
               <Grid item xs={12}>
-                <Chart commits={commits} prs={pullRequests} />
+                <Chart activityHistory={actHist} />
               </Grid>
             </Grid>
           </Container>
         </Box>
       );
     case "member":
-      return <></>;
+      return (
+        <Box sx={{ flexGrow: 1, height: "100vh" }}>
+          <Container sx={{ mt: 4, mb: 4 }}>
+            <Grid container spacing={2}></Grid>
+          </Container>
+        </Box>
+      );
     default:
       return <></>;
   }

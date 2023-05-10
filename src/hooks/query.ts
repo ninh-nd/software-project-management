@@ -16,9 +16,10 @@ import {
   updateAccount,
   updatePermission,
 } from "~/actions/accountAction";
-import { getCommits, getPullRequests } from "~/actions/activityHistoryAction";
+import { getAcivityHistoryByProject } from "~/actions/activityHistoryAction";
 import { getAllArtifacts, getArtifact } from "~/actions/artifactAction";
 import { login, register } from "~/actions/authAction";
+import { getCWE } from "~/actions/cweAction";
 import { getGithubRepos } from "~/actions/githubAction";
 import {
   addArtifactToPhase,
@@ -30,11 +31,7 @@ import {
   removeTaskFromPhase,
   updateArtifact,
 } from "~/actions/phaseAction";
-import {
-  createPhaseTemplate,
-  getProjectInfo,
-  importProject,
-} from "~/actions/projectAction";
+import { getProjectInfo, importProject } from "~/actions/projectAction";
 import { getAllTasks, getAvailableTasks } from "~/actions/taskAction";
 import { createThreat, getThreats } from "~/actions/threatActions";
 import {
@@ -51,16 +48,15 @@ import {
   markTask,
 } from "~/actions/userAction";
 import {
-  GithubRepoImport,
   AccountRegister,
   AccountUpdate,
   ArtifactCreate,
+  GithubRepoImport,
   PhaseTemplateCreate,
   ThreatCreate,
   TicketCreateSent,
 } from "~/interfaces/Entity";
 import { IErrorResponse, ISuccessResponse } from "~/interfaces/ServerResponse";
-import { getCWE } from "~/actions/cweAction";
 function toast(
   response: ISuccessResponse<any> | IErrorResponse,
   enqueueSnackbar: (
@@ -80,12 +76,10 @@ export function useAccountInfoQuery() {
   return useQuery(["accountInfo"], () => getAccountInfo());
 }
 
-export function usePullRequestsQuery(project: string) {
-  return useQuery(["pullRequests", project], () => getPullRequests(project));
-}
-
-export function useCommitsQuery(project: string) {
-  return useQuery(["commits", project], () => getCommits(project));
+export function useActivityHistoryQuery(projectName: string) {
+  return useQuery(["activityHistory", projectName], () =>
+    getAcivityHistoryByProject(projectName)
+  );
 }
 
 export function useArtifactQuery(artifactId: string) {

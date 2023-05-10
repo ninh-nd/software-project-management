@@ -1,17 +1,12 @@
 import { Typography } from "@mui/material";
-import { PullRequests } from "~/interfaces/Entity";
-import Title from "~/components/common/styledComponents/Title";
 import InfoPaper from "~/components/common/styledComponents/InfoPaper";
-export default function TotalPullRequests({
-  prs,
-}: {
-  prs: PullRequests | null | undefined;
-}) {
+import Title from "~/components/common/styledComponents/Title";
+export default function TotalPullRequests({ total }: { total: number }) {
   return (
     <InfoPaper>
       <Title>Total pull requests</Title>
       <Typography component="p" variant="h4">
-        {prs?.total ?? 0}
+        {total}
       </Typography>
     </InfoPaper>
   );
