@@ -39,8 +39,8 @@ export default function RecentActivity({
 }) {
   const lastRecentAct = activityHistory
     .sort((a, b) => {
-      const dateB = new Date(b.updatedAt);
-      const dateA = new Date(a.updatedAt);
+      const dateB = new Date(b.createdAt);
+      const dateA = new Date(a.createdAt);
       return dateB.valueOf() - dateA.valueOf();
     })
     .slice(0, 5);
@@ -55,7 +55,7 @@ export default function RecentActivity({
             </ListItemIcon>
             <ListItemText
               primary={act.content}
-              secondary={`Last updated: ${dayjs(act.updatedAt).format(
+              secondary={`Created: ${dayjs(act.createdAt).format(
                 "DD/MM/YYYY"
               )}`}
             />
