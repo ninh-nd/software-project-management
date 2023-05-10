@@ -13,20 +13,20 @@ import {
 import { IErrorResponse, ISuccessResponse } from "~/interfaces/ServerResponse";
 const AdminLayout = lazy(() => import("~/layouts/AdminLayout"));
 const DashboardLayout = lazy(() => import("~/layouts/DashboardLayout"));
-const AccountInfo = lazy(() => import("./AccountInfo"));
+const AccountInfo = lazy(() => import("./Account"));
 const AdminAccountManagement = lazy(() => import("./AdminAccountManagement"));
 const AdminThirdPartyManagement = lazy(
   () => import("./AdminThirdPartyManagement")
 );
 const Home = lazy(() => import("./Home"));
 const Login = lazy(() => import("./Login"));
-const MemberDetailInfo = lazy(() => import("./MemberDetailInfo"));
-const PhaseDetailInfo = lazy(() => import("./PhaseDetailInfo"));
-const PhaseInfo = lazy(() => import("./PhaseInfo"));
-const SignUpPage = lazy(() => import("./SignUpPage"));
-const TicketDetailPage = lazy(() => import("./TicketDetailPage"));
-const TicketPage = lazy(() => import("./TicketPage"));
-const VulnerabilityPage = lazy(() => import("./VulnerabilityPage"));
+const MemberDetailInfo = lazy(() => import("./MemberDetail"));
+const PhaseDetailInfo = lazy(() => import("./PhaseDetail"));
+const PhaseInfo = lazy(() => import("./Phase"));
+const SignUpPage = lazy(() => import("./SignUp"));
+const TicketDetailPage = lazy(() => import("./TicketDetail"));
+const TicketPage = lazy(() => import("./Ticket"));
+const VulnerabilityPage = lazy(() => import("./Vulnerability"));
 function GlobalSuspense({ element }: { element: JSX.Element }) {
   return <Suspense fallback={<></>}>{element}</Suspense>;
 }

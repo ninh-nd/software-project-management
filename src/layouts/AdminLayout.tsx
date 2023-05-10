@@ -1,5 +1,5 @@
 import Topbar from "~/components/common/topbar/Topbar";
-import AdminSidebar from "~/components/admin/AdminSidebar";
+import AdminSidebar from "~/components/admin/common/AdminSidebar";
 import { Outlet } from "react-router-dom";
 import { Box, CssBaseline, ThemeProvider } from "@mui/material";
 import { useCustomTheme } from "~/hooks/theme";

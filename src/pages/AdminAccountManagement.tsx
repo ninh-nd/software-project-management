@@ -19,8 +19,8 @@ import {
   GridToolbar,
 } from "@mui/x-data-grid";
 import { useState } from "react";
-import ChangePermissionDialog from "~/components/admin/ChangePermissionDialog";
-import EditAccountDialog from "~/components/admin/EditAccountDialog";
+import ChangePermissionDialog from "~/components/admin/accountPage/forms/ChangePermissionDialog";
+import EditAccountDialog from "~/components/admin/accountPage/EditAccountDialog";
 import { useAccountsQuery, useDeleteAccountMutation } from "~/hooks/query";
 function renderChip(role: "admin" | "manager" | "member") {
   switch (role) {
