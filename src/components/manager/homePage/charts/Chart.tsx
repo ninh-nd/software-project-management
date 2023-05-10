@@ -54,10 +54,14 @@ export default function Chart({
           <YAxis />
           <Tooltip />
           <Legend />
-          <Bar dataKey="totalCommits" fill="#8884d8" name="Number of commits" />
+          <Bar
+            dataKey="totalCommits"
+            fill={theme.palette.primary.dark}
+            name="Number of commits"
+          />
           <Bar
             dataKey="totalPrs"
-            fill="#82ca9d"
+            fill={theme.palette.secondary.dark}
             name="Number of pull requests"
           />
         </BarChart>
