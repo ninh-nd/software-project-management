@@ -15,17 +15,13 @@ import { Link as RouterLink, useParams } from "react-router-dom";
 import { usePermissionHook } from "~/hooks/general";
 import { useTicketsQuery } from "~/hooks/query";
 import { Ticket } from "~/interfaces/Entity";
+import * as dayjs from "dayjs";
 interface TabProps {
   title: string;
   ticketList: Ticket[];
 }
 function renderDate(date: string) {
-  const dateObj = new Date(date);
-  return Intl.DateTimeFormat("en-Us", {
-    year: "numeric",
-    month: "long",
-    day: "2-digit",
-  }).format(dateObj);
+  return dayjs(date).format("DD/MM/YYYY");
 }
 function Tab({ title, ticketList }: TabProps) {
   return (

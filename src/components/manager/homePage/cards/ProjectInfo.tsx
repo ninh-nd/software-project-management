@@ -9,22 +9,15 @@ import {
 import { useParams } from "react-router-dom";
 import InfoPaper from "~/components/common/styledComponents/InfoPaper";
 import { useProjectInfoQuery } from "~/hooks/query";
+import * as dayjs from "dayjs";
 export default function ProjectInfo() {
   const { currentProject } = useParams();
   if (!currentProject) return <></>;
   const projectInfoQuery = useProjectInfoQuery(currentProject);
   const projectInfo = projectInfoQuery.data?.data;
   if (!projectInfo) return <></>;
-  const createdAt = Intl.DateTimeFormat("en-Us", {
-    year: "numeric",
-    month: "long",
-    day: "2-digit",
-  }).format(new Date(projectInfo.createdAt));
-  const updatedAt = Intl.DateTimeFormat("en-Us", {
-    year: "numeric",
-    month: "long",
-    day: "2-digit",
-  }).format(new Date(projectInfo.updatedAt));
+  const createdAt = dayjs(projectInfo.createdAt).format("DD/MM/YYYY");
+  const updatedAt = dayjs(projectInfo.updatedAt).format("DD/MM/YYYY");
   return (
     <InfoPaper>
       <TableContainer>

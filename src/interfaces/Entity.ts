@@ -14,8 +14,8 @@ export interface ActivityHistory {
   content: string;
   createdBy: string;
   projectId: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Artifact {

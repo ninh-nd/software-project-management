@@ -16,7 +16,7 @@ import {
   updateAccount,
   updatePermission,
 } from "~/actions/accountAction";
-import { getAcivityHistoryByProject } from "~/actions/activityHistoryAction";
+import { getHistoryByProject } from "~/actions/activityHistoryAction";
 import { getAllArtifacts, getArtifact } from "~/actions/artifactAction";
 import { login, register } from "~/actions/authAction";
 import { getCWE } from "~/actions/cweAction";
@@ -76,9 +76,12 @@ export function useAccountInfoQuery() {
   return useQuery(["accountInfo"], () => getAccountInfo());
 }
 
-export function useActivityHistoryQuery(projectName: string) {
+export function useActivityHistoryQuery(
+  projectName: string,
+  username: string = ""
+) {
   return useQuery(["activityHistory", projectName], () =>
-    getAcivityHistoryByProject(projectName)
+    getHistoryByProject(projectName, username)
   );
 }
 

@@ -18,13 +18,9 @@ import {
 import { useParams } from "react-router-dom";
 import { useMarkTicketMutation, useTicketQuery } from "~/hooks/query";
 import { Ticket } from "~/interfaces/Entity";
-
+import * as dayjs from "dayjs";
 function Headline({ ticket }: { ticket: Ticket }) {
-  const createdAt = Intl.DateTimeFormat("en-Us", {
-    year: "numeric",
-    month: "long",
-    day: "2-digit",
-  }).format(new Date(ticket.createdAt));
+  const createdAt = dayjs(ticket.createdAt).format("DD/MM/YYYY");
   return (
     <Box>
       <Typography variant="h3" sx={{ mb: 2 }}>
