@@ -47,12 +47,12 @@ function ManagerHomePage() {
 }
 function MemberHomePage() {
   const { currentProject } = useParams();
+  if (!currentProject) return <></>;
   const accountInfoQuery = useAccountInfoQuery();
   const accountData = accountInfoQuery.data?.data;
-  if (!accountData || !currentProject) return <></>;
   const actHistQuery = useActivityHistoryQuery(
     currentProject,
-    accountData.username
+    accountData?.username
   );
   const actHistData = actHistQuery.data?.data;
   if (!actHistData) return <></>;
@@ -62,6 +62,9 @@ function MemberHomePage() {
         <Grid container spacing={2}>
           <Grid item xs={12} md={6}>
             <RecentActivity activityHistory={actHistData} />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <ProjectInfo />
           </Grid>
           <Grid item xs={12}>
             <TimelineChart activityHistory={actHistData} />
