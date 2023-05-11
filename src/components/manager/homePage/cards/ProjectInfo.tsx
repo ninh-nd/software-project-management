@@ -1,28 +1,39 @@
 import {
-  Avatar,
-  Link,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemIcon,
-  ListItemText,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableRow,
-} from "@mui/material";
-import { useParams } from "react-router-dom";
-import InfoPaper from "~/components/common/styledComponents/InfoPaper";
-import { useProjectInfoQuery } from "~/hooks/query";
-import * as dayjs from "dayjs";
-import {
   Abc,
   AccessTime,
   Link as LinkIcon,
   PowerSettingsNew,
 } from "@mui/icons-material";
+import {
+  Badge,
+  Link,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Theme,
+  Typography,
+} from "@mui/material";
+import * as dayjs from "dayjs";
+import { useParams } from "react-router-dom";
+import InfoPaper from "~/components/common/styledComponents/InfoPaper";
+import { useProjectInfoQuery } from "~/hooks/query";
+import { useCustomTheme } from "~/hooks/theme";
+function renderStatus(status: "active" | "inactive", theme: Theme) {
+  if (status === "active")
+    return (
+      <Typography variant="body1" color={theme.palette.success.main}>
+        Active
+      </Typography>
+    );
+  return (
+    <Typography variant="body1" color="inherit">
+      Inactive
+    </Typography>
+  );
+}
 export default function ProjectInfo() {
+  const theme = useCustomTheme();
   const { currentProject } = useParams();
   if (!currentProject) return <></>;
   const projectInfoQuery = useProjectInfoQuery(currentProject);
@@ -56,7 +67,10 @@ export default function ProjectInfo() {
           <ListItemIcon>
             <PowerSettingsNew />
           </ListItemIcon>
-          <ListItemText primary="Status" secondary={projectInfo.status} />
+          <ListItemText
+            primary="Status"
+            secondary={renderStatus(projectInfo.status, theme)}
+          />
         </ListItem>
         <ListItem>
           <ListItemIcon>
@@ -68,7 +82,7 @@ export default function ProjectInfo() {
           <ListItemIcon>
             <AccessTime />
           </ListItemIcon>
-          <ListItemText primary="Updated at" secondary={updatedAt} />
+          <ListItemText primary="Last updated at" secondary={updatedAt} />
         </ListItem>
       </List>
     </InfoPaper>
