@@ -7,10 +7,12 @@ import { useSnackbar } from "notistack";
 import { Suspense, lazy } from "react";
 import {
   Navigate,
+  RouteObject,
   RouterProvider,
   createBrowserRouter,
 } from "react-router-dom";
 import { IErrorResponse, ISuccessResponse } from "~/interfaces/ServerResponse";
+import MemberTaskAndIssue from "./MemberTaskAndIssue";
 const AdminLayout = lazy(() => import("~/layouts/AdminLayout"));
 const DashboardLayout = lazy(() => import("~/layouts/DashboardLayout"));
 const AccountInfo = lazy(() => import("./Account"));
@@ -30,7 +32,7 @@ const VulnerabilityPage = lazy(() => import("./Vulnerability"));
 function GlobalSuspense({ element }: { element: JSX.Element }) {
   return <Suspense fallback={<></>}>{element}</Suspense>;
 }
-const managerRoutes = {
+const managerAndMemberRoutes: RouteObject = {
   path: "/:currentProject",
   element: <GlobalSuspense element={<DashboardLayout />} />,
   children: [
@@ -77,9 +79,13 @@ const managerRoutes = {
         },
       ],
     },
+    {
+      path: "tasksAndIssues",
+      element: <GlobalSuspense element={<MemberTaskAndIssue />} />,
+    },
   ],
 };
-const adminRoutes = {
+const adminRoutes: RouteObject = {
   path: "/admin",
   element: <GlobalSuspense element={<AdminLayout />} />,
   children: [
@@ -95,7 +101,7 @@ const adminRoutes = {
 };
 const router = createBrowserRouter([
   adminRoutes,
-  managerRoutes,
+  managerAndMemberRoutes,
   {
     path: "/signup",
     element: <GlobalSuspense element={<SignUpPage />} />,

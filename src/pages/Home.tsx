@@ -10,7 +10,6 @@ import RecentActivity from "~/components/member/homePage/cards/RecentActivity";
 import TimelineChart from "~/components/member/homePage/charts/TimelineChart";
 import { useUserRole } from "~/hooks/general";
 import {
-  useAccountInfoQuery,
   useActivityHistoryOfUserQuery,
   useActivityHistoryQuery,
 } from "~/hooks/query";

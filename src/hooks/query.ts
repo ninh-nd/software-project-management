@@ -42,6 +42,7 @@ import {
 } from "~/actions/ticketAction";
 import {
   assignTask,
+  getMemberByAccountId,
   getMemberById,
   getMembersOfProject,
   getProjectIn,
@@ -57,6 +58,7 @@ import {
   TicketCreateSent,
 } from "~/interfaces/Entity";
 import { IErrorResponse, ISuccessResponse } from "~/interfaces/ServerResponse";
+import { useAccountContext, useAccountContextAction } from "./general";
 function toast(
   response: ISuccessResponse<any> | IErrorResponse,
   enqueueSnackbar: (
@@ -72,8 +74,16 @@ function toast(
     enqueueSnackbar(response.message, { variant: "error" });
   }
 }
-export function useAccountInfoQuery() {
-  return useQuery(["accountInfo"], () => getAccountInfo());
+
+export function useMemberByAccountIdQuery() {
+  const account = useAccountContext();
+  return useQuery(
+    ["userInfo", account._id],
+    () => getMemberByAccountId(account._id),
+    {
+      enabled: !!account,
+    }
+  );
 }
 
 export function useActivityHistoryQuery(projectName: string) {
@@ -83,11 +93,10 @@ export function useActivityHistoryQuery(projectName: string) {
 }
 
 export function useActivityHistoryOfUserQuery(projectName: string) {
-  const query = useAccountInfoQuery();
-  const account = query.data?.data;
+  const account = useAccountContext();
   return useQuery(
     ["activityHistory", projectName],
-    () => getHistoryByProject(projectName, account?.username),
+    () => getHistoryByProject(projectName, account.username),
     {
       enabled: !!account,
     }
@@ -325,12 +334,15 @@ interface LoginParams {
 export function useLoginMutation() {
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
+  const { setAccount } = useAccountContextAction();
   return useMutation({
     mutationFn: ({ username, password }: LoginParams) =>
       login(username, password),
     onSuccess: async () => {
       const { data } = await getAccountInfo();
       if (data) {
+        // IMPORTANT!
+        setAccount(data);
         const { role } = data;
         if (role === "admin") {
           navigate("/admin/accounts");

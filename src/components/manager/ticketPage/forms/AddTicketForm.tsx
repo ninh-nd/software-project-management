@@ -15,11 +15,8 @@ import {
 import { ChangeEvent, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
-import {
-  useAccountInfoQuery,
-  useCreateTicketMutation,
-  useMembersQuery,
-} from "~/hooks/query";
+import { useAccountContext } from "~/hooks/general";
+import { useCreateTicketMutation, useMembersQuery } from "~/hooks/query";
 import { TicketCreate } from "~/interfaces/Entity";
 export default function AddTicketForm({
   setCloseDialog,
@@ -28,14 +25,10 @@ export default function AddTicketForm({
 }) {
   const { currentProject } = useParams();
   if (!currentProject) return <></>;
-  const accountInfoQuery = useAccountInfoQuery();
   const memberInfoQuery = useMembersQuery(currentProject);
   const createTicketMutation = useCreateTicketMutation();
   const memberInfo = memberInfoQuery.data?.data ?? [];
-  const accountInfo = accountInfoQuery.data?.data;
-  if (!accountInfo) {
-    return <></>;
-  }
+  const accountInfo = useAccountContext();
   const {
     register,
     handleSubmit,

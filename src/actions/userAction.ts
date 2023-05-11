@@ -8,7 +8,21 @@ export async function getMembersOfProject(
   return response.data;
 }
 export async function getMemberById(memberId: string): PromiseServer<User> {
-  const response = await api.get(`/user/${memberId}`);
+  const response = await api.get(`/user/`, {
+    params: {
+      memberId,
+    },
+  });
+  return response.data;
+}
+export async function getMemberByAccountId(
+  accountId: string
+): PromiseServer<User> {
+  const response = await api.get(`/user/`, {
+    params: {
+      accountId,
+    },
+  });
   return response.data;
 }
 export async function markTask(taskIdArray: string[], status: string) {

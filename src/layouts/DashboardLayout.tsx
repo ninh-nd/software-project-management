@@ -1,4 +1,4 @@
-import Sidebar from "~/components/common/sidebar/Sidebar";
+import Sidebar from "~/components/manager/sidebar/Sidebar";
 import Topbar from "~/components/common/topbar/Topbar";
 import { Outlet } from "react-router-dom";
 import { Box, CssBaseline, ThemeProvider } from "@mui/material";

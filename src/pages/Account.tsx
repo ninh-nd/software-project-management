@@ -19,10 +19,8 @@ import {
 import Grid from "@mui/material/Unstable_Grid2";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import {
-  useAccountInfoQuery,
-  useUpdateAccessTokenMutation,
-} from "~/hooks/query";
+import { useAccountContext } from "~/hooks/general";
+import { useUpdateAccessTokenMutation } from "~/hooks/query";
 import { ThirdParty } from "~/interfaces/Entity";
 const accountPageStyle: SxProps = {
   display: "flex",
@@ -101,9 +99,7 @@ function Github({
 }
 
 export default function Account() {
-  const accountInfoQuery = useAccountInfoQuery();
-  const accountInfo = accountInfoQuery.data?.data;
-  if (!accountInfo) return <></>;
+  const accountInfo = useAccountContext();
   const github = accountInfo.thirdParty.find(
     (thirdParty: ThirdParty) => thirdParty.name === "Github"
   );

@@ -14,7 +14,7 @@ import {
 import { useNavigate, useParams } from "react-router-dom";
 import { useProjectInQuery } from "~/hooks/query";
 import { useIsDrawerOpen, useThemeActions } from "~/hooks/theme";
-import SelectProject from "../../common/sidebar/SelectProject";
+import SelectProject from "../../manager/sidebar/SelectProject";
 const drawerWidth = 240;
 interface ItemProps {
   text: string;
