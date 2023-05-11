@@ -3,19 +3,20 @@ import {
   Box,
   Button,
   Dialog,
-  Grid,
   Link,
   Paper,
   Stack,
   Tooltip,
   Typography,
 } from "@mui/material";
+import Grid from "@mui/material/Unstable_Grid2";
+import * as dayjs from "dayjs";
 import React from "react";
 import { Link as RouterLink, useParams } from "react-router-dom";
 import { usePermissionHook } from "~/hooks/general";
 import { useTicketsQuery } from "~/hooks/query";
 import { Ticket } from "~/interfaces/Entity";
-import * as dayjs from "dayjs";
+
 interface TabProps {
   title: string;
   ticketList: Ticket[];
@@ -93,7 +94,7 @@ export default function Ticket() {
       }}
     >
       <Grid container spacing={1} justifyContent="center">
-        <Grid item xs={12} sm={6} md={5} lg={3}>
+        <Grid xs={12} sm={6} md={5} lg={3}>
           {createTicketPermission ? (
             <Button variant="contained" onClick={() => setOpen(true)}>
               Add Ticket
@@ -108,13 +109,13 @@ export default function Ticket() {
             </Tooltip>
           )}
         </Grid>
-        <Grid item xs={12} sm={6} md={5} lg={3} />
+        <Grid xs={12} sm={6} md={5} lg={3} />
       </Grid>
       <Grid container spacing={1} justifyContent="center">
-        <Grid item xs={12} sm={6} md={5} lg={3}>
+        <Grid xs={12} sm={6} md={5} lg={3}>
           <Tab title="Open" ticketList={openTickets} />
         </Grid>
-        <Grid item xs={12} sm={6} md={5} lg={3}>
+        <Grid xs={12} sm={6} md={5} lg={3}>
           <Tab title="Closed" ticketList={closeTickets} />
         </Grid>
       </Grid>

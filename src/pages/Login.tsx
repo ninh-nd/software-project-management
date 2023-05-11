@@ -1,4 +1,6 @@
 import { GitHub } from "@mui/icons-material";
+import Grid from "@mui/material/Unstable_Grid2";
+
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import {
   Avatar,
@@ -6,7 +8,6 @@ import {
   Button,
   Container,
   CssBaseline,
-  Grid,
   Link,
   TextField,
   ThemeProvider,
@@ -108,12 +109,12 @@ export default function Login() {
               Sign In with Github
             </Button>
             <Grid container>
-              <Grid item xs>
+              <Grid xs>
                 <Link href="/forgetpwd" variant="body2" underline="hover">
                   Forgot password?
                 </Link>
               </Grid>
-              <Grid item>
+              <Grid>
                 <Link href="/signup" variant="body2" underline="hover">
                   Don't have an account? Sign Up
                 </Link>

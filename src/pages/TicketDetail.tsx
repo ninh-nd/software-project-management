@@ -11,14 +11,14 @@ import {
   Chip,
   Container,
   Divider,
-  Grid,
   Stack,
   Typography,
 } from "@mui/material";
+import Grid from "@mui/material/Unstable_Grid2";
+import * as dayjs from "dayjs";
 import { useParams } from "react-router-dom";
 import { useMarkTicketMutation, useTicketQuery } from "~/hooks/query";
 import { Ticket } from "~/interfaces/Entity";
-import * as dayjs from "dayjs";
 function Headline({ ticket }: { ticket: Ticket }) {
   const createdAt = dayjs(ticket.createdAt).format("DD/MM/YYYY");
   return (
@@ -152,10 +152,10 @@ export default function TicketDetail() {
           <Headline ticket={ticket} />
           <Divider />
           <Grid container spacing={2}>
-            <Grid item xs={9}>
+            <Grid xs={9}>
               <MainContent ticket={ticket} />
             </Grid>
-            <Grid item xs={3}>
+            <Grid xs={3}>
               <RightColumn ticket={ticket} />
             </Grid>
           </Grid>
