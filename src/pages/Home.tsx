@@ -9,7 +9,11 @@ import Chart from "~/components/manager/homePage/charts/Chart";
 import RecentActivity from "~/components/member/homePage/cards/RecentActivity";
 import TimelineChart from "~/components/member/homePage/charts/TimelineChart";
 import { useUserRole } from "~/hooks/general";
-import { useAccountInfoQuery, useActivityHistoryQuery } from "~/hooks/query";
+import {
+  useAccountInfoQuery,
+  useActivityHistoryOfUserQuery,
+  useActivityHistoryQuery,
+} from "~/hooks/query";
 function ManagerHomePage() {
   const { currentProject } = useParams();
   if (!currentProject) return <></>;
@@ -49,12 +53,7 @@ function ManagerHomePage() {
 function MemberHomePage() {
   const { currentProject } = useParams();
   if (!currentProject) return <></>;
-  const accountInfoQuery = useAccountInfoQuery();
-  const accountData = accountInfoQuery.data?.data;
-  const actHistQuery = useActivityHistoryQuery(
-    currentProject,
-    accountData?.username
-  );
+  const actHistQuery = useActivityHistoryOfUserQuery(currentProject);
   const actHistData = actHistQuery.data?.data;
   if (!actHistData) return <></>;
   return (

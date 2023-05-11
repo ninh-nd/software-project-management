@@ -76,12 +76,21 @@ export function useAccountInfoQuery() {
   return useQuery(["accountInfo"], () => getAccountInfo());
 }
 
-export function useActivityHistoryQuery(
-  projectName: string,
-  username: string = ""
-) {
+export function useActivityHistoryQuery(projectName: string) {
   return useQuery(["activityHistory", projectName], () =>
-    getHistoryByProject(projectName, username)
+    getHistoryByProject(projectName, undefined)
+  );
+}
+
+export function useActivityHistoryOfUserQuery(projectName: string) {
+  const query = useAccountInfoQuery();
+  const account = query.data?.data;
+  return useQuery(
+    ["activityHistory", projectName],
+    () => getHistoryByProject(projectName, account?.username),
+    {
+      enabled: !!account,
+    }
   );
 }
 
