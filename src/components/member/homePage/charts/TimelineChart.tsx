@@ -52,7 +52,10 @@ export default function TimelineChart({
       <Title>Timeline</Title>
       <ResponsiveContainer width="100%" aspect={3 / 1}>
         <LineChart width={600} height={400} data={count}>
-          <XAxis dataKey="date" />
+          <XAxis
+            dataKey="date"
+            ticks={[count[0].date, count[count.length - 1].date]}
+          />
           <YAxis />
           <Tooltip />
           <Line
