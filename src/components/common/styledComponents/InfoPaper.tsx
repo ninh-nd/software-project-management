@@ -12,6 +12,7 @@ export default function InfoPaper({
       md: 100,
       lg: 150,
     },
+    height: "100%",
   };
   return <Paper sx={style}>{children}</Paper>;
 }

@@ -1,5 +1,11 @@
 import {
+  Avatar,
   Link,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemIcon,
+  ListItemText,
   Table,
   TableBody,
   TableCell,
@@ -10,6 +16,12 @@ import { useParams } from "react-router-dom";
 import InfoPaper from "~/components/common/styledComponents/InfoPaper";
 import { useProjectInfoQuery } from "~/hooks/query";
 import * as dayjs from "dayjs";
+import {
+  Abc,
+  AccessTime,
+  Link as LinkIcon,
+  PowerSettingsNew,
+} from "@mui/icons-material";
 export default function ProjectInfo() {
   const { currentProject } = useParams();
   if (!currentProject) return <></>;
@@ -20,46 +32,45 @@ export default function ProjectInfo() {
   const updatedAt = dayjs(projectInfo.updatedAt).format("DD/MM/YYYY");
   return (
     <InfoPaper>
-      <TableContainer>
-        <Table aria-label="simple table">
-          <TableBody>
-            <TableRow>
-              <TableCell component="th" scope="row">
-                Project Name
-              </TableCell>
-              <TableCell align="right">{projectInfo.name}</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell component="th" scope="row">
-                URL
-              </TableCell>
-              <TableCell align="right">
-                <Link href={projectInfo.url} target="_blank" rel="noopener">
-                  {projectInfo.url}
-                </Link>
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell component="th" scope="row">
-                Status
-              </TableCell>
-              <TableCell align="right">{projectInfo.status}</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell component="th" scope="row">
-                Created at
-              </TableCell>
-              <TableCell align="right">{createdAt}</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell component="th" scope="row">
-                Updated at
-              </TableCell>
-              <TableCell align="right">{updatedAt}</TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <List>
+        <ListItem>
+          <ListItemIcon>
+            <Abc />
+          </ListItemIcon>
+          <ListItemText primary="Project name" secondary={projectInfo.name} />
+        </ListItem>
+        <ListItem>
+          <ListItemIcon>
+            <LinkIcon />
+          </ListItemIcon>
+          <ListItemText
+            primary="URL"
+            secondary={
+              <Link href={projectInfo.url} target="_blank" rel="noopener">
+                {projectInfo.url}
+              </Link>
+            }
+          />
+        </ListItem>
+        <ListItem>
+          <ListItemIcon>
+            <PowerSettingsNew />
+          </ListItemIcon>
+          <ListItemText primary="Status" secondary={projectInfo.status} />
+        </ListItem>
+        <ListItem>
+          <ListItemIcon>
+            <AccessTime />
+          </ListItemIcon>
+          <ListItemText primary="Created at" secondary={createdAt} />
+        </ListItem>
+        <ListItem>
+          <ListItemIcon>
+            <AccessTime />
+          </ListItemIcon>
+          <ListItemText primary="Updated at" secondary={updatedAt} />
+        </ListItem>
+      </List>
     </InfoPaper>
   );
 }
