@@ -15,8 +15,8 @@ import {
   SxProps,
   TextField,
   Typography,
+  Grid,
 } from "@mui/material";
-import Grid from "@mui/material/Unstable_Grid2";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useAccountContext } from "~/hooks/general";
@@ -107,14 +107,14 @@ export default function Account() {
     <Box sx={accountPageStyle}>
       <Card sx={{ minWidth: "550px" }}>
         <Grid container spacing={2}>
-          <Grid xs={4}>
+          <Grid item xs={4}>
             <CardMedia
               component="img"
               image="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
               height="140"
             />
           </Grid>
-          <Grid xs={8}>
+          <Grid item xs={8}>
             <CardContent>
               <Typography variant="body2" color="text.secondary">
                 Account: {accountInfo.username}
@@ -124,7 +124,7 @@ export default function Account() {
               </Typography>
             </CardContent>
           </Grid>
-          <Grid xs={12}>
+          <Grid item xs={12}>
             <CardActions>
               <Button variant="contained">Change password</Button>
             </CardActions>

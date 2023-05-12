@@ -1,6 +1,4 @@
 import { GitHub } from "@mui/icons-material";
-import Grid from "@mui/material/Unstable_Grid2";
-
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import {
   Avatar,
@@ -12,6 +10,7 @@ import {
   TextField,
   ThemeProvider,
   Typography,
+  Grid,
 } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useLoginMutation } from "~/hooks/query";
@@ -109,7 +108,7 @@ export default function Login() {
               Sign In with Github
             </Button>
             <Grid container>
-              <Grid xs>
+              <Grid item xs>
                 <Link href="/forgetpwd" variant="body2" underline="hover">
                   Forgot password?
                 </Link>

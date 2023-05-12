@@ -1,5 +1,4 @@
-import { Box, Container } from "@mui/material";
-import Grid from "@mui/material/Unstable_Grid2";
+import { Box, Container, Grid } from "@mui/material";
 import { useParams } from "react-router-dom";
 import MemberCard from "~/components/manager/homePage/cards/MemberCard";
 import ProjectInfo from "~/components/manager/homePage/cards/ProjectInfo";
@@ -25,23 +24,23 @@ function ManagerHomePage() {
     <Box sx={{ flexGrow: 1, height: "100vh" }}>
       <Container sx={{ mt: 4, mb: 4 }}>
         <Grid container spacing={2}>
-          <Grid container spacing={2} xs={12} sm={12} md={6}>
-            <Grid xs={12} sm={6}>
+          <Grid container item spacing={2} xs={12} sm={12} md={6}>
+            <Grid item xs={12} sm={6}>
               <TotalCommits total={commits.length} />
             </Grid>
-            <Grid xs={12} sm={6}>
+            <Grid item xs={12} sm={6}>
               <TotalPullRequests total={pullRequests.length} />
             </Grid>
-            <Grid xs={12}>
+            <Grid item xs={12}>
               <MemberCard />
             </Grid>
           </Grid>
-          <Grid container spacing={2} xs={12} sm={12} md={6}>
-            <Grid xs={12}>
+          <Grid container item spacing={2} xs={12} sm={12} md={6}>
+            <Grid item xs={12}>
               <ProjectInfo />
             </Grid>
           </Grid>
-          <Grid xs={12}>
+          <Grid item xs={12}>
             <Chart activityHistory={actHist} />
           </Grid>
         </Grid>
@@ -59,13 +58,13 @@ function MemberHomePage() {
     <Box sx={{ flexGrow: 1, height: "100vh" }}>
       <Container sx={{ mt: 4, mb: 4 }}>
         <Grid container spacing={2}>
-          <Grid xs={12} md={6}>
+          <Grid item xs={12} md={6}>
             <RecentActivity activityHistory={actHistData} />
           </Grid>
-          <Grid xs={12} md={6}>
+          <Grid item xs={12} md={6}>
             <ProjectInfo />
           </Grid>
-          <Grid xs={12}>
+          <Grid item xs={12}>
             <TimelineChart activityHistory={actHistData} />
           </Grid>
         </Grid>
