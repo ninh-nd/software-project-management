@@ -11,17 +11,13 @@ export const useUserRole = () => {
 };
 interface LoginStore {
   account: Account;
-  actions: {
-    setAccount: (account: Account) => void;
-  };
+  setAccountContext: (account: Account) => void;
 }
 const useLoginStore = create<LoginStore>()(
   persist(
     (set) => ({
       account: {} as Account,
-      actions: {
-        setAccount: (account) => set({ account }),
-      },
+      setAccountContext: (account) => set({ account }),
     }),
     {
       name: "login-store",
@@ -29,5 +25,5 @@ const useLoginStore = create<LoginStore>()(
   )
 );
 export const useAccountContext = () => useLoginStore((state) => state.account);
-export const useAccountContextAction = () =>
-  useLoginStore((state) => state.actions);
+export const useSetAccountContext = () =>
+  useLoginStore((state) => state.setAccountContext);

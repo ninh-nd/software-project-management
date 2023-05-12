@@ -58,7 +58,7 @@ import {
   TicketCreateSent,
 } from "~/interfaces/Entity";
 import { IErrorResponse, ISuccessResponse } from "~/interfaces/ServerResponse";
-import { useAccountContext, useAccountContextAction } from "./general";
+import { useAccountContext, useSetAccountContext } from "./general";
 function toast(
   response: ISuccessResponse<any> | IErrorResponse,
   enqueueSnackbar: (
@@ -334,7 +334,7 @@ interface LoginParams {
 export function useLoginMutation() {
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
-  const { setAccount } = useAccountContextAction();
+  const setAccountContext = useSetAccountContext();
   return useMutation({
     mutationFn: ({ username, password }: LoginParams) =>
       login(username, password),
@@ -342,7 +342,7 @@ export function useLoginMutation() {
       const { data } = await getAccountInfo();
       if (data) {
         // IMPORTANT!
-        setAccount(data);
+        setAccountContext(data);
         const { role } = data;
         if (role === "admin") {
           navigate("/admin/accounts");
@@ -359,7 +359,7 @@ export function useLoginMutation() {
         }
       }
     },
-    onError: () => {
+    onError: (error) => {
       enqueueSnackbar("Wrong username/password", { variant: "error" });
     },
   });
