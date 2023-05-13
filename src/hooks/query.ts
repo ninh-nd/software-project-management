@@ -502,6 +502,8 @@ export function useUpdateTaskMutation() {
     onSuccess: (response) => {
       toast(response, enqueueSnackbar, () => {
         queryClient.invalidateQueries(["tasks"]);
+        // Member page
+        queryClient.invalidateQueries(["userInfo"]);
       });
     },
   });
