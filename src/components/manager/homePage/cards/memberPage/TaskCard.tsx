@@ -14,14 +14,10 @@ import {
 } from "@mui/x-data-grid";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import {
-  useAssignTaskMutation,
-  useMarkTaskMutation,
-  useTasksQuery,
-} from "~/hooks/query";
+import InfoPaper from "~/components/common/styledComponents/InfoPaper";
+import Title from "~/components/common/styledComponents/Title";
+import { useAssignTaskMutation, useTasksQuery } from "~/hooks/query";
 import { User } from "~/interfaces/Entity";
-import Title from "../../../common/styledComponents/Title";
-import InfoPaper from "../../../common/styledComponents/InfoPaper";
 
 function ButtonRowBox({ children }: { children: JSX.Element[] }) {
   return (
@@ -42,7 +38,6 @@ export default function TaskCard({ member }: { member: User }) {
   if (!currentProject) return <></>;
   const taskQuery = useTasksQuery(currentProject);
   const taskList = taskQuery.data?.data ?? [];
-  const [selectedRows, setSelectedRows] = useState<string[]>([""]);
   const [open, setOpen] = useState(false);
   const taskColumns = [
     { field: "name", headerName: "Name", width: 200 },
@@ -52,12 +47,6 @@ export default function TaskCard({ member }: { member: User }) {
   function handleClose() {
     setOpen(false);
   }
-  function getSelection(arrayOfIds: GridRowSelectionModel) {
-    const ids = arrayOfIds as string[];
-    setSelectedRows(ids);
-  }
-
-  const markTaskMutation = useMarkTaskMutation();
 
   const assignTaskMutation = useAssignTaskMutation();
 
@@ -66,21 +55,6 @@ export default function TaskCard({ member }: { member: User }) {
     id = id.toString();
     const memberId = member._id;
     assignTaskMutation.mutate({ taskId: id, memberId });
-  }
-
-  function markAsComplete() {
-    markTaskMutation.mutate({
-      taskIdArray: selectedRows,
-      status: "completed",
-      memberId: member._id,
-    });
-  }
-  function markAsIncomplete() {
-    markTaskMutation.mutate({
-      taskIdArray: selectedRows,
-      status: "active",
-      memberId: member._id,
-    });
   }
 
   return (
@@ -94,7 +68,6 @@ export default function TaskCard({ member }: { member: User }) {
             columns={taskColumns}
             autoHeight
             checkboxSelection
-            onRowSelectionModelChange={getSelection}
           />
         </Box>
         <ButtonRowBox>
@@ -119,12 +92,6 @@ export default function TaskCard({ member }: { member: User }) {
               </Button>
             </DialogActions>
           </Dialog>
-          <Button onClick={markAsComplete}>
-            Mark selected tasks as completed
-          </Button>
-          <Button onClick={markAsIncomplete}>
-            Mark selected tasks as active
-          </Button>
         </ButtonRowBox>
       </Box>
     </InfoPaper>

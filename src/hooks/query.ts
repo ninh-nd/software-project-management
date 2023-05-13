@@ -5,7 +5,7 @@ import {
   SnackbarMessage,
   useSnackbar,
 } from "notistack";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   deleteAccount,
   getAccountById,
@@ -32,7 +32,14 @@ import {
   updateArtifact,
 } from "~/actions/phaseAction";
 import { getProjectInfo, importProject } from "~/actions/projectAction";
-import { getAllTasks, getAvailableTasks } from "~/actions/taskAction";
+import {
+  createTask,
+  deleteTask,
+  getAllTasks,
+  getAvailableTasks,
+  getTask,
+  updateTask,
+} from "~/actions/taskAction";
 import { createThreat, getThreats } from "~/actions/threatActions";
 import {
   createTicket,
@@ -46,7 +53,6 @@ import {
   getMemberById,
   getMembersOfProject,
   getProjectIn,
-  markTask,
 } from "~/actions/userAction";
 import {
   AccountRegister,
@@ -54,6 +60,9 @@ import {
   ArtifactCreate,
   GithubRepoImport,
   PhaseTemplateCreate,
+  Task,
+  TaskCreate,
+  TaskUpdate,
   ThreatCreate,
   TicketCreateSent,
 } from "~/interfaces/Entity";
@@ -115,25 +124,6 @@ export function useMemberQuery(memberId: string) {
   return useQuery(["member", memberId], () => getMemberById(memberId));
 }
 
-interface MarkTaskParams {
-  taskIdArray: string[];
-  status: "completed" | "active";
-  memberId: string;
-}
-export function useMarkTaskMutation() {
-  const queryClient = useQueryClient();
-  const { enqueueSnackbar } = useSnackbar();
-  return useMutation({
-    mutationFn: ({ taskIdArray, status }: MarkTaskParams) =>
-      markTask(taskIdArray, status),
-    onSuccess: (response, { memberId }) => {
-      toast(response, enqueueSnackbar, () =>
-        queryClient.invalidateQueries(["member", memberId])
-      );
-    },
-  });
-}
-
 interface AssignTaskParams {
   taskId: string;
   memberId: string;
@@ -170,7 +160,7 @@ export function useAddTaskToPhaseMutation() {
     onSuccess: (response, { phaseId, currentProject }) => {
       toast(response, enqueueSnackbar, () => {
         queryClient.invalidateQueries(["phase", phaseId]);
-        queryClient.invalidateQueries(["taskList", currentProject]);
+        queryClient.invalidateQueries(["tasks", currentProject]);
       });
     },
   });
@@ -184,7 +174,7 @@ export function useRemoveTaskFromPhaseMutation() {
     onSuccess: (response, { phaseId, currentProject }) => {
       toast(response, enqueueSnackbar, () => {
         queryClient.invalidateQueries(["phase", phaseId]);
-        queryClient.invalidateQueries(["taskList", currentProject]);
+        queryClient.invalidateQueries(["tasks", currentProject]);
       });
     },
   });
@@ -245,12 +235,10 @@ export function useProjectInQuery() {
   return useQuery(["projectIn"], getProjectIn);
 }
 export function useTasksQuery(projectName: string) {
-  return useQuery(["taskList", projectName], () => getAllTasks(projectName));
+  return useQuery(["tasks", projectName], () => getAllTasks(projectName));
 }
 export function useAvailableTasksQuery(projectName: string) {
-  return useQuery(["taskList", projectName], () =>
-    getAvailableTasks(projectName)
-  );
+  return useQuery(["tasks", projectName], () => getAvailableTasks(projectName));
 }
 export function useThreatsQuery() {
   return useQuery(["threats"], getThreats);
@@ -470,4 +458,54 @@ export function useImportProjectMutation() {
       });
     },
   });
+}
+
+export function useDeleteTaskMutation() {
+  const queryClient = useQueryClient();
+  const { enqueueSnackbar } = useSnackbar();
+  return useMutation({
+    mutationFn: (id: string) => deleteTask(id),
+    onSuccess: (response) => {
+      toast(response, enqueueSnackbar, () => {
+        queryClient.invalidateQueries(["tasks"]);
+      });
+    },
+  });
+}
+
+interface CreateTaskParams {
+  data: TaskCreate;
+  projectName: string;
+}
+export function useCreateTaskMutation() {
+  const queryClient = useQueryClient();
+  const { enqueueSnackbar } = useSnackbar();
+  return useMutation({
+    mutationFn: ({ data, projectName }: CreateTaskParams) =>
+      createTask(data, projectName),
+    onSuccess: (response) => {
+      toast(response, enqueueSnackbar, () => {
+        queryClient.invalidateQueries(["tasks"]);
+      });
+    },
+  });
+}
+interface UpdateTaskParams {
+  data: TaskUpdate;
+  id: string;
+}
+export function useUpdateTaskMutation() {
+  const queryClient = useQueryClient();
+  const { enqueueSnackbar } = useSnackbar();
+  return useMutation({
+    mutationFn: ({ data, id }: UpdateTaskParams) => updateTask(data, id),
+    onSuccess: (response) => {
+      toast(response, enqueueSnackbar, () => {
+        queryClient.invalidateQueries(["tasks"]);
+      });
+    },
+  });
+}
+export function useTaskQuery(id: string) {
+  return useQuery(["tasks", id], () => getTask(id));
 }

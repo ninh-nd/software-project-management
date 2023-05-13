@@ -79,14 +79,13 @@ export interface Task {
   _id: string;
   name: string;
   description: string;
-  status?: string;
+  status: "active" | "completed";
   createdBy?: string;
   updatedBy?: string;
-  isNew?: boolean;
-  projectName: string;
 }
 
-export type TaskUpdate = Omit<Task, "_id">;
+export type TaskCreate = Omit<Task, "_id" | "createdBy" | "updatedBy">;
+export interface TaskUpdate extends Partial<TaskCreate> {}
 export interface ThirdParty {
   name: string;
   username: string;
@@ -105,7 +104,7 @@ export interface Ticket {
   title: string;
   description: string;
   priority: "low" | "medium" | "high";
-  assignee: User[];
+  assignee: User;
   assigner: User;
   targetedVulnerability: Vulnerability[];
   projectName: string;
@@ -126,8 +125,10 @@ export interface User {
   _id: string;
   name: string;
   taskAssigned: Task[];
+  ticketAssigned: Ticket[];
   activityHistory: ActivityHistory[];
   account: Account;
+  projectIn: Project[];
 }
 export interface Vulnerability {
   cveId: string;

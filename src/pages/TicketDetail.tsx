@@ -54,16 +54,12 @@ function RightColumn({ ticket }: { ticket: Ticket }) {
       </Box>
       <Box>
         <Typography variant="h6">Assignee</Typography>
-        {ticket.assignee.map((assignee) => {
-          return (
-            <Box key={assignee._id}>
-              <AccountCircle sx={{ fontSize: 16, mr: 1 }} />
-              <Typography variant="body1" display="inline">
-                {assignee.name}
-              </Typography>
-            </Box>
-          );
-        })}
+        <Box>
+          <AccountCircle sx={{ fontSize: 16, mr: 1 }} />
+          <Typography variant="body1" display="inline">
+            {ticket.assignee.name}
+          </Typography>
+        </Box>
       </Box>
       <Box>
         <Typography variant="h6">Priority</Typography>

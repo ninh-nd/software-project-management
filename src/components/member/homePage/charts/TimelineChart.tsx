@@ -49,7 +49,7 @@ export default function TimelineChart({
   const count = countHistory(activityHistory);
   return (
     <InfoPaper>
-      <Title>Timeline</Title>
+      <Title>Activity timeline</Title>
       <ResponsiveContainer width="100%" aspect={3 / 1}>
         <LineChart width={600} height={400} data={count}>
           <XAxis

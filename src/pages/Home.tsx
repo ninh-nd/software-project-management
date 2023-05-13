@@ -1,16 +1,19 @@
 import { Box, Container, Grid } from "@mui/material";
 import { useParams } from "react-router-dom";
 import MemberCard from "~/components/manager/homePage/cards/MemberCard";
-import ProjectInfo from "~/components/manager/homePage/cards/ProjectInfo";
+import ProjectInfo from "~/components/common/cards/ProjectInfo";
 import TotalCommits from "~/components/manager/homePage/cards/TotalCommits";
 import TotalPullRequests from "~/components/manager/homePage/cards/TotalPull";
 import Chart from "~/components/manager/homePage/charts/Chart";
 import RecentActivity from "~/components/member/homePage/cards/RecentActivity";
 import TimelineChart from "~/components/member/homePage/charts/TimelineChart";
+import TaskAssigned from "~/components/member/tasksAndIssuesPage/cards/TaskAssigned";
+import TicketAssigned from "~/components/member/tasksAndIssuesPage/cards/TicketAssigned";
 import { useUserRole } from "~/hooks/general";
 import {
   useActivityHistoryOfUserQuery,
   useActivityHistoryQuery,
+  useMemberByAccountIdQuery,
 } from "~/hooks/query";
 function ManagerHomePage() {
   const { currentProject } = useParams();
@@ -53,7 +56,11 @@ function MemberHomePage() {
   if (!currentProject) return <></>;
   const actHistQuery = useActivityHistoryOfUserQuery(currentProject);
   const actHistData = actHistQuery.data?.data;
+  const memberInfoQuery = useMemberByAccountIdQuery();
+  const memberInfo = memberInfoQuery.data?.data;
+  if (!memberInfo) return <></>;
   if (!actHistData) return <></>;
+  const { taskAssigned, ticketAssigned } = memberInfo;
   return (
     <Box sx={{ flexGrow: 1, height: "100vh" }}>
       <Container sx={{ mt: 4, mb: 4 }}>
@@ -66,6 +73,12 @@ function MemberHomePage() {
           </Grid>
           <Grid item xs={12}>
             <TimelineChart activityHistory={actHistData} />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <TaskAssigned tasks={taskAssigned} />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <TicketAssigned tickets={ticketAssigned} />
           </Grid>
         </Grid>
       </Container>

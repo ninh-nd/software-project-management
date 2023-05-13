@@ -25,13 +25,6 @@ export async function getMemberByAccountId(
   });
   return response.data;
 }
-export async function markTask(taskIdArray: string[], status: string) {
-  const response = await api.patch("/task", {
-    data: taskIdArray,
-    status: status,
-  });
-  return response.data;
-}
 export async function assignTask(
   taskId: string,
   memberId: string

@@ -1,6 +1,6 @@
 import { Box, Breadcrumbs, Container, Link, Stack } from "@mui/material";
 import { Link as RouterLink, useParams } from "react-router-dom";
-import TaskInfo from "~/components/manager/phasePage/general/cards/TaskCard";
+import UnassginedTaskCard from "~/components/common/cards/UnassignedTaskCard";
 import CreatePhaseTemplate from "~/components/manager/phasePage/general/forms/CreatePhaseTemplate";
 import { useProjectInfoQuery } from "~/hooks/query";
 
@@ -31,7 +31,7 @@ export default function Phase() {
               ))}
             </Breadcrumbs>
           </Box>
-          <TaskInfo />
+          <UnassginedTaskCard />
         </Stack>
       </Container>
     </Box>

@@ -17,6 +17,7 @@ import {
 import * as dayjs from "dayjs";
 import { useParams } from "react-router-dom";
 import InfoPaper from "~/components/common/styledComponents/InfoPaper";
+import Title from "~/components/common/styledComponents/Title";
 import { useProjectInfoQuery } from "~/hooks/query";
 import { useCustomTheme } from "~/hooks/theme";
 function renderStatus(status: "active" | "inactive", theme: Theme) {
@@ -43,6 +44,7 @@ export default function ProjectInfo() {
   const updatedAt = dayjs(projectInfo.updatedAt).format("DD/MM/YYYY");
   return (
     <InfoPaper>
+      <Title>Project information</Title>
       <List>
         <ListItem>
           <ListItemIcon>
