@@ -25,6 +25,9 @@ dependencies:
   dayjs:
     specifier: ^1.11.7
     version: 1.11.7
+  material-ui-popup-state:
+    specifier: ^5.0.8
+    version: 5.0.8(@emotion/react@11.10.8)(@emotion/styled@11.10.8)(@types/react@18.2.5)(react-dom@18.2.0)(react@18.2.0)
   notistack:
     specifier: ^3.0.1
     version: 3.0.1(csstype@3.1.2)(react-dom@18.2.0)(react@18.2.0)
@@ -1221,6 +1224,23 @@ packages:
     hasBin: true
     dependencies:
       js-tokens: 4.0.0
+    dev: false
+
+  /material-ui-popup-state@5.0.8(@emotion/react@11.10.8)(@emotion/styled@11.10.8)(@types/react@18.2.5)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-5ptEBQVd68QJpm0PCIYBatpX/F5QIFS+EH0lPpGqjl6HPD6uIHPt7laHbiqWDEm/6Wy5YvWF69ny+3jHXmHizQ==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      '@babel/runtime': 7.21.5
+      '@mui/material': 5.12.3(@emotion/react@11.10.8)(@emotion/styled@11.10.8)(@types/react@18.2.5)(react-dom@18.2.0)(react@18.2.0)
+      classnames: 2.3.2
+      prop-types: 15.8.1
+      react: 18.2.0
+    transitivePeerDependencies:
+      - '@emotion/react'
+      - '@emotion/styled'
+      - '@types/react'
+      - react-dom
     dev: false
 
   /mime-db@1.52.0:
