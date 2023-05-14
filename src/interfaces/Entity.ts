@@ -96,8 +96,26 @@ export interface Threat {
   _id: string;
   name: string;
   description: string;
+  type:
+    | "spoofing"
+    | "tampering"
+    | "repudiation"
+    | "informationDisclosure"
+    | "denialOfService"
+    | "elevationOfPrivilege";
+  score: {
+    total: number;
+    details: {
+      damage: number;
+      reproducibility: number;
+      exploitability: number;
+      affectedUsers: number;
+      discoverability: number;
+    };
+  };
+  status: "nonMitigated" | "partiallyMitigated" | "fullyMitigated";
 }
-export type ThreatCreate = Omit<Threat, "_id">;
+export type ThreatCreate = Omit<Threat, "_id" | "status">;
 export interface Ticket {
   _id: string;
   status: "open" | "closed";
