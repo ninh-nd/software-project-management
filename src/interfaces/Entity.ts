@@ -32,6 +32,12 @@ export type ArtifactCreate = Omit<
   Artifact,
   "_id" | "threatList" | "vulnerabilityList"
 >;
+export interface ArtifactUpdate {
+  name: string;
+  url: string;
+  threatList: string[];
+  cpe?: string;
+}
 interface IndividualContribution {
   author: string;
   total: number;
@@ -97,12 +103,12 @@ export interface Threat {
   name: string;
   description: string;
   type:
-    | "spoofing"
-    | "tampering"
-    | "repudiation"
-    | "informationDisclosure"
-    | "denialOfService"
-    | "elevationOfPrivilege";
+    | "Spoofing"
+    | "Tampering"
+    | "Repudiation"
+    | "Information Disclosure"
+    | "Denial of Service"
+    | "Elevation of Privilege";
   score: {
     total: number;
     details: {
@@ -113,7 +119,8 @@ export interface Threat {
       discoverability: number;
     };
   };
-  status: "nonMitigated" | "partiallyMitigated" | "fullyMitigated";
+  status: "Non mitigated" | "Partially mitigated" | "Fully mitigated";
+  mitigation?: string;
 }
 export type ThreatCreate = Omit<Threat, "_id" | "status">;
 export interface Ticket {

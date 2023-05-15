@@ -17,7 +17,7 @@ export default function PhaseDetail() {
     (task) => task.status === "active"
   ).length;
   const completedTaskCount = phase.tasks.filter(
-    (task) => task.status === "complete"
+    (task) => task.status === "completed"
   ).length;
   return (
     <Box flexGrow={1} height="100vh" sx={{ m: 4 }}>

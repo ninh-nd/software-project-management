@@ -23,6 +23,7 @@ import { useRemoveArtifactFromPhaseMutation } from "~/hooks/query";
 import { Phase } from "~/interfaces/Entity";
 import CreateArtifactForm from "../forms/CreateArtifactForm";
 import ConfirmDeleteModal from "../forms/ConfirmDeleteModal";
+import UpdateArtifactForm from "../forms/UpdateArtifactForm";
 function renderType({
   type,
 }: {
@@ -162,11 +163,10 @@ export default function ArtifactDetails({ phase }: ArtifactDetailsProps) {
           onClose={() => setOpenArtCreateDialog(false)}
           fullWidth
         >
-          {/* <UpdateArtifactForm
-              phaseId={phase._id}
-              artifactId={selectedArtifact}
-              setCloseDialog={() => setOpenArtUpdateDialog(false)}
-            /> */}
+          <UpdateArtifactForm
+            artifactId={selectedArtifact}
+            setCloseDialog={() => setOpenArtUpdateDialog(false)}
+          />
         </Dialog>
       </CardActions>
       <ConfirmDeleteModal

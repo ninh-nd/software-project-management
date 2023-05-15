@@ -17,7 +17,11 @@ import {
   updatePermission,
 } from "~/actions/accountAction";
 import { getHistoryByProject } from "~/actions/activityHistoryAction";
-import { getAllArtifacts, getArtifact } from "~/actions/artifactAction";
+import {
+  getAllArtifacts,
+  getArtifact,
+  updateArtifact,
+} from "~/actions/artifactAction";
 import { login, register } from "~/actions/authAction";
 import { getCWE } from "~/actions/cweAction";
 import { getGithubRepos } from "~/actions/githubAction";
@@ -29,7 +33,6 @@ import {
   getPhaseTemplates,
   removeArtifactFromPhase,
   removeTaskFromPhase,
-  updateArtifact,
 } from "~/actions/phaseAction";
 import { getProjectInfo, importProject } from "~/actions/projectAction";
 import {
@@ -58,6 +61,7 @@ import {
   AccountRegister,
   AccountUpdate,
   ArtifactCreate,
+  ArtifactUpdate,
   GithubRepoImport,
   PhaseTemplateCreate,
   Task,
@@ -212,16 +216,20 @@ export function useRemoveArtifactFromPhaseMutation() {
     },
   });
 }
+interface UpdateArtifact {
+  artifactId: string;
+  artifact: ArtifactUpdate;
+}
 export function useUpdateArtifactMutation() {
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
   return useMutation({
-    mutationFn: ({ phaseId, artifactId, artifact }: ActionArtifactToPhase) =>
-      updateArtifact(phaseId, artifactId, artifact),
-    onSuccess: (response, { artifactId, phaseId }) => {
+    mutationFn: ({ artifactId, artifact }: UpdateArtifact) =>
+      updateArtifact(artifactId, artifact),
+    onSuccess: (response, { artifactId }) => {
       toast(response, enqueueSnackbar, () => {
         queryClient.invalidateQueries(["artifact", artifactId]);
-        queryClient.invalidateQueries(["phase", phaseId]);
+        queryClient.invalidateQueries(["phase"]);
       });
     },
   });
@@ -250,7 +258,7 @@ export function useCreateThreatMutation() {
     mutationFn: (threat: ThreatCreate) => createThreat(threat),
     onSuccess: (response) => {
       toast(response, enqueueSnackbar, () =>
-        queryClient.invalidateQueries(["threats"])
+        queryClient.invalidateQueries(["artifacts"])
       );
     },
   });

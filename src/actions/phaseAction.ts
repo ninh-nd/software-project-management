@@ -1,6 +1,7 @@
 import api from "~/api";
 import {
   ArtifactCreate,
+  ArtifactUpdate,
   Phase,
   PhaseTemplate,
   PhaseTemplateCreate,
@@ -53,19 +54,6 @@ export async function removeArtifactFromPhase(
 ): PromiseServer<Phase> {
   const response = await api.patch(
     `/phase/${phaseId}/artifact/delete/${artifactId}`
-  );
-  return response.data;
-}
-export async function updateArtifact(
-  phaseId: string,
-  artifactId: string,
-  artifact: ArtifactCreate
-): PromiseServer<Phase> {
-  const response = await api.patch(
-    `/phase/${phaseId}/artifact/update/${artifactId}`,
-    {
-      data: artifact,
-    }
   );
   return response.data;
 }

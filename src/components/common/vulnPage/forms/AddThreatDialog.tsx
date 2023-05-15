@@ -63,8 +63,6 @@ interface Props {
 function ScoreSlider({
   registerString,
   text,
-  getValues,
-  setValue,
   control,
 }: {
   registerString:
@@ -74,8 +72,6 @@ function ScoreSlider({
     | "score.details.affectedUsers"
     | "score.details.discoverability";
   text: string;
-  getValues: UseFormGetValues<ThreatCreate>;
-  setValue: UseFormSetValue<ThreatCreate>;
   control: Control<ThreatCreate, any>;
 }) {
   return (
@@ -113,7 +109,7 @@ export default function AddThreatDialog({ open, setOpen }: Props) {
     defaultValues: {
       name: "",
       description: "",
-      type: "spoofing",
+      type: "Spoofing",
       score: {
         total: 0,
         details: {
@@ -154,98 +150,98 @@ export default function AddThreatDialog({ open, setOpen }: Props) {
   return (
     <Dialog open={open} onClose={() => setOpen(false)}>
       <DialogTitle>Create a new threat</DialogTitle>
-      <DialogContent>
-        <TextField
-          fullWidth
-          margin="normal"
-          autoFocus
-          label="Name"
-          variant="standard"
-          {...register("name", {
-            required: "Name is required",
-          })}
-          error={errors.name !== undefined}
-          helperText={errors.name?.message}
-        />
-        <TextField
-          fullWidth
-          margin="normal"
-          multiline
-          rows={3}
-          label="Description"
-          variant="standard"
-          {...register("description", {
-            required: "Description is required",
-          })}
-          error={errors.description !== undefined}
-          helperText={errors.description?.message}
-        />
-        <Box display="flex" alignItems="center" justifyContent="space-between">
-          <Typography variant="subtitle1">Type</Typography>
-          <Controller
-            name="type"
-            control={control}
-            render={({ field }) => (
-              <Select {...field}>
-                {typeOptions.map((opt) => (
-                  <MenuItem key={opt.name} value={opt.name.toLowerCase()}>
-                    <Tooltip title={opt.description}>
-                      <ListItemText primary={opt.name} />
-                    </Tooltip>
-                  </MenuItem>
-                ))}
-              </Select>
-            )}
+      <Box component="form" onSubmit={handleSubmit(submit)}>
+        <DialogContent>
+          <TextField
+            fullWidth
+            margin="normal"
+            autoFocus
+            label="Name"
+            variant="standard"
+            {...register("name", {
+              required: "Name is required",
+            })}
+            error={errors.name !== undefined}
+            helperText={errors.name?.message}
           />
-        </Box>
-        <ScoreSlider
-          control={control}
-          registerString="score.details.damage"
-          text="Damage: How big would the damage be if the attack succeeded?"
-          getValues={getValues}
-          setValue={setValue}
-        />
-        <ScoreSlider
-          control={control}
-          registerString="score.details.reproducibility"
-          text="Reproducibility: How easy is it to reproduce the attack?"
-          getValues={getValues}
-          setValue={setValue}
-        />
-        <ScoreSlider
-          control={control}
-          registerString="score.details.exploitability"
-          text="Exploitability: How easy is it to exploit the vulnerability?"
-          getValues={getValues}
-          setValue={setValue}
-        />
-        <ScoreSlider
-          control={control}
-          registerString="score.details.affectedUsers"
-          text="Affected Users: How many users are affected by the vulnerability?"
-          getValues={getValues}
-          setValue={setValue}
-        />
-        <ScoreSlider
-          control={control}
-          registerString="score.details.discoverability"
-          text="Discoverability: How easy is it to discover the vulnerability?"
-          getValues={getValues}
-          setValue={setValue}
-        />
-        <Box display="flex" alignItems="center" justifyContent="space-between">
-          <Typography variant="subtitle1">Final score</Typography>
-          <Typography variant="subtitle1">
-            <TextField {...register("score.total")} disabled />
-          </Typography>
-        </Box>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={() => setOpen(false)} color="inherit">
-          Cancel
-        </Button>
-        <Button type="submit">Create</Button>
-      </DialogActions>
+          <TextField
+            fullWidth
+            margin="normal"
+            multiline
+            rows={3}
+            label="Description"
+            variant="standard"
+            {...register("description", {
+              required: "Description is required",
+            })}
+            error={errors.description !== undefined}
+            helperText={errors.description?.message}
+          />
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+          >
+            <Typography variant="subtitle1">Type</Typography>
+            <Controller
+              name="type"
+              control={control}
+              render={({ field }) => (
+                <Select {...field}>
+                  {typeOptions.map((opt) => (
+                    <MenuItem key={opt.name} value={opt.name}>
+                      <Tooltip title={opt.description}>
+                        <ListItemText primary={opt.name} />
+                      </Tooltip>
+                    </MenuItem>
+                  ))}
+                </Select>
+              )}
+            />
+          </Box>
+          <ScoreSlider
+            control={control}
+            registerString="score.details.damage"
+            text="Damage: How big would the damage be if the attack succeeded?"
+          />
+          <ScoreSlider
+            control={control}
+            registerString="score.details.reproducibility"
+            text="Reproducibility: How easy is it to reproduce the attack?"
+          />
+          <ScoreSlider
+            control={control}
+            registerString="score.details.exploitability"
+            text="Exploitability: How easy is it to exploit the vulnerability?"
+          />
+          <ScoreSlider
+            control={control}
+            registerString="score.details.affectedUsers"
+            text="Affected Users: How many users are affected by the vulnerability?"
+          />
+          <ScoreSlider
+            control={control}
+            registerString="score.details.discoverability"
+            text="Discoverability: How easy is it to discover the vulnerability?"
+          />
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+          >
+            <Typography variant="subtitle1">Final score</Typography>
+            <Typography variant="subtitle1">
+              <TextField {...register("score.total")} disabled />
+            </Typography>
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpen(false)} color="inherit">
+            Cancel
+          </Button>
+          <Button type="submit">Create</Button>
+        </DialogActions>
+      </Box>
     </Dialog>
   );
 }
