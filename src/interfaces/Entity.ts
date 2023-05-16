@@ -120,7 +120,7 @@ export interface Threat {
     };
   };
   status: "Non mitigated" | "Partially mitigated" | "Fully mitigated";
-  mitigation?: string;
+  mitigation: string[];
 }
 export type ThreatCreate = Omit<Threat, "_id" | "status">;
 export interface Ticket {

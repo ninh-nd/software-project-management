@@ -43,7 +43,7 @@ import {
   getTask,
   updateTask,
 } from "~/actions/taskAction";
-import { createThreat, getThreats } from "~/actions/threatActions";
+import { createThreat, getThreat, getThreats } from "~/actions/threatActions";
 import {
   createTicket,
   getTicket,
@@ -518,4 +518,7 @@ export function useUpdateTaskMutation() {
 }
 export function useTaskQuery(id: string) {
   return useQuery(["tasks", id], () => getTask(id));
+}
+export function useThreatQuery(id: string) {
+  return useQuery(["threats", id], () => getThreat(id));
 }
