@@ -3,7 +3,7 @@ import {
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
-import { useSnackbar } from "notistack";
+import { SnackbarProvider, useSnackbar } from "notistack";
 import { Suspense, lazy } from "react";
 import {
   Navigate,
@@ -146,7 +146,9 @@ export default function App() {
   });
   return (
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
+      <SnackbarProvider autoHideDuration={4000} maxSnack={1}>
+        <RouterProvider router={router} />
+      </SnackbarProvider>
     </QueryClientProvider>
   );
 }
