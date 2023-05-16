@@ -18,7 +18,7 @@ import { TaskCreate } from "~/interfaces/Entity";
 interface UpdateTaskDialogProps {
   open: boolean;
   setOpen: (open: boolean) => void;
-  id: string;
+  id: string | undefined;
 }
 export default function EditTaskDialog({
   open,
@@ -35,11 +35,13 @@ export default function EditTaskDialog({
   useEffect(() => {
     reset();
   }, [id]);
+  if (!id) return <></>;
   const getTaskInfoQuery = useTaskQuery(id);
   const updateTaskMutation = useUpdateTaskMutation();
   const task = getTaskInfoQuery.data?.data;
   if (!task) return <></>;
   async function onSubmit(data: TaskCreate) {
+    if (!id) return;
     updateTaskMutation.mutate({ data, id });
     setOpen(false);
   }

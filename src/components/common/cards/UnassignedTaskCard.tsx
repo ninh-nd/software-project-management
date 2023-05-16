@@ -32,7 +32,9 @@ export default function UnassignedTaskCard() {
   const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [openCreate, setOpenCreate] = useState(false);
-  const [selectedTask, setSelectedTask] = useState("");
+  const [selectedTask, setSelectedTask] = useState<string | undefined>(
+    undefined
+  );
   const { currentProject } = useParams();
   if (!currentProject) {
     return <></>;
@@ -99,6 +101,7 @@ export default function UnassignedTaskCard() {
     };
   }
   function deleteTask() {
+    if (!selectedTask) return;
     deleteTaskMutation.mutate(selectedTask);
     setOpenConfirmDelete(false);
   }
