@@ -24,7 +24,7 @@ function renderEntry(entry: Array<any>) {
   ));
 }
 
-function renderCWE(cwe: CWE | null | undefined) {
+function Body({ cwe }: { cwe: CWE | null | undefined }) {
   const theme = useCustomTheme();
   if (cwe === undefined) return <></>;
   else if (cwe === null) {
@@ -106,7 +106,7 @@ export default function CWEDetails({
           </IconButton>
         </Toolbar>
       </AppBar>
-      {renderCWE(cweData)}
+      <Body cwe={cweData} />
     </>
   );
 }
