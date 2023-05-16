@@ -23,15 +23,12 @@ export interface Artifact {
   name: string;
   type: "image" | "log" | "source code" | "executable" | "library";
   url: string;
-  threatList: Threat[];
+  threatList: string[];
   vulnerabilityList: Vulnerability[];
   cpe?: string;
 }
 
-export type ArtifactCreate = Omit<
-  Artifact,
-  "_id" | "threatList" | "vulnerabilityList"
->;
+export type ArtifactCreate = Omit<Artifact, "_id" | "vulnerabilityList">;
 export interface ArtifactUpdate {
   name: string;
   url: string;

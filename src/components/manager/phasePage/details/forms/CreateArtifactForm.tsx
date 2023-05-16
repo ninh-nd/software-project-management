@@ -1,13 +1,17 @@
 import {
   Box,
   Button,
+  Checkbox,
   CircularProgress,
   DialogActions,
   DialogContent,
   DialogTitle,
   FormControlLabel,
+  ListItemText,
+  MenuItem,
   Radio,
   RadioGroup,
+  Select,
   Stack,
   TextField,
   Typography,
@@ -15,7 +19,7 @@ import {
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { getCVEs } from "~/actions/vulnAction";
-import { useAddArtifactToPhaseMutation } from "~/hooks/query";
+import { useAddArtifactToPhaseMutation, useThreatsQuery } from "~/hooks/query";
 import { useCustomTheme } from "~/hooks/theme";
 import { ArtifactCreate, Vulnerability } from "~/interfaces/Entity";
 const type = ["image", "log", "source code", "executable", "library"];
@@ -33,8 +37,14 @@ export default function CreateArtifactForm({
     control,
     getValues,
     formState: { errors },
-  } = useForm<ArtifactCreate>({ mode: "onChange" });
+  } = useForm<ArtifactCreate>({
+    defaultValues: {
+      threatList: [],
+    },
+  });
   const createArtifactMutation = useAddArtifactToPhaseMutation();
+  const threatsQuery = useThreatsQuery();
+  const threats = threatsQuery.data?.data ?? [];
   const [importedCves, setImportedCves] = useState<Vulnerability[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const theme = useCustomTheme();
@@ -127,6 +137,38 @@ export default function CreateArtifactForm({
               {isLoading ? <CircularProgress size={20} sx={{ mr: 1 }} /> : null}
               {`Found ${importedCves.length} vulnerabilities`}
             </Typography>
+          </Box>
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Typography variant="body2">Threats</Typography>
+            <Controller
+              name="threatList"
+              control={control}
+              defaultValue={[]}
+              render={({ field }) => (
+                <Select
+                  {...field}
+                  multiple
+                  renderValue={(selected) => selected.join(", ")}
+                  defaultValue={[]}
+                  sx={{ minWidth: 200, maxWidth: 400 }}
+                >
+                  {threats.map((threat) => (
+                    <MenuItem key={threat._id} value={threat.name}>
+                      <Checkbox
+                        checked={
+                          getValues("threatList").indexOf(threat.name) > -1
+                        }
+                      />
+                      <ListItemText primary={threat.name} />
+                    </MenuItem>
+                  ))}
+                </Select>
+              )}
+            />
           </Box>
         </Stack>
       </DialogContent>
