@@ -11,7 +11,7 @@ import {
 import InfoPaper from "~/components/common/styledComponents/InfoPaper";
 import Title from "~/components/common/styledComponents/Title";
 import { ActivityHistory } from "~/interfaces/Entity";
-import * as dayjs from "dayjs";
+import dayjs from "dayjs";
 import { useCustomTheme } from "~/hooks/theme";
 function dateFormatter(date: string) {
   return dayjs(date).format("DD/MM/YY");

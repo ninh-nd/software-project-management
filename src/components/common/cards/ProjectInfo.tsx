@@ -14,7 +14,7 @@ import {
   Theme,
   Typography,
 } from "@mui/material";
-import * as dayjs from "dayjs";
+import dayjs from "dayjs";
 import { useParams } from "react-router-dom";
 import InfoPaper from "~/components/common/styledComponents/InfoPaper";
 import Title from "~/components/common/styledComponents/Title";

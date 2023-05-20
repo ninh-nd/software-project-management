@@ -9,7 +9,7 @@ import {
 import InfoPaper from "~/components/common/styledComponents/InfoPaper";
 import Title from "~/components/common/styledComponents/Title";
 import { ActivityHistory } from "~/interfaces/Entity";
-import * as dayjs from "dayjs";
+import dayjs from "dayjs";
 function PullRequestIcon() {
   return (
     <SvgIcon>
