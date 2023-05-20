@@ -1,7 +1,6 @@
-import Topbar from "~/components/common/topbar/Topbar";
-import AdminSidebar from "~/components/admin/common/AdminSidebar";
-import { Outlet } from "react-router-dom";
 import { Box, CssBaseline, ThemeProvider } from "@mui/material";
+import { Outlet } from "react-router-dom";
+import Topbar from "~/components/common/topbar/Topbar";
 import { useCustomTheme } from "~/hooks/theme";
 export default function AdminLayout() {
   const theme = useCustomTheme();
@@ -10,7 +9,6 @@ export default function AdminLayout() {
       <CssBaseline />
       <Topbar />
       <Box sx={{ display: "flex", mt: "100px" }}>
-        <AdminSidebar />
         <Outlet />
       </Box>
     </ThemeProvider>

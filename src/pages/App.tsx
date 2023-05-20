@@ -17,9 +17,6 @@ const AdminLayout = lazy(() => import("~/layouts/AdminLayout"));
 const DashboardLayout = lazy(() => import("~/layouts/DashboardLayout"));
 const AccountInfo = lazy(() => import("./Account"));
 const AdminAccountManagement = lazy(() => import("./AdminAccountManagement"));
-const AdminThirdPartyManagement = lazy(
-  () => import("./AdminThirdPartyManagement")
-);
 const Home = lazy(() => import("./Home"));
 const Login = lazy(() => import("./Login"));
 const MemberDetailInfo = lazy(() => import("./MemberDetail"));
@@ -90,12 +87,8 @@ const adminRoutes: RouteObject = {
   element: <GlobalSuspense element={<AdminLayout />} />,
   children: [
     {
-      path: "accounts",
+      path: "",
       element: <GlobalSuspense element={<AdminAccountManagement />} />,
-    },
-    {
-      path: "third-parties",
-      element: <GlobalSuspense element={<AdminThirdPartyManagement />} />,
     },
   ],
 };
