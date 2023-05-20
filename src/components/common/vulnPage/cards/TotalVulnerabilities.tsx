@@ -8,7 +8,7 @@ interface Props {
 export default function TotalVulnerabilities({ total }: Props) {
   return (
     <InfoPaper>
-      <Title>Total vulnerabilities of all artifacts</Title>
+      <Title>Total discovered vulnerabilities</Title>
       <Typography component="p" variant="h4">
         {total}
       </Typography>
