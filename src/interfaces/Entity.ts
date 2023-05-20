@@ -149,7 +149,7 @@ export interface TicketCreate {
   priority: "low" | "medium" | "high";
   assignee: string;
   assigner: string;
-  targetedVulnerability: string[];
+  targetedVulnerability: Vulnerability[];
   projectName: string;
 }
 export interface User {

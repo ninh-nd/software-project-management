@@ -154,10 +154,7 @@ export default function AddTicketForm({
               <Autocomplete
                 multiple
                 options={vulns}
-                onChange={(event, newValue) => {
-                  const selectedIds = newValue.map((option) => option._id);
-                  onChange(selectedIds);
-                }}
+                onChange={(event, data) => onChange(data)}
                 renderOption={(props, option) => (
                   <VulnOption props={props} option={option} />
                 )}
