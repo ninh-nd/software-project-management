@@ -23,15 +23,25 @@ export interface Artifact {
   name: string;
   type: "image" | "log" | "source code" | "executable" | "library";
   url: string;
-  threatList: string[];
+  version?: string;
+  threatList: Threat[];
   vulnerabilityList: Vulnerability[];
   cpe?: string;
 }
 
-export type ArtifactCreate = Omit<Artifact, "_id" | "vulnerabilityList">;
+export interface ArtifactCreate {
+  name: string;
+  type: "image" | "log" | "source code" | "executable" | "library";
+  url: string;
+  version?: string;
+  threatList: string[];
+  cpe?: string;
+}
+
 export interface ArtifactUpdate {
   name: string;
   url: string;
+  version?: string;
   threatList: string[];
   cpe?: string;
 }
@@ -155,12 +165,9 @@ export interface User {
 export interface Vulnerability {
   cveId: string;
   description: string;
-  score: number;
-  severity: "HIGH" | "MEDIUM" | "LOW";
+  score?: number;
+  severity: string;
   cwes: string[];
-  availabilityImpact: "COMPLETE" | "PARTIAL" | "NONE";
-  confidentialityImpact: "COMPLETE" | "PARTIAL" | "NONE";
-  integrityImpact: "COMPLETE" | "PARTIAL" | "NONE";
   _id: string;
 }
 export interface AccountUpdate {
