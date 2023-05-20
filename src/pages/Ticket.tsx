@@ -2,6 +2,7 @@ import { Box, Button, Dialog, Grid, Tooltip } from "@mui/material";
 import React from "react";
 import { useParams } from "react-router-dom";
 import TicketTab from "~/components/common/cards/TicketTab";
+import AddTicketForm from "~/components/common/forms/AddTicketForm";
 import { usePermissionHook } from "~/hooks/general";
 import { useTicketsQuery } from "~/hooks/query";
 
@@ -52,7 +53,7 @@ export default function Ticket() {
         </Grid>
       </Grid>
       <Dialog open={open} onClose={() => setOpen(false)} fullWidth>
-        {/* <AddTicketForm setCloseDialog={() => setOpen(false)} /> */}
+        <AddTicketForm setCloseDialog={() => setOpen(false)} />
       </Dialog>
     </Box>
   );

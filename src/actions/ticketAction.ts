@@ -1,6 +1,6 @@
 import api from "~/api";
 import { PromiseServer } from "~/interfaces/ServerResponse";
-import { Ticket, TicketCreateSent } from "~/interfaces/Entity";
+import { Ticket, TicketCreate } from "~/interfaces/Entity";
 
 export async function getTickets(projectName: string): PromiseServer<Ticket[]> {
   const response = await api.get("/ticket", {
@@ -11,7 +11,7 @@ export async function getTickets(projectName: string): PromiseServer<Ticket[]> {
   return response.data;
 }
 export async function createTicket(
-  ticket: TicketCreateSent
+  ticket: TicketCreate
 ): PromiseServer<Ticket> {
   const response = await api.post("/ticket", {
     data: ticket,

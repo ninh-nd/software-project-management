@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useParams } from "react-router-dom";
 import TicketTab from "~/components/common/cards/TicketTab";
 import UnassignedTaskCard from "~/components/common/cards/UnassignedTaskCard";
+import AddTicketForm from "~/components/common/forms/AddTicketForm";
 import { usePermissionHook } from "~/hooks/general";
 import { useTicketsQuery } from "~/hooks/query";
 
@@ -48,7 +49,7 @@ export default function MemberTaskAndIssue() {
         </Grid>
       </Grid>
       <Dialog open={open} onClose={() => setOpen(false)} fullWidth>
-        {/* <AddTicketForm setCloseDialog={() => setOpen(false)} /> */}
+        <AddTicketForm setCloseDialog={() => setOpen(false)} />
       </Dialog>
     </Box>
   );

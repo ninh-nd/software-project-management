@@ -143,12 +143,11 @@ export interface Ticket {
   createdAt: string;
   updatedAt: string;
 }
-export type TicketCreate = Omit<Ticket, "_id" | "createdAt" | "updatedAt">;
-export interface TicketCreateSent {
+export interface TicketCreate {
   title: string;
   description: string;
   priority: "low" | "medium" | "high";
-  assignee: string[];
+  assignee: string;
   assigner: string;
   targetedVulnerability: string[];
   projectName: string;

@@ -68,7 +68,7 @@ import {
   TaskCreate,
   TaskUpdate,
   ThreatCreate,
-  TicketCreateSent,
+  TicketCreate,
 } from "~/interfaces/Entity";
 import { IErrorResponse, ISuccessResponse } from "~/interfaces/ServerResponse";
 import { useAccountContext, useSetAccountContext } from "./general";
@@ -270,7 +270,7 @@ export function useCreateTicketMutation() {
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
   return useMutation({
-    mutationFn: (ticket: TicketCreateSent) => createTicket(ticket),
+    mutationFn: (ticket: TicketCreate) => createTicket(ticket),
     onSuccess: (response) => {
       toast(response, enqueueSnackbar, () => {
         queryClient.invalidateQueries(["tickets"]);

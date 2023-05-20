@@ -1,3 +1,4 @@
+import { AccountCircle, BugReport } from "@mui/icons-material";
 import {
   Autocomplete,
   Box,
@@ -5,19 +6,30 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  FormControl,
   FormControlLabel,
+  InputLabel,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  MenuItem,
   Radio,
   RadioGroup,
+  Select,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, HTMLAttributes, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { useAccountContext } from "~/hooks/general";
-import { useCreateTicketMutation, useMembersQuery } from "~/hooks/query";
-import { TicketCreate } from "~/interfaces/Entity";
+import {
+  useArtifactsQuery,
+  useCreateTicketMutation,
+  useMembersQuery,
+} from "~/hooks/query";
+import { TicketCreate, Vulnerability } from "~/interfaces/Entity";
 export default function AddTicketForm({
   setCloseDialog,
 }: {
@@ -25,6 +37,10 @@ export default function AddTicketForm({
 }) {
   const { currentProject } = useParams();
   if (!currentProject) return <></>;
+  const getAllArtifactsQuery = useArtifactsQuery(currentProject);
+  const artifacts = getAllArtifactsQuery.data?.data;
+  const vulns =
+    artifacts?.flatMap((artifact) => artifact.vulnerabilityList) ?? [];
   const memberInfoQuery = useMembersQuery(currentProject);
   const createTicketMutation = useCreateTicketMutation();
   const memberInfo = memberInfoQuery.data?.data ?? [];
@@ -46,8 +62,6 @@ export default function AddTicketForm({
   async function submit(data: TicketCreate) {
     if (!accountInfo || !currentProject) return;
     const assigner = accountInfo._id;
-    const assignee = data.assignee.map((item) => item._id);
-    const vulnerability = data.targetedVulnerability.map((item) => item._id);
     const priority = selectedPriority.toLowerCase() as
       | "low"
       | "medium"
@@ -55,10 +69,8 @@ export default function AddTicketForm({
     const ticket = {
       ...data,
       assigner,
-      assignee,
       priority,
       projectName: currentProject,
-      targetedVulnerability: vulnerability,
     };
     createTicketMutation.mutate(ticket);
     setCloseDialog();
@@ -117,33 +129,45 @@ export default function AddTicketForm({
           <Controller
             control={control}
             name="assignee"
-            render={({ field: { onChange, value } }) => (
-              <Autocomplete
-                multiple
-                options={memberInfo}
-                onChange={(event, newValue) => onChange(newValue)}
-                getOptionLabel={(option) => option.account.username}
-                renderInput={(params) => (
-                  <TextField {...params} label="Assignee" />
-                )}
-              />
+            render={({ field }) => (
+              <FormControl>
+                <InputLabel>Assignee</InputLabel>
+                <Select {...field} label="Assignee">
+                  {memberInfo.map((member) => (
+                    <MenuItem key={member._id} value={member._id}>
+                      <ListItem>
+                        <ListItemIcon>
+                          <AccountCircle />
+                        </ListItemIcon>
+                        <ListItemText primary={member.account.username} />
+                      </ListItem>
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
             )}
           />
-          {/* <Controller
+          <Controller
             control={control}
             name="targetedVulnerability"
             render={({ field: { onChange, value } }) => (
               <Autocomplete
                 multiple
                 options={vulns}
-                onChange={(event, newValue) => onChange(newValue)}
+                onChange={(event, newValue) => {
+                  const selectedIds = newValue.map((option) => option._id);
+                  onChange(selectedIds);
+                }}
+                renderOption={(props, option) => (
+                  <VulnOption props={props} option={option} />
+                )}
                 renderInput={(params) => (
                   <TextField {...params} label="Vulnerability" />
                 )}
                 getOptionLabel={(option) => option.cveId}
               />
             )}
-          /> */}
+          />
         </Stack>
       </DialogContent>
       <DialogActions>
@@ -153,5 +177,36 @@ export default function AddTicketForm({
         <Button type="submit">Create</Button>
       </DialogActions>
     </Box>
+  );
+}
+function VulnOption({
+  props,
+  option,
+}: {
+  props: HTMLAttributes<HTMLLIElement>;
+  option: Vulnerability;
+}) {
+  return (
+    <ListItem {...props} key={option._id}>
+      <ListItemIcon>
+        <BugReport />
+      </ListItemIcon>
+      <ListItemText
+        primary={<Typography variant="body1">{option.cveId}</Typography>}
+        secondary={
+          <>
+            <Typography variant="body2">
+              <b>Description:</b> {option.description}
+            </Typography>
+            <Typography variant="body2">
+              <b>Score:</b> {option.score}
+            </Typography>
+            <Typography variant="body2">
+              <b>Severity:</b> {option.severity}
+            </Typography>
+          </>
+        }
+      />
+    </ListItem>
   );
 }
