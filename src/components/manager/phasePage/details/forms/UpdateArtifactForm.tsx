@@ -16,7 +16,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { getCVEs } from "~/actions/vulnAction";
 import {
@@ -41,11 +41,20 @@ export default function UpdateArtifactForm({
     control,
     getValues,
     formState: { errors },
+    watch,
+    setValue,
   } = useForm<ArtifactUpdate>({
     defaultValues: {
       threatList: [],
     },
   });
+  const watchCpe = watch("cpe");
+  useEffect(() => {
+    if (watchCpe) {
+      setValue("name", getValues("cpe")?.split(":")[4] ?? "");
+      setValue("version", getValues("cpe")?.split(":")[5] ?? "");
+    }
+  }, [setValue, watchCpe]);
   const threatsQuery = useThreatsQuery();
   const threats = threatsQuery.data?.data ?? [];
   const updateArtifactMutation = useUpdateArtifactMutation();
@@ -78,13 +87,20 @@ export default function UpdateArtifactForm({
       <DialogTitle>Update this artifact</DialogTitle>
       <DialogContent>
         <Stack spacing={2}>
-          <TextField
-            {...register("name", { required: "Name is required" })}
+          <Controller
+            name="name"
+            control={control}
             defaultValue={artifact.name}
-            label="Name"
-            error={!!errors.name}
-            helperText={errors.name?.message}
-            required
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label="Name"
+                error={!!errors.name}
+                helperText={errors.name?.message}
+                required
+                InputLabelProps={{ shrink: field.value ? true : false }}
+              />
+            )}
           />
           <TextField
             {...register("url", {
@@ -102,6 +118,17 @@ export default function UpdateArtifactForm({
             }
             required
           />
+          <Controller
+            name="version"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                label="Version"
+                InputLabelProps={{ shrink: field.value ? true : false }}
+              />
+            )}
+          />
           <TextField
             {...register("cpe", {
               pattern:
@@ -112,7 +139,7 @@ export default function UpdateArtifactForm({
             helperText={
               errors.cpe
                 ? "Invalid CPE string"
-                : "A CPE is a Common Platform Enumaration, used as a naming scheme for software and packages. For example: cpe:2.3:a:apache:tomcat:3.0:*:*:*:*:*:*:* is a CPE string for Apache Tomcat 3.0. This string will be used to automatically import vulnerabilities from the NVD."
+                : "Hint: You can autofill name and version of the artifact by filling in the CPE string. Example of CPE string: cpe:2.3:a:apache:tomcat:3.0:*:*:*:*:*:*:* "
             }
             error={!!errors.cpe}
           />
