@@ -1,5 +1,6 @@
 import {
   AccountCircle,
+  BugReport,
   CheckCircleOutline,
   CheckCircleOutlined,
   ModeStandbyOutlined,
@@ -14,13 +15,18 @@ import {
   Stack,
   Typography,
   Grid,
+  Card,
+  CardHeader,
+  CardContent,
 } from "@mui/material";
-import * as dayjs from "dayjs";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+dayjs.extend(relativeTime);
 import { useParams } from "react-router-dom";
 import { useMarkTicketMutation, useTicketQuery } from "~/hooks/query";
 import { Ticket } from "~/interfaces/Entity";
 function Headline({ ticket }: { ticket: Ticket }) {
-  const createdAt = dayjs(ticket.createdAt).format("DD/MM/YYYY");
+  const relativeTime = dayjs().to(dayjs(ticket.updatedAt));
   return (
     <Box>
       <Typography variant="h3" sx={{ mb: 2 }}>
@@ -36,7 +42,7 @@ function Headline({ ticket }: { ticket: Ticket }) {
         />
       )}
       <Typography variant="body2" display="inline" sx={{ ml: 1 }}>
-        {`Ticket was created at ${createdAt}`}
+        {`This ticket was ${ticket.status} at ${relativeTime}`}
       </Typography>
     </Box>
   );
@@ -52,6 +58,7 @@ function RightColumn({ ticket }: { ticket: Ticket }) {
           {ticket.assigner.name}
         </Typography>
       </Box>
+      <Divider variant="middle" />
       <Box>
         <Typography variant="h6">Assignee</Typography>
         <Box>
@@ -61,6 +68,7 @@ function RightColumn({ ticket }: { ticket: Ticket }) {
           </Typography>
         </Box>
       </Box>
+      <Divider variant="middle" />
       <Box>
         <Typography variant="h6">Priority</Typography>
         <Typography variant="body1">
@@ -82,24 +90,55 @@ function MainContent({ ticket }: { ticket: Ticket }) {
   return (
     <Stack spacing={5}>
       <Box>
-        <Typography variant="h5">Description</Typography>
+        <Typography variant="h5">
+          <b>Description</b>
+        </Typography>
         <Typography variant="body1">{ticket.description}</Typography>
       </Box>
       <Box>
-        <Typography variant="h5">Targeted vulnerabilities</Typography>
-        {ticket.targetedVulnerability.map((v) => {
-          return (
-            <Chip
-              key={v.cveId}
-              label={v.cveId}
-              sx={{ mt: 2, mr: 2 }}
-              size="medium"
+        <Typography variant="h5">
+          <b>Vulnerabilities</b>
+        </Typography>
+        {ticket.targetedVulnerability.map((v) => (
+          <Card sx={{ m: 2 }}>
+            <CardHeader
+              title={
+                <Box display="flex" alignItems="center">
+                  <BugReport />
+                  <Typography display="inline" variant="h5" sx={{ ml: 1 }}>
+                    {v.cveId}
+                  </Typography>
+                </Box>
+              }
             />
-          );
-        })}
+            <CardContent>
+              <Typography variant="body1">
+                <b>Description: </b>
+                {v.description}
+              </Typography>
+              <Divider sx={{ mt: 2, mb: 2 }} />
+              <Typography variant="body1">
+                <b>Severity: </b>
+                {v.severity}
+              </Typography>
+              <Divider sx={{ mt: 2, mb: 2 }} />
+              <Typography variant="body1">
+                <b>Score: </b>
+                {v.score}
+              </Typography>
+              <Divider sx={{ mt: 2, mb: 2 }} />
+              <Typography variant="body1">
+                <b>CWEs: </b>
+                {v.cwes.join(", ")}
+              </Typography>
+            </CardContent>
+          </Card>
+        ))}
       </Box>
       <Box>
-        <Typography variant="h5">Actions</Typography>
+        <Typography variant="h5">
+          <b>Actions</b>
+        </Typography>
         {ticket.status === "open" ? (
           <Button
             variant="contained"
