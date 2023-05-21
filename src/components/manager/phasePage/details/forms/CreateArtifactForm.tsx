@@ -2,7 +2,6 @@ import {
   Box,
   Button,
   Checkbox,
-  CircularProgress,
   DialogActions,
   DialogContent,
   DialogTitle,
@@ -16,12 +15,11 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { getCVEs } from "~/actions/vulnAction";
 import { useAddArtifactToPhaseMutation, useThreatsQuery } from "~/hooks/query";
 import { useCustomTheme } from "~/hooks/theme";
-import { ArtifactCreate, Vulnerability } from "~/interfaces/Entity";
+import { ArtifactCreate } from "~/interfaces/Entity";
 const type = ["image", "log", "source code", "executable", "library"];
 interface CreateArtifactFormProps {
   phaseId: string;
@@ -31,6 +29,7 @@ export default function CreateArtifactForm({
   phaseId,
   setCloseDialog,
 }: CreateArtifactFormProps) {
+  const theme = useCustomTheme();
   const {
     register,
     handleSubmit,
@@ -54,18 +53,6 @@ export default function CreateArtifactForm({
   const createArtifactMutation = useAddArtifactToPhaseMutation();
   const threatsQuery = useThreatsQuery();
   const threats = threatsQuery.data?.data ?? [];
-  const [importedCves, setImportedCves] = useState<Vulnerability[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const theme = useCustomTheme();
-  async function searchCVEs() {
-    setIsLoading(true);
-    const value = getValues("cpe") ?? "";
-    const { data } = await getCVEs(value);
-    if (data) {
-      setImportedCves(data);
-      setIsLoading(false);
-    }
-  }
   async function submit(data: ArtifactCreate) {
     createArtifactMutation.mutate({ artifact: data, phaseId });
     setCloseDialog();
@@ -157,19 +144,6 @@ export default function CreateArtifactForm({
             justifyContent="space-between"
             alignItems="center"
           >
-            <Button variant="outlined" onClick={searchCVEs}>
-              Import vulnerabilities using CPE
-            </Button>
-            <Typography variant="body1" color={theme.palette.error.main}>
-              {isLoading ? <CircularProgress size={20} sx={{ mr: 1 }} /> : null}
-              {`Found ${importedCves.length} vulnerabilities`}
-            </Typography>
-          </Box>
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-          >
             <Typography variant="body2">Threats</Typography>
             <Controller
               name="threatList"
@@ -197,6 +171,10 @@ export default function CreateArtifactForm({
               )}
             />
           </Box>
+          <Typography color={theme.palette.info.main}>
+            After creating artifact, vulnerabilities will be automatically
+            discovered and added to it.
+          </Typography>
         </Stack>
       </DialogContent>
       <DialogActions>

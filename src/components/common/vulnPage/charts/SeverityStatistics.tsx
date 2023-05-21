@@ -16,15 +16,27 @@ interface Props {
 }
 export default function SeverityStatistics({ vulnList }: Props) {
   const theme = useCustomTheme();
-  const lowCount = vulnList.filter((vuln) => vuln.severity === "LOW").length;
-  const mediumCount = vulnList.filter(
-    (vuln) => vuln.severity === "MEDIUM"
+  const negligibleCount = vulnList.filter(
+    (vuln) => vuln.severity.toLowerCase() === "negligible"
   ).length;
-  const highCount = vulnList.filter((vuln) => vuln.severity === "HIGH").length;
+  const lowCount = vulnList.filter(
+    (vuln) => vuln.severity.toLowerCase() === "low"
+  ).length;
+  const mediumCount = vulnList.filter(
+    (vuln) => vuln.severity.toLowerCase() === "medium"
+  ).length;
+  const highCount = vulnList.filter(
+    (vuln) => vuln.severity.toLowerCase() === "high"
+  ).length;
+  const criticalCount = vulnList.filter(
+    (vuln) => vuln.severity.toLowerCase() === "critical"
+  ).length;
   const data = [
+    { name: "Negligible severity", value: negligibleCount },
     { name: "Low severity", value: lowCount },
     { name: "Medium severity", value: mediumCount },
     { name: "High severity", value: highCount },
+    { name: "Critical severity", value: criticalCount },
   ];
   return (
     <InfoPaper>
@@ -32,9 +44,11 @@ export default function SeverityStatistics({ vulnList }: Props) {
       <ResponsiveContainer width="100%" minHeight={300}>
         <PieChart>
           <Pie dataKey="value" nameKey="name" data={data}>
+            <Cell />
             <Cell fill={theme.palette.success.main} />
             <Cell fill={theme.palette.warning.main} />
             <Cell fill={theme.palette.error.main} />
+            <Cell fill={theme.palette.secondary.main} />
           </Pie>
           <Tooltip />
           <Legend />

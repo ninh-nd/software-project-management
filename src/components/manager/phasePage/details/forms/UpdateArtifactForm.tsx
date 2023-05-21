@@ -2,7 +2,6 @@ import {
   Box,
   Button,
   Checkbox,
-  CircularProgress,
   DialogActions,
   DialogContent,
   DialogTitle,
@@ -16,16 +15,14 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { getCVEs } from "~/actions/vulnAction";
 import {
   useArtifactQuery,
   useThreatsQuery,
   useUpdateArtifactMutation,
 } from "~/hooks/query";
-import { useCustomTheme } from "~/hooks/theme";
-import { ArtifactUpdate, Vulnerability } from "~/interfaces/Entity";
+import { ArtifactUpdate } from "~/interfaces/Entity";
 const type = ["image", "log", "source code", "executable", "library"];
 interface UpdateArtifactFormProps {
   setCloseDialog: () => void;
@@ -60,21 +57,7 @@ export default function UpdateArtifactForm({
   const updateArtifactMutation = useUpdateArtifactMutation();
   const artifactQuery = useArtifactQuery(artifactId);
   const artifact = artifactQuery.data?.data;
-  const [importedCves, setImportedCves] = useState<Vulnerability[]>(
-    artifact?.vulnerabilityList ?? []
-  );
-  const [isLoading, setIsLoading] = useState(false);
-  const theme = useCustomTheme();
   if (!artifact) return <></>;
-  async function searchCVEs() {
-    setIsLoading(true);
-    const value = getValues("cpe") ?? "";
-    const { data } = await getCVEs(value);
-    if (data) {
-      setImportedCves(data);
-      setIsLoading(false);
-    }
-  }
   async function submit(data: ArtifactUpdate) {
     updateArtifactMutation.mutate({
       artifactId,
@@ -160,19 +143,6 @@ export default function UpdateArtifactForm({
                 />
               ))}
             </RadioGroup>
-          </Box>
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Button variant="outlined" onClick={searchCVEs}>
-              Import vulnerabilities using CPE
-            </Button>
-            <Typography variant="body1" color={theme.palette.error.main}>
-              {isLoading ? <CircularProgress size={20} sx={{ mr: 1 }} /> : null}
-              {`Found ${importedCves.length} vulnerabilities`}
-            </Typography>
           </Box>
           <Box
             display="flex"
