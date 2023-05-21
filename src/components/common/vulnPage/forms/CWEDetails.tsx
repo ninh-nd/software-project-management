@@ -86,7 +86,7 @@ export default function CWEDetails({
   setCloseDialog: () => void;
 }) {
   const [searchParams] = useSearchParams();
-  const cwe = searchParams.get("cwe");
+  const cwe = searchParams.get("cweId");
   if (!cwe) {
     return <></>;
   }

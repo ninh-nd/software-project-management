@@ -3,11 +3,13 @@ import {
   Code,
   ContentPaste,
   GridView,
+  Info,
   LibraryBooks,
 } from "@mui/icons-material";
 import {
   Box,
   Divider,
+  IconButton,
   List,
   ListItem,
   ListItemIcon,
@@ -22,10 +24,12 @@ import { Artifact, Threat, Vulnerability } from "~/interfaces/Entity";
 import InfoPaper from "../../styledComponents/InfoPaper";
 import Title from "../../styledComponents/Title";
 import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 interface VulnTabPanelProps {
   list: Vulnerability[];
   value: number;
   index: number;
+  setOpenCWEDetails: (value: boolean) => void;
 }
 interface ThreatTabPanelProps {
   list: Threat[];
@@ -33,8 +37,15 @@ interface ThreatTabPanelProps {
   index: number;
 }
 function VulnTabPanel(props: VulnTabPanelProps) {
-  const { list, value, index } = props;
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { list, value, index, setOpenCWEDetails } = props;
   if (value !== index) return <></>;
+  function viewCwe(cwe: string) {
+    return () => {
+      setSearchParams({ cweId: cwe });
+      setOpenCWEDetails(true);
+    };
+  }
   return (
     <List sx={{ overflowY: "scroll", height: "80%" }} dense>
       {list.map((item) => (
@@ -47,13 +58,27 @@ function VulnTabPanel(props: VulnTabPanelProps) {
             secondary={
               <>
                 <Typography variant="body2">
-                  <b>Description:</b> {item.description}
+                  <b>Description: </b>
+                  {item.description}
                 </Typography>
                 <Typography variant="body2">
-                  <b>Score:</b> {item.score}
+                  <b>Score: </b>
+                  {item.score}
                 </Typography>
                 <Typography variant="body2">
-                  <b>Severity:</b> {item.severity}
+                  <b>Severity: </b>
+                  {item.severity}
+                </Typography>
+                <Typography variant="body2">
+                  <b>CWEs: </b>
+                  {item.cwes.map((cwe) => (
+                    <Box display="inline-flex" alignItems="center">
+                      <Typography variant="body2">{cwe}</Typography>
+                      <IconButton onClick={viewCwe(cwe)}>
+                        <Info />
+                      </IconButton>
+                    </Box>
+                  ))}
                 </Typography>
               </>
             }
@@ -78,13 +103,16 @@ function ThreatTabPanel(props: ThreatTabPanelProps) {
             secondary={
               <>
                 <Typography variant="body2">
-                  <b>Description:</b> {item.description}
+                  <b>Description: </b>
+                  {item.description}
                 </Typography>
                 <Typography variant="body2">
-                  <b>Score:</b> {item.score.total}
+                  <b>Score: </b>
+                  {item.score.total}
                 </Typography>
                 <Typography variant="body2">
-                  <b>Status:</b> {item.status}
+                  <b>Status: </b>
+                  {item.status}
                 </Typography>
               </>
             }
@@ -142,7 +170,13 @@ function renderType({
       );
   }
 }
-export default function ArtifactCard({ artifacts }: { artifacts: Artifact[] }) {
+export default function ArtifactCard({
+  artifacts,
+  setOpenCWEDetails,
+}: {
+  artifacts: Artifact[];
+  setOpenCWEDetails: (value: boolean) => void;
+}) {
   const [value, setValue] = useState(0);
   function handleTabChange(event: React.SyntheticEvent, newValue: number) {
     setValue(newValue);
@@ -180,6 +214,7 @@ export default function ArtifactCard({ artifacts }: { artifacts: Artifact[] }) {
                   value={value}
                   index={0}
                   list={artifact.vulnerabilityList}
+                  setOpenCWEDetails={setOpenCWEDetails}
                 />
                 <ThreatTabPanel
                   value={value}
