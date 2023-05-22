@@ -177,15 +177,21 @@ export default function ArtifactCard({
   artifacts: Artifact[];
   setOpenCWEDetails: (value: boolean) => void;
 }) {
-  const [value, setValue] = useState(0);
-  function handleTabChange(event: React.SyntheticEvent, newValue: number) {
-    setValue(newValue);
+  const [activeTabs, setActiveTabs] = useState<number[]>(() =>
+    Array(artifacts.length).fill(0)
+  );
+  function handleTabChange(index: number, newValue: number) {
+    setActiveTabs((prevActiveTabs) => {
+      const newActiveTabs = [...prevActiveTabs];
+      newActiveTabs[index] = newValue;
+      return newActiveTabs;
+    });
   }
   return (
     <InfoPaper>
       <Title>Artifact's vulnerabilities</Title>
       <Stack spacing={2}>
-        {artifacts.map((artifact) => (
+        {artifacts.map((artifact, index) => (
           <Box key={artifact._id}>
             <Box display="flex" sx={{ height: 200 }}>
               <Box
@@ -206,18 +212,23 @@ export default function ArtifactCard({
               </Box>
               <Divider orientation="vertical" />
               <Box flexGrow={2} maxWidth={900}>
-                <Tabs value={value} onChange={handleTabChange}>
+                <Tabs
+                  value={activeTabs[index]}
+                  onChange={(event, newValue) =>
+                    handleTabChange(index, newValue)
+                  }
+                >
                   <Tab label="Vulnerabilities" />
                   <Tab label="Threats" />
                 </Tabs>
                 <VulnTabPanel
-                  value={value}
+                  value={activeTabs[index]}
                   index={0}
                   list={artifact.vulnerabilityList}
                   setOpenCWEDetails={setOpenCWEDetails}
                 />
                 <ThreatTabPanel
-                  value={value}
+                  value={activeTabs[index]}
                   index={1}
                   list={artifact.threatList}
                 />
