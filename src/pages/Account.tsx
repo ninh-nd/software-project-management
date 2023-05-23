@@ -6,9 +6,8 @@ import { ThirdParty } from "~/interfaces/Entity";
 
 export default function Account() {
   const account = useAccountContext();
-  const github = account.thirdParty.find(
-    (thirdParty: ThirdParty) => thirdParty.name === "Github"
-  );
+  const github = account.thirdParty.find((t) => t.name === "Github");
+  const gitlab = account.thirdParty.find((t) => t.name === "Gitlab");
   return (
     <Box
       flexGrow={1}
@@ -25,7 +24,7 @@ export default function Account() {
             <AccountInfo account={account} />
           </Grid>
           <Grid item xs={12} md={5}>
-            <Integration github={github} />
+            <Integration github={github} gitlab={gitlab} />
           </Grid>
         </Grid>
       </Container>

@@ -32,6 +32,9 @@ export default function Login() {
   function githubLogin() {
     window.open(`${API_BASE_URL}auth/github`, "_self");
   }
+  function gitlabLogin() {
+    window.open(`${API_BASE_URL}auth/gitlab`, "_self");
+  }
   async function onSubmit(data: IFormInput) {
     loginMutation.mutate(data);
   }
@@ -82,10 +85,6 @@ export default function Login() {
               helperText={errors.password?.message}
               label="Password"
             />
-            {/* <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            /> */}
             <Button
               type="submit"
               fullWidth
@@ -117,6 +116,7 @@ export default function Login() {
                 "&:hover": { backgroundColor: "#fc6d26" },
               }}
               endIcon={<GitLab />}
+              onClick={gitlabLogin}
             >
               Sign In with Gitlab
             </Button>
