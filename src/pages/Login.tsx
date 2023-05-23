@@ -6,15 +6,16 @@ import {
   Button,
   Container,
   CssBaseline,
+  Grid,
   Link,
   TextField,
   ThemeProvider,
   Typography,
-  Grid,
 } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useLoginMutation } from "~/hooks/query";
 import { useCustomTheme } from "~/hooks/theme";
+import { GitLab } from "~/icons/Icons";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 interface IFormInput {
   username: string;
@@ -106,6 +107,18 @@ export default function Login() {
               onClick={githubLogin}
             >
               Sign In with Github
+            </Button>
+            <Button
+              fullWidth
+              variant="contained"
+              sx={{
+                mb: 2,
+                backgroundColor: "#fc6d26",
+                "&:hover": { backgroundColor: "#fc6d26" },
+              }}
+              endIcon={<GitLab />}
+            >
+              Sign In with Gitlab
             </Button>
             <Grid container>
               <Grid item xs>
