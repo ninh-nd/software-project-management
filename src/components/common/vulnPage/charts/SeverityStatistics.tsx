@@ -1,3 +1,4 @@
+import { Box, Typography } from "@mui/material";
 import {
   Cell,
   Legend,
@@ -41,19 +42,32 @@ export default function SeverityStatistics({ vulnList }: Props) {
   return (
     <InfoPaper>
       <Title>Severity statistics</Title>
-      <ResponsiveContainer width="100%" minHeight={300}>
-        <PieChart>
-          <Pie dataKey="value" nameKey="name" data={data}>
-            <Cell />
-            <Cell fill={theme.palette.success.main} />
-            <Cell fill={theme.palette.warning.main} />
-            <Cell fill={theme.palette.error.main} />
-            <Cell fill={theme.palette.secondary.main} />
-          </Pie>
-          <Tooltip />
-          <Legend />
-        </PieChart>
-      </ResponsiveContainer>
+      {vulnList.length === 0 ? (
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          height="100%"
+        >
+          <Typography variant="h6" color="textSecondary">
+            There's nothing here...
+          </Typography>
+        </Box>
+      ) : (
+        <ResponsiveContainer width="100%" minHeight={300}>
+          <PieChart>
+            <Pie dataKey="value" nameKey="name" data={data}>
+              <Cell />
+              <Cell fill={theme.palette.success.main} />
+              <Cell fill={theme.palette.warning.main} />
+              <Cell fill={theme.palette.error.main} />
+              <Cell fill={theme.palette.secondary.main} />
+            </Pie>
+            <Tooltip />
+            <Legend />
+          </PieChart>
+        </ResponsiveContainer>
+      )}
     </InfoPaper>
   );
 }
