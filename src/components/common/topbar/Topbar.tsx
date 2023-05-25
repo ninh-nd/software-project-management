@@ -17,9 +17,12 @@ import { getAccountInfo } from "~/actions/accountAction";
 import { logout } from "~/actions/authAction";
 import { useDrawerState } from "~/hooks/drawer";
 const drawerWidth: number = 240;
+interface Props extends AppBarProps {
+  open: boolean;
+}
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
-})<AppBarProps>(({ theme, open }) => ({
+})<Props>(({ theme, open }) => ({
   zIndex: theme.zIndex.drawer + 1,
   transition: theme.transitions.create(["width", "margin"], {
     easing: theme.transitions.easing.sharp,
