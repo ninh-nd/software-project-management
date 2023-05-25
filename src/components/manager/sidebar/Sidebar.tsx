@@ -1,11 +1,16 @@
 import {
+  Add,
   AssessmentOutlined,
   ChevronLeft,
+  ExpandLess,
+  ExpandMore,
   HomeOutlined,
   InfoOutlined,
   SecurityOutlined,
+  StarBorder,
 } from "@mui/icons-material";
 import {
+  Collapse,
   Divider,
   IconButton,
   List,
@@ -20,10 +25,8 @@ import {
 } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import { useProjectInQuery } from "~/hooks/query";
-import ProjectMenuItem from "./ProjectMenuItem";
-import { useState } from "react";
-import { useDrawerState } from "~/hooks/drawer";
-const drawerWidth = 240;
+import { useEffect, useState } from "react";
+import { drawerWidth, useDrawerState } from "~/hooks/drawer";
 interface ItemProps {
   text: string;
   icon: JSX.Element;
@@ -45,12 +48,19 @@ function Item({ text, icon, path }: ItemProps) {
 function DrawerContent() {
   const projectInQuery = useProjectInQuery();
   const projects = projectInQuery.data?.data;
-  if (!projects) return <></>;
-  const firstProject = projects[0].name;
+  const firstProject = projects ? projects[0].name : "";
   let { currentProject } = useParams();
   if (!currentProject) {
     currentProject = firstProject;
   }
+  const { open: isDrawerOpen } = useDrawerState();
+  const [open, setOpen] = useState(true);
+  function handleClick() {
+    setOpen(!open);
+  }
+  useEffect(() => {
+    setOpen(isDrawerOpen);
+  }, [isDrawerOpen]);
   return (
     <List component="nav">
       <ListSubheader component="div" inset>
@@ -67,7 +77,34 @@ function DrawerContent() {
         icon={<InfoOutlined />}
         path={`/${currentProject}/tickets`}
       />
-      <ProjectMenuItem />
+      <ListItemButton onClick={handleClick}>
+        <ListItemIcon>
+          <List />
+        </ListItemIcon>
+        <ListItemText primary="Switch to..." />
+        {open ? <ExpandLess /> : <ExpandMore />}
+      </ListItemButton>
+      <Collapse in={open} timeout="auto" unmountOnExit>
+        <List component="div">
+          {projects?.map((p) => (
+            <ListItemButton sx={{ pl: 4 }} key={p._id}>
+              <ListItemIcon>
+                <StarBorder />
+              </ListItemIcon>
+              <ListItemText primary={p.name} />
+            </ListItemButton>
+          ))}
+          <ListItemButton sx={{ pl: 4 }} key="import">
+            <ListItemIcon>
+              <Add />
+            </ListItemIcon>
+            <ListItemText
+              primary="Import a new project"
+              sx={{ overflow: "hidden", textOverflow: "ellipsis" }}
+            />
+          </ListItemButton>
+        </List>
+      </Collapse>
       <Divider />
       <ListSubheader component="div" inset>
         Vulnerability control

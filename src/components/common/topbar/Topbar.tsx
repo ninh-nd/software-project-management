@@ -15,8 +15,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { getAccountInfo } from "~/actions/accountAction";
 import { logout } from "~/actions/authAction";
-import { useDrawerState } from "~/hooks/drawer";
-const drawerWidth: number = 240;
+import { drawerWidth, useDrawerState } from "~/hooks/drawer";
 interface Props extends AppBarProps {
   open: boolean;
 }
