@@ -9,3 +9,4 @@ export const useDrawerState = create<DrawerState>((set) => {
     setOpen: (open: boolean) => set({ open }),
   };
 });
+export const drawerWidth = 300;
