@@ -1,4 +1,4 @@
-import { Box, Button, Dialog, Grid, Tooltip } from "@mui/material";
+import { Box, Button, Dialog, Grid, Toolbar, Tooltip } from "@mui/material";
 import React from "react";
 import { useParams } from "react-router-dom";
 import TicketTab from "~/components/common/cards/TicketTab";
@@ -24,8 +24,10 @@ export default function Ticket() {
           xs: 2,
           sm: 4,
         },
+        overflow: "auto",
       }}
     >
+      <Toolbar />
       <Grid container spacing={1} justifyContent="center">
         <Grid item xs={12} sm={6} md={5} lg={3}>
           {createTicketPermission ? (

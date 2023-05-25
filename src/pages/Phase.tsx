@@ -1,4 +1,11 @@
-import { Box, Breadcrumbs, Container, Link, Stack } from "@mui/material";
+import {
+  Box,
+  Breadcrumbs,
+  Container,
+  Link,
+  Stack,
+  Toolbar,
+} from "@mui/material";
 import { Link as RouterLink, useParams } from "react-router-dom";
 import UnassginedTaskCard from "~/components/common/cards/UnassignedTaskCard";
 import CreatePhaseTemplate from "~/components/manager/phasePage/general/forms/CreatePhaseTemplate";
@@ -14,6 +21,7 @@ export default function Phase() {
   if (phaseList.length === 0) return <CreatePhaseTemplate />;
   return (
     <Box flexGrow={1} height="100vh">
+      <Toolbar />
       <Container sx={{ mt: 4, mb: 4 }}>
         <Stack spacing={4}>
           <Box display="flex" justifyContent="center">

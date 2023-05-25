@@ -17,6 +17,7 @@ import {
   Popover,
   TextField,
   Typography,
+  useTheme,
 } from "@mui/material";
 import {
   bindMenu,
@@ -30,7 +31,6 @@ import InfoPaper from "~/components/common/styledComponents/InfoPaper";
 import Title from "~/components/common/styledComponents/Title";
 import { useAccountContext } from "~/hooks/general";
 import { useUpdateAccessTokenMutation } from "~/hooks/query";
-import { useCustomTheme } from "~/hooks/theme";
 import { GitLab } from "~/icons/Icons";
 import { ThirdParty } from "~/interfaces/Entity";
 function UpdateAccessTokenDialog({
@@ -93,7 +93,7 @@ export default function Integration({
   gitlab: ThirdParty | undefined;
 }) {
   const [openUpdateAccessToken, setOpenUpdateAccessToken] = useState(false);
-  const theme = useCustomTheme();
+  const theme = useTheme();
   const popupStateGithub = usePopupState({
     variant: "popover",
     popupId: "github",

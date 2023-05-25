@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, useTheme } from "@mui/material";
 import {
   Cell,
   Legend,
@@ -9,14 +9,13 @@ import {
 } from "recharts";
 import InfoPaper from "~/components/common/styledComponents/InfoPaper";
 import Title from "~/components/common/styledComponents/Title";
-import { useCustomTheme } from "~/hooks/theme";
 import { Vulnerability } from "~/interfaces/Entity";
 
 interface Props {
   vulnList: Vulnerability[];
 }
 export default function SeverityStatistics({ vulnList }: Props) {
-  const theme = useCustomTheme();
+  const theme = useTheme();
   const negligibleCount = vulnList.filter(
     (vuln) => vuln.severity.toLowerCase() === "negligible"
   ).length;

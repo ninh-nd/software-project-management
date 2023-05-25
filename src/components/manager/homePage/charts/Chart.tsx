@@ -1,4 +1,4 @@
-import { useMediaQuery } from "@mui/material";
+import { useMediaQuery, useTheme } from "@mui/material";
 import {
   Bar,
   BarChart,
@@ -11,7 +11,6 @@ import {
 } from "recharts";
 import InfoPaper from "~/components/common/styledComponents/InfoPaper";
 import Title from "~/components/common/styledComponents/Title";
-import { useCustomTheme } from "~/hooks/theme";
 import { ActivityHistory } from "~/interfaces/Entity";
 function reshapeActHistToRecharts(activityHistory: ActivityHistory[]) {
   // Turn activity history into a format that can be used by Recharts: An array of object with shape: {createdBy: string, totalCommits: number, totalPrs: number}
@@ -42,7 +41,7 @@ export default function Chart({
   activityHistory: ActivityHistory[];
 }) {
   const reshapedActHist = reshapeActHistToRecharts(activityHistory);
-  const theme = useCustomTheme();
+  const theme = useTheme();
   const lessThanMedium = useMediaQuery(theme.breakpoints.down("md"));
   return (
     <InfoPaper>

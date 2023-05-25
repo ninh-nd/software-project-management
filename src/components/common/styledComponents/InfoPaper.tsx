@@ -1,18 +1,20 @@
 import { SxProps, Paper } from "@mui/material";
 export default function InfoPaper({
   children,
+  sx,
 }: {
   children: JSX.Element | JSX.Element[];
+  sx?: SxProps;
 }) {
   const style: SxProps = {
-    p: "16px",
+    p: 2,
     display: "flex",
     flexDirection: "column",
     minHeight: {
       md: 100,
       lg: 150,
     },
-    height: "100%",
   };
-  return <Paper sx={style}>{children}</Paper>;
+  const mergedStyle = sx ? { ...style, ...sx } : style;
+  return <Paper sx={mergedStyle}>{children}</Paper>;
 }

@@ -11,7 +11,7 @@ function renderDate(date: string) {
 }
 export default function TicketTab({ title, tickets }: TabProps) {
   return (
-    <Paper elevation={3} sx={{ height: "73vh" }}>
+    <Paper elevation={3} sx={{ height: "100vh" }}>
       <Box>
         <Badge
           badgeContent={tickets.length}

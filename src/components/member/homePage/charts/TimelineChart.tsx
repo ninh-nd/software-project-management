@@ -12,7 +12,7 @@ import InfoPaper from "~/components/common/styledComponents/InfoPaper";
 import Title from "~/components/common/styledComponents/Title";
 import { ActivityHistory } from "~/interfaces/Entity";
 import dayjs from "dayjs";
-import { useCustomTheme } from "~/hooks/theme";
+import { useTheme } from "@mui/material";
 function dateFormatter(date: string) {
   return dayjs(date).format("DD/MM/YY");
 }
@@ -42,7 +42,7 @@ export default function TimelineChart({
 }: {
   activityHistory: ActivityHistory[];
 }) {
-  const theme = useCustomTheme();
+  const theme = useTheme();
   activityHistory.sort((a, b) => {
     return dayjs(a.createdAt).valueOf() - dayjs(b.createdAt).valueOf();
   });

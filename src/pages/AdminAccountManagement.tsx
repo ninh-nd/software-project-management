@@ -21,17 +21,8 @@ import {
 import { useState } from "react";
 import ChangePermissionDialog from "~/components/admin/accountPage/forms/ChangePermissionDialog";
 import EditAccountDialog from "~/components/admin/accountPage/forms/EditAccountDialog";
+import RoleChip from "~/components/common/styledComponents/RoleChip";
 import { useAccountsQuery, useDeleteAccountMutation } from "~/hooks/query";
-function renderChip(role: "admin" | "manager" | "member") {
-  switch (role) {
-    case "admin":
-      return <Chip label="Admin" color="primary" />;
-    case "manager":
-      return <Chip label="Manager" color="secondary" />;
-    case "member":
-      return <Chip label="Member" color="success" />;
-  }
-}
 interface DialogProps {
   id: GridRowId;
   open: boolean;
@@ -104,7 +95,7 @@ export default function AdminAccountManagement() {
       field: "role",
       headerName: "Role",
       flex: 0.5,
-      renderCell: (params) => renderChip(params.value),
+      renderCell: (params) => <RoleChip role={params.value} />,
       align: "center",
       headerAlign: "center",
     },

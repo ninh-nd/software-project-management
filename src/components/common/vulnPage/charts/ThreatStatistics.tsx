@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, useTheme } from "@mui/material";
 import {
   Cell,
   Legend,
@@ -9,7 +9,6 @@ import {
 } from "recharts";
 import InfoPaper from "~/components/common/styledComponents/InfoPaper";
 import Title from "~/components/common/styledComponents/Title";
-import { useCustomTheme } from "~/hooks/theme";
 import { Threat } from "~/interfaces/Entity";
 
 export default function ThreatStatistics({
@@ -17,7 +16,7 @@ export default function ThreatStatistics({
 }: {
   threatList: Threat[];
 }) {
-  const theme = useCustomTheme();
+  const theme = useTheme();
   const nonCount = threatList.filter(
     (t) => t.status === "Non mitigated"
   ).length;
@@ -33,7 +32,7 @@ export default function ThreatStatistics({
     { name: "Fully-mitigated threats", value: fullCount },
   ];
   return (
-    <InfoPaper>
+    <InfoPaper sx={{ height: "100%" }}>
       <Title>Threat statistics</Title>
       {threatList.length === 0 ? (
         <Box

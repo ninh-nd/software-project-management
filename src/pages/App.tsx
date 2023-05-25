@@ -13,6 +13,17 @@ import {
 } from "react-router-dom";
 import { IErrorResponse, ISuccessResponse } from "~/interfaces/ServerResponse";
 import MemberTaskAndIssue from "./MemberTaskAndIssue";
+import {
+  Box,
+  CssBaseline,
+  ThemeProvider,
+  createTheme,
+  useTheme,
+} from "@mui/material";
+import { createTypography } from "~/theme/create-typography";
+import { createShadows } from "~/theme/create-shadows";
+import { createComponents } from "~/theme/create-components";
+import { createPalette } from "~/theme/create-palette";
 const AdminLayout = lazy(() => import("~/layouts/AdminLayout"));
 const DashboardLayout = lazy(() => import("~/layouts/DashboardLayout"));
 const AccountInfo = lazy(() => import("./Account"));
@@ -120,6 +131,19 @@ const router = createBrowserRouter([
   },
 ]);
 export default function App() {
+  const palette = createPalette();
+  const components = createComponents({ palette });
+  const shadows = createShadows();
+  const typography = createTypography();
+  const theme = createTheme({
+    typography,
+    components,
+    palette,
+    shadows,
+    shape: {
+      borderRadius: 8,
+    },
+  });
   const { enqueueSnackbar } = useSnackbar();
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -137,10 +161,16 @@ export default function App() {
       },
     }),
   });
+
   return (
     <QueryClientProvider client={queryClient}>
       <SnackbarProvider autoHideDuration={4000} maxSnack={1}>
-        <RouterProvider router={router} />
+        <ThemeProvider theme={theme}>
+          <Box display="flex">
+            <CssBaseline />
+            <RouterProvider router={router} />
+          </Box>
+        </ThemeProvider>
       </SnackbarProvider>
     </QueryClientProvider>
   );

@@ -1,64 +1,41 @@
-import { AssignmentInd, Task } from "@mui/icons-material";
+import { Add, ArrowRight } from "@mui/icons-material";
 import {
   Box,
   Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  IconButton,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Pagination,
-  Tooltip,
+  CardActions,
+  Divider,
+  SvgIcon,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TablePagination,
+  TableRow,
 } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
-import { useState } from "react";
+import { MouseEvent, useState } from "react";
 import { useParams } from "react-router-dom";
 import InfoPaper from "~/components/common/styledComponents/InfoPaper";
 import Title from "~/components/common/styledComponents/Title";
 import { useAssignTaskMutation, useAvailableTasksQuery } from "~/hooks/query";
 import { User } from "~/interfaces/Entity";
 
-function ButtonRowBox({ children }: { children: JSX.Element[] }) {
-  return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-between",
-      }}
-    >
-      {children}
-    </Box>
-  );
-}
-const numberOfTaskPerPage = 5;
+const rowsPerPage = 5;
 export default function TaskCard({ member }: { member: User }) {
-  const [currentPage, setCurrentPage] = useState(0);
+  const [page, setPage] = useState(0);
+  const handlePageChange = (
+    event: MouseEvent<HTMLButtonElement> | null,
+    newPage: number
+  ) => {
+    setPage(newPage);
+  };
+  const list = member.taskAssigned.slice(
+    page * rowsPerPage,
+    (page + 1) * rowsPerPage
+  );
   const { currentProject } = useParams();
   if (!currentProject) return <></>;
   const taskQuery = useAvailableTasksQuery(currentProject);
   const assignTaskList = taskQuery.data?.data ?? [];
-  const visibility = assignTaskList.length > 0 ? "visible" : "hidden";
-  function handlePageChange(event: React.ChangeEvent<unknown>, value: number) {
-    setCurrentPage(value - 1);
-  }
-  const currentPageList = assignTaskList.slice(
-    currentPage,
-    currentPage + numberOfTaskPerPage
-  );
-  const [open, setOpen] = useState(false);
-  const taskColumns = [
-    { field: "name", headerName: "Name", width: 200 },
-    { field: "status", headerName: "Status" },
-    { field: "description", headerName: "Description", minWidth: 400, flex: 1 },
-  ];
-  function handleClose() {
-    setOpen(false);
-  }
 
   const assignTaskMutation = useAssignTaskMutation();
 
@@ -69,64 +46,38 @@ export default function TaskCard({ member }: { member: User }) {
   return (
     <InfoPaper>
       <Title>Tasks</Title>
-      <Box sx={{ height: "100%" }}>
-        <Box>
-          <DataGrid
-            getRowId={(row) => row._id}
-            rows={member.taskAssigned}
-            columns={taskColumns}
-            autoHeight
-            checkboxSelection
-          />
-        </Box>
-        <ButtonRowBox>
-          <Button onClick={() => setOpen(true)}>Assign task</Button>
-          <Dialog open={open} onClose={handleClose} fullWidth>
-            <DialogTitle>Assign task</DialogTitle>
-            <DialogContent>
-              <List>
-                {currentPageList.map((task) => (
-                  <ListItem
-                    key={task._id}
-                    secondaryAction={
-                      <Tooltip title="Assign task to this member">
-                        <IconButton
-                          edge="end"
-                          onClick={() => handleAssignTask(task._id)}
-                        >
-                          <AssignmentInd />
-                        </IconButton>
-                      </Tooltip>
-                    }
-                  >
-                    <ListItemIcon>
-                      <Task />
-                    </ListItemIcon>
-                    <ListItemText
-                      primary={task.name}
-                      secondary={task.description}
-                    />
-                  </ListItem>
-                ))}
-              </List>
-              <Pagination
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  visibility,
-                }}
-                count={Math.ceil(assignTaskList.length / numberOfTaskPerPage)}
-                onChange={handlePageChange}
-              />
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleClose} color="inherit">
-                Close
-              </Button>
-            </DialogActions>
-          </Dialog>
-        </ButtonRowBox>
-      </Box>
+      <Table>
+        <TableHead>
+          <TableRow>
+            <TableCell>Name</TableCell>
+            <TableCell>Status</TableCell>
+            <TableCell>Description</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {list.map((t, index) => (
+            <TableRow key={index}>
+              <TableCell>{t.name}</TableCell>
+              <TableCell>{t.status}</TableCell>
+              <TableCell>{t.description}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+      <TablePagination
+        component="div"
+        count={member.taskAssigned.length}
+        onPageChange={handlePageChange}
+        page={page}
+        rowsPerPage={rowsPerPage}
+        rowsPerPageOptions={[]}
+      />
+      <Divider />
+      <CardActions sx={{ justifyContent: "flex-end" }}>
+        <Button color="inherit" endIcon={<Add />} size="small" variant="text">
+          Assign
+        </Button>
+      </CardActions>
     </InfoPaper>
   );
 }

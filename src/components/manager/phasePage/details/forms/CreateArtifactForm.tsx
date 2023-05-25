@@ -14,11 +14,11 @@ import {
   Stack,
   TextField,
   Typography,
+  useTheme,
 } from "@mui/material";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useAddArtifactToPhaseMutation, useThreatsQuery } from "~/hooks/query";
-import { useCustomTheme } from "~/hooks/theme";
 import { ArtifactCreate } from "~/interfaces/Entity";
 const type = ["image", "log", "source code", "executable", "library"];
 interface CreateArtifactFormProps {
@@ -29,7 +29,7 @@ export default function CreateArtifactForm({
   phaseId,
   setCloseDialog,
 }: CreateArtifactFormProps) {
-  const theme = useCustomTheme();
+  const theme = useTheme();
   const {
     register,
     handleSubmit,

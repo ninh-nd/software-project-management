@@ -1,34 +1,64 @@
 import { GitHub } from "@mui/icons-material";
-import { Box, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  Divider,
+  Typography,
+} from "@mui/material";
+import RoleChip from "~/components/common/styledComponents/RoleChip";
+import { GitLab } from "~/icons/Icons";
 import { ThirdParty, User } from "~/interfaces/Entity";
-
-function displayBadge(thirdPartyList: ThirdParty[]) {
-  return thirdPartyList.map((thirdParty, index) => {
-    if (thirdParty.name === "Github") return <GitHub key={index} />;
-  });
+// @ts-ignore
+import AvatarImage from "/avatar.webp";
+function DisplayBadge({ thirdPartyList }: { thirdPartyList: ThirdParty[] }) {
+  return (
+    <Box justifyContent="center" display="flex" sx={{ py: 1 }}>
+      {thirdPartyList.map((t) => {
+        if (t.name === "Github") return <GitHub />;
+        if (t.name === "Gitlab") return <GitLab />;
+      })}
+    </Box>
+  );
 }
 
 export default function MemberInfoCard({ member }: { member: User }) {
   return (
-    <Box display="flex" flexDirection="column">
-      <Box
-        component="img"
-        sx={{
-          height: "auto",
-          maxWidth: "100%",
-          borderRadius: "50%",
-          mb: 2,
-          ml: 10,
-          mr: 10,
-        }}
-        src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541"
-        alt="avatar"
-      />
-      <Box>
-        <Typography variant="h4">{member.name}</Typography>
-        <Typography variant="h6">{member.account.username}</Typography>
-      </Box>
-      <Box>{displayBadge(member.account.thirdParty)}</Box>
-    </Box>
+    <Card>
+      <CardContent>
+        <Box
+          sx={{
+            alignItems: "center",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <Avatar
+            src={AvatarImage}
+            sx={{
+              height: 80,
+              mb: 2,
+              width: 80,
+            }}
+          />
+          <Typography gutterBottom variant="h5">
+            {member.name}
+          </Typography>
+          <Typography color="text.secondary" variant="body2">
+            <RoleChip role={member.account.role} />
+          </Typography>
+          <DisplayBadge thirdPartyList={member.account.thirdParty} />
+        </Box>
+      </CardContent>
+      <Divider />
+      <CardActions>
+        <Button fullWidth variant="text">
+          Update info
+        </Button>
+      </CardActions>
+    </Card>
   );
 }

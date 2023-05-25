@@ -1,47 +1,45 @@
 import {
-  AccountCircle,
-  Brightness4,
-  Brightness7,
-  Logout,
+  AccountCircleOutlined,
+  LogoutOutlined,
   Menu,
 } from "@mui/icons-material";
 import {
-  AppBar,
-  Box,
+  AppBarProps,
   IconButton,
-  Theme,
+  AppBar as MuiAppBar,
   Toolbar,
   Tooltip,
+  Typography,
+  styled,
 } from "@mui/material";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { getAccountInfo } from "~/actions/accountAction";
 import { logout } from "~/actions/authAction";
-import {
-  useIsDrawerOpen,
-  useThemeActions,
-  useCustomTheme,
-} from "~/hooks/theme";
-const topBarStyle = {
-  height: "50px",
-  position: "fixed",
-  top: "0",
-  zIndex: (theme: Theme) => theme.zIndex.drawer + 1,
-};
+import { useDrawerState } from "~/hooks/drawer";
+const drawerWidth: number = 240;
+const AppBar = styled(MuiAppBar, {
+  shouldForwardProp: (prop) => prop !== "open",
+})<AppBarProps>(({ theme, open }) => ({
+  zIndex: theme.zIndex.drawer + 1,
+  transition: theme.transitions.create(["width", "margin"], {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  ...(open && {
+    marginLeft: drawerWidth,
+    width: `calc(100% - ${drawerWidth}px)`,
+    transition: theme.transitions.create(["width", "margin"], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  }),
+}));
 export default function Topbar() {
-  const theme = useCustomTheme();
-  const { setTheme } = useThemeActions();
+  const { open, setOpen } = useDrawerState();
   const navigate = useNavigate();
-  const { currentProject } = useParams();
   async function handleLogOut() {
     logout();
     navigate("/login", { replace: true });
-  }
-  function changeTheme() {
-    if (theme.palette.mode === "light") {
-      setTheme("dark");
-    } else {
-      setTheme("light");
-    }
   }
   async function redirectToAccountPage() {
     const account = await getAccountInfo();
@@ -50,41 +48,45 @@ export default function Topbar() {
     const { username } = data;
     navigate(`/user/${username}`);
   }
-  const isDrawerOpen = useIsDrawerOpen();
-  const { setIsDrawerOpen } = useThemeActions();
   function handleDrawerToggle() {
-    setIsDrawerOpen(!isDrawerOpen);
+    setOpen(!open);
   }
   return (
-    <AppBar sx={topBarStyle}>
-      <Toolbar sx={{ pb: 1 }}>
+    <AppBar position="absolute" open={open}>
+      <Toolbar
+        sx={{
+          pr: "24px", // keep right padding when drawer closed
+        }}
+      >
         <IconButton
+          edge="start"
+          color="inherit"
+          aria-label="open drawer"
           onClick={handleDrawerToggle}
           sx={{
-            mr: 2,
-            display: {
-              lg: "none",
-            },
+            marginRight: "36px",
+            ...(open && { display: "none" }),
           }}
         >
           <Menu />
         </IconButton>
-        <Box sx={{ flexGrow: 1 }} />
+        <Typography
+          component="h1"
+          variant="h6"
+          color="inherit"
+          noWrap
+          sx={{ flexGrow: 1 }}
+        >
+          Dashboard
+        </Typography>
         <Tooltip title="Account">
           <IconButton onClick={redirectToAccountPage}>
-            <AccountCircle />
-          </IconButton>
-        </Tooltip>
-        <Tooltip
-          title={theme.palette.mode === "light" ? "Dark Mode" : "Light Mode"}
-        >
-          <IconButton onClick={changeTheme}>
-            {theme.palette.mode === "light" ? <Brightness4 /> : <Brightness7 />}
+            <AccountCircleOutlined color="secondary" />
           </IconButton>
         </Tooltip>
         <Tooltip title="Logout">
           <IconButton onClick={handleLogOut}>
-            <Logout />
+            <LogoutOutlined color="secondary" />
           </IconButton>
         </Tooltip>
       </Toolbar>

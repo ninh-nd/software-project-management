@@ -1,26 +1,28 @@
 import {
   AssessmentOutlined,
+  ChevronLeft,
   HomeOutlined,
   InfoOutlined,
   SecurityOutlined,
 } from "@mui/icons-material";
 import {
-  Box,
   Divider,
-  Drawer,
-  Link,
+  IconButton,
   List,
-  ListItem,
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  ListSubheader,
+  Drawer as MuiDrawer,
   Toolbar,
+  styled,
+  useTheme,
 } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import { useProjectInQuery } from "~/hooks/query";
-import { useIsDrawerOpen, useThemeActions } from "~/hooks/theme";
-import ImportProject from "./ImportProject";
-import SelectProject from "./SelectProject";
+import ProjectMenuItem from "./ProjectMenuItem";
+import { useState } from "react";
+import { useDrawerState } from "~/hooks/drawer";
 const drawerWidth = 240;
 interface ItemProps {
   text: string;
@@ -29,19 +31,15 @@ interface ItemProps {
 }
 function Item({ text, icon, path }: ItemProps) {
   const navigate = useNavigate();
-  const { setIsDrawerOpen } = useThemeActions();
   return (
-    <ListItem component={Link}>
-      <ListItemButton
-        onClick={() => {
-          setIsDrawerOpen(false);
-          navigate(path);
-        }}
-      >
-        <ListItemIcon>{icon}</ListItemIcon>
-        <ListItemText primary={text} />
-      </ListItemButton>
-    </ListItem>
+    <ListItemButton
+      onClick={() => {
+        navigate(path);
+      }}
+    >
+      <ListItemIcon>{icon}</ListItemIcon>
+      <ListItemText primary={text} />
+    </ListItemButton>
   );
 }
 function DrawerContent() {
@@ -54,74 +52,80 @@ function DrawerContent() {
     currentProject = firstProject;
   }
   return (
-    <Box>
-      <List>
-        <Item
-          text="Home"
-          icon={<HomeOutlined />}
-          path={`/${currentProject}/`}
-        />
-        <Item
-          text="Phase"
-          icon={<AssessmentOutlined />}
-          path={`/${currentProject}/phases`}
-        />
-        <Item
-          text="Ticket"
-          icon={<InfoOutlined />}
-          path={`/${currentProject}/tickets`}
-        />
-        <Divider />
-        <ListItem>
-          <SelectProject />
-        </ListItem>
-        <ListItem>
-          <ImportProject />
-        </ListItem>
-        <Divider />
-        <Item
-          text="Vulnerabilities dashboard"
-          icon={<SecurityOutlined />}
-          path={`/${currentProject}/vulnerabilities`}
-        />
-      </List>
-    </Box>
+    <List component="nav">
+      <ListSubheader component="div" inset>
+        Project navigation
+      </ListSubheader>
+      <Item text="Home" icon={<HomeOutlined />} path={`/${currentProject}/`} />
+      <Item
+        text="Phase"
+        icon={<AssessmentOutlined />}
+        path={`/${currentProject}/phases`}
+      />
+      <Item
+        text="Ticket"
+        icon={<InfoOutlined />}
+        path={`/${currentProject}/tickets`}
+      />
+      <ProjectMenuItem />
+      <Divider />
+      <ListSubheader component="div" inset>
+        Vulnerability control
+      </ListSubheader>
+      <Item
+        text="Vulnerabilities"
+        icon={<SecurityOutlined />}
+        path={`/${currentProject}/vulnerabilities`}
+      />
+    </List>
   );
 }
+const Drawer = styled(MuiDrawer, {
+  shouldForwardProp: (prop) => prop !== "open",
+})(({ theme, open }) => ({
+  "& .MuiDrawer-paper": {
+    position: "relative",
+    whiteSpace: "nowrap",
+    width: drawerWidth,
+    transition: theme.transitions.create("width", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    boxSizing: "border-box",
+    ...(!open && {
+      overflowX: "hidden",
+      transition: theme.transitions.create("width", {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+      }),
+      width: theme.spacing(7),
+      [theme.breakpoints.up("sm")]: {
+        width: theme.spacing(9),
+      },
+    }),
+  },
+}));
 export default function Sidebar() {
-  const isDrawerOpen = useIsDrawerOpen();
-  const { setIsDrawerOpen } = useThemeActions();
+  const { open, setOpen } = useDrawerState();
   function handleDrawerToggle() {
-    setIsDrawerOpen(!isDrawerOpen);
+    setOpen(!open);
   }
   return (
-    <>
-      <Drawer
-        variant="permanent"
+    <Drawer variant="permanent" open={open}>
+      <Toolbar
         sx={{
-          display: {
-            xs: "none",
-            md: "block",
-          },
-          width: drawerWidth,
-          flexShrink: 0,
-          "& .MuiDrawer-paper": { width: drawerWidth, boxSizing: "border-box" },
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "flex-end",
+          px: [1],
         }}
       >
-        <Toolbar />
-        <DrawerContent />
-      </Drawer>
-      <Drawer
-        variant="temporary"
-        sx={{ display: { xs: "block", md: "none" } }}
-        open={isDrawerOpen}
-        onClose={handleDrawerToggle}
-        anchor="top"
-        disableScrollLock={true}
-      >
-        <Toolbar />
-        <DrawerContent />
-      </Drawer>
-    </>
+        <IconButton onClick={handleDrawerToggle}>
+          <ChevronLeft />
+        </IconButton>
+      </Toolbar>
+      <Divider />
+      <DrawerContent />
+    </Drawer>
   );
 }

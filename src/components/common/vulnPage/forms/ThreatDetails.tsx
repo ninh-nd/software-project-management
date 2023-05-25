@@ -13,9 +13,9 @@ import {
   TableRow,
   Toolbar,
   Typography,
+  useTheme,
 } from "@mui/material";
 import { useThreatQuery } from "~/hooks/query";
-import { useCustomTheme } from "~/hooks/theme";
 import { Threat } from "~/interfaces/Entity";
 import { typeOptions } from "./displayInfo";
 interface Props {
@@ -54,7 +54,7 @@ function ScoreTable({ total, details }: Threat["score"]) {
   );
 }
 function Body({ data }: { data: Threat | null | undefined }) {
-  const theme = useCustomTheme();
+  const theme = useTheme();
   if (!data) return <></>;
   return (
     <Container sx={{ mt: 4, mb: 4 }}>

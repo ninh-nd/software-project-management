@@ -8,10 +8,10 @@ import {
   Stack,
   Toolbar,
   Typography,
+  useTheme,
 } from "@mui/material";
 import { useSearchParams } from "react-router-dom";
 import { useCWEQuery } from "~/hooks/query";
-import { useCustomTheme } from "~/hooks/theme";
 import { CWE } from "~/interfaces/Entity";
 
 function renderEntry(entry: Array<any>) {
@@ -25,7 +25,7 @@ function renderEntry(entry: Array<any>) {
 }
 
 function Body({ cwe }: { cwe: CWE | null | undefined }) {
-  const theme = useCustomTheme();
+  const theme = useTheme();
   if (cwe === undefined) return <></>;
   else if (cwe === null) {
     return (

@@ -8,10 +8,10 @@ import {
   TextField,
   ThemeProvider,
   Typography,
+  useTheme,
 } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useCreateAccountMutation } from "~/hooks/query";
-import { useCustomTheme } from "~/hooks/theme";
 import { AccountRegister } from "~/interfaces/Entity";
 export default function SignUp() {
   const registerMutation = useCreateAccountMutation();
@@ -24,7 +24,7 @@ export default function SignUp() {
     formState: { errors },
     watch,
   } = useForm<AccountRegister>();
-  const theme = useCustomTheme();
+  const theme = useTheme();
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">

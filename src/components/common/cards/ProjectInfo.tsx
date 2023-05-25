@@ -13,13 +13,13 @@ import {
   ListItemText,
   Theme,
   Typography,
+  useTheme,
 } from "@mui/material";
 import dayjs from "dayjs";
 import { useParams } from "react-router-dom";
 import InfoPaper from "~/components/common/styledComponents/InfoPaper";
 import Title from "~/components/common/styledComponents/Title";
 import { useProjectInfoQuery } from "~/hooks/query";
-import { useCustomTheme } from "~/hooks/theme";
 function renderStatus(status: "active" | "inactive", theme: Theme) {
   if (status === "active")
     return (
@@ -34,7 +34,7 @@ function renderStatus(status: "active" | "inactive", theme: Theme) {
   );
 }
 export default function ProjectInfo() {
-  const theme = useCustomTheme();
+  const theme = useTheme();
   const { currentProject } = useParams();
   if (!currentProject) return <></>;
   const projectInfoQuery = useProjectInfoQuery(currentProject);

@@ -11,10 +11,10 @@ import {
   TextField,
   ThemeProvider,
   Typography,
+  useTheme,
 } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useLoginMutation } from "~/hooks/query";
-import { useCustomTheme } from "~/hooks/theme";
 import { GitLab } from "~/icons/Icons";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 interface IFormInput {
@@ -22,7 +22,7 @@ interface IFormInput {
   password: string;
 }
 export default function Login() {
-  const theme = useCustomTheme();
+  const theme = useTheme();
   const {
     handleSubmit,
     register,

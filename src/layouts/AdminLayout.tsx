@@ -1,9 +1,8 @@
-import { Box, CssBaseline, ThemeProvider } from "@mui/material";
+import { Box, CssBaseline, ThemeProvider, useTheme } from "@mui/material";
 import { Outlet } from "react-router-dom";
 import Topbar from "~/components/common/topbar/Topbar";
-import { useCustomTheme } from "~/hooks/theme";
 export default function AdminLayout() {
-  const theme = useCustomTheme();
+  const theme = useTheme();
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
