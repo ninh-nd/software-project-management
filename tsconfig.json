@@ -2,12 +2,7 @@
   "compilerOptions": {
     "target": "ESNext",
     "useDefineForClassFields": true,
-    "lib": [
-      "DOM",
-      "DOM.Iterable",
-      "ESNext",
-      "es6"
-    ],
+    "lib": ["DOM", "DOM.Iterable", "ESNext", "es6"],
     "noImplicitAny": true,
     "noImplicitThis": true,
     "strictNullChecks": true,
@@ -25,10 +20,8 @@
     "jsx": "react-jsx",
     "baseUrl": "./src",
     "paths": {
-      "~/*": [
-        "./*"
-      ]
-    },
+      "~/*": ["./*"]
+    }
   },
   "references": [
     {

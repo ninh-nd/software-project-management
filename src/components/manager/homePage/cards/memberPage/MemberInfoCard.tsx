@@ -12,7 +12,6 @@ import {
 import RoleChip from "~/components/common/styledComponents/RoleChip";
 import { GitLab } from "~/icons/Icons";
 import { ThirdParty, User } from "~/interfaces/Entity";
-// @ts-ignore
 import AvatarImage from "/avatar.webp";
 function DisplayBadge({ thirdPartyList }: { thirdPartyList: ThirdParty[] }) {
   return (
