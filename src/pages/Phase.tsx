@@ -7,7 +7,7 @@ import {
   Toolbar,
 } from "@mui/material";
 import { Link as RouterLink, useParams } from "react-router-dom";
-import UnassginedTaskCard from "~/components/common/cards/UnassignedTaskCard";
+import UnassginedTaskCard from "~/components/UnassignedTaskCard";
 import CreatePhaseTemplate from "~/components/manager/phasePage/general/forms/CreatePhaseTemplate";
 import { useProjectInfoQuery } from "~/hooks/query";
 

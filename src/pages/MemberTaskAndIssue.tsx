@@ -9,9 +9,9 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import TicketTab from "~/components/common/cards/TicketTab";
-import UnassignedTaskCard from "~/components/common/cards/UnassignedTaskCard";
-import AddTicketForm from "~/components/common/forms/AddTicketForm";
+import TicketTable from "~/components/TicketTable";
+import UnassignedTaskCard from "~/components/UnassignedTaskCard";
+import AddTicketForm from "~/components/AddTicketForm";
 import { usePermissionHook } from "~/hooks/general";
 import { useTicketsQuery } from "~/hooks/query";
 
@@ -27,7 +27,7 @@ export default function MemberTaskAndIssue() {
   const closeTickets = tickets.filter((ticket) => ticket.status === "closed");
   return (
     <Box flexGrow={1} sx={{ m: { xs: 2, sm: 4 } }}>
-      <Toolbar />
+      {/* <Toolbar />
       <Container sx={{ mt: 4, mb: 4 }} maxWidth="lg">
         <Grid container spacing={1} justifyContent="center">
           <Grid item xs={12} sm={6} md={5} lg={3}>
@@ -49,10 +49,10 @@ export default function MemberTaskAndIssue() {
         </Grid>
         <Grid container spacing={1} justifyContent="center">
           <Grid item xs={12} sm={6} md={5} lg={3}>
-            <TicketTab title="Open" tickets={openTickets} />
+            <TicketTable title="Open" tickets={openTickets} />
           </Grid>
           <Grid item xs={12} sm={6} md={5} lg={3}>
-            <TicketTab title="Closed" tickets={closeTickets} />
+            <TicketTable title="Closed" tickets={closeTickets} />
           </Grid>
           <Grid item xs={12}>
             <UnassignedTaskCard />
@@ -61,7 +61,7 @@ export default function MemberTaskAndIssue() {
         <Dialog open={open} onClose={() => setOpen(false)} fullWidth>
           <AddTicketForm setCloseDialog={() => setOpen(false)} />
         </Dialog>
-      </Container>
+      </Container> */}
     </Box>
   );
 }

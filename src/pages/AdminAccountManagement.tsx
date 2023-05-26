@@ -19,9 +19,9 @@ import {
   GridToolbar,
 } from "@mui/x-data-grid";
 import { useState } from "react";
-import ChangePermissionDialog from "~/components/admin/accountPage/forms/ChangePermissionDialog";
-import EditAccountDialog from "~/components/admin/accountPage/forms/EditAccountDialog";
-import RoleChip from "~/components/common/styledComponents/RoleChip";
+import ChangePermissionDialog from "~/components/ChangePermissionDialog";
+import EditAccountDialog from "~/components/EditAccountDialog";
+import RoleChip from "~/components/RoleChip";
 import { useAccountsQuery, useDeleteAccountMutation } from "~/hooks/query";
 interface DialogProps {
   id: GridRowId;

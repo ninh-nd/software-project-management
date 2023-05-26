@@ -1,14 +1,14 @@
 import { Box, Container, Grid, Toolbar } from "@mui/material";
 import { useParams } from "react-router-dom";
-import MemberCard from "~/components/manager/homePage/cards/MemberCard";
-import ProjectInfo from "~/components/common/cards/ProjectInfo";
-import TotalCommits from "~/components/manager/homePage/cards/TotalCommits";
-import TotalPullRequests from "~/components/manager/homePage/cards/TotalPull";
-import Chart from "~/components/manager/homePage/charts/Chart";
-import RecentActivity from "~/components/member/homePage/cards/RecentActivity";
-import TimelineChart from "~/components/member/homePage/charts/TimelineChart";
-import TaskAssigned from "~/components/member/tasksAndIssuesPage/cards/TaskAssigned";
-import TicketAssigned from "~/components/member/tasksAndIssuesPage/cards/TicketAssigned";
+import MemberCard from "~/components/MemberCard";
+import ProjectInfo from "~/components/ProjectInfo";
+import TotalCommits from "~/components/TotalCommits";
+import TotalPullRequests from "~/components/TotalPull";
+import Chart from "~/components/Chart";
+import RecentActivity from "~/components/RecentActivity";
+import TimelineChart from "~/components/TimelineChart";
+import TaskAssigned from "~/components/TaskAssigned";
+import TicketAssigned from "~/components/TicketAssigned";
 import { useUserRole } from "~/hooks/general";
 import {
   useActivityHistoryOfUserQuery,

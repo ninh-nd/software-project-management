@@ -24,6 +24,7 @@ import { createTypography } from "~/theme/create-typography";
 import { createShadows } from "~/theme/create-shadows";
 import { createComponents } from "~/theme/create-components";
 import { createPalette } from "~/theme/create-palette";
+import NotFound from "./404";
 const AdminLayout = lazy(() => import("~/layouts/AdminLayout"));
 const DashboardLayout = lazy(() => import("~/layouts/DashboardLayout"));
 const AccountInfo = lazy(() => import("./Account"));
@@ -127,7 +128,7 @@ const router = createBrowserRouter([
 
   {
     path: "*",
-    element: <Navigate to="/login" />,
+    element: <NotFound />,
   },
 ]);
 export default function App() {

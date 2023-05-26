@@ -1,8 +1,21 @@
-import { Box, Button, Dialog, Grid, Toolbar, Tooltip } from "@mui/material";
+import { Add, Search } from "@mui/icons-material";
+import {
+  Box,
+  Button,
+  Card,
+  Container,
+  Dialog,
+  InputAdornment,
+  OutlinedInput,
+  Stack,
+  SvgIcon,
+  Toolbar,
+  Typography,
+} from "@mui/material";
 import React from "react";
 import { useParams } from "react-router-dom";
-import TicketTab from "~/components/common/cards/TicketTab";
-import AddTicketForm from "~/components/common/forms/AddTicketForm";
+import TicketTable from "~/components/TicketTable";
+import AddTicketForm from "~/components/AddTicketForm";
 import { usePermissionHook } from "~/hooks/general";
 import { useTicketsQuery } from "~/hooks/query";
 
@@ -14,8 +27,6 @@ export default function Ticket() {
   if (!currentProject) return <></>;
   const ticketQuery = useTicketsQuery(currentProject);
   const tickets = ticketQuery.data?.data ?? [];
-  const openTickets = tickets.filter((ticket) => ticket.status === "open");
-  const closeTickets = tickets.filter((ticket) => ticket.status === "closed");
   return (
     <Box
       flexGrow={1}
@@ -28,32 +39,45 @@ export default function Ticket() {
       }}
     >
       <Toolbar />
-      <Grid container spacing={1} justifyContent="center">
-        <Grid item xs={12} sm={6} md={5} lg={3}>
-          {createTicketPermission ? (
-            <Button variant="contained" onClick={() => setOpen(true)}>
-              Add Ticket
-            </Button>
-          ) : (
-            <Tooltip title="You don't have permission to create a ticket">
-              <span>
-                <Button variant="contained" disabled>
-                  Add Ticket
-                </Button>
-              </span>
-            </Tooltip>
-          )}
-        </Grid>
-        <Grid item xs={12} sm={6} md={5} lg={3} />
-      </Grid>
-      <Grid container spacing={1} justifyContent="center">
-        <Grid item xs={12} sm={6} md={5} lg={3}>
-          <TicketTab title="Open" tickets={openTickets} />
-        </Grid>
-        <Grid item xs={12} sm={6} md={5} lg={3}>
-          <TicketTab title="Closed" tickets={closeTickets} />
-        </Grid>
-      </Grid>
+      <Container maxWidth="lg">
+        <Stack spacing={3}>
+          <Stack direction="row" justifyContent="space-between" spacing={4}>
+            <Typography variant="h4">Tickets</Typography>
+            <div>
+              <Button
+                startIcon={
+                  <SvgIcon fontSize="small">
+                    <Add />
+                  </SvgIcon>
+                }
+                variant="contained"
+                disabled={!createTicketPermission}
+                onClick={() => setOpen(true)}
+              >
+                Add ticket
+              </Button>
+            </div>
+          </Stack>
+          <Card sx={{ p: 2 }}>
+            <OutlinedInput
+              defaultValue=""
+              fullWidth
+              placeholder="Search ticket"
+              startAdornment={
+                <InputAdornment position="start">
+                  <SvgIcon color="action" fontSize="small">
+                    <Search />
+                  </SvgIcon>
+                </InputAdornment>
+              }
+              sx={{ maxWidth: 500 }}
+            />
+          </Card>
+          <Box width="100%">
+            <TicketTable tickets={tickets} />
+          </Box>
+        </Stack>
+      </Container>
       <Dialog open={open} onClose={() => setOpen(false)} fullWidth>
         <AddTicketForm setCloseDialog={() => setOpen(false)} />
       </Dialog>

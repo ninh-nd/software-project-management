@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
-import Topbar from "~/components/common/topbar/Topbar";
-import Sidebar from "~/components/manager/sidebar/Sidebar";
-import MemberSidebar from "~/components/member/common/MemberSidebar";
+import Topbar from "~/components/Topbar";
+import Sidebar from "~/components/Sidebar";
+import MemberSidebar from "~/components/MemberSidebar";
 import { useUserRole } from "~/hooks/general";
 function SidebarWithRole() {
   const role = useUserRole();
