@@ -1,4 +1,12 @@
-import { Box, Grid, Button, Tooltip, Dialog } from "@mui/material";
+import {
+  Box,
+  Grid,
+  Button,
+  Tooltip,
+  Dialog,
+  Toolbar,
+  Container,
+} from "@mui/material";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import TicketTab from "~/components/common/cards/TicketTab";
@@ -19,38 +27,41 @@ export default function MemberTaskAndIssue() {
   const closeTickets = tickets.filter((ticket) => ticket.status === "closed");
   return (
     <Box flexGrow={1} sx={{ m: { xs: 2, sm: 4 } }}>
-      <Grid container spacing={1} justifyContent="center">
-        <Grid item xs={12} sm={6} md={5} lg={3}>
-          {createTicketPermission ? (
-            <Button variant="contained" onClick={() => setOpen(true)}>
-              Add Ticket
-            </Button>
-          ) : (
-            <Tooltip title="You don't have permission to create a ticket">
-              <span>
-                <Button variant="contained" disabled>
-                  Add Ticket
-                </Button>
-              </span>
-            </Tooltip>
-          )}
+      <Toolbar />
+      <Container sx={{ mt: 4, mb: 4 }} maxWidth="lg">
+        <Grid container spacing={1} justifyContent="center">
+          <Grid item xs={12} sm={6} md={5} lg={3}>
+            {createTicketPermission ? (
+              <Button variant="contained" onClick={() => setOpen(true)}>
+                Add Ticket
+              </Button>
+            ) : (
+              <Tooltip title="You don't have permission to create a ticket">
+                <span>
+                  <Button variant="contained" disabled>
+                    Add Ticket
+                  </Button>
+                </span>
+              </Tooltip>
+            )}
+          </Grid>
+          <Grid item xs={12} sm={6} md={5} lg={3} />
         </Grid>
-        <Grid item xs={12} sm={6} md={5} lg={3} />
-      </Grid>
-      <Grid container spacing={1} justifyContent="center">
-        <Grid item xs={12} sm={6} md={5} lg={3}>
-          <TicketTab title="Open" tickets={openTickets} />
+        <Grid container spacing={1} justifyContent="center">
+          <Grid item xs={12} sm={6} md={5} lg={3}>
+            <TicketTab title="Open" tickets={openTickets} />
+          </Grid>
+          <Grid item xs={12} sm={6} md={5} lg={3}>
+            <TicketTab title="Closed" tickets={closeTickets} />
+          </Grid>
+          <Grid item xs={12}>
+            <UnassignedTaskCard />
+          </Grid>
         </Grid>
-        <Grid item xs={12} sm={6} md={5} lg={3}>
-          <TicketTab title="Closed" tickets={closeTickets} />
-        </Grid>
-        <Grid item xs={12}>
-          <UnassignedTaskCard />
-        </Grid>
-      </Grid>
-      <Dialog open={open} onClose={() => setOpen(false)} fullWidth>
-        <AddTicketForm setCloseDialog={() => setOpen(false)} />
-      </Dialog>
+        <Dialog open={open} onClose={() => setOpen(false)} fullWidth>
+          <AddTicketForm setCloseDialog={() => setOpen(false)} />
+        </Dialog>
+      </Container>
     </Box>
   );
 }

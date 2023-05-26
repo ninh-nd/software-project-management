@@ -1,4 +1,4 @@
-import { useMediaQuery, useTheme } from "@mui/material";
+import { alpha, useMediaQuery, useTheme } from "@mui/material";
 import {
   Bar,
   BarChart,
@@ -48,19 +48,23 @@ export default function Chart({
       <Title>Activity history</Title>
       <ResponsiveContainer width="100%" aspect={3 / 1}>
         <BarChart width={500} height={300} data={reshapedActHist}>
-          <CartesianGrid strokeDasharray="3 3" />{" "}
-          <XAxis dataKey="createdBy" hide={lessThanMedium} />
-          <YAxis />
+          <XAxis
+            dataKey="createdBy"
+            hide={lessThanMedium}
+            axisLine={false}
+            tickLine={false}
+          />
+          <YAxis axisLine={false} tickLine={false} />
           <Tooltip />
           <Legend />
           <Bar
             dataKey="totalCommits"
-            fill={theme.palette.primary.dark}
+            fill={theme.palette.primary.main}
             name="Number of commits"
           />
           <Bar
             dataKey="totalPrs"
-            fill={theme.palette.secondary.dark}
+            fill={alpha(theme.palette.primary.main, 0.25)}
             name="Number of pull requests"
           />
         </BarChart>

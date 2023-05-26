@@ -205,7 +205,7 @@ export default function ArtifactCard({
                   </Typography>
                 </Stack>
               </Box>
-              <Divider orientation="vertical" />
+              <Divider orientation="vertical" sx={{ mx: 2 }} />
               <Box flexGrow={2} maxWidth={900}>
                 <Tabs
                   value={activeTabs[index]}

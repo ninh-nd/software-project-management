@@ -1,6 +1,6 @@
+import { useTheme } from "@mui/material";
+import dayjs from "dayjs";
 import {
-  CartesianGrid,
-  Legend,
   Line,
   LineChart,
   ResponsiveContainer,
@@ -11,8 +11,6 @@ import {
 import InfoPaper from "~/components/common/styledComponents/InfoPaper";
 import Title from "~/components/common/styledComponents/Title";
 import { ActivityHistory } from "~/interfaces/Entity";
-import dayjs from "dayjs";
-import { useTheme } from "@mui/material";
 function dateFormatter(date: string) {
   return dayjs(date).format("DD/MM/YY");
 }
@@ -52,15 +50,13 @@ export default function TimelineChart({
       <Title>Activity timeline</Title>
       <ResponsiveContainer width="100%" aspect={3 / 1}>
         <LineChart width={600} height={400} data={count}>
-          <XAxis
-            dataKey="date"
-            ticks={[count[0].date, count[count.length - 1].date]}
-          />
-          <YAxis />
+          <XAxis dataKey="date" axisLine={false} tickLine={false} />
+          <YAxis axisLine={false} tickLine={false} />
           <Tooltip />
           <Line
             dataKey="count"
-            stroke={theme.palette.primary.dark}
+            type="monotone"
+            stroke={theme.palette.primary.main}
             name="Number of activities"
           />
         </LineChart>
