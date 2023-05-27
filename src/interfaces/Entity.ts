@@ -78,7 +78,8 @@ export interface PhaseTemplate {
   isPrivate: boolean;
   createdBy: string;
 }
-export type PhaseTemplateCreate = Omit<PhaseTemplate, "_id" | "createdBy">;
+export interface PhaseTemplateCreate
+  extends Omit<PhaseTemplate, "_id" | "createdBy"> {}
 export interface Project {
   _id: string;
   name: string;
@@ -97,7 +98,8 @@ export interface Task {
   updatedBy?: string;
 }
 
-export type TaskCreate = Omit<Task, "_id" | "createdBy" | "updatedBy">;
+export interface TaskCreate
+  extends Omit<Task, "_id" | "createdBy" | "updatedBy"> {}
 export interface TaskUpdate extends Partial<TaskCreate> {}
 export interface ThirdParty {
   name: string;
@@ -129,7 +131,7 @@ export interface Threat {
   status: "Non mitigated" | "Partially mitigated" | "Fully mitigated";
   mitigation: string[];
 }
-export type ThreatCreate = Omit<Threat, "_id" | "status">;
+export interface ThreatCreate extends Omit<Threat, "_id" | "status"> {}
 export interface Ticket {
   _id: string;
   status: "open" | "closed";

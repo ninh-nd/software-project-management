@@ -188,8 +188,9 @@ interface ActionArtifactToPhase {
   artifactId: string;
   artifact: ArtifactCreate;
 }
+interface AddArtifactToPhase
+  extends Omit<ActionArtifactToPhase, "artifactId"> {}
 export function useAddArtifactToPhaseMutation() {
-  type AddArtifactToPhase = Omit<ActionArtifactToPhase, "artifactId">;
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
   return useMutation({
@@ -202,8 +203,9 @@ export function useAddArtifactToPhaseMutation() {
     },
   });
 }
+interface RemoveArtifactFromPhase
+  extends Omit<ActionArtifactToPhase, "artifact"> {}
 export function useRemoveArtifactFromPhaseMutation() {
-  type RemoveArtifactFromPhase = Omit<ActionArtifactToPhase, "artifact">;
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
   return useMutation({
