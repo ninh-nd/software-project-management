@@ -1,5 +1,5 @@
 import { Typography } from "@mui/material";
-import Title from "~/components/common/styledComponents/Title";
+import Title from "~/components/Title";
 import InfoPaper from "~/components/InfoPaper";
 
 export default function ActiveTaskCount({

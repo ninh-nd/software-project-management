@@ -23,10 +23,10 @@ import {
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useAvailableTasksQuery, useDeleteTaskMutation } from "~/hooks/query";
-import CreateTaskDialog from "../forms/CreateTaskDialog";
-import EditTaskDialog from "../forms/EditTaskDialog";
-import InfoPaper from "../styledComponents/InfoPaper";
-import Title from "../styledComponents/Title";
+import CreateTaskDialog from "./CreateTaskDialog";
+import EditTaskDialog from "./EditTaskDialog";
+import InfoPaper from "./InfoPaper";
+import Title from "./Title";
 
 export default function UnassignedTaskCard() {
   const [openConfirmDelete, setOpenConfirmDelete] = useState(false);

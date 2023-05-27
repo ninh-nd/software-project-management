@@ -12,7 +12,7 @@ import {
 import { useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import InfoPaper from "~/components/InfoPaper";
-import Title from "~/components/common/styledComponents/Title";
+import Title from "~/components/Title";
 import { Ticket } from "~/interfaces/Entity";
 const numberOfTaskPerPage = 5;
 export default function TicketAssigned({ tickets }: { tickets: Ticket[] }) {

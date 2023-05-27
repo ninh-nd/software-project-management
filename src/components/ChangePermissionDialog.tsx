@@ -22,7 +22,9 @@ interface DialogProps {
   open: boolean;
   handleClose: () => void;
 }
-type PermissionList = { [key: string]: boolean };
+interface PermissionList {
+  [key: string]: boolean;
+}
 export default function ChangePermissionDialog({
   id,
   open,
