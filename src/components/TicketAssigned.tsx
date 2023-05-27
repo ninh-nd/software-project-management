@@ -1,5 +1,6 @@
 import { Close, Undo } from "@mui/icons-material";
 import {
+  Box,
   IconButton,
   Link,
   List,
@@ -8,6 +9,7 @@ import {
   ListItemText,
   Pagination,
   Tooltip,
+  Typography,
 } from "@mui/material";
 import { useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
@@ -26,44 +28,59 @@ export default function TicketAssigned({ tickets }: { tickets: Ticket[] }) {
     currentPage + numberOfTaskPerPage
   );
   return (
-    <InfoPaper>
+    <InfoPaper sx={{ height: 400 }}>
       <Title>Ticket Assigned</Title>
-      <List>
-        {currentPageList.map((ticket) => (
-          <ListItem
-            key={ticket._id}
-            secondaryAction={
-              <Tooltip
-                title={
-                  ticket.status === "open"
-                    ? "Close this ticket"
-                    : "Reopen ticket"
-                }
-              >
-                <IconButton edge="end">
-                  {ticket.status === "open" ? <Close /> : <Undo />}
-                </IconButton>
-              </Tooltip>
-            }
-          >
-            <ListItemIcon>
-              {ticket.priority === "low"
-                ? "🟢"
-                : ticket.priority === "medium"
-                ? "🟠"
-                : "🔴"}
-            </ListItemIcon>
-            <ListItemText
-              primary={
-                <Link component={RouterLink} to={`/tickets/${ticket._id}`}>
-                  ticket.title
-                </Link>
+      {tickets.length === 0 ? (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            height: "100%",
+            alignItems: "center",
+          }}
+        >
+          <Typography variant="h6" color="textSecondary">
+            There's nothing here...
+          </Typography>
+        </Box>
+      ) : (
+        <List>
+          {currentPageList.map((ticket) => (
+            <ListItem
+              key={ticket._id}
+              secondaryAction={
+                <Tooltip
+                  title={
+                    ticket.status === "open"
+                      ? "Close this ticket"
+                      : "Reopen ticket"
+                  }
+                >
+                  <IconButton edge="end">
+                    {ticket.status === "open" ? <Close /> : <Undo />}
+                  </IconButton>
+                </Tooltip>
               }
-              secondary={ticket.description}
-            />
-          </ListItem>
-        ))}
-      </List>
+            >
+              <ListItemIcon>
+                {ticket.priority === "low"
+                  ? "🟢"
+                  : ticket.priority === "medium"
+                  ? "🟠"
+                  : "🔴"}
+              </ListItemIcon>
+              <ListItemText
+                primary={
+                  <Link component={RouterLink} to={`/tickets/${ticket._id}`}>
+                    ticket.title
+                  </Link>
+                }
+                secondary={ticket.description}
+              />
+            </ListItem>
+          ))}
+        </List>
+      )}
       <Pagination
         sx={{ display: "flex", justifyContent: "center", visibility }}
         count={Math.ceil(tickets.length / numberOfTaskPerPage)}

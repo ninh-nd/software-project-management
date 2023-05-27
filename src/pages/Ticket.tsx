@@ -14,7 +14,7 @@ import {
   Typography,
   debounce,
 } from "@mui/material";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import AddTicketForm from "~/components/AddTicketForm";
 import TicketTable from "~/components/TicketTable";
@@ -30,6 +30,9 @@ export default function Ticket() {
   const ticketQuery = useTicketsQuery(currentProject);
   const tickets = ticketQuery.data?.data ?? [];
   const [displayTickets, setDisplayTickets] = useState(tickets);
+  useEffect(() => {
+    setDisplayTickets(tickets);
+  }, [tickets]);
   function handleFilterTicket(event: ChangeEvent<HTMLInputElement>) {
     const value = event.target.value;
     if (value === "all") {

@@ -130,6 +130,10 @@ const router = createBrowserRouter([
     path: "*",
     element: <NotFound />,
   },
+  {
+    path: "/",
+    element: <Navigate to="/login" />,
+  },
 ]);
 export default function App() {
   const palette = createPalette();

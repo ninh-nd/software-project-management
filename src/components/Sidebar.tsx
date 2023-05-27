@@ -1,16 +1,11 @@
 import {
-  Add,
   AssessmentOutlined,
   ChevronLeft,
-  ExpandLess,
-  ExpandMore,
   HomeOutlined,
   InfoOutlined,
   SecurityOutlined,
-  StarBorder,
 } from "@mui/icons-material";
 import {
-  Collapse,
   Divider,
   IconButton,
   List,
@@ -21,12 +16,11 @@ import {
   Drawer as MuiDrawer,
   Toolbar,
   styled,
-  useTheme,
 } from "@mui/material";
-import { useNavigate, useParams } from "react-router-dom";
-import { useProjectInQuery } from "~/hooks/query";
 import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { drawerWidth, useDrawerState } from "~/hooks/drawer";
+import { useProjectInQuery } from "~/hooks/query";
 interface ItemProps {
   text: string;
   icon: JSX.Element;
@@ -55,9 +49,6 @@ function DrawerContent() {
   }
   const { open: isDrawerOpen } = useDrawerState();
   const [open, setOpen] = useState(true);
-  function handleClick() {
-    setOpen(!open);
-  }
   useEffect(() => {
     setOpen(isDrawerOpen);
   }, [isDrawerOpen]);
@@ -77,34 +68,6 @@ function DrawerContent() {
         icon={<InfoOutlined />}
         path={`/${currentProject}/tickets`}
       />
-      <ListItemButton onClick={handleClick}>
-        <ListItemIcon>
-          <List />
-        </ListItemIcon>
-        <ListItemText primary="Switch to..." />
-        {open ? <ExpandLess /> : <ExpandMore />}
-      </ListItemButton>
-      <Collapse in={open} timeout="auto" unmountOnExit>
-        <List component="div">
-          {projects?.map((p) => (
-            <ListItemButton sx={{ pl: 4 }} key={p._id}>
-              <ListItemIcon>
-                <StarBorder />
-              </ListItemIcon>
-              <ListItemText primary={p.name} />
-            </ListItemButton>
-          ))}
-          <ListItemButton sx={{ pl: 4 }} key="import">
-            <ListItemIcon>
-              <Add />
-            </ListItemIcon>
-            <ListItemText
-              primary="Import a new project"
-              sx={{ overflow: "hidden", textOverflow: "ellipsis" }}
-            />
-          </ListItemButton>
-        </List>
-      </Collapse>
       <Divider />
       <ListSubheader component="div" inset>
         Vulnerability control

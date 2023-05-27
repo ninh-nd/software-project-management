@@ -48,7 +48,7 @@ export default function TaskAssigned({ tasks }: { tasks: Task[] }) {
     };
   }
   return (
-    <InfoPaper>
+    <InfoPaper sx={{ height: 400 }}>
       <Title>Task Assigned</Title>
       <List>
         {currentPageList.map((task) => (

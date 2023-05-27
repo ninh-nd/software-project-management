@@ -18,11 +18,14 @@ import {
   Card,
   CardHeader,
   CardContent,
+  Toolbar,
 } from "@mui/material";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 dayjs.extend(relativeTime);
 import { useParams } from "react-router-dom";
+import PriorityChip from "~/components/PriorityChip";
+import TicketStatusChip from "~/components/TicketStatusChip";
 import { useMarkTicketMutation, useTicketQuery } from "~/hooks/query";
 import { Ticket } from "~/interfaces/Entity";
 function Headline({ ticket }: { ticket: Ticket }) {
@@ -32,15 +35,7 @@ function Headline({ ticket }: { ticket: Ticket }) {
       <Typography variant="h3" sx={{ mb: 2 }}>
         {ticket.title}
       </Typography>
-      {ticket.status === "open" ? (
-        <Chip label="Open" color="success" avatar={<ModeStandbyOutlined />} />
-      ) : (
-        <Chip
-          label="Closed"
-          color="secondary"
-          avatar={<CheckCircleOutlined />}
-        />
-      )}
+      <TicketStatusChip status={ticket.status} />
       <Typography variant="body2" display="inline" sx={{ ml: 1 }}>
         {`This ticket was ${ticket.status} at ${relativeTime}`}
       </Typography>
@@ -72,7 +67,7 @@ function RightColumn({ ticket }: { ticket: Ticket }) {
       <Box>
         <Typography variant="h6">Priority</Typography>
         <Typography variant="body1">
-          {renderPriority(ticket.priority)}
+          <PriorityChip priority={ticket.priority} />
         </Typography>
       </Box>
     </Stack>
@@ -80,13 +75,6 @@ function RightColumn({ ticket }: { ticket: Ticket }) {
 }
 
 function MainContent({ ticket }: { ticket: Ticket }) {
-  const ticketMutation = useMarkTicketMutation();
-  function closeTicket() {
-    ticketMutation.mutate({ id: ticket._id, status: "closed" });
-  }
-  function reopenTicket() {
-    ticketMutation.mutate({ id: ticket._id, status: "open" });
-  }
   return (
     <Stack spacing={5}>
       <Box>
@@ -135,56 +123,57 @@ function MainContent({ ticket }: { ticket: Ticket }) {
           </Card>
         ))}
       </Box>
-      <Box>
-        <Typography variant="h5">
-          <b>Actions</b>
-        </Typography>
-        {ticket.status === "open" ? (
-          <Button
-            variant="contained"
-            startIcon={<CheckCircleOutline />}
-            onClick={closeTicket}
-          >
-            Close ticket
-          </Button>
-        ) : (
-          <Button
-            variant="contained"
-            startIcon={<RefreshOutlined />}
-            onClick={reopenTicket}
-          >
-            Reopen ticket
-          </Button>
-        )}
-      </Box>
     </Stack>
   );
 }
 
-function renderPriority(priority: string) {
-  switch (priority) {
-    case "low":
-      return <Box color="green">Low</Box>;
-    case "medium":
-      return <Box color="orange">Medium</Box>;
-    case "high":
-      return <Box color="red">High</Box>;
-    default:
-      return <Box color="black">Unknown</Box>;
-  }
-}
-
 export default function TicketDetail() {
   const { ticketId } = useParams();
+  const ticketMutation = useMarkTicketMutation();
+  function closeTicket() {
+    if (ticketId) {
+      ticketMutation.mutate({ id: ticketId, status: "closed" });
+    }
+  }
+  function reopenTicket() {
+    if (ticketId) {
+      ticketMutation.mutate({ id: ticketId, status: "open" });
+    }
+  }
   if (!ticketId) return <></>;
   const ticketQuery = useTicketQuery(ticketId);
   const ticket = ticketQuery.data?.data;
   if (!ticket) return <></>;
   return (
     <Box flexGrow={1} height="100vh">
-      <Container maxWidth="lg">
+      <Toolbar />
+      <Container maxWidth="lg" sx={{ my: 4 }}>
         <Stack spacing={2} sx={{ m: 2 }}>
-          <Headline ticket={ticket} />
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            spacing={4}
+            alignItems="flex-end"
+          >
+            <Headline ticket={ticket} />
+            {ticket.status === "open" ? (
+              <Button
+                variant="contained"
+                startIcon={<CheckCircleOutline />}
+                onClick={closeTicket}
+              >
+                Close ticket
+              </Button>
+            ) : (
+              <Button
+                variant="contained"
+                startIcon={<RefreshOutlined />}
+                onClick={reopenTicket}
+              >
+                Reopen ticket
+              </Button>
+            )}
+          </Stack>
           <Divider />
           <Grid container spacing={2}>
             <Grid item xs={9}>

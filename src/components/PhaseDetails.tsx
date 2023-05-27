@@ -73,6 +73,7 @@ export default function PhaseDetails({ phase }: PhaseDetailsProps) {
           List of tasks to be done in this phase
         </Typography>
         <DataGrid
+          checkboxSelection
           autoHeight
           rows={phase.tasks}
           getRowId={(row) => row._id}

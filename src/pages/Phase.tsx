@@ -5,6 +5,7 @@ import {
   Link,
   Stack,
   Toolbar,
+  Typography,
 } from "@mui/material";
 import { Link as RouterLink, useParams } from "react-router-dom";
 import UnassginedTaskCard from "~/components/UnassignedTaskCard";
@@ -24,6 +25,7 @@ export default function Phase() {
       <Toolbar />
       <Container sx={{ mt: 4, mb: 4 }}>
         <Stack spacing={4}>
+          <Typography variant="h4">Phases</Typography>
           <Box display="flex" justifyContent="center">
             <Breadcrumbs separator=">">
               {phaseList.map((phase) => (

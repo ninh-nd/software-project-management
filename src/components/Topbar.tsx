@@ -1,21 +1,34 @@
 import {
   AccountCircleOutlined,
+  Add,
+  Book,
+  ExpandMore,
   LogoutOutlined,
   Menu,
 } from "@mui/icons-material";
 import {
   AppBarProps,
+  Dialog,
+  FormControl,
   IconButton,
+  InputLabel,
+  MenuItem,
   AppBar as MuiAppBar,
+  Select,
+  SelectChangeEvent,
+  Stack,
   Toolbar,
   Tooltip,
   Typography,
   styled,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { ReactNode, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { getAccountInfo } from "~/actions/accountAction";
 import { logout } from "~/actions/authAction";
 import { drawerWidth, useDrawerState } from "~/hooks/drawer";
+import { useProjectInQuery } from "~/hooks/query";
+import ImportProject from "./ImportProject";
 interface Props extends AppBarProps {
   open: boolean;
 }
@@ -37,8 +50,12 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 export default function Topbar() {
-  const { open, setOpen } = useDrawerState();
   const navigate = useNavigate();
+  const { currentProject } = useParams();
+  const [openDialog, setOpenDialog] = useState(false);
+  const { open, setOpen } = useDrawerState();
+  const projectInQuery = useProjectInQuery();
+  const projects = projectInQuery.data?.data;
   async function handleLogOut() {
     logout();
     navigate("/login", { replace: true });
@@ -52,6 +69,14 @@ export default function Topbar() {
   }
   function handleDrawerToggle() {
     setOpen(!open);
+  }
+  function switchProject(event: SelectChangeEvent<string>, child: ReactNode) {
+    const selection = event.target.value;
+    if (selection === "add-new-project") {
+      setOpenDialog(true);
+      return;
+    }
+    navigate(`/${selection}/`);
   }
   return (
     <AppBar position="absolute" open={open}>
@@ -81,6 +106,31 @@ export default function Topbar() {
         >
           Dashboard
         </Typography>
+        <FormControl sx={{ px: 1 }}>
+          <InputLabel sx={{ color: "white" }}>Project</InputLabel>
+          <Select
+            label="Project"
+            IconComponent={() => <ExpandMore color="inherit" />}
+            sx={{ minWidth: 200, color: "info" }}
+            onChange={switchProject}
+            value={currentProject}
+          >
+            {projects?.map((project) => (
+              <MenuItem key={project._id} value={project.name}>
+                <Stack direction="row" alignItems="center">
+                  <Book fontSize="small" />
+                  <Typography>{project.name}</Typography>
+                </Stack>
+              </MenuItem>
+            ))}
+            <MenuItem key="add-project" value="add-new-project">
+              <Stack direction="row" alignItems="center">
+                <Add fontSize="small" />
+                <Typography>Add new project</Typography>
+              </Stack>
+            </MenuItem>
+          </Select>
+        </FormControl>
         <Tooltip title="Account">
           <IconButton onClick={redirectToAccountPage}>
             <AccountCircleOutlined color="secondary" />
@@ -92,6 +142,14 @@ export default function Topbar() {
           </IconButton>
         </Tooltip>
       </Toolbar>
+      <Dialog
+        open={openDialog}
+        onClose={() => setOpenDialog(false)}
+        maxWidth="sm"
+        fullWidth
+      >
+        <ImportProject setClose={() => setOpenDialog(false)} />
+      </Dialog>
     </AppBar>
   );
 }

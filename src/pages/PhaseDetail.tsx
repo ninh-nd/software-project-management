@@ -23,7 +23,7 @@ export default function PhaseDetail() {
     <Box flexGrow={1} height="100vh">
       <Toolbar />
       <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-        <Grid container spacing={3}>
+        <Grid container spacing={2}>
           <Grid item xs={12}>
             <Typography variant="h4">{phase.name}</Typography>
             <Typography variant="subtitle1">{phase.description}</Typography>

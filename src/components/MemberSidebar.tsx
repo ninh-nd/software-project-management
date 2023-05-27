@@ -1,15 +1,10 @@
 import {
-  Add,
   ChevronLeft,
-  ExpandLess,
-  ExpandMore,
   HomeOutlined,
   SecurityOutlined,
-  StarBorder,
   Task,
 } from "@mui/icons-material";
 import {
-  Collapse,
   Divider,
   IconButton,
   List,
@@ -78,9 +73,6 @@ function DrawerContent() {
   }
   const { open: isDrawerOpen } = useDrawerState();
   const [open, setOpen] = useState(true);
-  function handleClick() {
-    setOpen(!open);
-  }
   useEffect(() => {
     setOpen(isDrawerOpen);
   }, [isDrawerOpen]);
@@ -96,34 +88,6 @@ function DrawerContent() {
         icon={<Task />}
         path={`/${currentProject}/tasksAndIssues`}
       />
-      <ListItemButton onClick={handleClick}>
-        <ListItemIcon>
-          <List />
-        </ListItemIcon>
-        <ListItemText primary="Switch to..." />
-        {open ? <ExpandLess /> : <ExpandMore />}
-      </ListItemButton>
-      <Collapse in={open} timeout="auto" unmountOnExit>
-        <List component="div">
-          {projects?.map((p) => (
-            <ListItemButton sx={{ pl: 4 }} key={p._id}>
-              <ListItemIcon>
-                <StarBorder />
-              </ListItemIcon>
-              <ListItemText primary={p.name} />
-            </ListItemButton>
-          ))}
-          <ListItemButton sx={{ pl: 4 }} key="import">
-            <ListItemIcon>
-              <Add />
-            </ListItemIcon>
-            <ListItemText
-              primary="Import a new project"
-              sx={{ overflow: "hidden", textOverflow: "ellipsis" }}
-            />
-          </ListItemButton>
-        </List>
-      </Collapse>
       <Divider />
       <ListSubheader component="div" inset>
         Vulnerability control
