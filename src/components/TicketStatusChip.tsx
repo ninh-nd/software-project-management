@@ -31,7 +31,7 @@ export default function TicketStatusChip({
     if (status === "open") {
       return <Done />;
     }
-    return <Close />;
+    return <Close color="secondary" />;
   };
 
   return (

@@ -161,6 +161,7 @@ export default function TicketDetail() {
                 variant="contained"
                 startIcon={<CheckCircleOutline />}
                 onClick={closeTicket}
+                color="success"
               >
                 Close ticket
               </Button>

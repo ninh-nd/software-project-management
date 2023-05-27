@@ -1,5 +1,7 @@
 import {
   Check,
+  CheckBox,
+  CheckBoxOutlineBlank,
   CheckCircleOutline,
   HourglassBottom,
   Undo,
@@ -65,7 +67,11 @@ export default function TaskAssigned({ tasks }: { tasks: Task[] }) {
                     task.status === "active" ? "completed" : "active"
                   )}
                 >
-                  {task.status === "active" ? <Check /> : <Undo />}
+                  {task.status === "active" ? (
+                    <CheckBox />
+                  ) : (
+                    <CheckBoxOutlineBlank />
+                  )}
                 </IconButton>
               </Tooltip>
             }
