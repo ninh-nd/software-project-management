@@ -10,10 +10,16 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
+import { DatePicker } from "@mui/x-date-pickers";
+import dayjs, { Dayjs } from "dayjs";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useTaskQuery, useUpdateTaskMutation } from "~/hooks/query";
 import { TaskCreate } from "~/interfaces/Entity";
+
+interface FormData extends Omit<TaskCreate, "dueDate"> {
+  dueDate: Dayjs;
+}
 
 interface UpdateTaskDialogProps {
   open: boolean;
@@ -25,24 +31,28 @@ export default function EditTaskDialog({
   setOpen,
   id,
 }: UpdateTaskDialogProps) {
+  if (!id) return <></>;
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
     control,
-  } = useForm<TaskCreate>();
+  } = useForm<FormData>();
   useEffect(() => {
     reset();
   }, [id]);
-  if (!id) return <></>;
   const getTaskInfoQuery = useTaskQuery(id);
   const updateTaskMutation = useUpdateTaskMutation();
   const task = getTaskInfoQuery.data?.data;
   if (!task) return <></>;
-  async function onSubmit(data: TaskCreate) {
+  async function onSubmit(data: FormData) {
     if (!id) return;
-    updateTaskMutation.mutate({ data, id });
+    const sendData = {
+      ...data,
+      dueDate: dayjs(data.dueDate).toDate(),
+    };
+    updateTaskMutation.mutate({ data: sendData, id });
     setOpen(false);
   }
   return (
@@ -75,6 +85,19 @@ export default function EditTaskDialog({
                   <MenuItem value="active">Active</MenuItem>
                   <MenuItem value="completed">Completed</MenuItem>
                 </Select>
+              )}
+            />
+            <Controller
+              name="dueDate"
+              control={control}
+              defaultValue={dayjs(task.dueDate)}
+              render={({ field }) => (
+                <DatePicker
+                  {...field}
+                  disablePast
+                  label="Due date"
+                  format="DD-MM-YYYY"
+                />
               )}
             />
           </Stack>

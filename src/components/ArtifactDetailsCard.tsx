@@ -22,7 +22,7 @@ import { useState } from "react";
 import { useRemoveArtifactFromPhaseMutation } from "~/hooks/query";
 import { Docker } from "~/icons/Icons";
 import { Phase } from "~/interfaces/Entity";
-import ConfirmDeleteModal from "./ConfirmDeleteDialog";
+import ConfirmDeleteDialog from "./ConfirmDeleteDialog";
 import CreateArtifactForm from "./CreateArtifactForm";
 import UpdateArtifactForm from "./UpdateArtifactForm";
 function renderType({
@@ -166,13 +166,12 @@ export default function ArtifactDetails({ phase }: ArtifactDetailsProps) {
           />
         </Dialog>
       </CardActions>
-      <ConfirmDeleteModal
+      <ConfirmDeleteDialog
         open={confirmModal}
         setOpen={setConfirmModal}
         deleteFunction={removeArtifact}
-      >
-        Do you want to delete this artifact?
-      </ConfirmDeleteModal>
+        text="Do you want to delete this artifact?"
+      />
     </Card>
   );
 }

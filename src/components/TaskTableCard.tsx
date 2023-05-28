@@ -15,6 +15,7 @@ import {
   Typography,
   debounce,
 } from "@mui/material";
+import dayjs from "dayjs";
 import { ChangeEvent, useEffect, useState } from "react";
 import { Task } from "~/interfaces/Entity";
 function TaskTable({ tasks }: { tasks: Task[] }) {
@@ -46,7 +47,7 @@ function TaskTable({ tasks }: { tasks: Task[] }) {
                 <TableCell>{t.name}</TableCell>
                 <TableCell align="center">{t.status}</TableCell>
                 <TableCell>{t.description}</TableCell>
-                <TableCell>TODO...</TableCell>
+                <TableCell>{dayjs(t.dueDate).format("DD/MM/YYYY")}</TableCell>
               </TableRow>
             ))}
           </TableBody>

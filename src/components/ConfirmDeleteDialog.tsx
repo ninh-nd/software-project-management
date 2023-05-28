@@ -9,11 +9,11 @@ import {
 interface Props {
   open: boolean;
   setOpen: (value: boolean) => void;
-  children: string;
-  deleteFunction: () => Promise<void>;
+  text: string;
+  deleteFunction: () => void;
 }
-export default function ConfirmDeleteModal({
-  children,
+export default function ConfirmDeleteDialog({
+  text,
   open,
   setOpen,
   deleteFunction,
@@ -21,15 +21,15 @@ export default function ConfirmDeleteModal({
   function handleClose() {
     setOpen(false);
   }
-  async function confirmDelete() {
+  function confirmDelete() {
     setOpen(false);
-    await deleteFunction();
+    deleteFunction();
   }
   return (
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle>Are you sure?</DialogTitle>
       <DialogContent>
-        <DialogContentText>{children}</DialogContentText>
+        <DialogContentText>{text}</DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose} color="info">

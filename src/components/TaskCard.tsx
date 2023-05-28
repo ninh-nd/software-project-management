@@ -17,10 +17,12 @@ import { MouseEvent, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useAssignTaskMutation, useAvailableTasksQuery } from "~/hooks/query";
 import { User } from "~/interfaces/Entity";
+import AssignTaskDialog from "./AssignTaskDialog";
 
 const rowsPerPage = 5;
 export default function TaskCard({ member }: { member: User }) {
   const [page, setPage] = useState(0);
+  const [open, setOpen] = useState(false);
   const handlePageChange = (
     event: MouseEvent<HTMLButtonElement> | null,
     newPage: number
@@ -33,15 +35,6 @@ export default function TaskCard({ member }: { member: User }) {
   );
   const { currentProject } = useParams();
   if (!currentProject) return <></>;
-  const taskQuery = useAvailableTasksQuery(currentProject);
-  const assignTaskList = taskQuery.data?.data ?? [];
-
-  const assignTaskMutation = useAssignTaskMutation();
-
-  async function handleAssignTask(id: string) {
-    assignTaskMutation.mutate({ taskId: id, memberId: member._id });
-  }
-
   return (
     <Card>
       <CardHeader title="Tasks" />
@@ -74,11 +67,18 @@ export default function TaskCard({ member }: { member: User }) {
         />
         <Divider />
         <CardActions sx={{ justifyContent: "flex-end" }}>
-          <Button color="inherit" endIcon={<Add />} size="small" variant="text">
+          <Button
+            color="inherit"
+            endIcon={<Add />}
+            size="small"
+            variant="text"
+            onClick={() => setOpen(true)}
+          >
             Assign
           </Button>
         </CardActions>
       </CardContent>
+      <AssignTaskDialog open={open} setOpen={setOpen} />
     </Card>
   );
 }

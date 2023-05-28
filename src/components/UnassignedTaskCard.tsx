@@ -28,18 +28,22 @@ import { useParams } from "react-router-dom";
 import { useAvailableTasksQuery, useDeleteTaskMutation } from "~/hooks/query";
 import CreateTaskDialog from "./CreateTaskDialog";
 import EditTaskDialog from "./EditTaskDialog";
+import dayjs from "dayjs";
+import ConfirmDeleteDialog from "./ConfirmDeleteDialog";
+import AssignTaskDialog from "./AssignTaskDialog";
 
 export default function UnassignedTaskCard() {
+  const { currentProject } = useParams();
+  if (!currentProject) {
+    return <></>;
+  }
+  const [openAssign, setOpenAssign] = useState(false);
   const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [openCreate, setOpenCreate] = useState(false);
   const [selectedTask, setSelectedTask] = useState<string | undefined>(
     undefined
   );
-  const { currentProject } = useParams();
-  if (!currentProject) {
-    return <></>;
-  }
   const deleteTaskMutation = useDeleteTaskMutation();
   const availableTasksQuery = useAvailableTasksQuery(currentProject);
   const availableTasks = availableTasksQuery.data?.data ?? [];
@@ -62,6 +66,14 @@ export default function UnassignedTaskCard() {
       headerName: "Description",
       editable: true,
       flex: 1,
+    },
+    {
+      field: "dueDate",
+      headerName: "Due date",
+      editable: true,
+      renderCell: (params) => {
+        return dayjs(params.value as string).format("DD/MM/YYYY");
+      },
     },
     {
       field: "actions",
@@ -124,7 +136,11 @@ export default function UnassignedTaskCard() {
           <CardHeader title="Actions" />
           <CardContent>
             <Box display="flex">
-              <Button variant="contained" color="primary">
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => setOpenAssign(true)}
+              >
                 Assign task
               </Button>
               <Button
@@ -139,24 +155,15 @@ export default function UnassignedTaskCard() {
           </CardContent>
         </Card>
       </Stack>
-      <Dialog
+      <ConfirmDeleteDialog
         open={openConfirmDelete}
-        onClose={() => setOpenConfirmDelete(false)}
-      >
-        <DialogTitle>Delete this task</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Are you sure you want to delete this task? This action cannot be
-            undone.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpenConfirmDelete(false)}>Cancel</Button>
-          <Button onClick={deleteTask}>Delete</Button>
-        </DialogActions>
-      </Dialog>
+        setOpen={setOpenConfirmDelete}
+        deleteFunction={deleteTask}
+        text="Are you sure you want to delete this task?"
+      />
       <CreateTaskDialog open={openCreate} setOpen={setOpenCreate} />
       <EditTaskDialog open={openEdit} setOpen={setOpenEdit} id={selectedTask} />
+      <AssignTaskDialog open={openAssign} setOpen={setOpenAssign} />
     </>
   );
 }
