@@ -26,7 +26,7 @@ import { useTicketsQuery } from "~/hooks/query";
 import { Ticket } from "~/interfaces/Entity";
 import PriorityChip from "./PriorityChip";
 import TicketStatusChip from "./TicketStatusChip";
-import AddTicketForm from "./AddTicketForm";
+import AddTicketForm from "./AddTicketDialog";
 interface TabProps {
   tickets: Ticket[];
 }

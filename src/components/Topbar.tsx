@@ -28,7 +28,7 @@ import { getAccountInfo } from "~/actions/accountAction";
 import { logout } from "~/actions/authAction";
 import { drawerWidth, useDrawerState } from "~/hooks/drawer";
 import { useProjectInQuery } from "~/hooks/query";
-import ImportProject from "./ImportProject";
+import ImportProject from "./ImportProjectDialog";
 import { useUserRole } from "~/hooks/general";
 interface Props extends AppBarProps {
   open: boolean;

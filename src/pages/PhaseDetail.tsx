@@ -1,9 +1,9 @@
 import { Box, Typography, Grid, Toolbar, Container } from "@mui/material";
 import { useParams } from "react-router-dom";
-import ActiveTaskCount from "~/components/ActiveTaskCount";
-import ArtifactDetails from "~/components/ArtifactDetails";
-import CompletedTaskCount from "~/components/CompletedTaskCount";
-import PhaseDetails from "~/components/PhaseDetails";
+import ActiveTaskCount from "~/components/ActiveTaskCountCard";
+import ArtifactDetails from "~/components/ArtifactDetailsCard";
+import CompletedTaskCount from "~/components/CompletedTaskCountCard";
+import PhaseDetails from "~/components/PhaseDetailsCard";
 import PhaseProgress from "~/components/PhaseProgress";
 import { usePhaseQuery } from "~/hooks/query";
 export default function PhaseDetail() {
@@ -42,7 +42,7 @@ export default function PhaseDetail() {
             />
           </Grid>
           <Grid item md={6}>
-            <PhaseProgress sx={{ height: "100%" }} />
+            <PhaseProgress sx={{ height: "100%" }} value={50} />
           </Grid>
           <Grid item xs={12}>
             <PhaseDetails phase={phase} />

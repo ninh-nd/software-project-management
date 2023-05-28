@@ -11,6 +11,7 @@ import {
   ListItemIcon,
   ListItemText,
   Pagination,
+  SxProps,
   Tooltip,
   Typography,
 } from "@mui/material";
@@ -18,7 +19,13 @@ import { useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { Ticket } from "~/interfaces/Entity";
 const numberOfTaskPerPage = 5;
-export default function TicketAssigned({ tickets }: { tickets: Ticket[] }) {
+export default function TicketAssigned({
+  tickets,
+  sx,
+}: {
+  tickets: Ticket[];
+  sx?: SxProps;
+}) {
   const [currentPage, setCurrentPage] = useState(0);
   const visibility = tickets.length > 0 ? "visible" : "hidden";
   function handlePageChange(event: React.ChangeEvent<unknown>, value: number) {
@@ -29,7 +36,7 @@ export default function TicketAssigned({ tickets }: { tickets: Ticket[] }) {
     currentPage + numberOfTaskPerPage
   );
   return (
-    <Card>
+    <Card sx={sx}>
       <CardHeader title="Ticket Assigned" />
       <CardContent>
         {tickets.length === 0 ? (

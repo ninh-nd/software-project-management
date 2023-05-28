@@ -1,22 +1,19 @@
-import { Schedule } from "@mui/icons-material";
+import { Assignment } from "@mui/icons-material";
 import {
   Avatar,
   Card,
   CardContent,
-  LinearProgress,
   Stack,
   SxProps,
   Typography,
-  useTheme,
 } from "@mui/material";
-export default function PhaseProgress({
+export default function OverdueTaskCard({
   sx,
-  value,
+  total,
 }: {
   sx?: SxProps;
-  value: number;
+  total: number;
 }) {
-  const theme = useTheme();
   return (
     <Card sx={sx}>
       <CardContent>
@@ -24,21 +21,24 @@ export default function PhaseProgress({
           alignItems="flex-start"
           direction="row"
           justifyContent="space-between"
+          spacing={3}
         >
-          <Stack spacing={1} sx={{ flexGrow: 0.8 }}>
+          <Stack spacing={1}>
             <Typography color="text.secondary" variant="overline">
-              Progress (Working feature)
+              Overdue tasks (Working feature)
             </Typography>
-            <LinearProgress variant="determinate" value={value} />
+            <Typography variant="h4" color="error.main">
+              {total}
+            </Typography>
           </Stack>
           <Avatar
             sx={{
-              backgroundColor: "info.main",
+              backgroundColor: "error.main",
               height: 56,
               width: 56,
             }}
           >
-            <Schedule />
+            <Assignment />
           </Avatar>
         </Stack>
       </CardContent>

@@ -22,7 +22,7 @@ import { useState } from "react";
 import { useRemoveArtifactFromPhaseMutation } from "~/hooks/query";
 import { Docker } from "~/icons/Icons";
 import { Phase } from "~/interfaces/Entity";
-import ConfirmDeleteModal from "./ConfirmDeleteModal";
+import ConfirmDeleteModal from "./ConfirmDeleteDialog";
 import CreateArtifactForm from "./CreateArtifactForm";
 import UpdateArtifactForm from "./UpdateArtifactForm";
 function renderType({

@@ -1,6 +1,6 @@
 import { Box, Button, Dialog, Typography } from "@mui/material";
 import { useState } from "react";
-import CreatePhaseTemplateForm from "./CreatePhaseModelForm";
+import CreatePhaseTemplateForm from "./CreatePhaseModelDialog";
 export default function CreatePhaseTemplate() {
   const [open, setOpen] = useState(false);
   return (

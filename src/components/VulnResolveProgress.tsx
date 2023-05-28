@@ -1,22 +1,22 @@
-import { Schedule } from "@mui/icons-material";
+import { ChecklistRtl } from "@mui/icons-material";
 import {
   Avatar,
+  Box,
   Card,
   CardContent,
   LinearProgress,
   Stack,
   SxProps,
   Typography,
-  useTheme,
 } from "@mui/material";
-export default function PhaseProgress({
+
+export default function VulnResolveProgress({
   sx,
   value,
 }: {
   sx?: SxProps;
   value: number;
 }) {
-  const theme = useTheme();
   return (
     <Card sx={sx}>
       <CardContent>
@@ -27,20 +27,23 @@ export default function PhaseProgress({
         >
           <Stack spacing={1} sx={{ flexGrow: 0.8 }}>
             <Typography color="text.secondary" variant="overline">
-              Progress (Working feature)
+              Resolution progress (Working feature)
             </Typography>
-            <LinearProgress variant="determinate" value={value} />
+            <Typography variant="h4">{`${value}%`}</Typography>
           </Stack>
           <Avatar
             sx={{
-              backgroundColor: "info.main",
+              backgroundColor: "warning.main",
               height: 56,
               width: 56,
             }}
           >
-            <Schedule />
+            <ChecklistRtl />
           </Avatar>
         </Stack>
+        <Box sx={{ mt: 3 }}>
+          <LinearProgress value={value} variant="determinate" />
+        </Box>
       </CardContent>
     </Card>
   );

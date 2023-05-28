@@ -1,9 +1,9 @@
 import {
-  Assignment,
+  AssignmentOutlined,
   ChevronLeft,
   HomeOutlined,
+  InfoOutlined,
   SecurityOutlined,
-  Task,
 } from "@mui/icons-material";
 import {
   Divider,
@@ -84,10 +84,14 @@ function DrawerContent() {
         icon={<HomeOutlined />}
         path={`/${currentProject}/`}
       />
-      <Item text="Ticket" icon={<Task />} path={`/${currentProject}/tickets`} />
+      <Item
+        text="Ticket"
+        icon={<InfoOutlined />}
+        path={`/${currentProject}/tickets`}
+      />
       <Item
         text="Task"
-        icon={<Assignment />}
+        icon={<AssignmentOutlined />}
         path={`/${currentProject}/tasks`}
       />
       <Divider />

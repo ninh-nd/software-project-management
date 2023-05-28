@@ -1,11 +1,11 @@
 import { Box, Container, Grid, Toolbar } from "@mui/material";
 import { useParams } from "react-router-dom";
 import MemberCard from "~/components/MemberCard";
-import ProjectInfo from "~/components/ProjectInfo";
-import TotalCommits from "~/components/TotalCommits";
-import TotalPullRequests from "~/components/TotalPull";
-import Chart from "~/components/Chart";
-import RecentActivity from "~/components/RecentActivity";
+import ProjectInfo from "~/components/ProjectInfoCard";
+import TotalCommits from "~/components/TotalCommitsCard";
+import TotalPullRequests from "~/components/TotalPullCard";
+import Chart from "~/components/ActivityHistoryChart";
+import RecentActivity from "~/components/RecentActivityCard";
 import TimelineChart from "~/components/TimelineChart";
 import TaskAssigned from "~/components/TaskAssigned";
 import TicketAssigned from "~/components/TicketAssigned";
@@ -77,10 +77,10 @@ function MemberHomePage() {
             <TimelineChart activityHistory={actHistData} />
           </Grid>
           <Grid item xs={12} md={6}>
-            <TaskAssigned tasks={taskAssigned} />
+            <TaskAssigned tasks={taskAssigned} sx={{ height: 450 }} />
           </Grid>
           <Grid item xs={12} md={6}>
-            <TicketAssigned tickets={ticketAssigned} />
+            <TicketAssigned tickets={ticketAssigned} sx={{ height: 450 }} />
           </Grid>
         </Grid>
       </Container>

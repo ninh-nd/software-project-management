@@ -146,7 +146,7 @@ function renderType({
     case "source code":
       return (
         <Stack direction="row" alignItems="center" gap={1}>
-          <Typography variant="body2">Source code</Typography>
+          <Typography variant="body2">Code</Typography>
           <Code />
         </Stack>
       );
@@ -190,14 +190,12 @@ export default function ArtifactCard({
         <Stack spacing={2}>
           {artifacts.map((artifact, index) => (
             <Box key={artifact._id}>
-              <Box display="flex" sx={{ height: 200 }}>
-                <Box
-                  flexGrow={1}
-                  display="flex"
-                  justifyContent="center"
-                  alignItems="center"
-                  maxWidth={200}
-                >
+              <Stack
+                direction="row"
+                sx={{ height: 200 }}
+                justifyContent="space-between"
+              >
+                <Box display="flex" justifyContent="center" alignItems="center">
                   <Stack alignItems="center">
                     <Typography variant="h6" component="div">
                       {artifact.name}
@@ -208,7 +206,7 @@ export default function ArtifactCard({
                   </Stack>
                 </Box>
                 <Divider orientation="vertical" sx={{ mx: 2 }} />
-                <Box flexGrow={2} maxWidth={900}>
+                <Box flexGrow={1}>
                   <Tabs
                     value={activeTabs[index]}
                     onChange={(event, newValue) =>
@@ -230,7 +228,7 @@ export default function ArtifactCard({
                     list={artifact.threatList}
                   />
                 </Box>
-              </Box>
+              </Stack>
               <Divider variant="middle" sx={{ m: 2 }} />
             </Box>
           ))}

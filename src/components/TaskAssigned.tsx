@@ -13,6 +13,7 @@ import {
   ListItemIcon,
   ListItemText,
   Pagination,
+  SxProps,
   Tooltip,
 } from "@mui/material";
 import { useState } from "react";
@@ -23,7 +24,13 @@ import {
 import { Task } from "~/interfaces/Entity";
 
 const numberOfTaskPerPage = 5;
-export default function TaskAssigned({ tasks }: { tasks: Task[] }) {
+export default function TaskAssigned({
+  tasks,
+  sx,
+}: {
+  tasks: Task[];
+  sx?: SxProps;
+}) {
   const userInfoQuery = useMemberByAccountIdQuery();
   const userInfo = userInfoQuery.data?.data;
   const [currentPage, setCurrentPage] = useState(0);
@@ -48,7 +55,7 @@ export default function TaskAssigned({ tasks }: { tasks: Task[] }) {
     };
   }
   return (
-    <Card>
+    <Card sx={sx}>
       <CardHeader title="Task Assigned" />
       <CardContent>
         <List>
