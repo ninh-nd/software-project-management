@@ -1,4 +1,10 @@
-import { useTheme } from "@mui/material";
+import {
+  SxProps,
+  useTheme,
+  Card,
+  CardHeader,
+  CardContent,
+} from "@mui/material";
 import dayjs from "dayjs";
 import {
   Line,
@@ -8,8 +14,6 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import InfoPaper from "~/components/InfoPaper";
-import Title from "~/components/Title";
 import { ActivityHistory } from "~/interfaces/Entity";
 function dateFormatter(date: string) {
   return dayjs(date).format("DD/MM/YY");
@@ -37,8 +41,10 @@ function countHistory(array: ActivityHistory[]) {
 }
 export default function TimelineChart({
   activityHistory,
+  sx,
 }: {
   activityHistory: ActivityHistory[];
+  sx?: SxProps;
 }) {
   const theme = useTheme();
   activityHistory.sort((a, b) => {
@@ -46,21 +52,23 @@ export default function TimelineChart({
   });
   const count = countHistory(activityHistory);
   return (
-    <InfoPaper>
-      <Title>Activity timeline</Title>
-      <ResponsiveContainer width="100%" aspect={3 / 1}>
-        <LineChart width={600} height={400} data={count}>
-          <XAxis dataKey="date" axisLine={false} tickLine={false} />
-          <YAxis axisLine={false} tickLine={false} />
-          <Tooltip />
-          <Line
-            dataKey="count"
-            type="monotone"
-            stroke={theme.palette.primary.main}
-            name="Number of activities"
-          />
-        </LineChart>
-      </ResponsiveContainer>
-    </InfoPaper>
+    <Card sx={sx}>
+      <CardHeader title="Activity timeline" />
+      <CardContent>
+        <ResponsiveContainer width="100%" aspect={3 / 1}>
+          <LineChart width={600} height={400} data={count}>
+            <XAxis dataKey="date" axisLine={false} tickLine={false} />
+            <YAxis axisLine={false} tickLine={false} />
+            <Tooltip />
+            <Line
+              dataKey="count"
+              type="monotone"
+              stroke={theme.palette.primary.main}
+              name="Number of activities"
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      </CardContent>
+    </Card>
   );
 }

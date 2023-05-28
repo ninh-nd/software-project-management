@@ -1,10 +1,11 @@
-import { Add, ArrowRight } from "@mui/icons-material";
+import { Add } from "@mui/icons-material";
 import {
-  Box,
   Button,
+  Card,
   CardActions,
+  CardContent,
+  CardHeader,
   Divider,
-  SvgIcon,
   Table,
   TableBody,
   TableCell,
@@ -14,8 +15,6 @@ import {
 } from "@mui/material";
 import { MouseEvent, useState } from "react";
 import { useParams } from "react-router-dom";
-import InfoPaper from "~/components/InfoPaper";
-import Title from "~/components/Title";
 import { useAssignTaskMutation, useAvailableTasksQuery } from "~/hooks/query";
 import { User } from "~/interfaces/Entity";
 
@@ -44,40 +43,42 @@ export default function TaskCard({ member }: { member: User }) {
   }
 
   return (
-    <InfoPaper>
-      <Title>Tasks</Title>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Name</TableCell>
-            <TableCell>Status</TableCell>
-            <TableCell>Description</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {list.map((t, index) => (
-            <TableRow key={index}>
-              <TableCell>{t.name}</TableCell>
-              <TableCell>{t.status}</TableCell>
-              <TableCell>{t.description}</TableCell>
+    <Card>
+      <CardHeader title="Tasks" />
+      <CardContent>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Name</TableCell>
+              <TableCell>Status</TableCell>
+              <TableCell>Description</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-      <TablePagination
-        component="div"
-        count={member.taskAssigned.length}
-        onPageChange={handlePageChange}
-        page={page}
-        rowsPerPage={rowsPerPage}
-        rowsPerPageOptions={[]}
-      />
-      <Divider />
-      <CardActions sx={{ justifyContent: "flex-end" }}>
-        <Button color="inherit" endIcon={<Add />} size="small" variant="text">
-          Assign
-        </Button>
-      </CardActions>
-    </InfoPaper>
+          </TableHead>
+          <TableBody>
+            {list.map((t, index) => (
+              <TableRow key={index}>
+                <TableCell>{t.name}</TableCell>
+                <TableCell>{t.status}</TableCell>
+                <TableCell>{t.description}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+        <TablePagination
+          component="div"
+          count={member.taskAssigned.length}
+          onPageChange={handlePageChange}
+          page={page}
+          rowsPerPage={rowsPerPage}
+          rowsPerPageOptions={[]}
+        />
+        <Divider />
+        <CardActions sx={{ justifyContent: "flex-end" }}>
+          <Button color="inherit" endIcon={<Add />} size="small" variant="text">
+            Assign
+          </Button>
+        </CardActions>
+      </CardContent>
+    </Card>
   );
 }

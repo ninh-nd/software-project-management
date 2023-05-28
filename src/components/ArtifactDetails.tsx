@@ -12,6 +12,7 @@ import {
   Card,
   CardActions,
   CardContent,
+  CardHeader,
   Dialog,
   IconButton,
   Stack,
@@ -97,6 +98,7 @@ export default function ArtifactDetails({ phase }: ArtifactDetailsProps) {
   }
   return (
     <Card sx={{ width: "100%" }}>
+      <CardHeader title="Artifacts" />
       <CardContent
         sx={{
           minHeight: {
@@ -105,9 +107,6 @@ export default function ArtifactDetails({ phase }: ArtifactDetailsProps) {
           },
         }}
       >
-        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          Phase's artifacts
-        </Typography>
         <Box display="flex" flexWrap="wrap">
           {phase.artifacts.length > 0 ? (
             phase.artifacts.map((item) => (

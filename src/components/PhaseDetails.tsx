@@ -3,6 +3,7 @@ import {
   Card,
   CardActions,
   CardContent,
+  CardHeader,
   Dialog,
   DialogActions,
   DialogContent,
@@ -61,6 +62,7 @@ export default function PhaseDetails({ phase }: PhaseDetailsProps) {
   }
   return (
     <Card sx={{ width: "100%" }}>
+      <CardHeader title="List of tasks to be done" />
       <CardContent
         sx={{
           minHeight: {
@@ -69,9 +71,6 @@ export default function PhaseDetails({ phase }: PhaseDetailsProps) {
           },
         }}
       >
-        <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          List of tasks to be done in this phase
-        </Typography>
         <DataGrid
           checkboxSelection
           autoHeight

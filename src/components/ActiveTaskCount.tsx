@@ -1,20 +1,48 @@
-import { Typography } from "@mui/material";
-import Title from "~/components/Title";
-import InfoPaper from "~/components/InfoPaper";
+import { Assignment } from "@mui/icons-material";
+import {
+  Avatar,
+  Card,
+  CardContent,
+  Stack,
+  SxProps,
+  Typography,
+} from "@mui/material";
 
 export default function ActiveTaskCount({
   count,
   total,
+  sx,
 }: {
   count: number;
   total: number;
+  sx?: SxProps;
 }) {
   return (
-    <InfoPaper>
-      <Title>Active tasks</Title>
-      <Typography component="p" variant="h4">
-        {`${count} / ${total}`}
-      </Typography>
-    </InfoPaper>
+    <Card sx={sx}>
+      <CardContent>
+        <Stack
+          alignItems="flex-start"
+          direction="row"
+          justifyContent="space-between"
+          spacing={3}
+        >
+          <Stack spacing={1}>
+            <Typography color="text.secondary" variant="overline">
+              Active tasks
+            </Typography>
+            <Typography variant="h4">{`${count} / ${total}`}</Typography>
+          </Stack>
+          <Avatar
+            sx={{
+              backgroundColor: "info.main",
+              height: 56,
+              width: 56,
+            }}
+          >
+            <Assignment />
+          </Avatar>
+        </Stack>
+      </CardContent>
+    </Card>
   );
 }

@@ -1,16 +1,21 @@
-import { alpha, useMediaQuery, useTheme } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  SxProps,
+  alpha,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import {
   Bar,
   BarChart,
-  CartesianGrid,
   Legend,
   ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
 } from "recharts";
-import InfoPaper from "~/components/InfoPaper";
-import Title from "~/components/Title";
 import { ActivityHistory } from "~/interfaces/Entity";
 function reshapeActHistToRecharts(activityHistory: ActivityHistory[]) {
   // Turn activity history into a format that can be used by Recharts: An array of object with shape: {createdBy: string, totalCommits: number, totalPrs: number}
@@ -37,38 +42,42 @@ function reshapeActHistToRecharts(activityHistory: ActivityHistory[]) {
 }
 export default function Chart({
   activityHistory,
+  sx,
 }: {
   activityHistory: ActivityHistory[];
+  sx?: SxProps;
 }) {
   const reshapedActHist = reshapeActHistToRecharts(activityHistory);
   const theme = useTheme();
   const lessThanMedium = useMediaQuery(theme.breakpoints.down("md"));
   return (
-    <InfoPaper>
-      <Title>Activity history</Title>
-      <ResponsiveContainer width="100%" aspect={3 / 1}>
-        <BarChart width={500} height={300} data={reshapedActHist}>
-          <XAxis
-            dataKey="createdBy"
-            hide={lessThanMedium}
-            axisLine={false}
-            tickLine={false}
-          />
-          <YAxis axisLine={false} tickLine={false} />
-          <Tooltip />
-          <Legend />
-          <Bar
-            dataKey="totalCommits"
-            fill={theme.palette.primary.main}
-            name="Number of commits"
-          />
-          <Bar
-            dataKey="totalPrs"
-            fill={alpha(theme.palette.primary.main, 0.25)}
-            name="Number of pull requests"
-          />
-        </BarChart>
-      </ResponsiveContainer>
-    </InfoPaper>
+    <Card sx={sx}>
+      <CardHeader title="Activity history" />
+      <CardContent>
+        <ResponsiveContainer width="100%" aspect={3 / 1}>
+          <BarChart width={500} height={300} data={reshapedActHist}>
+            <XAxis
+              dataKey="createdBy"
+              hide={lessThanMedium}
+              axisLine={false}
+              tickLine={false}
+            />
+            <YAxis axisLine={false} tickLine={false} />
+            <Tooltip />
+            <Legend />
+            <Bar
+              dataKey="totalCommits"
+              fill={theme.palette.primary.main}
+              name="Number of commits"
+            />
+            <Bar
+              dataKey="totalPrs"
+              fill={alpha(theme.palette.primary.main, 0.25)}
+              name="Number of pull requests"
+            />
+          </BarChart>
+        </ResponsiveContainer>
+      </CardContent>
+    </Card>
   );
 }

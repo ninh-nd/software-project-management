@@ -7,6 +7,9 @@ import {
 import {
   Box,
   Button,
+  Card,
+  CardContent,
+  CardHeader,
   Dialog,
   DialogActions,
   DialogContent,
@@ -25,8 +28,6 @@ import { useParams } from "react-router-dom";
 import { useAvailableTasksQuery, useDeleteTaskMutation } from "~/hooks/query";
 import CreateTaskDialog from "./CreateTaskDialog";
 import EditTaskDialog from "./EditTaskDialog";
-import InfoPaper from "./InfoPaper";
-import Title from "./Title";
 
 export default function UnassignedTaskCard() {
   const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
@@ -108,31 +109,35 @@ export default function UnassignedTaskCard() {
   return (
     <>
       <Stack spacing={2}>
-        <InfoPaper>
-          <Title>Task ready to be assigned</Title>
-          <DataGrid
-            sx={{ minHeight: 500 }}
-            rows={availableTasks}
-            getRowId={(row) => row._id}
-            columns={columns}
-          />
-        </InfoPaper>
-        <InfoPaper>
-          <Title>Actions</Title>
-          <Box display="flex">
-            <Button variant="contained" color="primary">
-              Assign task
-            </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => setOpenCreate(true)}
-              sx={{ ml: 1 }}
-            >
-              Create new task
-            </Button>
-          </Box>
-        </InfoPaper>
+        <Card>
+          <CardHeader title="Dangling tasks" />
+          <CardContent>
+            <DataGrid
+              sx={{ minHeight: 500 }}
+              rows={availableTasks}
+              getRowId={(row) => row._id}
+              columns={columns}
+            />
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader title="Actions" />
+          <CardContent>
+            <Box display="flex">
+              <Button variant="contained" color="primary">
+                Assign task
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => setOpenCreate(true)}
+                sx={{ ml: 1 }}
+              >
+                Create new task
+              </Button>
+            </Box>
+          </CardContent>
+        </Card>
       </Stack>
       <Dialog
         open={openConfirmDelete}

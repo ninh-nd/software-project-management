@@ -343,7 +343,7 @@ export function useLoginMutation() {
         setAccountContext(data);
         const { role } = data;
         if (role === "admin") {
-          navigate("/admin/accounts");
+          navigate("/admin");
         } else {
           const { data } = await getProjectIn();
           if (!data) {

@@ -29,6 +29,7 @@ import { logout } from "~/actions/authAction";
 import { drawerWidth, useDrawerState } from "~/hooks/drawer";
 import { useProjectInQuery } from "~/hooks/query";
 import ImportProject from "./ImportProject";
+import { useUserRole } from "~/hooks/general";
 interface Props extends AppBarProps {
   open: boolean;
 }
@@ -51,6 +52,7 @@ const AppBar = styled(MuiAppBar, {
 }));
 export default function Topbar() {
   const navigate = useNavigate();
+  const role = useUserRole();
   const { currentProject } = useParams();
   const [openDialog, setOpenDialog] = useState(false);
   const { open, setOpen } = useDrawerState();
@@ -106,7 +108,9 @@ export default function Topbar() {
         >
           Dashboard
         </Typography>
-        <FormControl sx={{ px: 1 }}>
+        <FormControl
+          sx={{ px: 1, display: role === "admin" ? "none" : "initial" }}
+        >
           <InputLabel sx={{ color: "white" }}>Project</InputLabel>
           <Select
             label="Project"
@@ -131,7 +135,10 @@ export default function Topbar() {
             </MenuItem>
           </Select>
         </FormControl>
-        <Tooltip title="Account">
+        <Tooltip
+          title="Account"
+          sx={{ display: role === "admin" ? "none" : "inline-flex" }}
+        >
           <IconButton onClick={redirectToAccountPage}>
             <AccountCircleOutlined color="secondary" />
           </IconButton>

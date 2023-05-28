@@ -1,4 +1,12 @@
-import { Box, Typography, useTheme } from "@mui/material";
+import {
+  Box,
+  Card,
+  CardContent,
+  CardHeader,
+  SxProps,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import {
   Cell,
   Legend,
@@ -7,14 +15,14 @@ import {
   ResponsiveContainer,
   Tooltip,
 } from "recharts";
-import InfoPaper from "~/components/InfoPaper";
-import Title from "~/components/Title";
 import { Threat } from "~/interfaces/Entity";
 
 export default function ThreatStatistics({
   threatList,
+  sx,
 }: {
   threatList: Threat[];
+  sx?: SxProps;
 }) {
   const theme = useTheme();
   const nonCount = threatList.filter(
@@ -32,32 +40,34 @@ export default function ThreatStatistics({
     { name: "Fully-mitigated threats", value: fullCount },
   ];
   return (
-    <InfoPaper sx={{ height: "100%" }}>
-      <Title>Threat statistics</Title>
-      {threatList.length === 0 ? (
-        <Box
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          height="100%"
-        >
-          <Typography variant="h6" color="textSecondary">
-            There's nothing here...
-          </Typography>
-        </Box>
-      ) : (
-        <ResponsiveContainer width="100%" minHeight={300}>
-          <PieChart>
-            <Pie dataKey="value" nameKey="name" data={data}>
-              <Cell fill={theme.palette.error.main} />
-              <Cell fill={theme.palette.warning.main} />
-              <Cell fill={theme.palette.success.main} />
-            </Pie>
-            <Tooltip />
-            <Legend />
-          </PieChart>
-        </ResponsiveContainer>
-      )}
-    </InfoPaper>
+    <Card sx={sx}>
+      <CardHeader title="Threat statistics" />
+      <CardContent>
+        {threatList.length === 0 ? (
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            height="100%"
+          >
+            <Typography variant="h6" color="textSecondary">
+              There's nothing here...
+            </Typography>
+          </Box>
+        ) : (
+          <ResponsiveContainer width="100%" minHeight={300}>
+            <PieChart>
+              <Pie dataKey="value" nameKey="name" data={data}>
+                <Cell fill={theme.palette.error.main} />
+                <Cell fill={theme.palette.warning.main} />
+                <Cell fill={theme.palette.success.main} />
+              </Pie>
+              <Tooltip />
+              <Legend />
+            </PieChart>
+          </ResponsiveContainer>
+        )}
+      </CardContent>
+    </Card>
   );
 }

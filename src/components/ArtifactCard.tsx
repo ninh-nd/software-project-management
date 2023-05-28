@@ -8,6 +8,9 @@ import {
 } from "@mui/icons-material";
 import {
   Box,
+  Card,
+  CardContent,
+  CardHeader,
   Divider,
   IconButton,
   List,
@@ -23,8 +26,6 @@ import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Docker } from "~/icons/Icons";
 import { Artifact, Threat, Vulnerability } from "~/interfaces/Entity";
-import InfoPaper from "./InfoPaper";
-import Title from "./Title";
 interface VulnTabPanelProps {
   list: Vulnerability[];
   value: number;
@@ -183,56 +184,58 @@ export default function ArtifactCard({
     });
   }
   return (
-    <InfoPaper>
-      <Title>Artifact's vulnerabilities</Title>
-      <Stack spacing={2}>
-        {artifacts.map((artifact, index) => (
-          <Box key={artifact._id}>
-            <Box display="flex" sx={{ height: 200 }}>
-              <Box
-                flexGrow={1}
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                maxWidth={200}
-              >
-                <Stack alignItems="center">
-                  <Typography variant="h6" component="div">
-                    {artifact.name}
-                  </Typography>
-                  <Typography color="text.secondary">
-                    {renderType(artifact)}
-                  </Typography>
-                </Stack>
-              </Box>
-              <Divider orientation="vertical" sx={{ mx: 2 }} />
-              <Box flexGrow={2} maxWidth={900}>
-                <Tabs
-                  value={activeTabs[index]}
-                  onChange={(event, newValue) =>
-                    handleTabChange(index, newValue)
-                  }
+    <Card>
+      <CardHeader title="Artifact vulnerabilities" />
+      <CardContent>
+        <Stack spacing={2}>
+          {artifacts.map((artifact, index) => (
+            <Box key={artifact._id}>
+              <Box display="flex" sx={{ height: 200 }}>
+                <Box
+                  flexGrow={1}
+                  display="flex"
+                  justifyContent="center"
+                  alignItems="center"
+                  maxWidth={200}
                 >
-                  <Tab label="Vulnerabilities" />
-                  <Tab label="Threats" />
-                </Tabs>
-                <VulnTabPanel
-                  value={activeTabs[index]}
-                  index={0}
-                  list={artifact.vulnerabilityList}
-                  setOpenCWEDetails={setOpenCWEDetails}
-                />
-                <ThreatTabPanel
-                  value={activeTabs[index]}
-                  index={1}
-                  list={artifact.threatList}
-                />
+                  <Stack alignItems="center">
+                    <Typography variant="h6" component="div">
+                      {artifact.name}
+                    </Typography>
+                    <Typography color="text.secondary">
+                      {renderType(artifact)}
+                    </Typography>
+                  </Stack>
+                </Box>
+                <Divider orientation="vertical" sx={{ mx: 2 }} />
+                <Box flexGrow={2} maxWidth={900}>
+                  <Tabs
+                    value={activeTabs[index]}
+                    onChange={(event, newValue) =>
+                      handleTabChange(index, newValue)
+                    }
+                  >
+                    <Tab label="Vulnerabilities" />
+                    <Tab label="Threats" />
+                  </Tabs>
+                  <VulnTabPanel
+                    value={activeTabs[index]}
+                    index={0}
+                    list={artifact.vulnerabilityList}
+                    setOpenCWEDetails={setOpenCWEDetails}
+                  />
+                  <ThreatTabPanel
+                    value={activeTabs[index]}
+                    index={1}
+                    list={artifact.threatList}
+                  />
+                </Box>
               </Box>
+              <Divider variant="middle" sx={{ m: 2 }} />
             </Box>
-            <Divider variant="middle" sx={{ m: 2 }} />
-          </Box>
-        ))}
-      </Stack>
-    </InfoPaper>
+          ))}
+        </Stack>
+      </CardContent>
+    </Card>
   );
 }

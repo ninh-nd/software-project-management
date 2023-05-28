@@ -1,14 +1,23 @@
 import { Commit } from "@mui/icons-material";
-import { List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  SxProps,
+} from "@mui/material";
 import dayjs from "dayjs";
-import InfoPaper from "~/components/InfoPaper";
-import Title from "~/components/Title";
 import { PullRequest } from "~/icons/Icons";
 import { ActivityHistory } from "~/interfaces/Entity";
 export default function RecentActivity({
   activityHistory,
+  sx,
 }: {
   activityHistory: ActivityHistory[];
+  sx?: SxProps;
 }) {
   const lastRecentAct = activityHistory
     .sort((a, b) => {
@@ -18,23 +27,25 @@ export default function RecentActivity({
     })
     .slice(0, 5);
   return (
-    <InfoPaper>
-      <Title>Recent activity</Title>
-      <List>
-        {lastRecentAct.map((act) => (
-          <ListItem key={act._id}>
-            <ListItemIcon>
-              {act.action === "commit" ? <Commit /> : <PullRequest />}
-            </ListItemIcon>
-            <ListItemText
-              primary={act.content}
-              secondary={`Created: ${dayjs(act.createdAt).format(
-                "DD/MM/YYYY"
-              )}`}
-            />
-          </ListItem>
-        ))}
-      </List>
-    </InfoPaper>
+    <Card sx={sx}>
+      <CardHeader title="Recent activity" />
+      <CardContent>
+        <List>
+          {lastRecentAct.map((act) => (
+            <ListItem key={act._id}>
+              <ListItemIcon>
+                {act.action === "commit" ? <Commit /> : <PullRequest />}
+              </ListItemIcon>
+              <ListItemText
+                primary={act.content}
+                secondary={`Created: ${dayjs(act.createdAt).format(
+                  "DD/MM/YYYY"
+                )}`}
+              />
+            </ListItem>
+          ))}
+        </List>
+      </CardContent>
+    </Card>
   );
 }

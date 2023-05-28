@@ -4,6 +4,7 @@ import ActiveTaskCount from "~/components/ActiveTaskCount";
 import ArtifactDetails from "~/components/ArtifactDetails";
 import CompletedTaskCount from "~/components/CompletedTaskCount";
 import PhaseDetails from "~/components/PhaseDetails";
+import PhaseProgress from "~/components/PhaseProgress";
 import { usePhaseQuery } from "~/hooks/query";
 export default function PhaseDetail() {
   const { phaseId } = useParams();
@@ -22,25 +23,28 @@ export default function PhaseDetail() {
   return (
     <Box flexGrow={1} height="100vh">
       <Toolbar />
-      <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+      <Container maxWidth="lg" sx={{ my: 4 }}>
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <Typography variant="h4">{phase.name}</Typography>
             <Typography variant="subtitle1">{phase.description}</Typography>
           </Grid>
-          <Grid item xs={12} sm={6} md={2}>
+          <Grid item xs={12} sm={6} md={3}>
             <ActiveTaskCount
               total={phase.tasks.length}
               count={activeTaskCount}
             />
           </Grid>
-          <Grid item xs={12} sm={6} md={2}>
+          <Grid item xs={12} sm={6} md={3}>
             <CompletedTaskCount
               total={phase.tasks.length}
               count={completedTaskCount}
             />
           </Grid>
-          <Grid item xs={12} md={8}>
+          <Grid item md={6}>
+            <PhaseProgress sx={{ height: "100%" }} />
+          </Grid>
+          <Grid item xs={12}>
             <PhaseDetails phase={phase} />
           </Grid>
           <Grid item xs={12}>

@@ -1,27 +1,39 @@
+import { Add, Search } from "@mui/icons-material";
 import {
   Box,
+  Button,
   Card,
+  Dialog,
+  InputAdornment,
   Link,
+  OutlinedInput,
+  Stack,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TablePagination,
   TableRow,
+  TextField,
+  Typography,
+  debounce,
 } from "@mui/material";
 import dayjs from "dayjs";
-import { useState } from "react";
-import { Link as RouterLink } from "react-router-dom";
+import { ChangeEvent, useEffect, useState } from "react";
+import { Link as RouterLink, useParams } from "react-router-dom";
+import { usePermissionHook } from "~/hooks/general";
+import { useTicketsQuery } from "~/hooks/query";
 import { Ticket } from "~/interfaces/Entity";
 import PriorityChip from "./PriorityChip";
 import TicketStatusChip from "./TicketStatusChip";
+import AddTicketForm from "./AddTicketForm";
 interface TabProps {
   tickets: Ticket[];
 }
 function renderDate(date: string) {
   return dayjs(date).format("DD/MM/YYYY");
 }
-export default function TicketTable({ tickets }: TabProps) {
+function TicketTable({ tickets }: TabProps) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const onPageChange = (event: unknown, newPage: number) => {
@@ -83,5 +95,94 @@ export default function TicketTable({ tickets }: TabProps) {
         />
       </Box>
     </Card>
+  );
+}
+
+export default function ExtendedTicketTable() {
+  const permission = usePermissionHook();
+  const createTicketPermission = permission.includes("ticket:create");
+  const [open, setOpen] = useState(false);
+  const { currentProject } = useParams();
+  if (!currentProject) return <></>;
+  const ticketQuery = useTicketsQuery(currentProject);
+  const tickets = ticketQuery.data?.data ?? [];
+  const [displayTickets, setDisplayTickets] = useState(tickets);
+  useEffect(() => {
+    setDisplayTickets(tickets);
+  }, [tickets]);
+  function handleFilterTicket(event: ChangeEvent<HTMLInputElement>) {
+    const value = event.target.value;
+    if (value === "all") {
+      setDisplayTickets(tickets);
+    } else {
+      setDisplayTickets(tickets.filter((t) => t.status === value));
+    }
+  }
+  const searchTicket = debounce((event) => {
+    const value = event.target.value;
+    if (value === "") {
+      setDisplayTickets(tickets);
+    } else {
+      setDisplayTickets(
+        tickets.filter((t) => t.title.toLowerCase().includes(value))
+      );
+    }
+  }, 500);
+  return (
+    <Stack spacing={3}>
+      <Stack direction="row" justifyContent="space-between" spacing={4}>
+        <Typography variant="h4">Tickets</Typography>
+        <div>
+          <Button
+            startIcon={<Add fontSize="small" />}
+            variant="contained"
+            disabled={!createTicketPermission}
+            onClick={() => setOpen(true)}
+          >
+            Add ticket
+          </Button>
+        </div>
+      </Stack>
+      <Card sx={{ p: 2, display: "flex" }}>
+        <OutlinedInput
+          defaultValue=""
+          fullWidth
+          placeholder="Search ticket"
+          startAdornment={
+            <InputAdornment position="start">
+              <Search color="action" fontSize="small" />
+            </InputAdornment>
+          }
+          onChange={searchTicket}
+          sx={{ maxWidth: 500 }}
+        />
+        <Stack
+          direction="row"
+          spacing={1}
+          width="100%"
+          justifyContent="flex-end"
+          alignItems="center"
+        >
+          <Typography variant="h6">Filter:</Typography>
+          <TextField
+            label="Status"
+            select
+            SelectProps={{ native: true }}
+            sx={{ minWidth: 200 }}
+            onChange={handleFilterTicket}
+          >
+            <option value="all">All</option>
+            <option value="open">Open</option>
+            <option value="closed">Closed</option>
+          </TextField>
+        </Stack>
+      </Card>
+      <Box width="100%">
+        <TicketTable tickets={displayTickets} />
+      </Box>
+      <Dialog open={open} onClose={() => setOpen(false)} fullWidth>
+        <AddTicketForm setCloseDialog={() => setOpen(false)} />
+      </Dialog>
+    </Stack>
   );
 }

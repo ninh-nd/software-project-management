@@ -27,7 +27,7 @@ export default function Account() {
       }}
     >
       <Toolbar />
-      <Container maxWidth="lg">
+      <Container maxWidth="lg" sx={{ my: 4 }}>
         <Stack spacing={5}>
           <div>
             <Typography variant="h4">Account</Typography>

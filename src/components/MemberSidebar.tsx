@@ -1,4 +1,5 @@
 import {
+  Assignment,
   ChevronLeft,
   HomeOutlined,
   SecurityOutlined,
@@ -83,10 +84,11 @@ function DrawerContent() {
         icon={<HomeOutlined />}
         path={`/${currentProject}/`}
       />
+      <Item text="Ticket" icon={<Task />} path={`/${currentProject}/tickets`} />
       <Item
-        text="Tasks and issues"
-        icon={<Task />}
-        path={`/${currentProject}/tasksAndIssues`}
+        text="Task"
+        icon={<Assignment />}
+        path={`/${currentProject}/tasks`}
       />
       <Divider />
       <ListSubheader component="div" inset>

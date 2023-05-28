@@ -1,19 +1,27 @@
 import { Commit } from "@mui/icons-material";
 import {
+  SxProps,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TablePagination,
   TableRow,
+  Card,
+  CardHeader,
+  CardContent,
 } from "@mui/material";
 import { MouseEvent, useState } from "react";
-import InfoPaper from "~/components/InfoPaper";
-import Title from "~/components/Title";
 import { PullRequest } from "~/icons/Icons";
 import { User } from "~/interfaces/Entity";
 const rowsPerPage = 5;
-export default function ActivityHistoryCard({ member }: { member: User }) {
+export default function ActivityHistoryCard({
+  member,
+  sx,
+}: {
+  member: User;
+  sx?: SxProps;
+}) {
   const [page, setPage] = useState(0);
   const handlePageChange = (
     event: MouseEvent<HTMLButtonElement> | null,
@@ -26,34 +34,36 @@ export default function ActivityHistoryCard({ member }: { member: User }) {
     (page + 1) * rowsPerPage
   );
   return (
-    <InfoPaper>
-      <Title>Activity history</Title>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell align="center">Activity</TableCell>
-            <TableCell>Description</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {list.map((a, index) => (
-            <TableRow key={index}>
-              <TableCell align="center">
-                {a.action === "pr" ? <PullRequest /> : <Commit />}
-              </TableCell>
-              <TableCell>{a.content}</TableCell>
+    <Card sx={sx}>
+      <CardHeader title="Activity history" />
+      <CardContent>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell align="center">Activity</TableCell>
+              <TableCell>Description</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-      <TablePagination
-        component="div"
-        count={member.activityHistory.length}
-        onPageChange={handlePageChange}
-        page={page}
-        rowsPerPage={rowsPerPage}
-        rowsPerPageOptions={[]}
-      />
-    </InfoPaper>
+          </TableHead>
+          <TableBody>
+            {list.map((a, index) => (
+              <TableRow key={index}>
+                <TableCell align="center">
+                  {a.action === "pr" ? <PullRequest /> : <Commit />}
+                </TableCell>
+                <TableCell>{a.content}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+        <TablePagination
+          component="div"
+          count={member.activityHistory.length}
+          onPageChange={handlePageChange}
+          page={page}
+          rowsPerPage={rowsPerPage}
+          rowsPerPageOptions={[]}
+        />
+      </CardContent>
+    </Card>
   );
 }

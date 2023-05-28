@@ -1,12 +1,12 @@
 import {
-  Check,
+  Assignment,
   CheckBox,
   CheckBoxOutlineBlank,
-  CheckCircleOutline,
-  HourglassBottom,
-  Undo,
 } from "@mui/icons-material";
 import {
+  Card,
+  CardContent,
+  CardHeader,
   IconButton,
   List,
   ListItem,
@@ -16,8 +16,6 @@ import {
   Tooltip,
 } from "@mui/material";
 import { useState } from "react";
-import InfoPaper from "~/components/InfoPaper";
-import Title from "~/components/Title";
 import {
   useMemberByAccountIdQuery,
   useUpdateTaskMutation,
@@ -50,52 +48,59 @@ export default function TaskAssigned({ tasks }: { tasks: Task[] }) {
     };
   }
   return (
-    <InfoPaper sx={{ height: 400 }}>
-      <Title>Task Assigned</Title>
-      <List>
-        {currentPageList.map((task) => (
-          <ListItem
-            key={task._id}
-            secondaryAction={
-              <Tooltip
-                title={task.status === "active" ? "Mark as completed" : "Undo"}
-              >
-                <IconButton
-                  edge="end"
-                  onClick={markTask(
-                    task._id,
-                    task.status === "active" ? "completed" : "active"
-                  )}
+    <Card>
+      <CardHeader title="Task Assigned" />
+      <CardContent>
+        <List>
+          {currentPageList.map((task) => (
+            <ListItem
+              key={task._id}
+              secondaryAction={
+                <Tooltip
+                  title={
+                    task.status === "active" ? "Mark as completed" : "Undo"
+                  }
                 >
-                  {task.status === "active" ? (
-                    <CheckBox />
-                  ) : (
-                    <CheckBoxOutlineBlank />
-                  )}
-                </IconButton>
-              </Tooltip>
-            }
-          >
-            <ListItemIcon>
-              {task.status === "active" ? (
-                <HourglassBottom />
-              ) : (
-                <CheckCircleOutline />
-              )}
-            </ListItemIcon>
-            <ListItemText primary={task.name} secondary={task.description} />
-          </ListItem>
-        ))}
-      </List>
-      <Pagination
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          visibility,
-        }}
-        count={Math.ceil(tasks.length / numberOfTaskPerPage)}
-        onChange={handlePageChange}
-      />
-    </InfoPaper>
+                  <IconButton
+                    edge="end"
+                    onClick={markTask(
+                      task._id,
+                      task.status === "active" ? "completed" : "active"
+                    )}
+                  >
+                    {task.status === "active" ? (
+                      <CheckBoxOutlineBlank />
+                    ) : (
+                      <CheckBox />
+                    )}
+                  </IconButton>
+                </Tooltip>
+              }
+            >
+              <ListItemIcon>
+                <Assignment />
+              </ListItemIcon>
+              <ListItemText
+                primary={task.name}
+                secondary={task.description}
+                sx={{
+                  textDecoration:
+                    task.status === "completed" ? "line-through" : "none",
+                }}
+              />
+            </ListItem>
+          ))}
+        </List>
+        <Pagination
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            visibility,
+          }}
+          count={Math.ceil(tasks.length / numberOfTaskPerPage)}
+          onChange={handlePageChange}
+        />
+      </CardContent>
+    </Card>
   );
 }

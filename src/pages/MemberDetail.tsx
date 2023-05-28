@@ -14,7 +14,7 @@ export default function MemberDetail() {
   return (
     <Box flexGrow={1} height="100vh">
       <Toolbar />
-      <Container sx={{ mt: 4, mb: 4 }} maxWidth="lg">
+      <Container sx={{ my: 4 }} maxWidth="lg">
         <Grid
           container
           spacing={3}

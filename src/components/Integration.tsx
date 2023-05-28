@@ -2,6 +2,9 @@ import { GitHub, Tune, Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   Box,
   Button,
+  Card,
+  CardContent,
+  CardHeader,
   Dialog,
   DialogActions,
   DialogContent,
@@ -27,8 +30,6 @@ import {
 } from "material-ui-popup-state/hooks";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import InfoPaper from "~/components/InfoPaper";
-import Title from "~/components/Title";
 import { useAccountContext } from "~/hooks/general";
 import { useUpdateAccessTokenMutation } from "~/hooks/query";
 import { GitLab } from "~/icons/Icons";
@@ -104,95 +105,101 @@ export default function Integration({
   });
   return (
     <>
-      <InfoPaper>
-        <Title>Integration</Title>
-        <List>
-          <ListItem>
-            <ListItemIcon>
-              <GitHub />
-            </ListItemIcon>
-            <ListItemText primary="Github" />
-            <ListItemSecondaryAction>
-              <IconButton edge="end" {...bindTrigger(popupStateGithub)}>
-                <Tune />
-              </IconButton>
-              <Popover
-                {...bindPopover(popupStateGithub)}
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "center",
-                }}
-              >
-                <Menu {...bindMenu(popupStateGithub)}>
-                  {github ? (
-                    <>
-                      <MenuItem>
-                        <Typography sx={{ color: theme.palette.error.main }}>
-                          Disconnect from Github
-                        </Typography>
-                      </MenuItem>
-                      <MenuItem onClick={() => setOpenUpdateAccessToken(true)}>
-                        <Typography>Update access token</Typography>
-                      </MenuItem>
-                    </>
-                  ) : (
-                    <>
-                      <MenuItem>
-                        <Typography>Connect to Github</Typography>
-                      </MenuItem>
-                      <MenuItem disabled>
-                        <Typography>Update access token</Typography>
-                      </MenuItem>
-                    </>
-                  )}
-                </Menu>
-              </Popover>
-            </ListItemSecondaryAction>
-          </ListItem>
-          <ListItem>
-            <ListItemIcon>
-              <GitLab />
-            </ListItemIcon>
-            <ListItemText primary="Gitlab" />
-            <ListItemSecondaryAction>
-              <IconButton edge="end" {...bindTrigger(popupStateGitlab)}>
-                <Tune />
-              </IconButton>
-              <Popover
-                {...bindPopover(popupStateGitlab)}
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "center",
-                }}
-              >
-                <Menu {...bindMenu(popupStateGitlab)}>
-                  {gitlab ? (
-                    <>
-                      <MenuItem>
-                        <Typography sx={{ color: theme.palette.error.main }}>
-                          Disconnect from Gitlab
-                        </Typography>
-                      </MenuItem>
-                      <MenuItem onClick={() => setOpenUpdateAccessToken(true)}>
-                        <Typography>Update access token</Typography>
-                      </MenuItem>
-                    </>
-                  ) : (
-                    <>
-                      <MenuItem>
-                        <Typography>Connect to Gitlab</Typography>
-                      </MenuItem>
-                      <MenuItem disabled>
-                        <Typography>Update access token</Typography>
-                      </MenuItem>
-                    </>
-                  )}
-                </Menu>
-              </Popover>
-            </ListItemSecondaryAction>
-          </ListItem>
-        </List>
-      </InfoPaper>
+      <Card>
+        <CardHeader title="Integration" />
+        <CardContent>
+          <List>
+            <ListItem>
+              <ListItemIcon>
+                <GitHub />
+              </ListItemIcon>
+              <ListItemText primary="Github" />
+              <ListItemSecondaryAction>
+                <IconButton edge="end" {...bindTrigger(popupStateGithub)}>
+                  <Tune />
+                </IconButton>
+                <Popover
+                  {...bindPopover(popupStateGithub)}
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "center",
+                  }}
+                >
+                  <Menu {...bindMenu(popupStateGithub)}>
+                    {github ? (
+                      <>
+                        <MenuItem>
+                          <Typography sx={{ color: theme.palette.error.main }}>
+                            Disconnect from Github
+                          </Typography>
+                        </MenuItem>
+                        <MenuItem
+                          onClick={() => setOpenUpdateAccessToken(true)}
+                        >
+                          <Typography>Update access token</Typography>
+                        </MenuItem>
+                      </>
+                    ) : (
+                      <>
+                        <MenuItem>
+                          <Typography>Connect to Github</Typography>
+                        </MenuItem>
+                        <MenuItem disabled>
+                          <Typography>Update access token</Typography>
+                        </MenuItem>
+                      </>
+                    )}
+                  </Menu>
+                </Popover>
+              </ListItemSecondaryAction>
+            </ListItem>
+            <ListItem>
+              <ListItemIcon>
+                <GitLab />
+              </ListItemIcon>
+              <ListItemText primary="Gitlab" />
+              <ListItemSecondaryAction>
+                <IconButton edge="end" {...bindTrigger(popupStateGitlab)}>
+                  <Tune />
+                </IconButton>
+                <Popover
+                  {...bindPopover(popupStateGitlab)}
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "center",
+                  }}
+                >
+                  <Menu {...bindMenu(popupStateGitlab)}>
+                    {gitlab ? (
+                      <>
+                        <MenuItem>
+                          <Typography sx={{ color: theme.palette.error.main }}>
+                            Disconnect from Gitlab
+                          </Typography>
+                        </MenuItem>
+                        <MenuItem
+                          onClick={() => setOpenUpdateAccessToken(true)}
+                        >
+                          <Typography>Update access token</Typography>
+                        </MenuItem>
+                      </>
+                    ) : (
+                      <>
+                        <MenuItem>
+                          <Typography>Connect to Gitlab</Typography>
+                        </MenuItem>
+                        <MenuItem disabled>
+                          <Typography>Update access token</Typography>
+                        </MenuItem>
+                      </>
+                    )}
+                  </Menu>
+                </Popover>
+              </ListItemSecondaryAction>
+            </ListItem>
+          </List>
+        </CardContent>
+      </Card>
       <Dialog open={openUpdateAccessToken} fullWidth>
         <UpdateAccessTokenDialog
           setOpen={setOpenUpdateAccessToken}

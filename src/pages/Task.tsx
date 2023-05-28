@@ -1,7 +1,6 @@
-import { Box, Container, Toolbar } from "@mui/material";
-import ExtendedTicketTable from "~/components/TicketTable";
+import { Box, Container, Stack, Toolbar, Typography } from "@mui/material";
 
-export default function Ticket() {
+export default function Task() {
   return (
     <Box
       flexGrow={1}
@@ -15,7 +14,10 @@ export default function Ticket() {
     >
       <Toolbar />
       <Container maxWidth="lg" sx={{ my: 4 }}>
-        <ExtendedTicketTable />
+        <Stack spacing={3}>
+          <Typography variant="h4">Task</Typography>
+          
+        </Stack>
       </Container>
     </Box>
   );

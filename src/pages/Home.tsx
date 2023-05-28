@@ -26,7 +26,7 @@ function ManagerHomePage() {
   return (
     <Box sx={{ flexGrow: 1, height: "100vh", overflow: "auto" }}>
       <Toolbar />
-      <Container sx={{ mt: 4, mb: 4 }} maxWidth="lg">
+      <Container sx={{ my: 4 }} maxWidth="lg">
         <Grid container spacing={2}>
           <Grid container item spacing={2} xs={12} sm={12} md={6}>
             <Grid item xs={12} sm={6}>

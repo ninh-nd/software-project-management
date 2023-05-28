@@ -1,3 +1,4 @@
+import { Box, CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 import {
   QueryCache,
   QueryClient,
@@ -12,19 +13,12 @@ import {
   createBrowserRouter,
 } from "react-router-dom";
 import { IErrorResponse, ISuccessResponse } from "~/interfaces/ServerResponse";
-import MemberTaskAndIssue from "./MemberTaskAndIssue";
-import {
-  Box,
-  CssBaseline,
-  ThemeProvider,
-  createTheme,
-  useTheme,
-} from "@mui/material";
-import { createTypography } from "~/theme/create-typography";
-import { createShadows } from "~/theme/create-shadows";
 import { createComponents } from "~/theme/create-components";
 import { createPalette } from "~/theme/create-palette";
+import { createShadows } from "~/theme/create-shadows";
+import { createTypography } from "~/theme/create-typography";
 import NotFound from "./404";
+const Task = lazy(() => import("./Task"));
 const AdminLayout = lazy(() => import("~/layouts/AdminLayout"));
 const DashboardLayout = lazy(() => import("~/layouts/DashboardLayout"));
 const AccountInfo = lazy(() => import("./Account"));
@@ -89,8 +83,8 @@ const managerAndMemberRoutes: RouteObject = {
       ],
     },
     {
-      path: "tasksAndIssues",
-      element: <GlobalSuspense element={<MemberTaskAndIssue />} />,
+      path: "tasks",
+      element: <GlobalSuspense element={<Task />} />,
     },
   ],
 };

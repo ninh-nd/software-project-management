@@ -23,7 +23,7 @@ export default function Phase() {
   return (
     <Box flexGrow={1} height="100vh">
       <Toolbar />
-      <Container sx={{ mt: 4, mb: 4 }}>
+      <Container sx={{ my: 4 }}>
         <Stack spacing={4}>
           <Typography variant="h4">Phases</Typography>
           <Box display="flex" justifyContent="center">

@@ -149,7 +149,7 @@ export default function AdminAccountManagement() {
   const accounts = accountsQuery.data?.data ?? [];
   return (
     <Box sx={{ flexGrow: 1, height: "100vh" }}>
-      <Container maxWidth="lg">
+      <Container maxWidth="lg" sx={{ my: 4 }}>
         <DataGrid
           columns={columns}
           rows={accounts}

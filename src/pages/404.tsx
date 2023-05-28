@@ -1,12 +1,5 @@
 import { ArrowLeft } from "@mui/icons-material";
-import {
-  Box,
-  Button,
-  Container,
-  Link,
-  SvgIcon,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Container, Link, Typography } from "@mui/material";
 import Error404 from "/error-404.png";
 export default function NotFound() {
   return (
@@ -53,11 +46,7 @@ export default function NotFound() {
           <Button
             component={Link}
             href="/login"
-            startIcon={
-              <SvgIcon fontSize="small">
-                <ArrowLeft />
-              </SvgIcon>
-            }
+            startIcon={<ArrowLeft fontSize="small" />}
             sx={{ mt: 3 }}
             variant="contained"
           >
