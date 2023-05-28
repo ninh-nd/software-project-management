@@ -52,7 +52,7 @@ export default function ChangePermissionDialog({
   const permissionList = permissionListQuery.data?.data;
   if (!account || !permissionList) return <></>;
   return (
-    <Dialog open={open} onClose={handleClose}>
+    <Dialog open={open} onClose={handleClose} maxWidth="lg">
       <DialogTitle>Edit Permission</DialogTitle>
       <Box component="form" onSubmit={handleSubmit(onSubmit)}>
         <DialogContent>

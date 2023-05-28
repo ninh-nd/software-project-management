@@ -4,7 +4,7 @@ import ActiveTaskCount from "~/components/ActiveTaskCountCard";
 import ArtifactDetails from "~/components/ArtifactDetailsCard";
 import CompletedTaskCount from "~/components/CompletedTaskCountCard";
 import PhaseDetails from "~/components/PhaseDetailsCard";
-import PhaseProgress from "~/components/PhaseProgress";
+import PhaseProgress from "~/components/PhaseProgressCard";
 import { usePhaseQuery } from "~/hooks/query";
 export default function PhaseDetail() {
   const { phaseId } = useParams();

@@ -2,6 +2,9 @@ import { Delete, Edit, ManageAccounts } from "@mui/icons-material";
 import {
   Box,
   Button,
+  Card,
+  CardContent,
+  CardHeader,
   Chip,
   Container,
   Dialog,
@@ -9,6 +12,8 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Stack,
+  Toolbar,
   Tooltip,
 } from "@mui/material";
 import {
@@ -148,26 +153,40 @@ export default function AdminAccountManagement() {
   const accountsQuery = useAccountsQuery();
   const accounts = accountsQuery.data?.data ?? [];
   return (
-    <Box sx={{ flexGrow: 1, height: "100vh" }}>
+    <Box
+      sx={{
+        height: "100%",
+        width: "100vw",
+        display: "flex",
+        justifyContent: " center",
+      }}
+    >
       <Container maxWidth="lg" sx={{ my: 4 }}>
-        <DataGrid
-          columns={columns}
-          rows={accounts}
-          getRowId={(row) => row._id}
-          autoHeight
-          disableColumnFilter
-          disableColumnSelector
-          disableDensitySelector
-          slots={{ toolbar: GridToolbar }}
-          slotProps={{
-            toolbar: {
-              showQuickFilter: true,
-              quickFilterProps: {
-                debounceMs: 500,
-              },
-            },
-          }}
-        />
+        <Stack spacing={2} sx={{ m: 2 }}>
+          <Card>
+            <CardHeader title="Account Management" />
+            <CardContent>
+              <DataGrid
+                columns={columns}
+                rows={accounts}
+                getRowId={(row) => row._id}
+                autoHeight
+                disableColumnFilter
+                disableColumnSelector
+                disableDensitySelector
+                slots={{ toolbar: GridToolbar }}
+                slotProps={{
+                  toolbar: {
+                    showQuickFilter: true,
+                    quickFilterProps: {
+                      debounceMs: 500,
+                    },
+                  },
+                }}
+              />
+            </CardContent>
+          </Card>
+        </Stack>
       </Container>
       <EditAccountDialog
         id={id}

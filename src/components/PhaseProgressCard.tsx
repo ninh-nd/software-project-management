@@ -7,16 +7,14 @@ import {
   Stack,
   SxProps,
   Typography,
-  useTheme,
 } from "@mui/material";
-export default function PhaseProgress({
+export default function PhaseProgressCard({
   sx,
   value,
 }: {
   sx?: SxProps;
   value: number;
 }) {
-  const theme = useTheme();
   return (
     <Card sx={sx}>
       <CardContent>

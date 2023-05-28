@@ -10,7 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 
-export default function VulnResolveProgress({
+export default function VulnResolveProgressCard({
   sx,
   value,
 }: {
