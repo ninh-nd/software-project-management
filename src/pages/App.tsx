@@ -1,4 +1,6 @@
 import { Box, CssBaseline, ThemeProvider, createTheme } from "@mui/material";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import {
   QueryCache,
   QueryClient,
@@ -162,15 +164,17 @@ export default function App() {
   });
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <SnackbarProvider autoHideDuration={4000} maxSnack={1}>
-        <ThemeProvider theme={theme}>
-          <Box display="flex">
-            <CssBaseline />
-            <RouterProvider router={router} />
-          </Box>
-        </ThemeProvider>
-      </SnackbarProvider>
-    </QueryClientProvider>
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <QueryClientProvider client={queryClient}>
+        <SnackbarProvider autoHideDuration={4000} maxSnack={1}>
+          <ThemeProvider theme={theme}>
+            <Box display="flex">
+              <CssBaseline />
+              <RouterProvider router={router} />
+            </Box>
+          </ThemeProvider>
+        </SnackbarProvider>
+      </QueryClientProvider>
+    </LocalizationProvider>
   );
 }

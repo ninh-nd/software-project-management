@@ -25,9 +25,12 @@ export default function OverdueTaskCard({
         >
           <Stack spacing={1}>
             <Typography color="text.secondary" variant="overline">
-              Overdue tasks (Working feature)
+              Overdue tasks
             </Typography>
-            <Typography variant="h4" color="error.main">
+            <Typography
+              variant="h4"
+              color={total === 0 ? "success.main" : "error.main"}
+            >
               {total}
             </Typography>
           </Stack>

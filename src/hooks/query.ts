@@ -482,7 +482,6 @@ export function useDeleteTaskMutation() {
     },
   });
 }
-
 interface CreateTaskParams {
   data: TaskCreate;
   projectName: string;

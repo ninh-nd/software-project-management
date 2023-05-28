@@ -8,11 +8,17 @@ import {
   Stack,
   TextField,
 } from "@mui/material";
+import { DatePicker } from "@mui/x-date-pickers";
+import dayjs, { Dayjs } from "dayjs";
 import { useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { useCreateTaskMutation } from "~/hooks/query";
 import { TaskCreate } from "~/interfaces/Entity";
+
+interface FormData extends Omit<TaskCreate, "dueDate"> {
+  dueDate: Dayjs;
+}
 
 interface CreateTaskDialogProps {
   open: boolean;
@@ -27,11 +33,11 @@ export default function CreateTaskDialog({
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<TaskCreate>({
+    control,
+  } = useForm<FormData>({
     defaultValues: {
       name: "",
       description: "",
-      status: "active",
     },
   });
   useEffect(() => {
@@ -39,8 +45,17 @@ export default function CreateTaskDialog({
   }, [open]);
   const { currentProject } = useParams();
   const createTaskMutation = useCreateTaskMutation();
-  async function onSubmit(data: TaskCreate) {
-    createTaskMutation.mutate({ data, projectName: currentProject as string });
+  async function onSubmit(data: FormData) {
+    const dueDateNativeObject = dayjs(data.dueDate).toDate();
+    createTaskMutation.mutate({
+      data: {
+        name: data.name,
+        description: data.description,
+        status: data.status,
+        dueDate: dueDateNativeObject,
+      },
+      projectName: currentProject as string,
+    });
     setOpen(false);
   }
   return (
@@ -68,6 +83,19 @@ export default function CreateTaskDialog({
               {...register("status")}
               disabled
               defaultValue="active"
+            />
+            <Controller
+              name="dueDate"
+              control={control}
+              defaultValue={dayjs()}
+              render={({ field }) => (
+                <DatePicker
+                  {...field}
+                  disablePast
+                  label="Due date"
+                  format="DD-MM-YYYY"
+                />
+              )}
             />
           </Stack>
         </DialogContent>

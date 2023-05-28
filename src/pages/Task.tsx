@@ -7,6 +7,8 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
+import { useState } from "react";
+import CreateTaskDialog from "~/components/CreateTaskDialog";
 import OverdueTaskCard from "~/components/OverdueTaskCard";
 import TaskProgressCard from "~/components/TaskProgressCard";
 import ExtendedTaskTable from "~/components/TaskTableCard";
@@ -21,8 +23,15 @@ function getProgressTotal(tasks: Task[]) {
 }
 
 export default function Task() {
+  const [open, setOpen] = useState(false);
   const memberInfoQuery = useMemberByAccountIdQuery();
   const memberInfo = memberInfoQuery.data?.data;
+  // Find the number of overdue tasks
+  const overdueTasks = memberInfo?.taskAssigned.filter((x) => {
+    const dueDate = new Date(x.dueDate);
+    return dueDate < new Date();
+  });
+  const overdueCount = overdueTasks?.length ?? 0;
   if (!memberInfo) return <></>;
   return (
     <Box
@@ -44,11 +53,13 @@ export default function Task() {
             alignItems="center"
           >
             <Typography variant="h4">Tasks</Typography>
-            <Button variant="contained">Create a task</Button>
+            <Button variant="contained" onClick={() => setOpen(true)}>
+              Create a task
+            </Button>
           </Stack>
           <Grid container spacing={2}>
             <Grid item xs={4}>
-              <OverdueTaskCard total={3} sx={{ height: "100%" }} />
+              <OverdueTaskCard total={overdueCount} sx={{ height: "100%" }} />
             </Grid>
             <Grid item xs={4}>
               <TaskProgressCard
@@ -61,6 +72,7 @@ export default function Task() {
           </Grid>
         </Stack>
       </Container>
+      <CreateTaskDialog open={open} setOpen={setOpen} />
     </Box>
   );
 }

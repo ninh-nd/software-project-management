@@ -91,7 +91,7 @@ export default function ExtendedTaskTable({ tasks }: { tasks: Task[] }) {
         <OutlinedInput
           defaultValue=""
           fullWidth
-          placeholder="Search ticket"
+          placeholder="Search task"
           startAdornment={
             <InputAdornment position="start">
               <Search color="action" fontSize="small" />
