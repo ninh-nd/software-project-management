@@ -26,7 +26,7 @@ import { useTicketsQuery } from "~/hooks/query";
 import { Ticket } from "~/interfaces/Entity";
 import PriorityChip from "./PriorityChip";
 import TicketStatusChip from "./TicketStatusChip";
-import AddTicketForm from "./AddTicketDialog";
+import AddTicketDialog from "./AddTicketDialog";
 interface TabProps {
   tickets: Ticket[];
 }
@@ -180,9 +180,7 @@ export default function ExtendedTicketTable() {
       <Box width="100%">
         <TicketTable tickets={displayTickets} />
       </Box>
-      <Dialog open={open} onClose={() => setOpen(false)} fullWidth>
-        <AddTicketForm setCloseDialog={() => setOpen(false)} />
-      </Dialog>
+      <AddTicketDialog open={open} setOpen={setOpen} />
     </Stack>
   );
 }

@@ -7,8 +7,8 @@ import TotalPullRequests from "~/components/TotalPullCard";
 import Chart from "~/components/ActivityHistoryChart";
 import RecentActivity from "~/components/RecentActivityCard";
 import TimelineChart from "~/components/TimelineChart";
-import TaskAssigned from "~/components/TaskAssigned";
-import TicketAssigned from "~/components/TicketAssigned";
+import TaskAssigned from "~/components/TaskAssignedCard";
+import TicketAssigned from "~/components/TicketAssignedCard";
 import { useUserRole } from "~/hooks/general";
 import {
   useActivityHistoryOfUserQuery,

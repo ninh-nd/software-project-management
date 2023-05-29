@@ -23,8 +23,8 @@ import { useRemoveArtifactFromPhaseMutation } from "~/hooks/query";
 import { Docker } from "~/icons/Icons";
 import { Phase } from "~/interfaces/Entity";
 import ConfirmDeleteDialog from "./ConfirmDeleteDialog";
-import CreateArtifactForm from "./CreateArtifactForm";
-import UpdateArtifactForm from "./UpdateArtifactForm";
+import CreateArtifactDialog from "./CreateArtifactDialog";
+import UpdateArtifactDialog from "./UpdateArtifactDialog";
 function renderType({
   type,
 }: {
@@ -145,27 +145,17 @@ export default function ArtifactDetails({ phase }: ArtifactDetailsProps) {
         >
           Add a new artifact
         </Button>
-        <Dialog
-          open={openArtCreateDialog}
-          onClose={() => setOpenArtCreateDialog(false)}
-          fullWidth
-        >
-          <CreateArtifactForm
-            phaseId={phase._id}
-            setCloseDialog={() => setOpenArtCreateDialog(false)}
-          />
-        </Dialog>
-        <Dialog
-          open={openArtUpdateDialog}
-          onClose={() => setOpenArtCreateDialog(false)}
-          fullWidth
-        >
-          <UpdateArtifactForm
-            artifactId={selectedArtifact}
-            setCloseDialog={() => setOpenArtUpdateDialog(false)}
-          />
-        </Dialog>
       </CardActions>
+      <CreateArtifactDialog
+        open={openArtCreateDialog}
+        setOpen={setOpenArtCreateDialog}
+        phaseId={phase._id}
+      />
+      <UpdateArtifactDialog
+        open={openArtUpdateDialog}
+        setOpen={setOpenArtUpdateDialog}
+        artifactId={selectedArtifact}
+      />
       <ConfirmDeleteDialog
         open={confirmModal}
         setOpen={setConfirmModal}

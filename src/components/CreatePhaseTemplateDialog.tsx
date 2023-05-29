@@ -6,6 +6,7 @@ import {
   CardActions,
   CardContent,
   Checkbox,
+  Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
@@ -322,10 +323,12 @@ function ConfirmPhaseTemplate() {
   );
 }
 interface CreatePhaseTemplateFormProps {
-  setOpen: Dispatch<SetStateAction<boolean>>;
+  open: boolean;
+  setOpen: (open: boolean) => void;
 }
-export default function CreatePhaseTemplateForm({
+export default function CreatePhaseTemplateDialog({
   setOpen,
+  open,
 }: CreatePhaseTemplateFormProps) {
   const { currentProject } = useParams();
   const createPhasesFromTemplateMutation =
@@ -372,7 +375,7 @@ export default function CreatePhaseTemplateForm({
   }
   return (
     <PhaseTemplateContext.Provider value={{ data, setData }}>
-      <Box>
+      <Dialog open={open} onClose={() => setOpen(false)} fullWidth>
         <DialogTitle>
           {activeStep === 0
             ? "Create a new phase template"
@@ -404,7 +407,7 @@ export default function CreatePhaseTemplateForm({
             <Button onClick={createPhasesFromTemplate}>Create</Button>
           )}
         </DialogActions>
-      </Box>
+      </Dialog>
     </PhaseTemplateContext.Provider>
   );
 }

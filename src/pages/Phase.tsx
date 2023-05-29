@@ -1,6 +1,7 @@
 import {
   Box,
   Breadcrumbs,
+  Button,
   Container,
   Link,
   Stack,
@@ -9,8 +10,9 @@ import {
 } from "@mui/material";
 import { Link as RouterLink, useParams } from "react-router-dom";
 import UnassginedTaskCard from "~/components/UnassignedTaskCard";
-import CreatePhaseTemplate from "~/components/CreatePhaseTemplate";
 import { useProjectInfoQuery } from "~/hooks/query";
+import { useState } from "react";
+import CreatePhaseTemplateDialog from "~/components/CreatePhaseTemplateDialog";
 
 export default function Phase() {
   const { currentProject } = useParams();
@@ -44,6 +46,29 @@ export default function Phase() {
           <UnassginedTaskCard />
         </Stack>
       </Container>
+    </Box>
+  );
+}
+
+function CreatePhaseTemplate() {
+  const [open, setOpen] = useState(false);
+  return (
+    <Box
+      sx={{ display: "flex", justifyContent: "space-evenly", flexGrow: "1" }}
+    >
+      <Box sx={{ p: "30px", display: "flex" }}>
+        <Typography variant="h4">
+          You haven't created a phase template yet. Do it now?
+        </Typography>
+        <Button
+          variant="contained"
+          sx={{ ml: "20px" }}
+          onClick={() => setOpen(true)}
+        >
+          Create a phase template
+        </Button>
+      </Box>
+      <CreatePhaseTemplateDialog open={open} setOpen={setOpen} />
     </Box>
   );
 }

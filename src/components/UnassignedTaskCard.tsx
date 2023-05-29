@@ -5,16 +5,11 @@ import {
   HourglassBottom,
 } from "@mui/icons-material";
 import {
-  Box,
   Button,
   Card,
+  CardActions,
   CardContent,
   CardHeader,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
   Stack,
 } from "@mui/material";
 import {
@@ -23,14 +18,14 @@ import {
   GridColDef,
   GridRowId,
 } from "@mui/x-data-grid";
+import dayjs from "dayjs";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useAvailableTasksQuery, useDeleteTaskMutation } from "~/hooks/query";
+import AssignTaskDialog from "./AssignTaskDialog";
+import ConfirmDeleteDialog from "./ConfirmDeleteDialog";
 import CreateTaskDialog from "./CreateTaskDialog";
 import EditTaskDialog from "./EditTaskDialog";
-import dayjs from "dayjs";
-import ConfirmDeleteDialog from "./ConfirmDeleteDialog";
-import AssignTaskDialog from "./AssignTaskDialog";
 
 export default function UnassignedTaskCard() {
   const { currentProject } = useParams();
@@ -131,28 +126,10 @@ export default function UnassignedTaskCard() {
               columns={columns}
             />
           </CardContent>
-        </Card>
-        <Card>
-          <CardHeader title="Actions" />
-          <CardContent>
-            <Box display="flex">
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => setOpenAssign(true)}
-              >
-                Assign task
-              </Button>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => setOpenCreate(true)}
-                sx={{ ml: 1 }}
-              >
-                Create new task
-              </Button>
-            </Box>
-          </CardContent>
+          <CardActions>
+            <Button onClick={() => setOpenAssign(true)}>Assign task</Button>
+            <Button onClick={() => setOpenCreate(true)}>Create new task</Button>
+          </CardActions>
         </Card>
       </Stack>
       <ConfirmDeleteDialog
@@ -161,8 +138,8 @@ export default function UnassignedTaskCard() {
         deleteFunction={deleteTask}
         text="Are you sure you want to delete this task?"
       />
-      <CreateTaskDialog open={openCreate} setOpen={setOpenCreate} />
       <EditTaskDialog open={openEdit} setOpen={setOpenEdit} id={selectedTask} />
+      <CreateTaskDialog open={openCreate} setOpen={setOpenCreate} />
       <AssignTaskDialog open={openAssign} setOpen={setOpenAssign} />
     </>
   );
