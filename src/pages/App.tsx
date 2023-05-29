@@ -14,12 +14,14 @@ import {
   RouterProvider,
   createBrowserRouter,
 } from "react-router-dom";
+import FullScreenLoading from "~/components/FullScreenLoading";
 import { IErrorResponse, ISuccessResponse } from "~/interfaces/ServerResponse";
 import { createComponents } from "~/theme/create-components";
 import { createPalette } from "~/theme/create-palette";
 import { createShadows } from "~/theme/create-shadows";
 import { createTypography } from "~/theme/create-typography";
 import NotFound from "./404";
+import Script from "./Script";
 const Task = lazy(() => import("./Task"));
 const AdminLayout = lazy(() => import("~/layouts/AdminLayout"));
 const DashboardLayout = lazy(() => import("~/layouts/DashboardLayout"));
@@ -35,7 +37,7 @@ const TicketDetailPage = lazy(() => import("./TicketDetail"));
 const TicketPage = lazy(() => import("./Ticket"));
 const VulnerabilityPage = lazy(() => import("./Vulnerability"));
 function GlobalSuspense({ element }: { element: JSX.Element }) {
-  return <Suspense fallback={<></>}>{element}</Suspense>;
+  return <Suspense fallback={<FullScreenLoading />}>{element}</Suspense>;
 }
 const managerAndMemberRoutes: RouteObject = {
   path: "/:currentProject",
@@ -87,6 +89,10 @@ const managerAndMemberRoutes: RouteObject = {
     {
       path: "tasks",
       element: <GlobalSuspense element={<Task />} />,
+    },
+    {
+      path: "scripts",
+      element: <GlobalSuspense element={<Script />} />,
     },
   ],
 };
@@ -151,6 +157,7 @@ export default function App() {
       queries: {
         retry: false,
         refetchOnWindowFocus: false,
+        suspense: true,
       },
     },
     queryCache: new QueryCache({
@@ -162,7 +169,6 @@ export default function App() {
       },
     }),
   });
-
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <QueryClientProvider client={queryClient}>

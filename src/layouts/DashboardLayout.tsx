@@ -1,7 +1,8 @@
 import { Outlet } from "react-router-dom";
-import Topbar from "~/components/Topbar";
-import Sidebar from "~/components/Sidebar";
 import MemberSidebar from "~/components/MemberSidebar";
+import QueryBoundaries from "~/components/QueryBoundaries";
+import Sidebar from "~/components/Sidebar";
+import Topbar from "~/components/Topbar";
 import { useUserRole } from "~/hooks/general";
 function SidebarWithRole() {
   const role = useUserRole();
@@ -16,10 +17,10 @@ function SidebarWithRole() {
 }
 export default function DashboardLayout() {
   return (
-    <>
+    <QueryBoundaries>
       <Topbar />
       <SidebarWithRole />
       <Outlet />
-    </>
+    </QueryBoundaries>
   );
 }
