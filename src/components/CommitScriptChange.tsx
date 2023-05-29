@@ -14,19 +14,14 @@ import {
 } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import { Branch } from "~/icons/Icons";
+import { Workflow } from "~/interfaces/Entity";
 
 interface Props {
-  fileName: string;
-  content: string;
+  workflow: Workflow;
   open: boolean;
   setOpen: (open: boolean) => void;
 }
-export default function CommitScriptChange({
-  fileName,
-  content,
-  open,
-  setOpen,
-}: Props) {
+export default function CommitScriptChange({ workflow, open, setOpen }: Props) {
   const { register, handleSubmit, control, watch } = useForm();
   const watchBranchSelection = watch("branchSelection");
   return (

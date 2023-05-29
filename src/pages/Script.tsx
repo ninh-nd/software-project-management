@@ -11,13 +11,15 @@ import {
   Stack,
   Toolbar,
   Typography,
+  debounce,
 } from "@mui/material";
 import { langs } from "@uiw/codemirror-extensions-langs";
 import CodeMirror from "@uiw/react-codemirror";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import CommitScriptChange from "~/components/CommitScriptChange";
 import { useGetWorkflowsQuery, useProjectInfoQuery } from "~/hooks/query";
+import { Workflow } from "~/interfaces/Entity";
 function NoWorkflow() {
   return (
     <Box sx={{ flexGrow: 1, height: "100vh" }}>
@@ -56,9 +58,28 @@ export default function Script() {
   const projectInfoQuery = useProjectInfoQuery(currentProject);
   const projectInfo = projectInfoQuery.data?.data;
   const workflowQuery = useGetWorkflowsQuery(projectInfo?.url);
+  const [selectedWorkFlow, setSelectedWorkflow] = useState<
+    Workflow | undefined
+  >();
   const workflows = workflowQuery.data?.data;
-  const [workflow, setWorkflow] = useState(workflows?.[0]);
-  if (workflows?.length === 0) return <NoWorkflow />;
+  useEffect(() => {
+    if (workflows) {
+      setSelectedWorkflow(workflows[0]);
+    }
+  }, [workflows]);
+  if (!workflows || !selectedWorkFlow) return <></>;
+  if (workflows.length === 0) return <NoWorkflow />;
+  function setContent(value: string) {
+    debounce(() => {
+      setSelectedWorkflow((workflow) => {
+        if (!workflow) return;
+        return {
+          ...workflow,
+          content: value,
+        };
+      });
+    }, 500);
+  }
   return (
     <Box sx={{ flexGrow: 1, height: "100vh" }}>
       <Toolbar />
@@ -69,8 +90,8 @@ export default function Script() {
             <CardHeader
               title="Editor"
               action={
-                <Select value={workflow?.name}>
-                  {workflows?.map((workflow) => (
+                <Select value={selectedWorkFlow.name}>
+                  {workflows.map((workflow) => (
                     <MenuItem key={workflow.name} value={workflow.name}>
                       {workflow.name}
                     </MenuItem>
@@ -80,7 +101,8 @@ export default function Script() {
             />
             <CardContent sx={{ height: 550 }}>
               <CodeMirror
-                value={workflow?.content}
+                value={selectedWorkFlow.content}
+                onChange={setContent}
                 extensions={[langs.yaml()]}
                 height="500px"
               />
@@ -94,8 +116,7 @@ export default function Script() {
       <CommitScriptChange
         open={open}
         setOpen={setOpen}
-        fileName="integrate.yml"
-        content="ddd"
+        workflow={selectedWorkFlow}
       />
     </Box>
   );
