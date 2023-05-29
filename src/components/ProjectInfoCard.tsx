@@ -37,7 +37,6 @@ function renderStatus(status: "active" | "inactive", theme: Theme) {
 export default function ProjectInfo({ sx }: { sx?: SxProps }) {
   const theme = useTheme();
   const { currentProject } = useParams();
-  if (!currentProject) return <></>;
   const projectInfoQuery = useProjectInfoQuery(currentProject);
   const projectInfo = projectInfoQuery.data?.data;
   if (!projectInfo) return <></>;

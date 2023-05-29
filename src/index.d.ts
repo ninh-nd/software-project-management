@@ -4,3 +4,8 @@ declare module "@mui/material/styles" {
     neutral: PaletteOptions["primary"];
   }
 }
+declare module "react-router-dom" {
+  export declare function useParams<
+    ParamsOrKey extends string | Record<string, string | undefined> = string
+  >(): { [key in ParamsOrKey]: string };
+}

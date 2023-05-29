@@ -6,19 +6,26 @@ import {
   CardContent,
   CardHeader,
   Container,
-  IconButton,
   MenuItem,
   Select,
   Stack,
   Toolbar,
   Typography,
 } from "@mui/material";
-import CodeMirror from "@uiw/react-codemirror";
 import { langs } from "@uiw/codemirror-extensions-langs";
+import CodeMirror from "@uiw/react-codemirror";
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 import CommitScriptChange from "~/components/CommitScriptChange";
+import { useGetWorkflowsQuery, useProjectInfoQuery } from "~/hooks/query";
 export default function Script() {
+  const { currentProject } = useParams();
   const [open, setOpen] = useState(false);
+  const projectInfoQuery = useProjectInfoQuery(currentProject);
+  const projectInfo = projectInfoQuery.data?.data;
+  if (!projectInfo) return <></>;
+  const workflowQuery = useGetWorkflowsQuery(projectInfo.url);
+  const workflows = workflowQuery.data?.data ?? [];
   return (
     <Box sx={{ flexGrow: 1, height: "100vh" }}>
       <Toolbar />

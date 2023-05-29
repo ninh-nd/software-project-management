@@ -17,7 +17,6 @@ import {
 } from "~/hooks/query";
 function ManagerHomePage() {
   const { currentProject } = useParams();
-  if (!currentProject) return <></>;
   const actHistQuery = useActivityHistoryQuery(currentProject);
   const actHist = actHistQuery.data?.data;
   if (!actHist) return <></>;
@@ -54,7 +53,6 @@ function ManagerHomePage() {
 }
 function MemberHomePage() {
   const { currentProject } = useParams();
-  if (!currentProject) return <></>;
   const actHistQuery = useActivityHistoryOfUserQuery(currentProject);
   const actHistData = actHistQuery.data?.data;
   const memberInfoQuery = useMemberByAccountIdQuery();

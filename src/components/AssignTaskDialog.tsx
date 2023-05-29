@@ -31,7 +31,6 @@ export default function AssignTaskDialog({
 }) {
   const { control, handleSubmit } = useForm<FormData>();
   const { currentProject } = useParams();
-  if (!currentProject) return <></>;
   const availableTasksQuery = useAvailableTasksQuery(currentProject);
   const availableTasks = availableTasksQuery.data?.data;
   const membersQuery = useMembersQuery(currentProject);

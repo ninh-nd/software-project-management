@@ -29,9 +29,6 @@ import EditTaskDialog from "./EditTaskDialog";
 
 export default function UnassignedTaskCard() {
   const { currentProject } = useParams();
-  if (!currentProject) {
-    return <></>;
-  }
   const [openAssign, setOpenAssign] = useState(false);
   const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);

@@ -16,7 +16,6 @@ import CreatePhaseTemplateDialog from "~/components/CreatePhaseTemplateDialog";
 
 export default function Phase() {
   const { currentProject } = useParams();
-  if (!currentProject) return <></>;
   const projectQuery = useProjectInfoQuery(currentProject);
   const project = projectQuery.data?.data;
   if (!project) return <></>;

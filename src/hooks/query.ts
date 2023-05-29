@@ -72,6 +72,7 @@ import {
 } from "~/interfaces/Entity";
 import { IErrorResponse, ISuccessResponse } from "~/interfaces/ServerResponse";
 import { useAccountContext, useSetAccountContext } from "./general";
+import { getWorkflows } from "~/actions/workflowAction";
 function toast(
   response: ISuccessResponse<any> | IErrorResponse,
   enqueueSnackbar: (
@@ -522,4 +523,7 @@ export function useTaskQuery(id: string) {
 }
 export function useThreatQuery(id: string) {
   return useQuery(["threats", id], () => getThreat(id));
+}
+export function useGetWorkflowsQuery(url: string) {
+  return useQuery(["workflows", url], () => getWorkflows(url));
 }

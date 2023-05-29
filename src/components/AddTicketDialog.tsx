@@ -37,7 +37,6 @@ interface Props {
 }
 export default function AddTicketDialog({ open, setOpen }: Props) {
   const { currentProject } = useParams();
-  if (!currentProject) return <></>;
   const getAllArtifactsQuery = useArtifactsQuery(currentProject);
   const artifacts = getAllArtifactsQuery.data?.data;
   const vulns =

@@ -35,7 +35,6 @@ export default function PhaseDetails({ phase }: PhaseDetailsProps) {
     { field: "description", headerName: "Description", minWidth: 400, flex: 1 },
   ];
   const { currentProject } = useParams();
-  if (!currentProject) return <></>;
   const taskQuery = useAvailableTasksQuery(currentProject);
   const availableTasks = taskQuery.data?.data ?? [];
   const [openTaskDialog, setOpenTaskDialog] = useState(false);
@@ -46,12 +45,10 @@ export default function PhaseDetails({ phase }: PhaseDetailsProps) {
     const { id } = params;
     const phaseId = phase._id;
     const taskId = id.toString();
-    if (!currentProject) return;
     addTaskMutation.mutate({ phaseId, taskId, currentProject });
   }
   function handleDeleteSelectedTask(id: string) {
     const phaseId = id;
-    if (!currentProject) return;
     selectedRows.forEach((taskId) => {
       removeTaskMutation.mutate({ phaseId, taskId, currentProject });
     });

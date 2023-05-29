@@ -103,7 +103,6 @@ export default function ExtendedTicketTable() {
   const createTicketPermission = permission.includes("ticket:create");
   const [open, setOpen] = useState(false);
   const { currentProject } = useParams();
-  if (!currentProject) return <></>;
   const ticketQuery = useTicketsQuery(currentProject);
   const tickets = ticketQuery.data?.data ?? [];
   const [displayTickets, setDisplayTickets] = useState(tickets);

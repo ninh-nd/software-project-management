@@ -15,7 +15,6 @@ import { Link as RouterLink, useParams } from "react-router-dom";
 import { useMembersQuery } from "~/hooks/query";
 export default function MemberCard({ sx }: { sx?: SxProps }) {
   const { currentProject } = useParams();
-  if (!currentProject) return <></>;
   const memberListQuery = useMembersQuery(currentProject);
   const memberList = memberListQuery.data?.data ?? [];
   return (

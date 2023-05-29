@@ -202,3 +202,7 @@ export interface GithubRepoImport {
   status: "private" | "public";
   owner: string;
 }
+export interface Workflow {
+  fileName: string;
+  content: string;
+}

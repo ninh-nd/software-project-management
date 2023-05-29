@@ -14,8 +14,6 @@ import {
   TableRow,
 } from "@mui/material";
 import { MouseEvent, useState } from "react";
-import { useParams } from "react-router-dom";
-import { useAssignTaskMutation, useAvailableTasksQuery } from "~/hooks/query";
 import { User } from "~/interfaces/Entity";
 import AssignTaskDialog from "./AssignTaskDialog";
 
@@ -33,8 +31,6 @@ export default function TaskCard({ member }: { member: User }) {
     page * rowsPerPage,
     (page + 1) * rowsPerPage
   );
-  const { currentProject } = useParams();
-  if (!currentProject) return <></>;
   return (
     <Card>
       <CardHeader title="Tasks" />
