@@ -524,6 +524,8 @@ export function useTaskQuery(id: string) {
 export function useThreatQuery(id: string) {
   return useQuery(["threats", id], () => getThreat(id));
 }
-export function useGetWorkflowsQuery(url: string) {
-  return useQuery(["workflows", url], () => getWorkflows(url));
+export function useGetWorkflowsQuery(url: string | undefined) {
+  return useQuery(["workflows", url], () => getWorkflows(url as string), {
+    enabled: !!url,
+  });
 }

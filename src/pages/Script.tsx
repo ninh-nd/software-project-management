@@ -18,14 +18,47 @@ import { useState } from "react";
 import { useParams } from "react-router-dom";
 import CommitScriptChange from "~/components/CommitScriptChange";
 import { useGetWorkflowsQuery, useProjectInfoQuery } from "~/hooks/query";
+function NoWorkflow() {
+  return (
+    <Box sx={{ flexGrow: 1, height: "100vh" }}>
+      <Toolbar />
+      <Container sx={{ my: 4 }} maxWidth="lg">
+        <Stack spacing={3}>
+          <Typography variant="h4">Workflow scripts</Typography>
+          <Card sx={{ p: 2 }}>
+            <CardContent
+              sx={{
+                height: 550,
+              }}
+            >
+              <Stack
+                sx={{
+                  justifyContent: "center",
+                  alignItems: "center",
+                  width: "100%",
+                  height: "100%",
+                }}
+              >
+                <Typography variant="h5">
+                  Found no workflow in this project.
+                </Typography>
+              </Stack>
+            </CardContent>
+          </Card>
+        </Stack>
+      </Container>
+    </Box>
+  );
+}
 export default function Script() {
   const { currentProject } = useParams();
   const [open, setOpen] = useState(false);
   const projectInfoQuery = useProjectInfoQuery(currentProject);
   const projectInfo = projectInfoQuery.data?.data;
-  if (!projectInfo) return <></>;
-  const workflowQuery = useGetWorkflowsQuery(projectInfo.url);
-  const workflows = workflowQuery.data?.data ?? [];
+  const workflowQuery = useGetWorkflowsQuery(projectInfo?.url);
+  const workflows = workflowQuery.data?.data;
+  const [workflow, setWorkflow] = useState(workflows?.[0]);
+  if (workflows?.length === 0) return <NoWorkflow />;
   return (
     <Box sx={{ flexGrow: 1, height: "100vh" }}>
       <Toolbar />
@@ -36,15 +69,18 @@ export default function Script() {
             <CardHeader
               title="Editor"
               action={
-                <Select value="1">
-                  <MenuItem value="1">integrate.yml</MenuItem>
-                  <MenuItem value="2">another.yml</MenuItem>
+                <Select value={workflow?.name}>
+                  {workflows?.map((workflow) => (
+                    <MenuItem key={workflow.name} value={workflow.name}>
+                      {workflow.name}
+                    </MenuItem>
+                  ))}
                 </Select>
               }
             />
             <CardContent sx={{ height: 550 }}>
               <CodeMirror
-                value="console.log('Hello World!');\nhello"
+                value={workflow?.content}
                 extensions={[langs.yaml()]}
                 height="500px"
               />

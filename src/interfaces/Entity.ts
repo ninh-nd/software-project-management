@@ -203,6 +203,6 @@ export interface GithubRepoImport {
   owner: string;
 }
 export interface Workflow {
-  fileName: string;
+  name: string;
   content: string;
 }
