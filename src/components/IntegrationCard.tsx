@@ -10,6 +10,7 @@ import {
   DialogContent,
   DialogTitle,
   IconButton,
+  InputAdornment,
   List,
   ListItem,
   ListItemIcon,
@@ -60,22 +61,26 @@ function UpdateAccessTokenDialog({
     <Box component="form" onSubmit={handleSubmit(onSubmit)}>
       <DialogTitle>Update Github configuration</DialogTitle>
       <DialogContent>
-        <Box display="flex" alignItems="center" justifyContent="center">
-          <TextField
-            type={isTokenShown ? "text" : "password"}
-            defaultValue={github?.accessToken}
-            {...register("accessToken", {
-              required: "Access token is required",
-            })}
-            error={errors.accessToken !== undefined}
-            helperText={errors.accessToken?.message}
-            fullWidth
-            label="Access token"
-          />
-          <IconButton onClick={() => setIsTokenShown(!isTokenShown)}>
-            {isTokenShown ? <Visibility /> : <VisibilityOff />}
-          </IconButton>
-        </Box>
+        <TextField
+          type={isTokenShown ? "text" : "password"}
+          defaultValue={github?.accessToken}
+          {...register("accessToken", {
+            required: "Access token is required",
+          })}
+          error={errors.accessToken !== undefined}
+          helperText={errors.accessToken?.message}
+          fullWidth
+          label="Access token"
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={() => setIsTokenShown(!isTokenShown)}>
+                  {isTokenShown ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
       </DialogContent>
       <DialogActions>
         <Button onClick={() => setOpen(false)} color="inherit">

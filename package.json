@@ -16,6 +16,8 @@
     "@mui/x-data-grid": "^6.3.0",
     "@mui/x-date-pickers": "^6.5.0",
     "@tanstack/react-query": "^4.29.5",
+    "@uiw/codemirror-extensions-langs": "^4.20.2",
+    "@uiw/react-codemirror": "^4.20.2",
     "axios": "^1.4.0",
     "dayjs": "^1.11.7",
     "material-ui-popup-state": "^5.0.8",

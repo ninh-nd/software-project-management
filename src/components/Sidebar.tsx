@@ -1,6 +1,8 @@
 import {
   AssessmentOutlined,
   ChevronLeft,
+  Description,
+  DescriptionOutlined,
   HomeOutlined,
   InfoOutlined,
   SecurityOutlined,
@@ -62,6 +64,11 @@ function DrawerContent() {
         text="Phase"
         icon={<AssessmentOutlined />}
         path={`/${currentProject}/phases`}
+      />
+      <Item
+        text="Script"
+        icon={<DescriptionOutlined />}
+        path={`/${currentProject}/scripts`}
       />
       <Item
         text="Ticket"
