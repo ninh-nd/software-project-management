@@ -10,9 +10,11 @@ import {
   RadioGroup,
   Stack,
   TextField,
-  Typography,
 } from "@mui/material";
-import { Controller, useForm } from "react-hook-form";
+import { ChangeEvent, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useParams } from "react-router-dom";
+import { useProjectInfoQuery, useUpdateWorkflowMutation } from "~/hooks/query";
 import { Branch } from "~/icons/Icons";
 import { Workflow } from "~/interfaces/Entity";
 
@@ -21,54 +23,83 @@ interface Props {
   open: boolean;
   setOpen: (open: boolean) => void;
 }
+interface FormData {
+  branch: string;
+  message: string;
+}
 export default function CommitScriptChange({ workflow, open, setOpen }: Props) {
-  const { register, handleSubmit, control, watch } = useForm();
-  const watchBranchSelection = watch("branchSelection");
+  const updateWorkflowMutation = useUpdateWorkflowMutation();
+  const [branchSelection, setBranchSelection] = useState<"default" | "new">(
+    "default"
+  );
+  const { currentProject } = useParams();
+  const projectInfoQuery = useProjectInfoQuery(currentProject);
+  const url = projectInfoQuery.data?.data?.url ?? "";
+  const { register, handleSubmit } = useForm<FormData>({
+    defaultValues: {
+      branch: undefined,
+      message: `Update ${workflow.name} workflow`,
+    },
+  });
+  function onSubmit(data: FormData) {
+    const { branch, message } = data;
+    updateWorkflowMutation.mutate({
+      branch,
+      data: workflow,
+      message,
+      url,
+    });
+    setOpen(false);
+  }
+  function changeBranch(event: ChangeEvent<HTMLInputElement>, value: string) {
+    setBranchSelection(value as "default" | "new");
+  }
   return (
     <Dialog open={open} onClose={() => setOpen(false)} fullWidth>
-      <DialogTitle>Commit changes</DialogTitle>
-      <DialogContent>
-        <Stack spacing={2}>
-          <TextField label="Commit message" fullWidth />
-          <Controller
-            name="branchSelection"
-            control={control}
-            render={({ field }) => (
-              <RadioGroup {...field}>
-                <FormControlLabel
-                  control={<Radio />}
-                  label="Commit directly to default branch (master/main)"
-                  value="default"
-                />
-                <FormControlLabel
-                  control={<Radio />}
-                  label="Create a new branch for this commit"
-                  value="new"
-                />
-              </RadioGroup>
-            )}
-          />
-          {watchBranchSelection === "new" && (
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <DialogTitle>Commit changes</DialogTitle>
+        <DialogContent>
+          <Stack spacing={2}>
             <TextField
-              label="Branch name"
+              label="Commit message"
               fullWidth
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Branch />
-                  </InputAdornment>
-                ),
-              }}
+              {...register("message")}
             />
-          )}
-        </Stack>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={() => setOpen(false)}>Cancel</Button>
-        <Button type="submit" variant="contained" color="success">
-          Commit changes
-        </Button>
-      </DialogActions>
+            <RadioGroup onChange={changeBranch}>
+              <FormControlLabel
+                control={<Radio />}
+                label="Commit directly to default branch (master/main)"
+                value="default"
+              />
+              <FormControlLabel
+                control={<Radio />}
+                label="Create a new branch for this commit"
+                value="new"
+              />
+            </RadioGroup>
+            {branchSelection === "new" && (
+              <TextField
+                {...register("branch")}
+                label="Branch name"
+                fullWidth
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Branch />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            )}
+          </Stack>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpen(false)}>Cancel</Button>
+          <Button type="submit" variant="contained" color="success">
+            Commit changes
+          </Button>
+        </DialogActions>
+      </form>
     </Dialog>
   );
 }

@@ -69,10 +69,11 @@ import {
   TaskUpdate,
   ThreatCreate,
   TicketCreate,
+  Workflow,
 } from "~/interfaces/Entity";
 import { IErrorResponse, ISuccessResponse } from "~/interfaces/ServerResponse";
 import { useAccountContext, useSetAccountContext } from "./general";
-import { getWorkflows } from "~/actions/workflowAction";
+import { getWorkflows, pushNewWorkflow } from "~/actions/workflowAction";
 function toast(
   response: ISuccessResponse<any> | IErrorResponse,
   enqueueSnackbar: (
@@ -527,5 +528,24 @@ export function useThreatQuery(id: string) {
 export function useGetWorkflowsQuery(url: string | undefined) {
   return useQuery(["workflows", url], () => getWorkflows(url as string), {
     enabled: !!url,
+  });
+}
+interface WorkflowUpdate {
+  url: string;
+  branch: string | undefined;
+  data: Workflow;
+  message: string;
+}
+export function useUpdateWorkflowMutation() {
+  const queryClient = useQueryClient();
+  const { enqueueSnackbar } = useSnackbar();
+  return useMutation({
+    mutationFn: ({ url, branch, data, message }: WorkflowUpdate) =>
+      pushNewWorkflow(url, branch, data, message),
+    onSuccess: (response) => {
+      toast(response, enqueueSnackbar, () => {
+        queryClient.invalidateQueries(["workflows"]);
+      });
+    },
   });
 }

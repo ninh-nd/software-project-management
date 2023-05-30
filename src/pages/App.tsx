@@ -157,6 +157,7 @@ export default function App() {
       queries: {
         retry: false,
         refetchOnWindowFocus: false,
+        suspense: true,
       },
     },
     queryCache: new QueryCache({

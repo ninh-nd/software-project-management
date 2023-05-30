@@ -67,8 +67,8 @@ export default function Script() {
       setSelectedWorkflow(workflows[0]);
     }
   }, [workflows]);
-  if (!workflows || !selectedWorkFlow) return <></>;
-  if (workflows.length === 0) return <NoWorkflow />;
+  if (!workflows || !selectedWorkFlow || workflows.length === 0)
+    return <NoWorkflow />;
   function setContent(value: string) {
     debounce(() => {
       setSelectedWorkflow((workflow) => {
