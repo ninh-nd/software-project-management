@@ -9,10 +9,10 @@ import {
   Typography,
 } from "@mui/material";
 import { Link as RouterLink, useParams } from "react-router-dom";
-import UnassginedTaskCard from "~/components/UnassignedTaskCard";
+import UnassginedTaskCard from "~/components/cards/UnassignedTaskCard";
 import { useProjectInfoQuery } from "~/hooks/query";
 import { useState } from "react";
-import CreatePhaseTemplateDialog from "~/components/CreatePhaseTemplateDialog";
+import CreatePhaseTemplateDialog from "~/components/dialogs/CreatePhaseTemplateDialog";
 
 export default function Phase() {
   const { currentProject } = useParams();

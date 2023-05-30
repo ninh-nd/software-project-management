@@ -24,9 +24,9 @@ import { Link as RouterLink, useParams } from "react-router-dom";
 import { usePermissionHook } from "~/hooks/general";
 import { useTicketsQuery } from "~/hooks/query";
 import { Ticket } from "~/interfaces/Entity";
-import PriorityChip from "./PriorityChip";
-import TicketStatusChip from "./TicketStatusChip";
-import AddTicketDialog from "./AddTicketDialog";
+import PriorityChip from "~/components/styled-components/PriorityChip";
+import TicketStatusChip from "~/components/styled-components/TicketStatusChip";
+import AddTicketDialog from "~/components/dialogs/AddTicketDialog";
 interface TabProps {
   tickets: Ticket[];
 }

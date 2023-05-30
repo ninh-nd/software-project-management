@@ -9,7 +9,7 @@ import {
   Divider,
   Typography,
 } from "@mui/material";
-import RoleChip from "~/components/RoleChip";
+import RoleChip from "~/components/styled-components/RoleChip";
 import { GitLab } from "~/icons/Icons";
 import { ThirdParty, User } from "~/interfaces/Entity";
 import AvatarImage from "/avatar.webp";

@@ -1,6 +1,6 @@
 import { Avatar, Box, Card, CardContent, Typography } from "@mui/material";
 import { Account } from "~/interfaces/Entity";
-import RoleChip from "./RoleChip";
+import RoleChip from "../styled-components/RoleChip";
 import AvatarImage from "/avatar.webp";
 export default function AccountProfile({ account }: { account: Account }) {
   return (

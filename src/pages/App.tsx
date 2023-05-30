@@ -14,7 +14,7 @@ import {
   RouterProvider,
   createBrowserRouter,
 } from "react-router-dom";
-import FullScreenLoading from "~/components/FullScreenLoading";
+import FullScreenLoading from "~/components/layout-components/FullScreenLoading";
 import { IErrorResponse, ISuccessResponse } from "~/interfaces/ServerResponse";
 import { createComponents } from "~/theme/create-components";
 import { createPalette } from "~/theme/create-palette";

@@ -8,10 +8,10 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
-import CreateTaskDialog from "~/components/CreateTaskDialog";
-import OverdueTaskCard from "~/components/OverdueTaskCard";
-import TaskProgressCard from "~/components/TaskProgressCard";
-import ExtendedTaskTable from "~/components/TaskTableCard";
+import CreateTaskDialog from "~/components/dialogs/CreateTaskDialog";
+import OverdueTaskCard from "~/components/cards/OverdueTaskCard";
+import TaskProgressCard from "~/components/cards/TaskProgressCard";
+import ExtendedTaskTable from "~/components/cards/TaskTableCard";
 import { useMemberByAccountIdQuery } from "~/hooks/query";
 import { Task } from "~/interfaces/Entity";
 

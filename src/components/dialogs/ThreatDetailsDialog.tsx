@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import { useThreatQuery } from "~/hooks/query";
 import { Threat } from "~/interfaces/Entity";
-import { typeOptions } from "../utils/threat-display";
+import { typeOptions } from "~/utils/threat-display";
 interface Props {
   id: string | undefined;
   setCloseDialog: () => void;

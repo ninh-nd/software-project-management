@@ -24,8 +24,8 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 dayjs.extend(relativeTime);
 import { useParams } from "react-router-dom";
-import PriorityChip from "~/components/PriorityChip";
-import TicketStatusChip from "~/components/TicketStatusChip";
+import PriorityChip from "~/components/styled-components/PriorityChip";
+import TicketStatusChip from "~/components/styled-components/TicketStatusChip";
 import { useMarkTicketMutation, useTicketQuery } from "~/hooks/query";
 import { Ticket } from "~/interfaces/Entity";
 function Headline({ ticket }: { ticket: Ticket }) {

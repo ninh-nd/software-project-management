@@ -1,8 +1,8 @@
 import { Stack, Grid, Box, Toolbar, Container } from "@mui/material";
 import { useParams } from "react-router-dom";
-import ActivityHistoryCard from "~/components/ActivityHistoryCard";
-import MemberInfoCard from "~/components/MemberInfoCard";
-import TaskCard from "~/components/TaskCard";
+import ActivityHistoryCard from "~/components/cards/ActivityHistoryCard";
+import MemberInfoCard from "~/components/cards/MemberInfoCard";
+import TaskCard from "~/components/cards/TaskCard";
 import { useMemberQuery } from "~/hooks/query";
 
 export default function MemberDetail() {

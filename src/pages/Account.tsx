@@ -6,9 +6,9 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import AccountProfile from "~/components/AccountProfileCard";
-import AccountProfileDetails from "~/components/AccountProfileDetailsCard";
-import Integration from "~/components/IntegrationCard";
+import AccountProfile from "~/components/cards/AccountProfileCard";
+import AccountProfileDetails from "~/components/cards/AccountProfileDetailsCard";
+import Integration from "~/components/cards/IntegrationCard";
 import { useAccountContext } from "~/hooks/general";
 
 export default function Account() {

@@ -22,9 +22,9 @@ import { useState } from "react";
 import { useRemoveArtifactFromPhaseMutation } from "~/hooks/query";
 import { Docker } from "~/icons/Icons";
 import { Phase } from "~/interfaces/Entity";
-import ConfirmDeleteDialog from "./ConfirmDeleteDialog";
-import CreateArtifactDialog from "./CreateArtifactDialog";
-import UpdateArtifactDialog from "./UpdateArtifactDialog";
+import ConfirmDeleteDialog from "~/components/dialogs/ConfirmDeleteDialog";
+import CreateArtifactDialog from "~/components/dialogs/CreateArtifactDialog";
+import UpdateArtifactDialog from "~/components/dialogs/UpdateArtifactDialog";
 function renderType({
   type,
 }: {

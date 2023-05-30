@@ -1,5 +1,5 @@
 import { Box, Container, Toolbar } from "@mui/material";
-import ExtendedTicketTable from "~/components/TicketTable";
+import ExtendedTicketTable from "~/components/styled-components/TicketTable";
 
 export default function Ticket() {
   return (

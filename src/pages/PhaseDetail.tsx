@@ -1,10 +1,10 @@
 import { Box, Typography, Grid, Toolbar, Container } from "@mui/material";
 import { useParams } from "react-router-dom";
-import ActiveTaskCount from "~/components/ActiveTaskCountCard";
-import ArtifactDetails from "~/components/ArtifactDetailsCard";
-import CompletedTaskCount from "~/components/CompletedTaskCountCard";
-import PhaseDetails from "~/components/PhaseDetailsCard";
-import PhaseProgress from "~/components/PhaseProgressCard";
+import ActiveTaskCount from "~/components/cards/ActiveTaskCountCard";
+import ArtifactDetails from "~/components/cards/ArtifactDetailsCard";
+import CompletedTaskCount from "~/components/cards/CompletedTaskCountCard";
+import PhaseDetails from "~/components/cards/PhaseDetailsCard";
+import PhaseProgress from "~/components/cards/PhaseProgressCard";
 import { usePhaseQuery } from "~/hooks/query";
 export default function PhaseDetail() {
   const { phaseId } = useParams();

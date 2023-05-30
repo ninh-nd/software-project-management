@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import { MouseEvent, useState } from "react";
 import { User } from "~/interfaces/Entity";
-import AssignTaskDialog from "./AssignTaskDialog";
+import AssignTaskDialog from "~/components/dialogs/AssignTaskDialog";
 
 const rowsPerPage = 5;
 export default function TaskCard({ member }: { member: User }) {

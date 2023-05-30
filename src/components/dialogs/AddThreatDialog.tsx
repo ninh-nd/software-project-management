@@ -18,7 +18,7 @@ import { useEffect } from "react";
 import { Control, Controller, useForm } from "react-hook-form";
 import { useCreateThreatMutation } from "~/hooks/query";
 import { ThreatCreate } from "~/interfaces/Entity";
-import { typeOptions } from "../utils/threat-display";
+import { typeOptions } from "../../utils/threat-display";
 interface Props {
   open: boolean;
   setOpen: (value: boolean) => void;

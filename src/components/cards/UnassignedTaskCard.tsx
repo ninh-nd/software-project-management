@@ -22,10 +22,10 @@ import dayjs from "dayjs";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { useAvailableTasksQuery, useDeleteTaskMutation } from "~/hooks/query";
-import AssignTaskDialog from "./AssignTaskDialog";
-import ConfirmDeleteDialog from "./ConfirmDeleteDialog";
-import CreateTaskDialog from "./CreateTaskDialog";
-import EditTaskDialog from "./EditTaskDialog";
+import AssignTaskDialog from "~/components/dialogs/AssignTaskDialog";
+import ConfirmDeleteDialog from "~/components/dialogs/ConfirmDeleteDialog";
+import CreateTaskDialog from "~/components/dialogs/CreateTaskDialog";
+import EditTaskDialog from "~/components/dialogs/EditTaskDialog";
 
 export default function UnassignedTaskCard() {
   const { currentProject } = useParams();

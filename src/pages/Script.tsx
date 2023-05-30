@@ -17,7 +17,7 @@ import { langs } from "@uiw/codemirror-extensions-langs";
 import CodeMirror from "@uiw/react-codemirror";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import CommitScriptChange from "~/components/CommitScriptChange";
+import CommitScriptChange from "~/components/dialogs/CommitScriptChangeDialog";
 import { useGetWorkflowsQuery, useProjectInfoQuery } from "~/hooks/query";
 import { Workflow } from "~/interfaces/Entity";
 function NoWorkflow() {
