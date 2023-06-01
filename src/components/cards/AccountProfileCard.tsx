@@ -2,7 +2,10 @@ import { Avatar, Box, Card, CardContent, Typography } from "@mui/material";
 import { Account } from "~/interfaces/Entity";
 import RoleChip from "../styled-components/RoleChip";
 import AvatarImage from "/avatar.webp";
+import { useMemberByAccountIdQuery } from "~/hooks/query";
 export default function AccountProfile({ account }: { account: Account }) {
+  const memberByAccountIdInfo = useMemberByAccountIdQuery();
+  const memberInfo = memberByAccountIdInfo.data?.data;
   return (
     <Card>
       <CardContent>
@@ -22,7 +25,7 @@ export default function AccountProfile({ account }: { account: Account }) {
             }}
           />
           <Typography gutterBottom variant="h5">
-            Hello, {account.username}
+            Hello, {memberInfo?.name}
           </Typography>
           <Typography color="text.secondary" variant="body2">
             <RoleChip role={account.role} />

@@ -8,6 +8,7 @@ import {
   Container,
   MenuItem,
   Select,
+  SelectChangeEvent,
   Stack,
   Toolbar,
   Typography,
@@ -55,9 +56,7 @@ function NoWorkflow() {
 export default function Script() {
   const { currentProject } = useParams();
   const [open, setOpen] = useState(false);
-  const projectInfoQuery = useProjectInfoQuery(currentProject);
-  const projectInfo = projectInfoQuery.data?.data;
-  const workflowQuery = useGetWorkflowsQuery(projectInfo?.url);
+  const workflowQuery = useGetWorkflowsQuery(currentProject);
   const [selectedWorkFlow, setSelectedWorkflow] = useState<
     Workflow | undefined
   >();
@@ -80,6 +79,13 @@ export default function Script() {
       });
     }, 500);
   }
+  function changeSelectedWorkflow(event: SelectChangeEvent<string>) {
+    const name = event.target.value;
+    const workflow = workflows?.find((workflow) => workflow.name === name);
+    if (workflow) {
+      setSelectedWorkflow(workflow);
+    }
+  }
   return (
     <Box sx={{ flexGrow: 1, height: "100vh" }}>
       <Toolbar />
@@ -90,7 +96,10 @@ export default function Script() {
             <CardHeader
               title="Editor"
               action={
-                <Select value={selectedWorkFlow.name}>
+                <Select
+                  value={selectedWorkFlow.name}
+                  onChange={changeSelectedWorkflow}
+                >
                   {workflows.map((workflow) => (
                     <MenuItem key={workflow.name} value={workflow.name}>
                       {workflow.name}

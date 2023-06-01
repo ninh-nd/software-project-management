@@ -15,7 +15,7 @@ import { useCreateAccountMutation } from "~/hooks/query";
 import { AccountRegister } from "~/interfaces/Entity";
 export default function SignUp() {
   const registerMutation = useCreateAccountMutation();
-  function onSubmit(data: AccountRegister) {
+  async function onSubmit(data: AccountRegister) {
     registerMutation.mutate(data);
   }
   const {
@@ -46,7 +46,6 @@ export default function SignUp() {
           <Box
             component="form"
             onSubmit={handleSubmit(onSubmit)}
-            noValidate
             sx={{ mt: 1 }}
           >
             <TextField

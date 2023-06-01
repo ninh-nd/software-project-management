@@ -67,11 +67,12 @@ const Drawer = styled(MuiDrawer, {
 function DrawerContent() {
   const projectInQuery = useProjectInQuery();
   const projects = projectInQuery.data?.data;
-  const firstProject = projects ? projects[0].name : "";
+  const firstProject = projects ? encodeURIComponent(projects[0]?.name) : "";
   let { currentProject } = useParams();
   if (!currentProject) {
     currentProject = firstProject;
   }
+  const encodedUrl = encodeURIComponent(currentProject);
   const { open: isDrawerOpen } = useDrawerState();
   const [open, setOpen] = useState(true);
   useEffect(() => {
@@ -79,20 +80,16 @@ function DrawerContent() {
   }, [isDrawerOpen]);
   return (
     <List component="nav">
-      <Item
-        text="Overview"
-        icon={<HomeOutlined />}
-        path={`/${currentProject}/`}
-      />
+      <Item text="Overview" icon={<HomeOutlined />} path={`/${encodedUrl}/`} />
       <Item
         text="Ticket"
         icon={<InfoOutlined />}
-        path={`/${currentProject}/tickets`}
+        path={`/${encodedUrl}/tickets`}
       />
       <Item
         text="Task"
         icon={<AssignmentOutlined />}
-        path={`/${currentProject}/tasks`}
+        path={`/${encodedUrl}/tasks`}
       />
       <Divider />
       <ListSubheader component="div" inset>
@@ -101,7 +98,7 @@ function DrawerContent() {
       <Item
         text="Vulnerabilities"
         icon={<SecurityOutlined />}
-        path={`/${currentProject}/vulnerabilities`}
+        path={`/${encodedUrl}/vulnerabilities`}
       />
     </List>
   );

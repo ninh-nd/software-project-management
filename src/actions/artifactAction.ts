@@ -8,7 +8,10 @@ export async function getArtifact(artifactId: string): PromiseServer<Artifact> {
 export async function getAllArtifacts(
   projectName: string
 ): PromiseServer<Artifact[]> {
-  const response = await api.get("/artifact", { params: { projectName } });
+  const urlEncodedProjectName = encodeURIComponent(projectName);
+  const response = await api.get("/artifact", {
+    params: { projectName: urlEncodedProjectName },
+  });
   return response.data;
 }
 export async function updateArtifact(

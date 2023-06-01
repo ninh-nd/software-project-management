@@ -8,14 +8,16 @@ import { PromiseServer } from "~/interfaces/ServerResponse";
 export async function getProjectInfo(
   projectName: string
 ): PromiseServer<Project> {
-  const response = await api.get(`/project/${projectName}`);
+  const urlEncodedProjectName = encodeURIComponent(projectName);
+  const response = await api.get(`/project/${urlEncodedProjectName}`);
   return response.data;
 }
 export async function createPhaseTemplate(
   projectName: string,
   template: PhaseTemplateCreate
 ) {
-  const response = await api.post(`/project/${projectName}`, {
+  const urlEncodedProjectName = encodeURIComponent(projectName);
+  const response = await api.post(`/project/${urlEncodedProjectName}`, {
     data: template,
   });
   return response.data;

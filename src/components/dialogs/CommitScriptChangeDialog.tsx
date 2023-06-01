@@ -14,7 +14,7 @@ import {
 import { ChangeEvent, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
-import { useProjectInfoQuery, useUpdateWorkflowMutation } from "~/hooks/query";
+import { useUpdateWorkflowMutation } from "~/hooks/query";
 import { Branch } from "~/icons/Icons";
 import { Workflow } from "~/interfaces/Entity";
 
@@ -33,8 +33,6 @@ export default function CommitScriptChange({ workflow, open, setOpen }: Props) {
     "default"
   );
   const { currentProject } = useParams();
-  const projectInfoQuery = useProjectInfoQuery(currentProject);
-  const url = projectInfoQuery.data?.data?.url ?? "";
   const { register, handleSubmit } = useForm<FormData>({
     defaultValues: {
       branch: undefined,
@@ -47,7 +45,7 @@ export default function CommitScriptChange({ workflow, open, setOpen }: Props) {
       branch,
       data: workflow,
       message,
-      url,
+      projectName: currentProject,
     });
     setOpen(false);
   }

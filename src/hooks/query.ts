@@ -354,7 +354,10 @@ export function useLoginMutation() {
             });
             return;
           }
-          const currentProject = data[0].name;
+          const currentProject = data[0]?.name;
+          if (!currentProject) {
+            navigate("/new-project");
+          }
           navigate(`/${currentProject}/`);
         }
       }
@@ -465,7 +468,8 @@ export function useImportProjectMutation() {
         queryClient.invalidateQueries(["projectIn"]);
         const { data } = response;
         if (data) {
-          navigate(`/${data.name}/`);
+          const encodedName = encodeURIComponent(data.name);
+          navigate(`/${encodedName}/`);
         }
       });
     },
@@ -525,13 +529,13 @@ export function useTaskQuery(id: string) {
 export function useThreatQuery(id: string) {
   return useQuery(["threats", id], () => getThreat(id));
 }
-export function useGetWorkflowsQuery(url: string | undefined) {
-  return useQuery(["workflows", url], () => getWorkflows(url as string), {
-    enabled: !!url,
+export function useGetWorkflowsQuery(projectName: string) {
+  return useQuery(["workflows", projectName], () => getWorkflows(projectName), {
+    enabled: !!projectName,
   });
 }
 interface WorkflowUpdate {
-  url: string;
+  projectName: string;
   branch: string | undefined;
   data: Workflow;
   message: string;
@@ -540,8 +544,8 @@ export function useUpdateWorkflowMutation() {
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
   return useMutation({
-    mutationFn: ({ url, branch, data, message }: WorkflowUpdate) =>
-      pushNewWorkflow(url, branch, data, message),
+    mutationFn: ({ projectName, branch, data, message }: WorkflowUpdate) =>
+      pushNewWorkflow(projectName, branch, data, message),
     onSuccess: (response) => {
       toast(response, enqueueSnackbar, () => {
         queryClient.invalidateQueries(["workflows"]);

@@ -7,7 +7,7 @@ import {
   QueryClientProvider,
 } from "@tanstack/react-query";
 import { SnackbarProvider, useSnackbar } from "notistack";
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, useEffect } from "react";
 import {
   Navigate,
   RouteObject,
@@ -22,6 +22,9 @@ import { createShadows } from "~/theme/create-shadows";
 import { createTypography } from "~/theme/create-typography";
 import NotFound from "./404";
 import Script from "./Script";
+import { getAccountInfo } from "~/actions/accountAction";
+import { useSetAccountContext } from "~/hooks/general";
+const FirstTimeLoginPage = lazy(() => import("./FirstTimeLoginPage"));
 const Task = lazy(() => import("./Task"));
 const AdminLayout = lazy(() => import("~/layouts/AdminLayout"));
 const DashboardLayout = lazy(() => import("~/layouts/DashboardLayout"));
@@ -127,7 +130,16 @@ const router = createBrowserRouter([
       },
     ],
   },
-
+  {
+    path: "/new-project",
+    element: <GlobalSuspense element={<DashboardLayout />} />,
+    children: [
+      {
+        path: "",
+        element: <GlobalSuspense element={<FirstTimeLoginPage />} />,
+      },
+    ],
+  },
   {
     path: "*",
     element: <NotFound />,
@@ -157,7 +169,6 @@ export default function App() {
       queries: {
         retry: false,
         refetchOnWindowFocus: false,
-        suspense: true,
       },
     },
     queryCache: new QueryCache({
@@ -169,6 +180,16 @@ export default function App() {
       },
     }),
   });
+  const setAccountContext = useSetAccountContext();
+  useEffect(() => {
+    async function setContext() {
+      const { data } = await getAccountInfo();
+      if (data) {
+        setAccountContext(data);
+      }
+    }
+    setContext();
+  }, []);
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <QueryClientProvider client={queryClient}>

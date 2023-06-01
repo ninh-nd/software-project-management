@@ -44,11 +44,12 @@ function Item({ text, icon, path }: ItemProps) {
 function DrawerContent() {
   const projectInQuery = useProjectInQuery();
   const projects = projectInQuery.data?.data;
-  const firstProject = projects ? projects[0].name : "";
+  const firstProject = projects ? encodeURIComponent(projects[0]?.name) : "";
   let { currentProject } = useParams();
   if (!currentProject) {
     currentProject = firstProject;
   }
+  const encodedUrl = encodeURIComponent(currentProject);
   const { open: isDrawerOpen } = useDrawerState();
   const [open, setOpen] = useState(true);
   useEffect(() => {
@@ -59,21 +60,21 @@ function DrawerContent() {
       <ListSubheader component="div" inset>
         Project navigation
       </ListSubheader>
-      <Item text="Home" icon={<HomeOutlined />} path={`/${currentProject}/`} />
+      <Item text="Home" icon={<HomeOutlined />} path={`/${encodedUrl}/`} />
       <Item
         text="Phase"
         icon={<AssessmentOutlined />}
-        path={`/${currentProject}/phases`}
+        path={`/${encodedUrl}/phases`}
       />
       <Item
         text="Script"
         icon={<DescriptionOutlined />}
-        path={`/${currentProject}/scripts`}
+        path={`/${encodedUrl}/scripts`}
       />
       <Item
         text="Ticket"
         icon={<InfoOutlined />}
-        path={`/${currentProject}/tickets`}
+        path={`/${encodedUrl}/tickets`}
       />
       <Divider />
       <ListSubheader component="div" inset>
@@ -82,7 +83,7 @@ function DrawerContent() {
       <Item
         text="Vulnerabilities"
         icon={<SecurityOutlined />}
-        path={`/${currentProject}/vulnerabilities`}
+        path={`/${encodedUrl}/vulnerabilities`}
       />
     </List>
   );

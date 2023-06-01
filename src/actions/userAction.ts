@@ -4,7 +4,8 @@ import { Project, User } from "~/interfaces/Entity";
 export async function getMembersOfProject(
   projectName: string
 ): PromiseServer<User[]> {
-  const response = await api.get(`/project/${projectName}/member`);
+  const urlEncodedProjectName = encodeURIComponent(projectName);
+  const response = await api.get(`/project/${urlEncodedProjectName}/member`);
   return response.data;
 }
 export async function getMemberById(memberId: string): PromiseServer<User> {

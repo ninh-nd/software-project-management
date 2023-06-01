@@ -27,7 +27,7 @@ export default function ImportProject({ setClose }: { setClose: () => void }) {
   }
   return (
     <Box component="form" onSubmit={handleSubmit(onSubmit)}>
-      <DialogTitle>Import project from Github</DialogTitle>
+      <DialogTitle>Import project from Github/Gitlab</DialogTitle>
       <DialogContent>
         <Controller
           name="data"

@@ -53,20 +53,30 @@ function CreatePhaseTemplate() {
   const [open, setOpen] = useState(false);
   return (
     <Box
-      sx={{ display: "flex", justifyContent: "space-evenly", flexGrow: "1" }}
+      sx={{
+        flexGrow: "1",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+        width: "100%",
+      }}
     >
-      <Box sx={{ p: "30px", display: "flex" }}>
-        <Typography variant="h4">
-          You haven't created a phase template yet. Do it now?
-        </Typography>
-        <Button
-          variant="contained"
-          sx={{ ml: "20px" }}
-          onClick={() => setOpen(true)}
-        >
-          Create a phase template
-        </Button>
-      </Box>
+      <Toolbar />
+      <Container maxWidth="lg" sx={{ my: 4 }}>
+        <Box sx={{ display: "flex" }}>
+          <Typography variant="h4">
+            You haven't created a phase template yet. Do it now?
+          </Typography>
+          <Button
+            variant="contained"
+            sx={{ mx: 2 }}
+            onClick={() => setOpen(true)}
+          >
+            Create a phase template
+          </Button>
+        </Box>
+      </Container>
       <CreatePhaseTemplateDialog open={open} setOpen={setOpen} />
     </Box>
   );
