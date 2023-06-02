@@ -196,7 +196,7 @@ export interface CWE {
   detectionMethods: string[];
   __v: number;
 }
-export interface GithubRepoImport {
+export interface RepoImport {
   name: string;
   url: string;
   status: "private" | "public";

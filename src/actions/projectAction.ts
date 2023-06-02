@@ -1,9 +1,5 @@
 import api from "~/api";
-import {
-  GithubRepoImport,
-  PhaseTemplateCreate,
-  Project,
-} from "~/interfaces/Entity";
+import { RepoImport, PhaseTemplateCreate, Project } from "~/interfaces/Entity";
 import { PromiseServer } from "~/interfaces/ServerResponse";
 export async function getProjectInfo(
   projectName: string
@@ -22,9 +18,7 @@ export async function createPhaseTemplate(
   });
   return response.data;
 }
-export async function importProject(
-  data: GithubRepoImport
-): PromiseServer<Project> {
+export async function importProject(data: RepoImport): PromiseServer<Project> {
   const response = await api.post("project", {
     data: {
       type: "import",

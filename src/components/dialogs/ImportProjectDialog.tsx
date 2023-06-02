@@ -10,20 +10,29 @@ import {
   TextField,
 } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
-import { useGetGithubRepo, useImportProjectMutation } from "~/hooks/query";
-import { GithubRepoImport } from "~/interfaces/Entity";
+import { useGetRepo, useImportProjectMutation } from "~/hooks/query";
+import { GitLab } from "~/icons/Icons";
+import { RepoImport } from "~/interfaces/Entity";
 interface Data {
-  data: GithubRepoImport;
+  data: RepoImport;
 }
 export default function ImportProject({ setClose }: { setClose: () => void }) {
   const importProjectMutation = useImportProjectMutation();
   const { control, handleSubmit } = useForm<Data>();
-  const importProjectListQuery = useGetGithubRepo();
-  if (importProjectListQuery.isError) return <></>;
-  const importProjectList = importProjectListQuery.data?.data ?? [];
+  const importProjectListQuery = useGetRepo();
+  if (importProjectListQuery[0].isError || importProjectListQuery[1].isError)
+    return <></>;
+  const importProjectList = importProjectListQuery.flatMap(
+    (item) => item.data?.data ?? []
+  );
   async function onSubmit(data: Data) {
     importProjectMutation.mutate(data.data);
     setClose();
+  }
+  function groupSelection(url: string) {
+    if (url.includes("github")) return "Github";
+    if (url.includes("gitlab")) return "Gitlab";
+    return "Other";
   }
   return (
     <Box component="form" onSubmit={handleSubmit(onSubmit)}>
@@ -39,11 +48,12 @@ export default function ImportProject({ setClose }: { setClose: () => void }) {
               getOptionLabel={(option) => option.url}
               renderOption={(props, option) => (
                 <Box component="li" sx={{ "& > svg": { mr: 2 } }} {...props}>
-                  <GitHub />
-                  {option.owner}/{option.name}
+                  {option.url.includes("github") ? <GitHub /> : <GitLab />}
+                  {option.name}
                   <Chip label={option.status} sx={{ ml: 1 }} />
                 </Box>
               )}
+              groupBy={(option) => groupSelection(option.url)}
               renderInput={(params) => (
                 <Box>
                   <TextField {...params} label="Choose a project" />

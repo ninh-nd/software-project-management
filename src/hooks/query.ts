@@ -1,4 +1,9 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueries,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import {
   OptionsObject,
   SnackbarKey,
@@ -24,7 +29,7 @@ import {
 } from "~/actions/artifactAction";
 import { login, register } from "~/actions/authAction";
 import { getCWE } from "~/actions/cweAction";
-import { getGithubRepos } from "~/actions/githubAction";
+import { getGithubRepos, getGitlabRepos } from "~/actions/gitAction";
 import {
   addArtifactToPhase,
   addTaskToPhase,
@@ -62,7 +67,7 @@ import {
   AccountUpdate,
   ArtifactCreate,
   ArtifactUpdate,
-  GithubRepoImport,
+  RepoImport,
   PhaseTemplateCreate,
   Task,
   TaskCreate,
@@ -301,8 +306,19 @@ export function useMarkTicketMutation() {
     },
   });
 }
-export function useGetGithubRepo() {
-  return useQuery(["repos"], getGithubRepos);
+export function useGetRepo() {
+  return useQueries({
+    queries: [
+      {
+        queryKey: ["repo", "github"],
+        queryFn: () => getGithubRepos(),
+      },
+      {
+        queryKey: ["repo", "gitlab"],
+        queryFn: () => getGitlabRepos(),
+      },
+    ],
+  });
 }
 export function useAccountsQuery() {
   return useQuery(["accounts"], getAllAccounts);
@@ -462,7 +478,7 @@ export function useImportProjectMutation() {
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
   return useMutation({
-    mutationFn: (data: GithubRepoImport) => importProject(data),
+    mutationFn: (data: RepoImport) => importProject(data),
     onSuccess: (response) => {
       toast(response, enqueueSnackbar, () => {
         queryClient.invalidateQueries(["projectIn"]);
