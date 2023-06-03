@@ -74,11 +74,12 @@ export default function Topbar() {
   }
   function switchProject(event: SelectChangeEvent<string>, child: ReactNode) {
     const selection = event.target.value;
+    const encoded = encodeURIComponent(selection);
     if (selection === "add-new-project") {
       setOpenDialog(true);
       return;
     }
-    navigate(`/${selection}/`);
+    navigate(`/${encoded}/`);
   }
   return (
     <AppBar position="absolute" open={open}>
