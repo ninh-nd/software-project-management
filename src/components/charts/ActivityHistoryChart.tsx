@@ -55,7 +55,12 @@ export default function Chart({
       <CardHeader title="Activity history" />
       <CardContent>
         <ResponsiveContainer width="100%" aspect={3 / 1}>
-          <BarChart width={500} height={300} data={reshapedActHist}>
+          <BarChart
+            width={500}
+            height={300}
+            data={reshapedActHist}
+            barSize={20}
+          >
             <XAxis
               dataKey="createdBy"
               hide={lessThanMedium}
@@ -63,7 +68,7 @@ export default function Chart({
               tickLine={false}
             />
             <YAxis axisLine={false} tickLine={false} />
-            <Tooltip />
+            <Tooltip cursor={false} />
             <Legend />
             <Bar
               dataKey="totalCommits"
