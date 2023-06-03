@@ -370,10 +370,10 @@ export function useLoginMutation() {
             });
             return;
           }
-          const currentProject = data[0]?.name;
-          if (!currentProject) {
+          if (data.length === 0) {
             navigate("/new-project");
           }
+          const currentProject = data[0].name;
           navigate(`/${currentProject}/`);
         }
       }
