@@ -1,7 +1,6 @@
 export interface ThirdParty {
   name: string;
   username: string;
-  url: string;
   accessToken: string;
 }
 export interface Account {
