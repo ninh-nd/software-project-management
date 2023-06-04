@@ -20,6 +20,7 @@ export function useLoginMutation() {
     mutationFn: ({ username, password }: LoginParams) =>
       login(username, password),
     onSuccess: async () => {
+      enqueueSnackbar("Login successfully", { variant: "success" });
       const { data } = await getAccountInfo();
       if (data) {
         // IMPORTANT!
@@ -37,6 +38,7 @@ export function useLoginMutation() {
           }
           if (data.length === 0) {
             navigate("/new-project");
+            return;
           }
           const currentProject = data[0].name;
           navigate(`/${currentProject}/`);
