@@ -4,6 +4,7 @@ import {
   disconnectFromGithub,
   disconnectFromGitlab,
   getAccountById,
+  getAccountInfo,
   getAllAccounts,
   getPermissions,
   updateAccessToken,
@@ -13,6 +14,7 @@ import {
 import { AccountUpdate } from ".";
 import { useSnackbar } from "notistack";
 import { toast } from "~/utils/toast";
+import { useSetAccountContext } from "~/hooks/general";
 
 export function useAccountsQuery() {
   return useQuery(["accounts"], getAllAccounts);
@@ -75,38 +77,41 @@ export function useUpdateAccessTokenMutation() {
     id: string;
     accessToken: string;
   }
-  const queryClient = useQueryClient();
+  const setAccountContext = useSetAccountContext();
   const { enqueueSnackbar } = useSnackbar();
   return useMutation({
     mutationFn: ({ id, accessToken }: UpdateAccessTokenParams) =>
       updateAccessToken(id, accessToken),
     onSuccess: (response) => {
-      toast(response, enqueueSnackbar, () => {
-        queryClient.invalidateQueries(["accountInfo"]);
+      toast(response, enqueueSnackbar, async () => {
+        const { data } = await getAccountInfo();
+        if (data) setAccountContext(data);
       });
     },
   });
 }
 export function useDisconnectFromGithubMutation() {
-  const queryClient = useQueryClient();
+  const setAccountContext = useSetAccountContext();
   const { enqueueSnackbar } = useSnackbar();
   return useMutation({
     mutationFn: disconnectFromGithub,
     onSuccess: (response) => {
-      toast(response, enqueueSnackbar, () => {
-        queryClient.invalidateQueries(["accountInfo"]);
+      toast(response, enqueueSnackbar, async () => {
+        const { data } = await getAccountInfo();
+        if (data) setAccountContext(data);
       });
     },
   });
 }
 export function useDisconnectFromGitlabMutation() {
-  const queryClient = useQueryClient();
+  const setAccountContext = useSetAccountContext();
   const { enqueueSnackbar } = useSnackbar();
   return useMutation({
     mutationFn: disconnectFromGitlab,
     onSuccess: (response) => {
-      toast(response, enqueueSnackbar, () => {
-        queryClient.invalidateQueries(["accountInfo"]);
+      toast(response, enqueueSnackbar, async () => {
+        const { data } = await getAccountInfo();
+        if (data) setAccountContext(data);
       });
     },
   });
