@@ -32,9 +32,15 @@ import {
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useAccountContext } from "~/hooks/general";
-import { useUpdateAccessTokenMutation } from "~/hooks/fetching/account/query";
+import {
+  useDisconnectFromGithubMutation,
+  useDisconnectFromGitlabMutation,
+  useUpdateAccessTokenMutation,
+} from "~/hooks/fetching/account/query";
 import { GitLab } from "~/icons/Icons";
 import { ThirdParty } from "~/hooks/fetching/account";
+import ConfirmDeleteDialog from "../dialogs/ConfirmDeleteDialog";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 function UpdateAccessTokenDialog({
   github,
   setOpen,
@@ -99,6 +105,12 @@ export default function Integration({
   gitlab: ThirdParty | undefined;
 }) {
   const [openUpdateAccessToken, setOpenUpdateAccessToken] = useState(false);
+  const [openDisconnectFromGithub, setOpenDisconnectFromGithub] =
+    useState(false);
+  const [openDisconnectFromGitlab, setOpenDisconnectFromGitlab] =
+    useState(false);
+  const disconnectFromGithubMutation = useDisconnectFromGithubMutation();
+  const disconnectFromGitlabMutation = useDisconnectFromGitlabMutation();
   const theme = useTheme();
   const popupStateGithub = usePopupState({
     variant: "popover",
@@ -108,6 +120,18 @@ export default function Integration({
     variant: "popover",
     popupId: "gitlab",
   });
+  function connectToGithub() {
+    window.open(`${API_BASE_URL}account/connect/github`, "_self");
+  }
+  function connectToGitlab() {
+    window.open(`${API_BASE_URL}account/connect/gitlab`, "_self");
+  }
+  function disconnectFromGithub() {
+    disconnectFromGithubMutation.mutate();
+  }
+  function disconnectFromGitlab() {
+    disconnectFromGitlabMutation.mutate();
+  }
   return (
     <>
       <Card>
@@ -134,7 +158,10 @@ export default function Integration({
                     {github ? (
                       <>
                         <MenuItem>
-                          <Typography sx={{ color: theme.palette.error.main }}>
+                          <Typography
+                            sx={{ color: theme.palette.error.main }}
+                            onClick={() => setOpenDisconnectFromGithub(true)}
+                          >
                             Disconnect from Github
                           </Typography>
                         </MenuItem>
@@ -146,7 +173,7 @@ export default function Integration({
                       </>
                     ) : (
                       <>
-                        <MenuItem>
+                        <MenuItem onClick={connectToGithub}>
                           <Typography>Connect to Github</Typography>
                         </MenuItem>
                         <MenuItem disabled>
@@ -178,7 +205,10 @@ export default function Integration({
                     {gitlab ? (
                       <>
                         <MenuItem>
-                          <Typography sx={{ color: theme.palette.error.main }}>
+                          <Typography
+                            sx={{ color: theme.palette.error.main }}
+                            onClick={() => setOpenDisconnectFromGitlab(true)}
+                          >
                             Disconnect from Gitlab
                           </Typography>
                         </MenuItem>
@@ -190,7 +220,7 @@ export default function Integration({
                       </>
                     ) : (
                       <>
-                        <MenuItem>
+                        <MenuItem onClick={connectToGitlab}>
                           <Typography>Connect to Gitlab</Typography>
                         </MenuItem>
                         <MenuItem disabled>
@@ -211,6 +241,18 @@ export default function Integration({
           github={github}
         />
       </Dialog>
+      <ConfirmDeleteDialog
+        open={openDisconnectFromGithub}
+        setOpen={setOpenDisconnectFromGithub}
+        text="Are you sure you want to disconnect from Github?"
+        deleteFunction={disconnectFromGithub}
+      />
+      <ConfirmDeleteDialog
+        open={openDisconnectFromGitlab}
+        setOpen={setOpenDisconnectFromGitlab}
+        text="Are you sure you want to disconnect from Github?"
+        deleteFunction={disconnectFromGitlab}
+      />
     </>
   );
 }
