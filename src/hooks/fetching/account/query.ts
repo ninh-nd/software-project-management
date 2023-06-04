@@ -1,6 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   deleteAccount,
+  disconnectFromGithub,
+  disconnectFromGitlab,
   getAccountById,
   getAllAccounts,
   getPermissions,
@@ -78,6 +80,30 @@ export function useUpdateAccessTokenMutation() {
   return useMutation({
     mutationFn: ({ id, accessToken }: UpdateAccessTokenParams) =>
       updateAccessToken(id, accessToken),
+    onSuccess: (response) => {
+      toast(response, enqueueSnackbar, () => {
+        queryClient.invalidateQueries(["accountInfo"]);
+      });
+    },
+  });
+}
+export function useDisconnectFromGithubMutation() {
+  const queryClient = useQueryClient();
+  const { enqueueSnackbar } = useSnackbar();
+  return useMutation({
+    mutationFn: disconnectFromGithub,
+    onSuccess: (response) => {
+      toast(response, enqueueSnackbar, () => {
+        queryClient.invalidateQueries(["accountInfo"]);
+      });
+    },
+  });
+}
+export function useDisconnectFromGitlabMutation() {
+  const queryClient = useQueryClient();
+  const { enqueueSnackbar } = useSnackbar();
+  return useMutation({
+    mutationFn: disconnectFromGitlab,
     onSuccess: (response) => {
       toast(response, enqueueSnackbar, () => {
         queryClient.invalidateQueries(["accountInfo"]);

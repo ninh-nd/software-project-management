@@ -16,13 +16,13 @@ export async function getAccountById(id: string): PromiseServer<Account> {
 export async function updateAccount(
   id: string,
   updateData: AccountUpdate
-): PromiseServer<Account> {
+): PromiseServer<null> {
   const response = await api.patch(`/account/${id}`, {
     data: updateData,
   });
   return response.data;
 }
-export async function deleteAccount(id: string): PromiseServer<Account> {
+export async function deleteAccount(id: string): PromiseServer<null> {
   const response = await api.delete(`/account/${id}`);
   return response.data;
 }
@@ -33,7 +33,7 @@ export async function getPermissions(): PromiseServer<string[]> {
 export async function updatePermission(
   id: string,
   updateData: string[]
-): PromiseServer<Account> {
+): PromiseServer<null> {
   const response = await api.patch(`/account/${id}/permission`, {
     data: updateData,
   });
@@ -42,9 +42,17 @@ export async function updatePermission(
 export async function updateAccessToken(
   id: string,
   accessToken: string
-): PromiseServer<Account> {
+): PromiseServer<null> {
   const response = await api.patch(`/account/${id}/thirdParty/github`, {
     data: accessToken,
   });
+  return response.data;
+}
+export async function disconnectFromGithub(): PromiseServer<null> {
+  const response = await api.patch("/account/disconnect/github");
+  return response.data;
+}
+export async function disconnectFromGitlab(): PromiseServer<null> {
+  const response = await api.patch("/account/disconnect/gitlab");
   return response.data;
 }

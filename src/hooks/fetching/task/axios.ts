@@ -20,14 +20,14 @@ export async function getAvailableTasks(
   });
   return response.data;
 }
-export async function deleteTask(taskId: string): PromiseServer<Task> {
+export async function deleteTask(taskId: string): PromiseServer<null> {
   const response = await api.delete(`/task/${taskId}`);
   return response.data;
 }
 export async function createTask(
   task: TaskCreate,
   projectName: string
-): PromiseServer<Task> {
+): PromiseServer<null> {
   const response = await api.post(`/task`, {
     data: {
       ...task,
@@ -39,7 +39,7 @@ export async function createTask(
 export async function updateTask(
   task: TaskUpdate,
   taskId: string
-): PromiseServer<Task> {
+): PromiseServer<null> {
   const response = await api.patch(`/task/${taskId}`, { data: task });
   return response.data;
 }

@@ -10,9 +10,7 @@ export async function getTickets(projectName: string): PromiseServer<Ticket[]> {
   });
   return response.data;
 }
-export async function createTicket(
-  ticket: TicketCreate
-): PromiseServer<Ticket> {
+export async function createTicket(ticket: TicketCreate): PromiseServer<null> {
   const response = await api.post("/ticket", {
     data: ticket,
   });
@@ -25,7 +23,7 @@ export async function getTicket(id: string): PromiseServer<Ticket> {
 export async function markTicket(
   id: string,
   status: "open" | "closed"
-): PromiseServer<Ticket> {
+): PromiseServer<null> {
   const response = await api.patch(`/ticket/${id}`, {
     data: {
       status,

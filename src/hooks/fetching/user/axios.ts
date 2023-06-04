@@ -30,7 +30,7 @@ export async function getUserByAccountId(
 export async function assignTask(
   taskId: string,
   memberId: string
-): PromiseServer<User> {
+): PromiseServer<null> {
   const response = await api.patch(`/user/${memberId}/assignTask/${taskId}`);
   return response.data;
 }

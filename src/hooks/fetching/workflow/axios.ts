@@ -15,7 +15,7 @@ export async function pushNewWorkflow(
   branch: string | undefined,
   data: Workflow,
   message: string
-): PromiseServer<Workflow> {
+): PromiseServer<null> {
   const response = await api.post("/workflow", {
     projectName,
     branch,

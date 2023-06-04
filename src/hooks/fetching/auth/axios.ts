@@ -14,7 +14,7 @@ export async function logout() {
   const response = await api.get("/auth/logout");
   return response;
 }
-export async function register(data: AccountRegister): PromiseServer<Account> {
+export async function register(data: AccountRegister): PromiseServer<null> {
   const response = await api.post("/account/reg", data);
   return response.data;
 }

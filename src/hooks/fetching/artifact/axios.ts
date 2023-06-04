@@ -17,7 +17,7 @@ export async function getAllArtifacts(
 export async function updateArtifact(
   artifactId: string,
   artifact: ArtifactUpdate
-): PromiseServer<Artifact> {
+): PromiseServer<null> {
   const response = await api.patch(`/artifact/${artifactId}`, {
     data: artifact,
   });

@@ -9,14 +9,14 @@ export async function getPhase(id: string): PromiseServer<Phase> {
 export async function addTaskToPhase(
   phaseId: string,
   taskId: string
-): PromiseServer<Phase> {
+): PromiseServer<null> {
   const response = await api.patch(`/phase/${phaseId}/task/add/${taskId}`);
   return response.data;
 }
 export async function removeTaskFromPhase(
   phaseId: string,
   taskId: string
-): PromiseServer<Phase> {
+): PromiseServer<null> {
   const response = await api.patch(`/phase/${phaseId}/task/delete/${taskId}`);
   return response.data;
 }
@@ -27,7 +27,7 @@ export async function getPhaseTemplates(): PromiseServer<PhaseTemplate[]> {
 export async function createPhasesFromTemplate(
   projectName: string,
   data: PhaseTemplateCreate
-): PromiseServer<PhaseTemplate> {
+): PromiseServer<null> {
   const response = await api.post(`/phase/templates`, {
     projectName,
     data,
@@ -37,7 +37,7 @@ export async function createPhasesFromTemplate(
 export async function addArtifactToPhase(
   phaseId: string,
   artifact: ArtifactCreate
-): PromiseServer<Phase> {
+): PromiseServer<null> {
   const response = await api.patch(`/phase/${phaseId}/artifact/add`, {
     data: artifact,
   });
@@ -46,7 +46,7 @@ export async function addArtifactToPhase(
 export async function removeArtifactFromPhase(
   phaseId: string,
   artifactId: string
-): PromiseServer<Phase> {
+): PromiseServer<null> {
   const response = await api.patch(
     `/phase/${phaseId}/artifact/delete/${artifactId}`
   );

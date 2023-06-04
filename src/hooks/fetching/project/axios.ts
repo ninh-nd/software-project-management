@@ -13,7 +13,7 @@ export async function getProjectInfo(
 export async function createPhaseTemplate(
   projectName: string,
   template: PhaseTemplateCreate
-) {
+): PromiseServer<null> {
   const urlEncodedProjectName = encodeURIComponent(projectName);
   const response = await api.post(`/project/${urlEncodedProjectName}`, {
     data: template,
