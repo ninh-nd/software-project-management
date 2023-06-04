@@ -24,13 +24,14 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import { Artifact, Vulnerability } from "~/hooks/fetching/artifact";
+import { Threat } from "~/hooks/fetching/threat";
 import { Docker } from "~/icons/Icons";
-import { Artifact, Threat, Vulnerability } from "~/interfaces/Entity";
 interface VulnTabPanelProps {
   list: Vulnerability[];
   value: number;
   index: number;
-  setOpenCWEDetails: (value: boolean) => void;
+  setOpenCweDetails: (value: boolean) => void;
 }
 interface ThreatTabPanelProps {
   list: Threat[];
@@ -39,12 +40,12 @@ interface ThreatTabPanelProps {
 }
 function VulnTabPanel(props: VulnTabPanelProps) {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { list, value, index, setOpenCWEDetails } = props;
+  const { list, value, index, setOpenCweDetails } = props;
   if (value !== index) return <></>;
   function viewCwe(cwe: string) {
     return () => {
       setSearchParams({ cweId: cwe });
-      setOpenCWEDetails(true);
+      setOpenCweDetails(true);
     };
   }
   return (
@@ -168,10 +169,10 @@ function renderType({
 }
 export default function ArtifactCard({
   artifacts,
-  setOpenCWEDetails,
+  setOpenCweDetails,
 }: {
   artifacts: Artifact[];
-  setOpenCWEDetails: (value: boolean) => void;
+  setOpenCweDetails: (value: boolean) => void;
 }) {
   const [activeTabs, setActiveTabs] = useState<number[]>(() =>
     Array(artifacts.length).fill(0)
@@ -220,7 +221,7 @@ export default function ArtifactCard({
                     value={activeTabs[index]}
                     index={0}
                     list={artifact.vulnerabilityList}
-                    setOpenCWEDetails={setOpenCWEDetails}
+                    setOpenCweDetails={setOpenCweDetails}
                   />
                   <ThreatTabPanel
                     value={activeTabs[index]}

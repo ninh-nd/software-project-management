@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
-import { Ticket } from "~/interfaces/Entity";
+import { Ticket } from "~/hooks/fetching/ticket";
 const numberOfTaskPerPage = 5;
 export default function TicketAssigned({
   tickets,

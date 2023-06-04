@@ -24,10 +24,10 @@ import {
 } from "@mui/material";
 import { ReactNode, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getAccountInfo } from "~/actions/accountAction";
-import { logout } from "~/actions/authAction";
+import { getAccountInfo } from "~/hooks/fetching/account/axios";
+import { logout } from "~/hooks/fetching/auth/axios";
 import { drawerWidth, useDrawerState } from "~/hooks/drawer";
-import { useProjectInQuery } from "~/hooks/query";
+import { useProjectInQuery } from "~/hooks/fetching/user/query";
 import ImportProject from "~/components/dialogs/ImportProjectDialog";
 import { useUserRole } from "~/hooks/general";
 interface Props extends AppBarProps {

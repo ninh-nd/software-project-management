@@ -15,7 +15,7 @@ import {
   ResponsiveContainer,
   Tooltip,
 } from "recharts";
-import { Threat } from "~/interfaces/Entity";
+import { Threat } from "~/hooks/fetching/threat";
 
 export default function ThreatStatistics({
   threatList,

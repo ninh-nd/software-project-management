@@ -21,7 +21,10 @@ import {
 import dayjs from "dayjs";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { useAvailableTasksQuery, useDeleteTaskMutation } from "~/hooks/query";
+import {
+  useAvailableTasksQuery,
+  useDeleteTaskMutation,
+} from "~/hooks/fetching/task/query";
 import AssignTaskDialog from "~/components/dialogs/AssignTaskDialog";
 import ConfirmDeleteDialog from "~/components/dialogs/ConfirmDeleteDialog";
 import CreateTaskDialog from "~/components/dialogs/CreateTaskDialog";

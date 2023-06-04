@@ -12,8 +12,8 @@ import CreateTaskDialog from "~/components/dialogs/CreateTaskDialog";
 import OverdueTaskCard from "~/components/cards/OverdueTaskCard";
 import TaskProgressCard from "~/components/cards/TaskProgressCard";
 import ExtendedTaskTable from "~/components/cards/TaskTableCard";
-import { useMemberByAccountIdQuery } from "~/hooks/query";
-import { Task } from "~/interfaces/Entity";
+import { Task } from "~/hooks/fetching/task";
+import { useUserByAccountIdQuery } from "~/hooks/fetching/user/query";
 
 function getProgressTotal(tasks: Task[]) {
   const total = tasks.length;
@@ -24,7 +24,7 @@ function getProgressTotal(tasks: Task[]) {
 
 export default function Task() {
   const [open, setOpen] = useState(false);
-  const memberInfoQuery = useMemberByAccountIdQuery();
+  const memberInfoQuery = useUserByAccountIdQuery();
   const memberInfo = memberInfoQuery.data?.data;
   // Find the number of overdue tasks
   const overdueTasks = memberInfo?.taskAssigned.filter((x) => {

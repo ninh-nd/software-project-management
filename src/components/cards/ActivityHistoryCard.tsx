@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import { MouseEvent, useState } from "react";
 import { PullRequest } from "~/icons/Icons";
-import { User } from "~/interfaces/Entity";
+import { User } from "~/hooks/fetching/user";
 const rowsPerPage = 5;
 export default function ActivityHistoryCard({
   member,

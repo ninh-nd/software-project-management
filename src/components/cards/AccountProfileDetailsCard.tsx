@@ -10,9 +10,9 @@ import {
   SxProps,
   TextField,
 } from "@mui/material";
-import { useMemberByAccountIdQuery } from "~/hooks/query";
+import { useUserByAccountIdQuery } from "~/hooks/fetching/user/query";
 export default function AccountProfileDetails({ sx }: { sx?: SxProps }) {
-  const userInfoQuery = useMemberByAccountIdQuery();
+  const userInfoQuery = useUserByAccountIdQuery();
   const user = userInfoQuery.data?.data;
   if (!user) return <></>;
   function handleSubmit() {

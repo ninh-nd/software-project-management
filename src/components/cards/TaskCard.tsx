@@ -14,7 +14,7 @@ import {
   TableRow,
 } from "@mui/material";
 import { MouseEvent, useState } from "react";
-import { User } from "~/interfaces/Entity";
+import { User } from "~/hooks/fetching/user";
 import AssignTaskDialog from "~/components/dialogs/AssignTaskDialog";
 
 const rowsPerPage = 5;

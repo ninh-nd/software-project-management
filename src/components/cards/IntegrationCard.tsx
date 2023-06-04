@@ -32,9 +32,9 @@ import {
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useAccountContext } from "~/hooks/general";
-import { useUpdateAccessTokenMutation } from "~/hooks/query";
+import { useUpdateAccessTokenMutation } from "~/hooks/fetching/account/query";
 import { GitLab } from "~/icons/Icons";
-import { ThirdParty } from "~/interfaces/Entity";
+import { ThirdParty } from "~/hooks/fetching/account";
 function UpdateAccessTokenDialog({
   github,
   setOpen,

@@ -18,12 +18,12 @@ import {
 } from "@mui/material";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { ArtifactUpdate } from "~/hooks/fetching/artifact";
 import {
   useArtifactQuery,
-  useThreatsQuery,
   useUpdateArtifactMutation,
-} from "~/hooks/query";
-import { ArtifactUpdate } from "~/interfaces/Entity";
+} from "~/hooks/fetching/artifact/query";
+import { useThreatsQuery } from "~/hooks/fetching/threat/query";
 const type = ["image", "log", "source code", "executable", "library"];
 interface UpdateArtifactFormProps {
   open: boolean;

@@ -13,11 +13,11 @@ import {
 import dayjs from "dayjs";
 import { Controller, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
+import { useAvailableTasksQuery } from "~/hooks/fetching/task/query";
 import {
   useAssignTaskMutation,
-  useAvailableTasksQuery,
   useMembersQuery,
-} from "~/hooks/query";
+} from "~/hooks/fetching/user/query";
 interface FormData {
   taskId: string;
   memberId: string;

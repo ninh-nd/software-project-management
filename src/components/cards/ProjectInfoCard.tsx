@@ -20,7 +20,7 @@ import {
 } from "@mui/material";
 import dayjs from "dayjs";
 import { useParams } from "react-router-dom";
-import { useProjectInfoQuery } from "~/hooks/query";
+import { useProjectInfoQuery } from "~/hooks/fetching/project/query";
 function renderStatus(status: "active" | "inactive", theme: Theme) {
   if (status === "active")
     return (

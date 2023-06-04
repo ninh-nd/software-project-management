@@ -13,8 +13,8 @@ import { useUserRole } from "~/hooks/general";
 import {
   useActivityHistoryOfUserQuery,
   useActivityHistoryQuery,
-  useMemberByAccountIdQuery,
-} from "~/hooks/query";
+} from "~/hooks/fetching/history/query";
+import { useUserByAccountIdQuery } from "~/hooks/fetching/user/query";
 function ManagerHomePage() {
   const { currentProject } = useParams();
   const actHistQuery = useActivityHistoryQuery(currentProject);
@@ -55,11 +55,11 @@ function MemberHomePage() {
   const { currentProject } = useParams();
   const actHistQuery = useActivityHistoryOfUserQuery(currentProject);
   const actHistData = actHistQuery.data?.data;
-  const memberInfoQuery = useMemberByAccountIdQuery();
-  const memberInfo = memberInfoQuery.data?.data;
-  if (!memberInfo) return <></>;
+  const userQuery = useUserByAccountIdQuery();
+  const user = userQuery.data?.data;
+  if (!user) return <></>;
   if (!actHistData) return <></>;
-  const { taskAssigned, ticketAssigned } = memberInfo;
+  const { taskAssigned, ticketAssigned } = user;
   return (
     <Box sx={{ flexGrow: 1, height: "100vh" }}>
       <Toolbar />

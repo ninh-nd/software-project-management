@@ -15,7 +15,7 @@ import {
   ResponsiveContainer,
   Tooltip,
 } from "recharts";
-import { Vulnerability } from "~/interfaces/Entity";
+import { Vulnerability } from "~/hooks/fetching/artifact";
 
 interface Props {
   vulnList: Vulnerability[];

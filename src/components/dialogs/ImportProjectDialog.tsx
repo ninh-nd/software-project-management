@@ -10,9 +10,10 @@ import {
   TextField,
 } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
-import { useGetRepo, useImportProjectMutation } from "~/hooks/query";
+import { RepoImport } from "~/hooks/fetching/git";
+import { useGetRepo } from "~/hooks/fetching/git/query";
+import { useImportProjectMutation } from "~/hooks/fetching/project/query";
 import { GitLab } from "~/icons/Icons";
-import { RepoImport } from "~/interfaces/Entity";
 interface Data {
   data: RepoImport;
 }

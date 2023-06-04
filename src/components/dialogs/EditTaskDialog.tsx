@@ -14,8 +14,11 @@ import { DatePicker } from "@mui/x-date-pickers";
 import dayjs, { Dayjs } from "dayjs";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { useTaskQuery, useUpdateTaskMutation } from "~/hooks/query";
-import { TaskCreate } from "~/interfaces/Entity";
+import {
+  useTaskQuery,
+  useUpdateTaskMutation,
+} from "~/hooks/fetching/task/query";
+import { TaskCreate } from "~/hooks/fetching/task";
 
 interface FormData extends Omit<TaskCreate, "dueDate"> {
   dueDate: Dayjs;

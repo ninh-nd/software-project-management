@@ -15,8 +15,8 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { useThreatQuery } from "~/hooks/query";
-import { Threat } from "~/interfaces/Entity";
+import { Threat } from "~/hooks/fetching/threat";
+import { useThreatQuery } from "~/hooks/fetching/threat/query";
 import { typeOptions } from "~/utils/threat-display";
 interface Props {
   id: string | undefined;

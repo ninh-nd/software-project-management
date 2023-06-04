@@ -17,11 +17,9 @@ import {
   Tooltip,
 } from "@mui/material";
 import { useState } from "react";
-import {
-  useMemberByAccountIdQuery,
-  useUpdateTaskMutation,
-} from "~/hooks/query";
-import { Task } from "~/interfaces/Entity";
+import { Task } from "~/hooks/fetching/task";
+import { useUpdateTaskMutation } from "~/hooks/fetching/task/query";
+import { useUserByAccountIdQuery } from "~/hooks/fetching/user/query";
 
 const numberOfTaskPerPage = 5;
 export default function TaskAssigned({
@@ -31,7 +29,7 @@ export default function TaskAssigned({
   tasks: Task[];
   sx?: SxProps;
 }) {
-  const userInfoQuery = useMemberByAccountIdQuery();
+  const userInfoQuery = useUserByAccountIdQuery();
   const userInfo = userInfoQuery.data?.data;
   const [currentPage, setCurrentPage] = useState(0);
   const updateTaskMutation = useUpdateTaskMutation();

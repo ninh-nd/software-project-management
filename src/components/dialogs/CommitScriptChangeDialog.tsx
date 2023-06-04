@@ -14,9 +14,9 @@ import {
 import { ChangeEvent, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
-import { useUpdateWorkflowMutation } from "~/hooks/query";
+import { useUpdateWorkflowMutation } from "~/hooks/fetching/workflow/query";
 import { Branch } from "~/icons/Icons";
-import { Workflow } from "~/interfaces/Entity";
+import { Workflow } from "~/hooks/fetching/workflow";
 
 interface Props {
   workflow: Workflow;

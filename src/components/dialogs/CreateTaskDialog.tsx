@@ -13,8 +13,8 @@ import dayjs, { Dayjs } from "dayjs";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
-import { useCreateTaskMutation } from "~/hooks/query";
-import { TaskCreate } from "~/interfaces/Entity";
+import { useCreateTaskMutation } from "~/hooks/fetching/task/query";
+import { TaskCreate } from "~/hooks/fetching/task";
 
 interface FormData extends Omit<TaskCreate, "dueDate"> {
   dueDate: Dayjs;

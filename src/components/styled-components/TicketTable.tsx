@@ -3,7 +3,6 @@ import {
   Box,
   Button,
   Card,
-  Dialog,
   InputAdornment,
   Link,
   OutlinedInput,
@@ -21,12 +20,12 @@ import {
 import dayjs from "dayjs";
 import { ChangeEvent, useEffect, useState } from "react";
 import { Link as RouterLink, useParams } from "react-router-dom";
-import { usePermissionHook } from "~/hooks/general";
-import { useTicketsQuery } from "~/hooks/query";
-import { Ticket } from "~/interfaces/Entity";
+import AddTicketDialog from "~/components/dialogs/AddTicketDialog";
 import PriorityChip from "~/components/styled-components/PriorityChip";
 import TicketStatusChip from "~/components/styled-components/TicketStatusChip";
-import AddTicketDialog from "~/components/dialogs/AddTicketDialog";
+import { Ticket } from "~/hooks/fetching/ticket";
+import { useTicketsQuery } from "~/hooks/fetching/ticket/query";
+import { usePermissionHook } from "~/hooks/general";
 interface TabProps {
   tickets: Ticket[];
 }

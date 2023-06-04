@@ -5,7 +5,6 @@ import {
   Card,
   CardContent,
   CardHeader,
-  Chip,
   Container,
   Dialog,
   DialogActions,
@@ -13,7 +12,6 @@ import {
   DialogContentText,
   DialogTitle,
   Stack,
-  Toolbar,
   Tooltip,
 } from "@mui/material";
 import {
@@ -27,7 +25,10 @@ import { useState } from "react";
 import ChangePermissionDialog from "~/components/dialogs/ChangePermissionDialog";
 import EditAccountDialog from "~/components/dialogs/EditAccountDialog";
 import RoleChip from "~/components/styled-components/RoleChip";
-import { useAccountsQuery, useDeleteAccountMutation } from "~/hooks/query";
+import {
+  useAccountsQuery,
+  useDeleteAccountMutation,
+} from "~/hooks/fetching/account/query";
 interface DialogProps {
   id: GridRowId;
   open: boolean;

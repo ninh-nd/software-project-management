@@ -24,13 +24,12 @@ import {
 import { ChangeEvent, HTMLAttributes, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
+import { Vulnerability } from "~/hooks/fetching/artifact";
+import { useArtifactsQuery } from "~/hooks/fetching/artifact/query";
+import { TicketCreate } from "~/hooks/fetching/ticket";
+import { useCreateTicketMutation } from "~/hooks/fetching/ticket/query";
+import { useMembersQuery } from "~/hooks/fetching/user/query";
 import { useAccountContext } from "~/hooks/general";
-import {
-  useArtifactsQuery,
-  useCreateTicketMutation,
-  useMembersQuery,
-} from "~/hooks/query";
-import { TicketCreate, Vulnerability } from "~/interfaces/Entity";
 interface Props {
   open: boolean;
   setOpen: (open: boolean) => void;

@@ -14,7 +14,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { ActivityHistory } from "~/interfaces/Entity";
+import { ActivityHistory } from "~/hooks/fetching/history";
 function dateFormatter(date: string) {
   return dayjs(date).format("DD/MM/YY");
 }

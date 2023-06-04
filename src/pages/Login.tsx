@@ -14,7 +14,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { useForm } from "react-hook-form";
-import { useLoginMutation } from "~/hooks/query";
+import { useLoginMutation } from "~/hooks/fetching/auth/query";
 import { GitLab } from "~/icons/Icons";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 interface IFormInput {

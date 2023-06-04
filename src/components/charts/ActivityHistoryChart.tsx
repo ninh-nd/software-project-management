@@ -16,7 +16,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { ActivityHistory } from "~/interfaces/Entity";
+import { ActivityHistory } from "~/hooks/fetching/history";
 function reshapeActHistToRecharts(activityHistory: ActivityHistory[]) {
   // Turn activity history into a format that can be used by Recharts: An array of object with shape: {createdBy: string, totalCommits: number, totalPrs: number}
   const reshaped: {

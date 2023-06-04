@@ -15,14 +15,17 @@ import {
   createBrowserRouter,
 } from "react-router-dom";
 import FullScreenLoading from "~/components/layout-components/FullScreenLoading";
-import { IErrorResponse, ISuccessResponse } from "~/interfaces/ServerResponse";
+import {
+  IErrorResponse,
+  ISuccessResponse,
+} from "~/hooks/fetching/response-type";
 import { createComponents } from "~/theme/create-components";
 import { createPalette } from "~/theme/create-palette";
 import { createShadows } from "~/theme/create-shadows";
 import { createTypography } from "~/theme/create-typography";
 import NotFound from "./404";
 import Script from "./Script";
-import { getAccountInfo } from "~/actions/accountAction";
+import { getAccountInfo } from "~/hooks/fetching/account/axios";
 import { useSetAccountContext } from "~/hooks/general";
 const FirstTimeLoginPage = lazy(() => import("./FirstTimeLoginPage"));
 const Task = lazy(() => import("./Task"));

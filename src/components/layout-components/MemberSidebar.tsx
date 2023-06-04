@@ -20,7 +20,7 @@ import {
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { drawerWidth, useDrawerState } from "~/hooks/drawer";
-import { useProjectInQuery } from "~/hooks/query";
+import { useProjectInQuery } from "~/hooks/fetching/user/query";
 interface ItemProps {
   text: string;
   icon: JSX.Element;

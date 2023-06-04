@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import dayjs from "dayjs";
 import { PullRequest } from "~/icons/Icons";
-import { ActivityHistory } from "~/interfaces/Entity";
+import { ActivityHistory } from "~/hooks/fetching/history";
 export default function RecentActivity({
   activityHistory,
   sx,

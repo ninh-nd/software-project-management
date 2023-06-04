@@ -11,8 +11,8 @@ import {
   useTheme,
 } from "@mui/material";
 import { useForm } from "react-hook-form";
-import { useCreateAccountMutation } from "~/hooks/query";
-import { AccountRegister } from "~/interfaces/Entity";
+import { AccountRegister } from "~/hooks/fetching/account";
+import { useCreateAccountMutation } from "~/hooks/fetching/auth/query";
 export default function SignUp() {
   const registerMutation = useCreateAccountMutation();
   async function onSubmit(data: AccountRegister) {

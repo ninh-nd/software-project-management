@@ -19,8 +19,8 @@ import CodeMirror from "@uiw/react-codemirror";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import CommitScriptChange from "~/components/dialogs/CommitScriptChangeDialog";
-import { useGetWorkflowsQuery, useProjectInfoQuery } from "~/hooks/query";
-import { Workflow } from "~/interfaces/Entity";
+import { Workflow } from "~/hooks/fetching/workflow";
+import { useGetWorkflowsQuery } from "~/hooks/fetching/workflow/query";
 function NoWorkflow() {
   return (
     <Box sx={{ flexGrow: 1, height: "100vh" }}>

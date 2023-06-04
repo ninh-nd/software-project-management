@@ -9,7 +9,6 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Typography,
 } from "@mui/material";
 import {
   DataGrid,
@@ -19,12 +18,12 @@ import {
 } from "@mui/x-data-grid";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
+import { Phase } from "~/hooks/fetching/phase";
 import {
   useAddTaskToPhaseMutation,
-  useAvailableTasksQuery,
   useRemoveTaskFromPhaseMutation,
-} from "~/hooks/query";
-import { Phase } from "~/interfaces/Entity";
+} from "~/hooks/fetching/phase/query";
+import { useAvailableTasksQuery } from "~/hooks/fetching/task/query";
 interface PhaseDetailsProps {
   phase: Phase;
 }

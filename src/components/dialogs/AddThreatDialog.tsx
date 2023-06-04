@@ -16,8 +16,8 @@ import {
 } from "@mui/material";
 import { useEffect } from "react";
 import { Control, Controller, useForm } from "react-hook-form";
-import { useCreateThreatMutation } from "~/hooks/query";
-import { ThreatCreate } from "~/interfaces/Entity";
+import { useCreateThreatMutation } from "~/hooks/fetching/threat/query";
+import { ThreatCreate } from "~/hooks/fetching/threat";
 import { typeOptions } from "../../utils/threat-display";
 interface Props {
   open: boolean;

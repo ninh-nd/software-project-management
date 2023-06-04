@@ -11,7 +11,8 @@ import {
 } from "@mui/material";
 import RoleChip from "~/components/styled-components/RoleChip";
 import { GitLab } from "~/icons/Icons";
-import { ThirdParty, User } from "~/interfaces/Entity";
+import { ThirdParty } from "~/hooks/fetching/account";
+import { User } from "~/hooks/fetching/user";
 import AvatarImage from "/avatar.webp";
 function DisplayBadge({ thirdPartyList }: { thirdPartyList: ThirdParty[] }) {
   return (

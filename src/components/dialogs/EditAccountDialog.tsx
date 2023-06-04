@@ -13,8 +13,11 @@ import {
 } from "@mui/material";
 import { GridRowId } from "@mui/x-data-grid";
 import { Controller, useForm } from "react-hook-form";
-import { useAccountByIdQuery, useAccountUpdateMutation } from "~/hooks/query";
-import { AccountUpdate } from "~/interfaces/Entity";
+import {
+  useAccountByIdQuery,
+  useAccountUpdateMutation,
+} from "~/hooks/fetching/account/query";
+import { AccountUpdate } from "~/hooks/fetching/account";
 interface DialogProps {
   id: GridRowId;
   open: boolean;

@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { Account } from "~/interfaces/Entity";
+import { Account } from "~/hooks/fetching/account";
 export const usePermissionHook = () => {
   const accountInfo = useAccountContext();
   return accountInfo.permission;

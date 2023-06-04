@@ -16,7 +16,7 @@ import {
   useAccountByIdQuery,
   usePermissionListQuery,
   useUpdatePermissionMutation,
-} from "~/hooks/query";
+} from "~/hooks/fetching/account/query";
 interface DialogProps {
   id: GridRowId;
   open: boolean;

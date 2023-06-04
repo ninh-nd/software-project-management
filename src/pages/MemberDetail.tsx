@@ -3,12 +3,12 @@ import { useParams } from "react-router-dom";
 import ActivityHistoryCard from "~/components/cards/ActivityHistoryCard";
 import MemberInfoCard from "~/components/cards/MemberInfoCard";
 import TaskCard from "~/components/cards/TaskCard";
-import { useMemberQuery } from "~/hooks/query";
+import { useUserQuery } from "~/hooks/fetching/user/query";
 
 export default function MemberDetail() {
   const { memberId } = useParams();
   if (!memberId) return <></>;
-  const memberQuery = useMemberQuery(memberId);
+  const memberQuery = useUserQuery(memberId);
   const member = memberQuery.data?.data;
   if (!member) return <></>;
   return (

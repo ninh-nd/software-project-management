@@ -13,18 +13,17 @@ import {
   CardActions,
   CardContent,
   CardHeader,
-  Dialog,
   IconButton,
   Stack,
   Typography,
 } from "@mui/material";
 import { useState } from "react";
-import { useRemoveArtifactFromPhaseMutation } from "~/hooks/query";
-import { Docker } from "~/icons/Icons";
-import { Phase } from "~/interfaces/Entity";
 import ConfirmDeleteDialog from "~/components/dialogs/ConfirmDeleteDialog";
 import CreateArtifactDialog from "~/components/dialogs/CreateArtifactDialog";
 import UpdateArtifactDialog from "~/components/dialogs/UpdateArtifactDialog";
+import { Phase } from "~/hooks/fetching/phase";
+import { useRemoveArtifactFromPhaseMutation } from "~/hooks/fetching/phase/query";
+import { Docker } from "~/icons/Icons";
 function renderType({
   type,
 }: {

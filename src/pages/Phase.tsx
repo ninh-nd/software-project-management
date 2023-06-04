@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { Link as RouterLink, useParams } from "react-router-dom";
 import UnassginedTaskCard from "~/components/cards/UnassignedTaskCard";
-import { useProjectInfoQuery } from "~/hooks/query";
+import { useProjectInfoQuery } from "~/hooks/fetching/project/query";
 import { useState } from "react";
 import CreatePhaseTemplateDialog from "~/components/dialogs/CreatePhaseTemplateDialog";
 

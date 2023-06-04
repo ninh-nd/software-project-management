@@ -12,7 +12,7 @@ import {
   TableRow,
 } from "@mui/material";
 import { Link as RouterLink, useParams } from "react-router-dom";
-import { useMembersQuery } from "~/hooks/query";
+import { useMembersQuery } from "~/hooks/fetching/user/query";
 export default function MemberCard({ sx }: { sx?: SxProps }) {
   const { currentProject } = useParams();
   const memberListQuery = useMembersQuery(currentProject);

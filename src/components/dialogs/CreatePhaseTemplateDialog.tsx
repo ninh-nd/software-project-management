@@ -30,11 +30,11 @@ import {
 } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
+import { PhaseTemplate } from "~/hooks/fetching/phase";
 import {
   useCreatePhasesFromTemplateMutation,
   usePhaseTemplatesQuery,
-} from "~/hooks/query";
-import { PhaseTemplate } from "~/interfaces/Entity";
+} from "~/hooks/fetching/phase/query";
 
 interface TabPanelProps {
   templateList: PhaseTemplate[];

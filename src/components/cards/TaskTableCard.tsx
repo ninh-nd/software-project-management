@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import dayjs from "dayjs";
 import { ChangeEvent, useEffect, useState } from "react";
-import { Task } from "~/interfaces/Entity";
+import { Task } from "~/hooks/fetching/task";
 function TaskTable({ tasks }: { tasks: Task[] }) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);

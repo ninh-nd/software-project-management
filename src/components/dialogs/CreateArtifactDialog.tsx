@@ -19,8 +19,9 @@ import {
 } from "@mui/material";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { useAddArtifactToPhaseMutation, useThreatsQuery } from "~/hooks/query";
-import { ArtifactCreate } from "~/interfaces/Entity";
+import { ArtifactCreate } from "~/hooks/fetching/artifact";
+import { useAddArtifactToPhaseMutation } from "~/hooks/fetching/phase/query";
+import { useThreatsQuery } from "~/hooks/fetching/threat/query";
 const type = ["image", "log", "source code", "executable", "library"];
 interface CreateArtifactFormProps {
   open: boolean;
