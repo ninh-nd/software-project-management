@@ -1,3 +1,4 @@
+import { Add, Remove } from "@mui/icons-material";
 import {
   Button,
   Card,
@@ -83,13 +84,18 @@ export default function PhaseDetails({ phase }: PhaseDetailsProps) {
         />
       </CardContent>
       <CardActions>
-        <Button onClick={() => setOpenTaskDialog(true)} variant="contained">
+        <Button
+          onClick={() => setOpenTaskDialog(true)}
+          variant="contained"
+          startIcon={<Add />}
+        >
           Add new tasks
         </Button>
         <Button
           color="error"
           onClick={() => handleDeleteSelectedTask(phase._id)}
           variant="contained"
+          startIcon={<Remove />}
         >
           Remove selected tasks from phase
         </Button>
