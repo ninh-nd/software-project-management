@@ -41,7 +41,7 @@ export function useLoginMutation() {
             return;
           }
           const currentProject = data[0].name;
-          navigate(`/${currentProject}/`);
+          navigate(`/${encodeURIComponent(currentProject)}/`);
         }
       }
     },
