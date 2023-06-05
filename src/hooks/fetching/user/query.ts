@@ -1,14 +1,15 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useSnackbar } from "notistack";
 import { useAccountContext } from "~/hooks/general";
+import { toast } from "~/utils/toast";
 import {
   assignTask,
-  getUserByAccountId,
-  getUserById,
   getMembersOfProject,
   getProjectIn,
+  getUserByAccountId,
+  getUserById,
+  updateUser,
 } from "./axios";
-import { useSnackbar } from "notistack";
-import { toast } from "~/utils/toast";
 
 export function useUserByAccountIdQuery() {
   const account = useAccountContext();
@@ -49,4 +50,18 @@ export function useAssignTaskMutation() {
 
 export function useProjectInQuery() {
   return useQuery(["projectIn"], getProjectIn);
+}
+
+export function useUpdateUserMutation() {
+  const queryClient = useQueryClient();
+  const { enqueueSnackbar } = useSnackbar();
+  return useMutation({
+    mutationFn: ({ name, email }: { name?: string; email?: string }) =>
+      updateUser(name, email),
+    onSuccess: (response) => {
+      toast(response, enqueueSnackbar, async () =>
+        queryClient.invalidateQueries(["userInfo"])
+      );
+    },
+  });
 }

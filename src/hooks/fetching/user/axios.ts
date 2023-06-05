@@ -38,3 +38,13 @@ export async function getProjectIn(): PromiseServer<Project[]> {
   const response = await api.get(`/user/project`);
   return response.data;
 }
+export async function updateUser(
+  name: string | undefined,
+  email: string | undefined
+): PromiseServer<null> {
+  const response = await api.patch(`/user/`, {
+    name,
+    email,
+  });
+  return response.data;
+}
