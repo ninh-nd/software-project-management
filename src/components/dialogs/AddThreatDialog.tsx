@@ -98,13 +98,7 @@ export default function AddThreatDialog({ open, setOpen }: Props) {
   useEffect(() => {
     const sum = Object.values(watchFields).reduce((a, b) => a + b, 0);
     setValue("score.total", sum / 5);
-  }, [
-    getValues("score.details.damage"),
-    getValues("score.details.affectedUsers"),
-    getValues("score.details.discoverability"),
-    getValues("score.details.exploitability"),
-    getValues("score.details.reproducibility"),
-  ]);
+  }, [watchFields]);
   const createThreatMutation = useCreateThreatMutation();
   async function submit(data: ThreatCreate) {
     createThreatMutation.mutate(data);
@@ -193,9 +187,7 @@ export default function AddThreatDialog({ open, setOpen }: Props) {
             justifyContent="space-between"
           >
             <Typography variant="subtitle1">Final score</Typography>
-            <Typography variant="subtitle1">
-              <TextField {...register("score.total")} disabled />
-            </Typography>
+            <TextField {...register("score.total")} disabled />
           </Box>
         </DialogContent>
         <DialogActions>

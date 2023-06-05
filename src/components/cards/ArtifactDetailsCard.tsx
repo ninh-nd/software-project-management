@@ -1,4 +1,6 @@
 import {
+  Add,
+  BugReport,
   Code,
   ContentPaste,
   CreateOutlined,
@@ -24,6 +26,7 @@ import UpdateArtifactDialog from "~/components/dialogs/UpdateArtifactDialog";
 import { Phase } from "~/hooks/fetching/phase";
 import { useRemoveArtifactFromPhaseMutation } from "~/hooks/fetching/phase/query";
 import { Docker } from "~/icons/Icons";
+import AddThreatDialog from "../dialogs/AddThreatDialog";
 function renderType({
   type,
 }: {
@@ -71,6 +74,7 @@ interface ArtifactDetailsProps {
   phase: Phase;
 }
 export default function ArtifactDetails({ phase }: ArtifactDetailsProps) {
+  const [openAddThreatDialog, setOpenAddThreatDialog] = useState(false);
   const [openArtCreateDialog, setOpenArtCreateDialog] = useState(false);
   const [openArtUpdateDialog, setOpenArtUpdateDialog] = useState(false);
   const [selectedArtifact, setSelectedArtifact] = useState("");
@@ -139,10 +143,19 @@ export default function ArtifactDetails({ phase }: ArtifactDetailsProps) {
       </CardContent>
       <CardActions>
         <Button
+          startIcon={<Add />}
           onClick={() => setOpenArtCreateDialog(true)}
           variant="contained"
         >
           Add a new artifact
+        </Button>
+        <Button
+          variant="contained"
+          color="warning"
+          startIcon={<BugReport />}
+          onClick={() => setOpenAddThreatDialog(true)}
+        >
+          Add a new threat
         </Button>
       </CardActions>
       <CreateArtifactDialog
@@ -160,6 +173,10 @@ export default function ArtifactDetails({ phase }: ArtifactDetailsProps) {
         setOpen={setConfirmModal}
         deleteFunction={removeArtifact}
         text="Do you want to delete this artifact?"
+      />
+      <AddThreatDialog
+        open={openAddThreatDialog}
+        setOpen={setOpenAddThreatDialog}
       />
     </Card>
   );
