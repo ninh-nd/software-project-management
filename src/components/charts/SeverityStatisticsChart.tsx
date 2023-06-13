@@ -13,6 +13,12 @@ interface Props {
   vulnList: Vulnerability[];
   sx?: SxProps;
 }
+const renderLabel = ({ percent }: { percent: number }) => {
+  if (percent < 0.005) {
+    return null;
+  }
+  return `${(percent * 100).toFixed(0)}%`;
+};
 export default function SeverityStatistics({ vulnList, sx }: Props) {
   const theme = useTheme();
   const negligibleCount = vulnList.filter(
@@ -72,7 +78,8 @@ export default function SeverityStatistics({ vulnList, sx }: Props) {
                 outerRadius={100}
                 data={data}
                 dataKey="value"
-                label
+                label={renderLabel}
+                labelLine={false}
               />
               <Legend />
             </PieChart>

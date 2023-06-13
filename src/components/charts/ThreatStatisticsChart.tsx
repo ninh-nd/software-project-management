@@ -9,7 +9,12 @@ import {
 } from "@mui/material";
 import { Legend, Pie, PieChart, ResponsiveContainer } from "recharts";
 import { Threat } from "~/hooks/fetching/threat";
-
+const renderLabel = ({ percent }: { percent: number }) => {
+  if (percent < 0.005) {
+    return null;
+  }
+  return `${(percent * 100).toFixed(0)}%`;
+};
 export default function ThreatStatistics({
   threatList,
   sx,
@@ -67,7 +72,8 @@ export default function ThreatStatistics({
                 data={data}
                 innerRadius={80}
                 outerRadius={100}
-                label
+                label={renderLabel}
+                labelLine={false}
               />
               <Legend />
             </PieChart>
