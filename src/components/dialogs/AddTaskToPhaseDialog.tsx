@@ -33,7 +33,7 @@ export default function AddTaskToPhaseDialog({
     addTaskMutation.mutate({ phaseId, taskId, currentProject });
   }
   return (
-    <Dialog open={open} onClose={() => setOpen(false)} fullWidth>
+    <Dialog open={open} onClose={() => setOpen(false)} maxWidth="lg">
       <DialogTitle>Add tasks to phase</DialogTitle>
       <DialogContent>
         <DialogContentText>

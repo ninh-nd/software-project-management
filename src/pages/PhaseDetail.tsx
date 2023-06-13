@@ -37,16 +37,10 @@ export default function PhaseDetail() {
             <Typography variant="subtitle1">{phase.description}</Typography>
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <ActiveTaskCount
-              total={phase.tasks.length}
-              count={activeTaskCount}
-            />
+            <ActiveTaskCount count={activeTaskCount} />
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            <CompletedTaskCount
-              total={phase.tasks.length}
-              count={completedTaskCount}
-            />
+            <CompletedTaskCount count={completedTaskCount} />
           </Grid>
           <Grid item md={6}>
             <PhaseProgress

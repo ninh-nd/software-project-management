@@ -10,11 +10,9 @@ import {
 
 export default function ActiveTaskCount({
   count,
-  total,
   sx,
 }: {
   count: number;
-  total: number;
   sx?: SxProps;
 }) {
   return (
@@ -30,7 +28,7 @@ export default function ActiveTaskCount({
             <Typography color="text.secondary" variant="overline">
               Active tasks
             </Typography>
-            <Typography variant="h4">{`${count} / ${total}`}</Typography>
+            <Typography variant="h4">{count}</Typography>
           </Stack>
           <Avatar
             sx={{
