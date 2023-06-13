@@ -77,7 +77,7 @@ export default function PhaseDetails({ phase }: PhaseDetailsProps) {
           variant="contained"
           startIcon={<Add />}
         >
-          Add tasks to phase
+          Add tasks
         </Button>
         <Button
           color="error"
@@ -85,7 +85,7 @@ export default function PhaseDetails({ phase }: PhaseDetailsProps) {
           variant="contained"
           startIcon={<Remove />}
         >
-          Remove selected tasks from phase
+          Remove selected tasks
         </Button>
       </CardActions>
       <CreateTaskDialog
