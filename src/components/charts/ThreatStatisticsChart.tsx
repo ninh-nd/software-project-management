@@ -7,14 +7,7 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import {
-  Cell,
-  Legend,
-  Pie,
-  PieChart,
-  ResponsiveContainer,
-  Tooltip,
-} from "recharts";
+import { Legend, Pie, PieChart, ResponsiveContainer } from "recharts";
 import { Threat } from "~/hooks/fetching/threat";
 
 export default function ThreatStatistics({
@@ -35,9 +28,21 @@ export default function ThreatStatistics({
     (t) => t.status === "Fully mitigated"
   ).length;
   const data = [
-    { name: "Non-mitigated threats", value: nonCount },
-    { name: "Partially-mitigated threats", value: partialCount },
-    { name: "Fully-mitigated threats", value: fullCount },
+    {
+      name: "Non-mitigated threats",
+      value: nonCount,
+      fill: theme.palette.error.main,
+    },
+    {
+      name: "Partially-mitigated threats",
+      value: partialCount,
+      fill: theme.palette.warning.main,
+    },
+    {
+      name: "Fully-mitigated threats",
+      value: fullCount,
+      fill: theme.palette.success.main,
+    },
   ];
   return (
     <Card sx={sx}>
@@ -57,12 +62,13 @@ export default function ThreatStatistics({
         ) : (
           <ResponsiveContainer width="100%" minHeight={300}>
             <PieChart>
-              <Pie dataKey="value" nameKey="name" data={data}>
-                <Cell fill={theme.palette.error.main} />
-                <Cell fill={theme.palette.warning.main} />
-                <Cell fill={theme.palette.success.main} />
-              </Pie>
-              <Tooltip />
+              <Pie
+                dataKey="value"
+                data={data}
+                innerRadius={80}
+                outerRadius={100}
+                label
+              />
               <Legend />
             </PieChart>
           </ResponsiveContainer>

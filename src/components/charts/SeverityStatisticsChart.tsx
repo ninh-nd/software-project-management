@@ -7,16 +7,8 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import {
-  Cell,
-  Legend,
-  Pie,
-  PieChart,
-  ResponsiveContainer,
-  Tooltip,
-} from "recharts";
+import { Legend, Pie, PieChart, ResponsiveContainer } from "recharts";
 import { Vulnerability } from "~/hooks/fetching/artifact";
-
 interface Props {
   vulnList: Vulnerability[];
   sx?: SxProps;
@@ -39,11 +31,23 @@ export default function SeverityStatistics({ vulnList, sx }: Props) {
     (vuln) => vuln.severity.toLowerCase() === "critical"
   ).length;
   const data = [
-    { name: "Negligible severity", value: negligibleCount },
-    { name: "Low severity", value: lowCount },
-    { name: "Medium severity", value: mediumCount },
-    { name: "High severity", value: highCount },
-    { name: "Critical severity", value: criticalCount },
+    {
+      name: "Negligible severity",
+      value: negligibleCount,
+      fill: theme.palette.text.secondary,
+    },
+    { name: "Low severity", value: lowCount, fill: theme.palette.success.main },
+    {
+      name: "Medium severity",
+      value: mediumCount,
+      fill: theme.palette.warning.main,
+    },
+    { name: "High severity", value: highCount, fill: theme.palette.error.main },
+    {
+      name: "Critical severity",
+      value: criticalCount,
+      fill: theme.palette.error.dark,
+    },
   ];
   return (
     <Card sx={sx}>
@@ -63,14 +67,13 @@ export default function SeverityStatistics({ vulnList, sx }: Props) {
         ) : (
           <ResponsiveContainer width="100%" minHeight={300}>
             <PieChart>
-              <Pie dataKey="value" nameKey="name" data={data}>
-                <Cell />
-                <Cell fill={theme.palette.success.main} />
-                <Cell fill={theme.palette.warning.main} />
-                <Cell fill={theme.palette.error.main} />
-                <Cell fill={theme.palette.secondary.main} />
-              </Pie>
-              <Tooltip />
+              <Pie
+                innerRadius={80}
+                outerRadius={100}
+                data={data}
+                dataKey="value"
+                label
+              />
               <Legend />
             </PieChart>
           </ResponsiveContainer>
