@@ -3,16 +3,18 @@ import {
   Breadcrumbs,
   Button,
   Container,
+  Grid,
   Link,
   Stack,
   Toolbar,
   Typography,
 } from "@mui/material";
 import { Link as RouterLink, useParams } from "react-router-dom";
-import UnassginedTaskCard from "~/components/cards/UnassignedTaskCard";
 import { useProjectInfoQuery } from "~/hooks/fetching/project/query";
 import { useState } from "react";
 import CreatePhaseTemplateDialog from "~/components/dialogs/CreatePhaseTemplateDialog";
+import PhaseTasksChart from "~/components/charts/PhaseTasksChart";
+import PhaseProgressChart from "~/components/charts/PhaseProgressChart";
 
 export default function Phase() {
   const { currentProject } = useParams();
@@ -42,7 +44,14 @@ export default function Phase() {
               ))}
             </Breadcrumbs>
           </Box>
-          <UnassginedTaskCard />
+          <Grid container spacing={2}>
+            <Grid item xs={5}>
+              <PhaseTasksChart phases={phaseList} />
+            </Grid>
+            <Grid item xs={7}>
+              <PhaseProgressChart phases={phaseList} />
+            </Grid>
+          </Grid>
         </Stack>
       </Container>
     </Box>

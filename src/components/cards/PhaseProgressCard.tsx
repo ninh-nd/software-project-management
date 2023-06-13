@@ -25,7 +25,7 @@ export default function PhaseProgressCard({
         >
           <Stack spacing={1} sx={{ flexGrow: 0.8 }}>
             <Typography color="text.secondary" variant="overline">
-              Progress (Working feature)
+              Progress
             </Typography>
             <LinearProgress variant="determinate" value={value} />
           </Stack>

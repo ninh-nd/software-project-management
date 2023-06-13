@@ -6,6 +6,13 @@ import CompletedTaskCount from "~/components/cards/CompletedTaskCountCard";
 import PhaseDetails from "~/components/cards/PhaseDetailsCard";
 import PhaseProgress from "~/components/cards/PhaseProgressCard";
 import { usePhaseQuery } from "~/hooks/fetching/phase/query";
+import { Task } from "~/hooks/fetching/task";
+function getPhaseProgress(tasks: Task[]) {
+  const total = tasks.length;
+  if (total === 0) return 0;
+  const completed = tasks.filter((task) => task.status === "completed").length;
+  return (completed / total) * 100;
+}
 export default function PhaseDetail() {
   const { phaseId } = useParams();
   if (!phaseId) {
@@ -42,7 +49,10 @@ export default function PhaseDetail() {
             />
           </Grid>
           <Grid item md={6}>
-            <PhaseProgress sx={{ height: "100%" }} value={50} />
+            <PhaseProgress
+              sx={{ height: "100%" }}
+              value={getPhaseProgress(phase.tasks)}
+            />
           </Grid>
           <Grid item xs={12}>
             <PhaseDetails phase={phase} />

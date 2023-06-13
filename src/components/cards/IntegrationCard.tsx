@@ -1,4 +1,10 @@
-import { GitHub, Tune, Visibility, VisibilityOff } from "@mui/icons-material";
+import {
+  BugReport,
+  GitHub,
+  Tune,
+  Visibility,
+  VisibilityOff,
+} from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -9,6 +15,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Divider,
   IconButton,
   InputAdornment,
   List,
@@ -31,22 +38,25 @@ import {
 } from "material-ui-popup-state/hooks";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useAccountContext } from "~/hooks/general";
+import { ThirdParty } from "~/hooks/fetching/account";
 import {
   useDisconnectFromGithubMutation,
   useDisconnectFromGitlabMutation,
   useUpdateAccessTokenMutation,
 } from "~/hooks/fetching/account/query";
+import { useAccountContext } from "~/hooks/general";
 import { GitLab } from "~/icons/Icons";
-import { ThirdParty } from "~/hooks/fetching/account";
 import ConfirmDeleteDialog from "../dialogs/ConfirmDeleteDialog";
+import ImageScanningConfigDialog from "../dialogs/ImageScanningConfigDialog";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 function UpdateAccessTokenDialog({
   github,
   setOpen,
+  open,
 }: {
   github: ThirdParty | undefined;
   setOpen: (open: boolean) => void;
+  open: boolean;
 }) {
   const account = useAccountContext();
   const updateAccessTokenMutation = useUpdateAccessTokenMutation();
@@ -64,37 +74,39 @@ function UpdateAccessTokenDialog({
     setOpen(false);
   }
   return (
-    <Box component="form" onSubmit={handleSubmit(onSubmit)}>
-      <DialogTitle>Update Github configuration</DialogTitle>
-      <DialogContent>
-        <TextField
-          type={isTokenShown ? "text" : "password"}
-          defaultValue={github?.accessToken}
-          {...register("accessToken", {
-            required: "Access token is required",
-          })}
-          error={errors.accessToken !== undefined}
-          helperText={errors.accessToken?.message}
-          fullWidth
-          label="Access token"
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton onClick={() => setIsTokenShown(!isTokenShown)}>
-                  {isTokenShown ? <Visibility /> : <VisibilityOff />}
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        />
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={() => setOpen(false)} color="inherit">
-          Cancel
-        </Button>
-        <Button type="submit">Update</Button>
-      </DialogActions>
-    </Box>
+    <Dialog open={open} fullWidth>
+      <Box component="form" onSubmit={handleSubmit(onSubmit)}>
+        <DialogTitle>Update Github configuration</DialogTitle>
+        <DialogContent>
+          <TextField
+            type={isTokenShown ? "text" : "password"}
+            defaultValue={github?.accessToken}
+            {...register("accessToken", {
+              required: "Access token is required",
+            })}
+            error={errors.accessToken !== undefined}
+            helperText={errors.accessToken?.message}
+            fullWidth
+            label="Access token"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={() => setIsTokenShown(!isTokenShown)}>
+                    {isTokenShown ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpen(false)} color="inherit">
+            Cancel
+          </Button>
+          <Button type="submit">Update</Button>
+        </DialogActions>
+      </Box>
+    </Dialog>
   );
 }
 export default function Integration({
@@ -104,6 +116,7 @@ export default function Integration({
   github: ThirdParty | undefined;
   gitlab: ThirdParty | undefined;
 }) {
+  const [openImageScanningConfig, setOpenImageScanningConfig] = useState(false);
   const [openUpdateAccessToken, setOpenUpdateAccessToken] = useState(false);
   const [openDisconnectFromGithub, setOpenDisconnectFromGithub] =
     useState(false);
@@ -232,15 +245,29 @@ export default function Integration({
                 </Popover>
               </ListItemSecondaryAction>
             </ListItem>
+            <Divider />
+            <ListItem>
+              <ListItemIcon>
+                <BugReport />
+              </ListItemIcon>
+              <ListItemText primary="Image scanning tool" />
+              <ListItemSecondaryAction>
+                <IconButton
+                  edge="end"
+                  onClick={() => setOpenImageScanningConfig(true)}
+                >
+                  <Tune />
+                </IconButton>
+              </ListItemSecondaryAction>
+            </ListItem>
           </List>
         </CardContent>
       </Card>
-      <Dialog open={openUpdateAccessToken} fullWidth>
-        <UpdateAccessTokenDialog
-          setOpen={setOpenUpdateAccessToken}
-          github={github}
-        />
-      </Dialog>
+      <UpdateAccessTokenDialog
+        open={openUpdateAccessToken}
+        setOpen={setOpenUpdateAccessToken}
+        github={github}
+      />
       <ConfirmDeleteDialog
         open={openDisconnectFromGithub}
         setOpen={setOpenDisconnectFromGithub}
@@ -252,6 +279,10 @@ export default function Integration({
         setOpen={setOpenDisconnectFromGitlab}
         text="Are you sure you want to disconnect from Github?"
         deleteFunction={disconnectFromGitlab}
+      />
+      <ImageScanningConfigDialog
+        open={openImageScanningConfig}
+        setOpen={setOpenImageScanningConfig}
       />
     </>
   );
