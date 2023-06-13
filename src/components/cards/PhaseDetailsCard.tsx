@@ -5,26 +5,14 @@ import {
   CardActions,
   CardContent,
   CardHeader,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
 } from "@mui/material";
-import {
-  DataGrid,
-  GridColDef,
-  GridRowParams,
-  GridRowSelectionModel,
-} from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridRowSelectionModel } from "@mui/x-data-grid";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { Phase } from "~/hooks/fetching/phase";
-import {
-  useAddTaskToPhaseMutation,
-  useRemoveTaskFromPhaseMutation,
-} from "~/hooks/fetching/phase/query";
-import { useAvailableTasksQuery } from "~/hooks/fetching/task/query";
+import { useRemoveTaskFromPhaseMutation } from "~/hooks/fetching/phase/query";
+import AddTaskToPhaseDialog from "../dialogs/AddTaskToPhaseDialog";
+import CreateTaskDialog from "../dialogs/CreateTaskDialog";
 interface PhaseDetailsProps {
   phase: Phase;
 }
@@ -35,18 +23,10 @@ export default function PhaseDetails({ phase }: PhaseDetailsProps) {
     { field: "description", headerName: "Description", minWidth: 400, flex: 1 },
   ];
   const { currentProject } = useParams();
-  const taskQuery = useAvailableTasksQuery(currentProject);
-  const availableTasks = taskQuery.data?.data ?? [];
   const [openTaskDialog, setOpenTaskDialog] = useState(false);
-  const addTaskMutation = useAddTaskToPhaseMutation();
+  const [openCreateTaskDialog, setOpenCreateTaskDialog] = useState(false);
   const removeTaskMutation = useRemoveTaskFromPhaseMutation();
   const [selectedRows, setSelectedRows] = useState<string[]>([""]);
-  async function handleDoubleClick(params: GridRowParams) {
-    const { id } = params;
-    const phaseId = phase._id;
-    const taskId = id.toString();
-    addTaskMutation.mutate({ phaseId, taskId, currentProject });
-  }
   function handleDeleteSelectedTask(id: string) {
     const phaseId = id;
     selectedRows.forEach((taskId) => {
@@ -59,7 +39,7 @@ export default function PhaseDetails({ phase }: PhaseDetailsProps) {
   }
   return (
     <Card sx={{ width: "100%" }}>
-      <CardHeader title="List of tasks to be done" />
+      <CardHeader title="List of tasks in this phase" />
       <CardContent
         sx={{
           minHeight: {
@@ -85,11 +65,19 @@ export default function PhaseDetails({ phase }: PhaseDetailsProps) {
       </CardContent>
       <CardActions>
         <Button
+          variant="contained"
+          color="warning"
+          startIcon={<Add />}
+          onClick={() => setOpenCreateTaskDialog(true)}
+        >
+          Create a new task
+        </Button>
+        <Button
           onClick={() => setOpenTaskDialog(true)}
           variant="contained"
           startIcon={<Add />}
         >
-          Add new tasks
+          Add tasks to phase
         </Button>
         <Button
           color="error"
@@ -99,33 +87,12 @@ export default function PhaseDetails({ phase }: PhaseDetailsProps) {
         >
           Remove selected tasks from phase
         </Button>
-        <Dialog
-          open={openTaskDialog}
-          onClose={() => setOpenTaskDialog(false)}
-          fullWidth
-        >
-          <DialogTitle>
-            Adding tasks to phase: <b>{phase.name}</b>
-          </DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              Double click on a task to add it to this phase
-            </DialogContentText>
-            <DataGrid
-              rows={availableTasks}
-              columns={taskColumn}
-              autoHeight
-              onRowDoubleClick={handleDoubleClick}
-              getRowId={(row) => row._id}
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button color="inherit" onClick={() => setOpenTaskDialog(false)}>
-              Close
-            </Button>
-          </DialogActions>
-        </Dialog>
       </CardActions>
+      <CreateTaskDialog
+        open={openCreateTaskDialog}
+        setOpen={setOpenCreateTaskDialog}
+      />
+      <AddTaskToPhaseDialog open={openTaskDialog} setOpen={setOpenTaskDialog} />
     </Card>
   );
 }
