@@ -1,20 +1,19 @@
 import {
   Box,
-  Breadcrumbs,
   Button,
   Container,
   Grid,
-  Link,
   Stack,
   Toolbar,
   Typography,
 } from "@mui/material";
-import { Link as RouterLink, useParams } from "react-router-dom";
-import { useProjectInfoQuery } from "~/hooks/fetching/project/query";
 import { useState } from "react";
-import CreatePhaseTemplateDialog from "~/components/dialogs/CreatePhaseTemplateDialog";
-import PhaseTasksChart from "~/components/charts/PhaseTasksChart";
+import { useParams } from "react-router-dom";
+import PhaseBoard from "~/components/cards/PhaseBoard";
 import PhaseProgressChart from "~/components/charts/PhaseProgressChart";
+import PhaseTasksChart from "~/components/charts/PhaseTasksChart";
+import CreatePhaseTemplateDialog from "~/components/dialogs/CreatePhaseTemplateDialog";
+import { useProjectInfoQuery } from "~/hooks/fetching/project/query";
 
 export default function Phase() {
   const { currentProject } = useParams();
@@ -24,27 +23,15 @@ export default function Phase() {
   const { phaseList } = project;
   if (phaseList.length === 0) return <CreatePhaseTemplate />;
   return (
-    <Box flexGrow={1} height="100vh">
+    <Box sx={{ flexGrow: 1, height: "100vh" }}>
       <Toolbar />
       <Container sx={{ my: 4 }}>
         <Stack spacing={4}>
           <Typography variant="h4">Phases</Typography>
-          <Box display="flex" justifyContent="center">
-            <Breadcrumbs separator=">">
-              {phaseList.map((phase) => (
-                <Link
-                  key={phase._id}
-                  component={RouterLink}
-                  to={`${phase._id}`}
-                  underline="hover"
-                  color="inherit"
-                >
-                  {phase.name}
-                </Link>
-              ))}
-            </Breadcrumbs>
-          </Box>
           <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <PhaseBoard phases={phaseList} />
+            </Grid>
             <Grid item xs={5}>
               <PhaseTasksChart phases={phaseList} />
             </Grid>
