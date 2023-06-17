@@ -48,6 +48,7 @@ import { useAccountContext } from "~/hooks/general";
 import { GitLab } from "~/icons/Icons";
 import ConfirmDeleteDialog from "../dialogs/ConfirmDeleteDialog";
 import ImageScanningConfigDialog from "../dialogs/ImageScanningConfigDialog";
+import AddNewToolDialog from "../dialogs/AddNewToolDialog";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 function UpdateAccessTokenDialog({
   github,
@@ -122,6 +123,7 @@ export default function Integration({
     useState(false);
   const [openDisconnectFromGitlab, setOpenDisconnectFromGitlab] =
     useState(false);
+  const [openAddNew, setOpenAddNew] = useState(false);
   const disconnectFromGithubMutation = useDisconnectFromGithubMutation();
   const disconnectFromGitlabMutation = useDisconnectFromGitlabMutation();
   const theme = useTheme();
@@ -132,6 +134,10 @@ export default function Integration({
   const popupStateGitlab = usePopupState({
     variant: "popover",
     popupId: "gitlab",
+  });
+  const popupStateImageScanning = usePopupState({
+    variant: "popover",
+    popupId: "image-scanning",
   });
   function connectToGithub() {
     window.open(`${API_BASE_URL}account/connect/github`, "_self");
@@ -253,11 +259,27 @@ export default function Integration({
               <ListItemText primary="Image scanning tool" />
               <ListItemSecondaryAction>
                 <IconButton
+                  {...bindTrigger(popupStateImageScanning)}
                   edge="end"
-                  onClick={() => setOpenImageScanningConfig(true)}
                 >
                   <Tune />
                 </IconButton>
+                <Popover
+                  {...bindPopover(popupStateImageScanning)}
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "center",
+                  }}
+                >
+                  <Menu {...bindMenu(popupStateImageScanning)}>
+                    <MenuItem onClick={() => setOpenImageScanningConfig(true)}>
+                      Configure
+                    </MenuItem>
+                    <MenuItem onClick={() => setOpenAddNew(true)}>
+                      Add a new tool
+                    </MenuItem>
+                  </Menu>
+                </Popover>
               </ListItemSecondaryAction>
             </ListItem>
           </List>
@@ -284,6 +306,7 @@ export default function Integration({
         open={openImageScanningConfig}
         setOpen={setOpenImageScanningConfig}
       />
+      <AddNewToolDialog open={openAddNew} setOpen={setOpenAddNew} />
     </>
   );
 }
