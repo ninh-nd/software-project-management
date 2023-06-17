@@ -5,7 +5,7 @@ export const createTypography = (): TypographyOptions => {
     fontFamily:
       '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"',
     body1: {
-      fontSize: "1.1rem",
+      fontSize: "1rem",
       fontWeight: 400,
       lineHeight: 1.5,
     },
@@ -72,7 +72,7 @@ export const createTypography = (): TypographyOptions => {
     h6: {
       fontFamily: "'Plus Jakarta Sans', sans-serif",
       fontWeight: 700,
-      fontSize: "1.3rem",
+      fontSize: "1.125rem",
       lineHeight: 1.2,
     },
   };
