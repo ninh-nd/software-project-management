@@ -19,6 +19,7 @@ import {
 } from "@mui/material";
 import { useSnackbar } from "notistack";
 import { Controller, useForm } from "react-hook-form";
+import { useGetScanners } from "~/hooks/fetching/scanner/query";
 
 export default function ImageScanningConfigDialog({
   open,
@@ -27,13 +28,11 @@ export default function ImageScanningConfigDialog({
   open: boolean;
   setOpen: (open: boolean) => void;
 }) {
-  const { register, control, watch, handleSubmit } = useForm({
-    defaultValues: {
-      endpointSelection: "default",
-    },
-  });
+  const { register, control, watch, handleSubmit } = useForm();
   const { enqueueSnackbar } = useSnackbar();
   const watchSelection = watch("endpointSelection");
+  const scannersQuery = useGetScanners();
+  const scanners = scannersQuery.data?.data;
   async function onSubmit(data: any) {
     console.log(data);
   }
@@ -47,19 +46,18 @@ export default function ImageScanningConfigDialog({
               <FormLabel>Service</FormLabel>
               <Controller
                 name="service"
+                defaultValue="grype"
                 control={control}
                 render={({ field }) => (
                   <RadioGroup {...field} row>
-                    <FormControlLabel
-                      value="trivy"
-                      control={<Radio />}
-                      label="Trivy"
-                    />
-                    <FormControlLabel
-                      value="grype"
-                      control={<Radio />}
-                      label="Grype"
-                    />
+                    {scanners?.map((scanner) => (
+                      <FormControlLabel
+                        key={scanner.name}
+                        value={scanner.name}
+                        control={<Radio />}
+                        label={scanner.name}
+                      />
+                    ))}
                   </RadioGroup>
                 )}
               />
@@ -98,30 +96,6 @@ export default function ImageScanningConfigDialog({
             <Typography variant="body1">
               1. Pull the image from Docker Hub using commands provided below
             </Typography>
-            <TextField
-              label="Trivy"
-              value="docker pull ninhnd/trivy"
-              disabled
-              fullWidth
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      onClick={() => {
-                        navigator.clipboard.writeText(
-                          "docker pull ninhnd/trivy"
-                        );
-                        enqueueSnackbar("Copied to clipboard", {
-                          variant: "success",
-                        });
-                      }}
-                    >
-                      <ContentCopy />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
             <TextField
               label="Grype"
               value="docker pull ninhnd/grype"
