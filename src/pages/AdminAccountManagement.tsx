@@ -22,6 +22,7 @@ import {
   GridToolbar,
 } from "@mui/x-data-grid";
 import { useState } from "react";
+import ScanningToolManagementCard from "~/components/cards/ScanningToolManagementCard";
 import ChangePermissionDialog from "~/components/dialogs/ChangePermissionDialog";
 import EditAccountDialog from "~/components/dialogs/EditAccountDialog";
 import RoleChip from "~/components/styled-components/RoleChip";
@@ -165,7 +166,7 @@ export default function AdminAccountManagement() {
       <Container maxWidth="lg" sx={{ my: 4 }}>
         <Stack spacing={2} sx={{ m: 2 }}>
           <Card>
-            <CardHeader title="Account Management" />
+            <CardHeader title="Account management" />
             <CardContent>
               <DataGrid
                 columns={columns}
@@ -187,6 +188,7 @@ export default function AdminAccountManagement() {
               />
             </CardContent>
           </Card>
+          <ScanningToolManagementCard />
         </Stack>
       </Container>
       <EditAccountDialog
