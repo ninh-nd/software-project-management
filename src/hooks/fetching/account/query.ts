@@ -10,6 +10,7 @@ import {
   updateAccessToken,
   updateAccount,
   updatePermission,
+  updateScannerPreference,
 } from "./axios";
 import { AccountUpdate } from ".";
 import { useSnackbar } from "notistack";
@@ -73,15 +74,10 @@ export function useUpdatePermissionMutation() {
   });
 }
 export function useUpdateAccessTokenMutation() {
-  interface UpdateAccessTokenParams {
-    id: string;
-    accessToken: string;
-  }
   const setAccountContext = useSetAccountContext();
   const { enqueueSnackbar } = useSnackbar();
   return useMutation({
-    mutationFn: ({ id, accessToken }: UpdateAccessTokenParams) =>
-      updateAccessToken(id, accessToken),
+    mutationFn: (accessToken: string) => updateAccessToken(accessToken),
     onSuccess: (response) => {
       toast(response, enqueueSnackbar, async () => {
         const { data } = await getAccountInfo();
@@ -113,6 +109,20 @@ export function useDisconnectFromGitlabMutation() {
         const { data } = await getAccountInfo();
         if (data) setAccountContext(data);
       });
+    },
+  });
+}
+export function useUpdateScannerPreferenceMutation() {
+  interface Params {
+    scanner: string;
+    endpoint: string | undefined;
+  }
+  const { enqueueSnackbar } = useSnackbar();
+  return useMutation({
+    mutationFn: ({ scanner, endpoint }: Params) =>
+      updateScannerPreference(scanner, endpoint),
+    onSuccess: (response) => {
+      toast(response, enqueueSnackbar, () => {});
     },
   });
 }

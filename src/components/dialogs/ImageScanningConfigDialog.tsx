@@ -18,9 +18,16 @@ import {
   Typography,
 } from "@mui/material";
 import { useSnackbar } from "notistack";
+import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { useUpdateScannerPreferenceMutation } from "~/hooks/fetching/account/query";
 import { useGetScanners } from "~/hooks/fetching/scanner/query";
-
+import { useAccountContext } from "~/hooks/general";
+interface FormData {
+  service: string;
+  endpoint: string;
+  endpointSelection: "default" | "self-hosted";
+}
 export default function ImageScanningConfigDialog({
   open,
   setOpen,
@@ -28,13 +35,27 @@ export default function ImageScanningConfigDialog({
   open: boolean;
   setOpen: (open: boolean) => void;
 }) {
-  const { register, control, watch, handleSubmit } = useForm();
+  const accountContext = useAccountContext();
+  const updateScannerPref = useUpdateScannerPreferenceMutation();
+  const { register, control, watch, handleSubmit, reset } = useForm<FormData>();
   const { enqueueSnackbar } = useSnackbar();
   const watchSelection = watch("endpointSelection");
   const scannersQuery = useGetScanners();
   const scanners = scannersQuery.data?.data;
-  async function onSubmit(data: any) {
-    console.log(data);
+  useEffect(() => {
+    if (watchSelection === "default") {
+      reset({
+        endpoint: undefined,
+      });
+    }
+  }, [watchSelection]);
+  async function onSubmit(data: FormData) {
+    const { endpoint, service } = data;
+    updateScannerPref.mutate({
+      endpoint,
+      scanner: service,
+    });
+    setOpen(false);
   }
   return (
     <Dialog open={open} onClose={() => setOpen(false)} maxWidth="md">
@@ -46,7 +67,7 @@ export default function ImageScanningConfigDialog({
               <FormLabel>Service</FormLabel>
               <Controller
                 name="service"
-                defaultValue="grype"
+                defaultValue={accountContext.scanner.details.name}
                 control={control}
                 render={({ field }) => (
                   <RadioGroup {...field} row>
@@ -85,7 +106,7 @@ export default function ImageScanningConfigDialog({
               />
             </FormControl>
             {watchSelection === "self-hosted" && (
-              <TextField label="Endpoint" fullWidth />
+              <TextField label="Endpoint" fullWidth {...register("endpoint")} />
             )}
           </Stack>
           <Divider orientation="vertical" flexItem />

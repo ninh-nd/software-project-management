@@ -10,6 +10,10 @@ export interface Account {
   thirdParty: ThirdParty[];
   role: "admin" | "manager" | "member";
   permission: string[];
+  scanner: {
+    endpoint?: string;
+    details: Scanner;
+  };
 }
 export interface AccountUpdate {
   email: string;

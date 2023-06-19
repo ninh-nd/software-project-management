@@ -40,10 +40,9 @@ export async function updatePermission(
   return response.data;
 }
 export async function updateAccessToken(
-  id: string,
   accessToken: string
 ): PromiseServer<null> {
-  const response = await api.patch(`/account/${id}/thirdParty/github`, {
+  const response = await api.patch(`/account/thirdParty/github`, {
     data: accessToken,
   });
   return response.data;
@@ -54,5 +53,17 @@ export async function disconnectFromGithub(): PromiseServer<null> {
 }
 export async function disconnectFromGitlab(): PromiseServer<null> {
   const response = await api.patch("/account/disconnect/gitlab");
+  return response.data;
+}
+export async function updateScannerPreference(
+  scanner: string,
+  endpoint: string | undefined
+): PromiseServer<null> {
+  const response = await api.patch("/account/scanner", {
+    data: {
+      scanner,
+      endpoint,
+    },
+  });
   return response.data;
 }

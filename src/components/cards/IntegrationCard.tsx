@@ -44,11 +44,10 @@ import {
   useDisconnectFromGitlabMutation,
   useUpdateAccessTokenMutation,
 } from "~/hooks/fetching/account/query";
-import { useAccountContext } from "~/hooks/general";
 import { GitLab } from "~/icons/Icons";
+import AddNewToolDialog from "../dialogs/AddNewToolDialog";
 import ConfirmDeleteDialog from "../dialogs/ConfirmDeleteDialog";
 import ImageScanningConfigDialog from "../dialogs/ImageScanningConfigDialog";
-import AddNewToolDialog from "../dialogs/AddNewToolDialog";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 function UpdateAccessTokenDialog({
   github,
@@ -59,7 +58,6 @@ function UpdateAccessTokenDialog({
   setOpen: (open: boolean) => void;
   open: boolean;
 }) {
-  const account = useAccountContext();
   const updateAccessTokenMutation = useUpdateAccessTokenMutation();
   const [isTokenShown, setIsTokenShown] = useState(false);
   const {
@@ -68,10 +66,7 @@ function UpdateAccessTokenDialog({
     formState: { errors },
   } = useForm<{ accessToken: string }>();
   async function onSubmit(data: { accessToken: string }) {
-    updateAccessTokenMutation.mutate({
-      id: account._id,
-      accessToken: data.accessToken,
-    });
+    updateAccessTokenMutation.mutate(data.accessToken);
     setOpen(false);
   }
   return (
