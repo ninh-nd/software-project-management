@@ -170,7 +170,7 @@ export default function Integration({
                 >
                   <Menu {...bindMenu(popupStateGithub)}>
                     {github ? (
-                      <>
+                      <Box>
                         <MenuItem>
                           <Typography
                             sx={{ color: theme.palette.error.main }}
@@ -184,16 +184,16 @@ export default function Integration({
                         >
                           <Typography>Update access token</Typography>
                         </MenuItem>
-                      </>
+                      </Box>
                     ) : (
-                      <>
+                      <Box>
                         <MenuItem onClick={connectToGithub}>
                           <Typography>Connect to Github</Typography>
                         </MenuItem>
                         <MenuItem disabled>
                           <Typography>Update access token</Typography>
                         </MenuItem>
-                      </>
+                      </Box>
                     )}
                   </Menu>
                 </Popover>
@@ -217,7 +217,7 @@ export default function Integration({
                 >
                   <Menu {...bindMenu(popupStateGitlab)}>
                     {gitlab ? (
-                      <>
+                      <Box>
                         <MenuItem>
                           <Typography
                             sx={{ color: theme.palette.error.main }}
@@ -231,16 +231,16 @@ export default function Integration({
                         >
                           <Typography>Update access token</Typography>
                         </MenuItem>
-                      </>
+                      </Box>
                     ) : (
-                      <>
+                      <Box>
                         <MenuItem onClick={connectToGitlab}>
                           <Typography>Connect to Gitlab</Typography>
                         </MenuItem>
                         <MenuItem disabled>
                           <Typography>Update access token</Typography>
                         </MenuItem>
-                      </>
+                      </Box>
                     )}
                   </Menu>
                 </Popover>
