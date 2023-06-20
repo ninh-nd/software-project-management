@@ -31,10 +31,6 @@ export default function AddNewToolDialog({
     formState: { errors },
     reset,
   } = useForm<CreateNewScanner>();
-  useEffect(() => {
-    setIsSuccess(false);
-    reset();
-  }, [open, reset]);
   const createNewScannerMutation = useCreateNewScannerMutation();
   const [isSuccess, setIsSuccess] = useState(false);
   const [dockerfile, setDockerfile] = useState("");

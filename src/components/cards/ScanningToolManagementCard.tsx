@@ -6,11 +6,16 @@ import {
   GridColDef,
   GridRowId,
 } from "@mui/x-data-grid";
+import { useState } from "react";
 import { useGetScanners } from "~/hooks/fetching/scanner/query";
+import ViewScannerCode from "../dialogs/ViewScannerCode";
 
 export default function ScanningToolManagementCard({ sx }: { sx?: SxProps }) {
   function handleViewCode(id: GridRowId) {
-    return () => {};
+    return async () => {
+      setId(id as string);
+      setOpen(true);
+    };
   }
   const columns: GridColDef[] = [
     {
@@ -52,6 +57,8 @@ export default function ScanningToolManagementCard({ sx }: { sx?: SxProps }) {
       },
     },
   ];
+  const [open, setOpen] = useState(false);
+  const [id, setId] = useState("");
   const scanningToolsQuery = useGetScanners();
   const scanners = scanningToolsQuery.data?.data ?? [];
   return (
@@ -61,9 +68,10 @@ export default function ScanningToolManagementCard({ sx }: { sx?: SxProps }) {
         <DataGrid
           columns={columns}
           rows={scanners}
-          getRowId={(row) => row.name}
+          getRowId={(row) => row._id}
         />
       </CardContent>
+      <ViewScannerCode open={open} setOpen={setOpen} scannerId={id} />
     </Card>
   );
 }

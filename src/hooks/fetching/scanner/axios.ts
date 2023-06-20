@@ -19,3 +19,8 @@ export async function getAllScanners(): PromiseServer<Scanner[]> {
   const response = await api.get("/scanner");
   return response.data;
 }
+
+export async function getOneScanner(id: string): PromiseServer<Scanner> {
+  const response = await api.get(`/scanner/${id}`);
+  return response.data;
+}

@@ -32,7 +32,7 @@ const Task = lazy(() => import("./Task"));
 const AdminLayout = lazy(() => import("~/layouts/AdminLayout"));
 const DashboardLayout = lazy(() => import("~/layouts/DashboardLayout"));
 const AccountInfo = lazy(() => import("./Account"));
-const AdminAccountManagement = lazy(() => import("./AdminAccountManagement"));
+const AdminPage = lazy(() => import("./AdminPage"));
 const Home = lazy(() => import("./Home"));
 const Login = lazy(() => import("./Login"));
 const MemberDetailInfo = lazy(() => import("./MemberDetail"));
@@ -108,7 +108,7 @@ const adminRoutes: RouteObject = {
   children: [
     {
       path: "",
-      element: <GlobalSuspense element={<AdminAccountManagement />} />,
+      element: <GlobalSuspense element={<AdminPage />} />,
     },
   ],
 };

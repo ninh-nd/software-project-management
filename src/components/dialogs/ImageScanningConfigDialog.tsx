@@ -37,18 +37,12 @@ export default function ImageScanningConfigDialog({
 }) {
   const accountContext = useAccountContext();
   const updateScannerPref = useUpdateScannerPreferenceMutation();
-  const { register, control, watch, handleSubmit, reset } = useForm<FormData>();
+  const { register, control, watch, handleSubmit } = useForm<FormData>();
   const { enqueueSnackbar } = useSnackbar();
   const watchSelection = watch("endpointSelection");
+  const watchService = watch("service");
   const scannersQuery = useGetScanners();
   const scanners = scannersQuery.data?.data;
-  useEffect(() => {
-    if (watchSelection === "default") {
-      reset({
-        endpoint: undefined,
-      });
-    }
-  }, [watchSelection]);
   async function onSubmit(data: FormData) {
     const { endpoint, service } = data;
     updateScannerPref.mutate({
@@ -91,11 +85,13 @@ export default function ImageScanningConfigDialog({
                 defaultValue="default"
                 render={({ field }) => (
                   <RadioGroup {...field} row>
-                    <FormControlLabel
-                      value="default"
-                      control={<Radio />}
-                      label="Use default endpoint"
-                    />
+                    {watchService === "Grype" && (
+                      <FormControlLabel
+                        value="default"
+                        control={<Radio />}
+                        label="Use default endpoint"
+                      />
+                    )}
                     <FormControlLabel
                       value="self-hosted"
                       control={<Radio />}

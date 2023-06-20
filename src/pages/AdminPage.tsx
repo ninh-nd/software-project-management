@@ -58,7 +58,7 @@ function ConfirmDeleteDialog({ id, open, handleClose }: DialogProps) {
     </Dialog>
   );
 }
-export default function AdminAccountManagement() {
+export default function AdminPage() {
   const [open, setOpen] = useState(false);
   const [openPermissionEdit, setOpenPermissionEdit] = useState(false);
   const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
