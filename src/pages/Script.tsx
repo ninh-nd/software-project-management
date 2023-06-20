@@ -17,6 +17,7 @@ import {
 import { langs } from "@uiw/codemirror-extensions-langs";
 import CodeMirror from "@uiw/react-codemirror";
 import { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import CommitScriptChange from "~/components/dialogs/CommitScriptChangeDialog";
 import { Workflow } from "~/hooks/fetching/workflow";
@@ -54,6 +55,7 @@ function NoWorkflow() {
   );
 }
 export default function Script() {
+  const { control, handleSubmit, getValues } = useForm();
   const { currentProject } = useParams();
   const [open, setOpen] = useState(false);
   const workflowQuery = useGetWorkflowsQuery(currentProject);
@@ -68,16 +70,16 @@ export default function Script() {
   }, [workflows]);
   if (!workflows || !selectedWorkFlow || workflows.length === 0)
     return <NoWorkflow />;
-  function setContent(value: string) {
-    debounce(() => {
-      setSelectedWorkflow((workflow) => {
-        if (!workflow) return;
-        return {
-          ...workflow,
-          content: value,
-        };
-      });
-    }, 500);
+  async function onSubmit() {
+    const code = getValues("code");
+    setSelectedWorkflow((workflow) => {
+      if (!workflow) return;
+      return {
+        ...workflow,
+        content: code,
+      };
+    });
+    setOpen(true);
   }
   function changeSelectedWorkflow(event: SelectChangeEvent<string>) {
     const name = event.target.value;
@@ -109,15 +111,23 @@ export default function Script() {
               }
             />
             <CardContent sx={{ height: 550 }}>
-              <CodeMirror
-                value={selectedWorkFlow.content}
-                onChange={setContent}
-                extensions={[langs.yaml()]}
-                height="500px"
+              <Controller
+                name="code"
+                control={control}
+                defaultValue={selectedWorkFlow.content}
+                render={({ field }) => (
+                  <CodeMirror
+                    {...field}
+                    extensions={[langs.yaml()]}
+                    height="500px"
+                  />
+                )}
               />
             </CardContent>
             <CardActions sx={{ display: "flex", flexDirection: "row-reverse" }}>
-              <Button onClick={() => setOpen(true)}>Commit changes...</Button>
+              <Button onClick={handleSubmit(onSubmit)}>
+                Commit changes...
+              </Button>
             </CardActions>
           </Card>
         </Stack>

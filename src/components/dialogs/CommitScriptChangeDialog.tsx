@@ -12,7 +12,7 @@ import {
   TextField,
 } from "@mui/material";
 import { ChangeEvent, useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { useUpdateWorkflowMutation } from "~/hooks/fetching/workflow/query";
 import { Branch } from "~/icons/Icons";
@@ -25,20 +25,19 @@ interface Props {
 }
 interface FormData {
   branch: string;
+  branchSelection: "default" | "new";
   message: string;
 }
 export default function CommitScriptChange({ workflow, open, setOpen }: Props) {
   const updateWorkflowMutation = useUpdateWorkflowMutation();
-  const [branchSelection, setBranchSelection] = useState<"default" | "new">(
-    "default"
-  );
   const { currentProject } = useParams();
-  const { register, handleSubmit } = useForm<FormData>({
+  const { register, handleSubmit, control, watch } = useForm<FormData>({
     defaultValues: {
       branch: undefined,
       message: `Update ${workflow.name} workflow`,
     },
   });
+  const watchSelection = watch("branchSelection");
   function onSubmit(data: FormData) {
     const { branch, message } = data;
     updateWorkflowMutation.mutate({
@@ -48,9 +47,6 @@ export default function CommitScriptChange({ workflow, open, setOpen }: Props) {
       projectName: currentProject,
     });
     setOpen(false);
-  }
-  function changeBranch(event: ChangeEvent<HTMLInputElement>, value: string) {
-    setBranchSelection(value as "default" | "new");
   }
   return (
     <Dialog open={open} onClose={() => setOpen(false)} fullWidth>
@@ -63,19 +59,25 @@ export default function CommitScriptChange({ workflow, open, setOpen }: Props) {
               fullWidth
               {...register("message")}
             />
-            <RadioGroup onChange={changeBranch}>
-              <FormControlLabel
-                control={<Radio />}
-                label="Commit directly to default branch (master/main)"
-                value="default"
-              />
-              <FormControlLabel
-                control={<Radio />}
-                label="Create a new branch for this commit"
-                value="new"
-              />
-            </RadioGroup>
-            {branchSelection === "new" && (
+            <Controller
+              name="branchSelection"
+              control={control}
+              render={({ field }) => (
+                <RadioGroup {...field}>
+                  <FormControlLabel
+                    control={<Radio />}
+                    label="Commit directly to default branch (master/main)"
+                    value="default"
+                  />
+                  <FormControlLabel
+                    control={<Radio />}
+                    label="Create a new branch for this commit"
+                    value="new"
+                  />
+                </RadioGroup>
+              )}
+            />
+            {watchSelection === "new" && (
               <TextField
                 {...register("branch")}
                 label="Branch name"
