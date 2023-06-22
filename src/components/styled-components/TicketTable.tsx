@@ -47,7 +47,7 @@ function TicketTable({ tickets }: TabProps) {
     (page + 1) * rowsPerPage
   );
   return (
-    <Card>
+    <Card sx={{ minHeight: 500 }}>
       <Box sx={{ minWidth: 800 }}>
         <Table>
           <TableHead>
