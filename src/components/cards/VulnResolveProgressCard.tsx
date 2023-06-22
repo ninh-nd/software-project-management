@@ -9,6 +9,8 @@ import {
   SxProps,
   Typography,
 } from "@mui/material";
+import { useParams } from "react-router-dom";
+import { useVulnProgress } from "~/hooks/fetching/vuln/query";
 
 export default function VulnResolveProgressCard({
   sx,
@@ -17,6 +19,10 @@ export default function VulnResolveProgressCard({
   sx?: SxProps;
   value: number;
 }) {
+  const { currentProject } = useParams();
+  const vulnProgressQuery = useVulnProgress(currentProject);
+  const data = vulnProgressQuery.data?.data;
+  const percentage = data ? Math.round(data.resolved / data.total) : 0;
   return (
     <Card sx={sx}>
       <CardContent>
@@ -27,9 +33,9 @@ export default function VulnResolveProgressCard({
         >
           <Stack spacing={1} sx={{ flexGrow: 0.8 }}>
             <Typography color="text.secondary" variant="overline">
-              Resolution progress (Working feature)
+              Resolution progress
             </Typography>
-            <Typography variant="h4">{`${value}%`}</Typography>
+            <Typography variant="h4">{`${percentage}%`}</Typography>
           </Stack>
           <Avatar
             sx={{
@@ -42,7 +48,7 @@ export default function VulnResolveProgressCard({
           </Avatar>
         </Stack>
         <Box sx={{ mt: 3 }}>
-          <LinearProgress value={value} variant="determinate" />
+          <LinearProgress value={percentage} variant="determinate" />
         </Box>
       </CardContent>
     </Card>

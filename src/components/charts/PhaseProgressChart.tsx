@@ -8,8 +8,6 @@ import {
 import {
   Bar,
   BarChart,
-  CartesianGrid,
-  Label,
   LabelList,
   ResponsiveContainer,
   XAxis,
@@ -26,9 +24,7 @@ function getPhaseProgressChartData(phases: Phase[]) {
     const calcPercent =
       totalTasksCount === 0
         ? 0
-        : Number.parseInt(
-            ((completedTasksCount / totalTasksCount) * 100).toString()
-          );
+        : Math.round((completedTasksCount / totalTasksCount) * 100);
     data.push({
       name: phase.name,
       percent: calcPercent,
