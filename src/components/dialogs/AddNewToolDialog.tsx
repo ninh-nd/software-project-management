@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import { langs } from "@uiw/codemirror-extensions-langs";
 import ReactCodeMirror from "@uiw/react-codemirror";
+import { useSnackbar } from "notistack";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
@@ -34,6 +35,7 @@ export default function AddNewToolDialog({
   const createNewScannerMutation = useCreateNewScannerMutation();
   const [isSuccess, setIsSuccess] = useState(false);
   const [dockerfile, setDockerfile] = useState("");
+  const { enqueueSnackbar } = useSnackbar();
   async function onSubmit(data: CreateOrUpdateNewScanner) {
     createNewScannerMutation.mutate(data, {
       onSuccess: (response) => {
@@ -47,6 +49,8 @@ export default function AddNewToolDialog({
   const sampleCodeQuery = useSampleCode();
   const sampleCode = sampleCodeQuery.data?.data;
   if (isSuccess) {
+    navigator.clipboard.writeText(dockerfile);
+    enqueueSnackbar("Dockerfile copied to clipboard!", { variant: "success" });
     return (
       <Dialog open={open} onClose={() => setOpen(false)} maxWidth="lg">
         <DialogTitle>Generated Dockerfile</DialogTitle>
