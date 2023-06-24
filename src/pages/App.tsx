@@ -19,14 +19,13 @@ import {
   IErrorResponse,
   ISuccessResponse,
 } from "~/hooks/fetching/response-type";
+import { updateAccountContext } from "~/hooks/general";
 import { createComponents } from "~/theme/create-components";
 import { createPalette } from "~/theme/create-palette";
 import { createShadows } from "~/theme/create-shadows";
 import { createTypography } from "~/theme/create-typography";
 import NotFound from "./404";
 import Script from "./Script";
-import { getAccountInfo } from "~/hooks/fetching/account/axios";
-import { useSetAccountContext } from "~/hooks/general";
 const FirstTimeLoginPage = lazy(() => import("./FirstTimeLoginPage"));
 const Task = lazy(() => import("./Task"));
 const AdminLayout = lazy(() => import("~/layouts/AdminLayout"));
@@ -183,15 +182,8 @@ export default function App() {
       },
     }),
   });
-  const setAccountContext = useSetAccountContext();
   useEffect(() => {
-    async function setContext() {
-      const { data } = await getAccountInfo();
-      if (data) {
-        setAccountContext(data);
-      }
-    }
-    setContext();
+    updateAccountContext();
   }, []);
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>

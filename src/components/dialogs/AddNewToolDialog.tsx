@@ -30,11 +30,11 @@ export default function AddNewToolDialog({
     register,
     formState: { errors },
     reset,
-  } = useForm<CreateNewScanner>();
+  } = useForm<CreateOrUpdateNewScanner>();
   const createNewScannerMutation = useCreateNewScannerMutation();
   const [isSuccess, setIsSuccess] = useState(false);
   const [dockerfile, setDockerfile] = useState("");
-  async function onSubmit(data: CreateNewScanner) {
+  async function onSubmit(data: CreateOrUpdateNewScanner) {
     createNewScannerMutation.mutate(data, {
       onSuccess: (response) => {
         if (response.status === "success") {

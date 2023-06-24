@@ -8,6 +8,7 @@ import {
 } from "@mui/icons-material";
 import {
   Box,
+  Button,
   Card,
   CardContent,
   CardHeader,
@@ -15,7 +16,9 @@ import {
   IconButton,
   List,
   ListItem,
+  ListItemButton,
   ListItemIcon,
+  ListItemSecondaryAction,
   ListItemText,
   Stack,
   Tab,
@@ -27,6 +30,7 @@ import { useSearchParams } from "react-router-dom";
 import { Artifact, Vulnerability } from "~/hooks/fetching/artifact";
 import { Threat } from "~/hooks/fetching/threat";
 import { Docker } from "~/icons/Icons";
+import ThreatDetailsDialog from "../dialogs/ThreatDetailsDialog";
 interface VulnTabPanelProps {
   list: Vulnerability[];
   value: number;
@@ -91,8 +95,16 @@ function VulnTabPanel(props: VulnTabPanelProps) {
   );
 }
 function ThreatTabPanel(props: ThreatTabPanelProps) {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [open, setOpen] = useState(false);
   const { list, value, index } = props;
   if (value !== index) return <></>;
+  function viewThreatDetails(threatId: string) {
+    return () => {
+      setSearchParams({ threatId });
+      setOpen(true);
+    };
+  }
   return (
     <List sx={{ overflowY: "scroll", height: "80%" }} dense>
       {list.map((item) => (
@@ -119,8 +131,14 @@ function ThreatTabPanel(props: ThreatTabPanelProps) {
               </>
             }
           />
+          <ListItemSecondaryAction>
+            <Button color="primary" onClick={viewThreatDetails(item._id)}>
+              Details
+            </Button>
+          </ListItemSecondaryAction>
         </ListItem>
       ))}
+      <ThreatDetailsDialog open={open} setOpen={setOpen} />
     </List>
   );
 }

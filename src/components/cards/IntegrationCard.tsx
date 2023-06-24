@@ -1,6 +1,8 @@
 import {
   BugReport,
+  Edit,
   GitHub,
+  Handyman,
   Tune,
   Visibility,
   VisibilityOff,
@@ -48,6 +50,9 @@ import { GitLab } from "~/icons/Icons";
 import AddNewToolDialog from "../dialogs/AddNewToolDialog";
 import ConfirmDeleteDialog from "../dialogs/ConfirmDeleteDialog";
 import ImageScanningConfigDialog from "../dialogs/ImageScanningConfigDialog";
+import { useAccountContext } from "~/hooks/general";
+import { useGetScanners } from "~/hooks/fetching/scanner/query";
+import EditScannerDialog from "../dialogs/EditScannerDialog";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 function UpdateAccessTokenDialog({
   github,
@@ -105,13 +110,14 @@ function UpdateAccessTokenDialog({
     </Dialog>
   );
 }
-export default function Integration({
-  github,
-  gitlab,
-}: {
-  github: ThirdParty | undefined;
-  gitlab: ThirdParty | undefined;
-}) {
+export default function Integration() {
+  const [selectedScanner, setSelectedScanner] = useState("");
+  const account = useAccountContext();
+  const scannersQuery = useGetScanners(account.username);
+  const scanners = scannersQuery.data?.data ?? [];
+  const github = account.thirdParty.find((t) => t.name === "Github");
+  const gitlab = account.thirdParty.find((t) => t.name === "Gitlab");
+  const [openEditScanner, setOpenEditScanner] = useState(false);
   const [openImageScanningConfig, setOpenImageScanningConfig] = useState(false);
   const [openUpdateAccessToken, setOpenUpdateAccessToken] = useState(false);
   const [openDisconnectFromGithub, setOpenDisconnectFromGithub] =
@@ -145,6 +151,12 @@ export default function Integration({
   }
   function disconnectFromGitlab() {
     disconnectFromGitlabMutation.mutate();
+  }
+  function editScanner(id: string) {
+    return () => {
+      setSelectedScanner(id);
+      setOpenEditScanner(true);
+    };
   }
   return (
     <>
@@ -277,6 +289,19 @@ export default function Integration({
                 </Popover>
               </ListItemSecondaryAction>
             </ListItem>
+            {scanners.map((scanner) => (
+              <ListItem key={scanner.name} sx={{ mx: 3 }}>
+                <ListItemIcon>
+                  <Handyman />
+                </ListItemIcon>
+                <ListItemText primary={scanner.name} />
+                <ListItemSecondaryAction>
+                  <IconButton edge="end" onClick={editScanner(scanner._id)}>
+                    <Edit />
+                  </IconButton>
+                </ListItemSecondaryAction>
+              </ListItem>
+            ))}
           </List>
         </CardContent>
       </Card>
@@ -300,6 +325,11 @@ export default function Integration({
       <ImageScanningConfigDialog
         open={openImageScanningConfig}
         setOpen={setOpenImageScanningConfig}
+      />
+      <EditScannerDialog
+        open={openEditScanner}
+        setOpen={setOpenEditScanner}
+        scannerId={selectedScanner}
       />
       <AddNewToolDialog open={openAddNew} setOpen={setOpenAddNew} />
     </>

@@ -13,8 +13,6 @@ import { useAccountContext } from "~/hooks/general";
 
 export default function Account() {
   const account = useAccountContext();
-  const github = account.thirdParty.find((t) => t.name === "Github");
-  const gitlab = account.thirdParty.find((t) => t.name === "Gitlab");
   return (
     <Box
       sx={{
@@ -40,7 +38,7 @@ export default function Account() {
               <Grid xs={12} md={6} lg={8}>
                 <Stack spacing={2} sx={{ p: 2 }}>
                   <AccountProfileDetails />
-                  <Integration github={github} gitlab={gitlab} />
+                  <Integration />
                 </Stack>
               </Grid>
             </Grid>

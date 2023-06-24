@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { getProjectIn } from "~/hooks/fetching/user/axios";
 import { toast } from "~/utils/toast";
 import { getAccountInfo } from "../account/axios";
-import { useSetAccountContext } from "~/hooks/general";
+import { updateAccountContext } from "~/hooks/general";
 import { login, register } from "./axios";
 import { AccountRegister } from "../account";
 
@@ -15,7 +15,6 @@ export function useLoginMutation() {
   }
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
-  const setAccountContext = useSetAccountContext();
   return useMutation({
     mutationFn: ({ username, password }: LoginParams) =>
       login(username, password),
@@ -24,7 +23,7 @@ export function useLoginMutation() {
       const { data } = await getAccountInfo();
       if (data) {
         // IMPORTANT!
-        setAccountContext(data);
+        await updateAccountContext();
         const { role } = data;
         if (role === "admin") {
           navigate("/admin");

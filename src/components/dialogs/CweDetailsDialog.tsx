@@ -3,8 +3,10 @@ import {
   AppBar,
   Box,
   Container,
+  Dialog,
   Divider,
   IconButton,
+  Slide,
   Stack,
   Toolbar,
   Typography,
@@ -13,6 +15,8 @@ import {
 import { useSearchParams } from "react-router-dom";
 import { useCweQuery } from "~/hooks/fetching/cwe/query";
 import { Cwe } from "~/hooks/fetching/cwe";
+import { forwardRef } from "react";
+import { TransitionProps } from "@mui/material/transitions";
 
 function renderEntry(entry: Array<any>) {
   if (entry.length === 0)
@@ -80,10 +84,20 @@ function Body({ cwe }: { cwe: Cwe | null | undefined }) {
     </Container>
   );
 }
+const Transition = forwardRef(function Transition(
+  props: TransitionProps & {
+    children: React.ReactElement;
+  },
+  ref: React.Ref<unknown>
+) {
+  return <Slide direction="left" ref={ref} {...props} />;
+});
 export default function CweDetailsDialog({
-  setCloseDialog,
+  open,
+  setOpen,
 }: {
-  setCloseDialog: () => void;
+  open: boolean;
+  setOpen: (value: boolean) => void;
 }) {
   const [searchParams] = useSearchParams();
   const cwe = searchParams.get("cweId");
@@ -93,13 +107,18 @@ export default function CweDetailsDialog({
   const cweQuery = useCweQuery(cwe);
   const cweData = cweQuery.data?.data;
   return (
-    <>
+    <Dialog
+      open={open}
+      onClose={() => setOpen(false)}
+      fullScreen
+      TransitionComponent={Transition}
+    >
       <AppBar position="relative">
         <Toolbar>
           <IconButton
             edge="start"
             color="inherit"
-            onClick={setCloseDialog}
+            onClick={() => setOpen(false)}
             aria-label="close"
           >
             <ArrowBack />
@@ -107,6 +126,6 @@ export default function CweDetailsDialog({
         </Toolbar>
       </AppBar>
       <Body cwe={cweData} />
-    </>
+    </Dialog>
   );
 }

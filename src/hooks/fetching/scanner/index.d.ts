@@ -2,7 +2,7 @@ interface Sample {
   interface: string;
   sampleCode: string;
 }
-interface CreateNewScanner {
+interface CreateOrUpdateNewScanner {
   name: string;
   config: {
     installCommand: string;
@@ -10,6 +10,7 @@ interface CreateNewScanner {
   };
 }
 interface Scanner {
+  _id: string;
   name: string;
   createdBy: string;
   config?: {

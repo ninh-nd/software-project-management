@@ -8,7 +8,7 @@ import {
 } from "@mui/x-data-grid";
 import { useState } from "react";
 import { useGetScanners } from "~/hooks/fetching/scanner/query";
-import ViewScannerCode from "../dialogs/ViewScannerCode";
+import EditScannerDialog from "../dialogs/EditScannerDialog";
 
 export default function ScanningToolManagementCard({ sx }: { sx?: SxProps }) {
   function handleViewCode(id: GridRowId) {
@@ -71,7 +71,7 @@ export default function ScanningToolManagementCard({ sx }: { sx?: SxProps }) {
           getRowId={(row) => row._id}
         />
       </CardContent>
-      <ViewScannerCode open={open} setOpen={setOpen} scannerId={id} />
+      <EditScannerDialog open={open} setOpen={setOpen} scannerId={id} />
     </Card>
   );
 }
