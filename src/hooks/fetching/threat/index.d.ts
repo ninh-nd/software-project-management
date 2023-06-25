@@ -23,3 +23,7 @@ export interface Threat {
   mitigation: string[];
 }
 export interface ThreatCreate extends Omit<Threat, "_id" | "status"> {}
+export interface ThreatUpdate {
+  status: Threat["status"];
+  mitigation: Threat["mitigation"];
+}

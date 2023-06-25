@@ -1,4 +1,4 @@
-import { ArrowBack, Build, Save } from "@mui/icons-material";
+import { ArrowBack, Build, Delete, Save } from "@mui/icons-material";
 import {
   AppBar,
   Box,
@@ -7,21 +7,31 @@ import {
   Dialog,
   Divider,
   IconButton,
+  InputAdornment,
+  ListItemIcon,
+  ListItemText,
+  MenuItem,
   Paper,
+  Select,
   Slide,
   Stack,
   Table,
   TableCell,
   TableHead,
   TableRow,
+  TextField,
   Toolbar,
   Typography,
 } from "@mui/material";
 import { TransitionProps } from "@mui/material/transitions";
 import { forwardRef, useState } from "react";
+import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { useSearchParams } from "react-router-dom";
 import { Threat } from "~/hooks/fetching/threat";
-import { useThreatQuery } from "~/hooks/fetching/threat/query";
+import {
+  useThreatQuery,
+  useUpdateThreatMutation,
+} from "~/hooks/fetching/threat/query";
 import { typeOptions } from "~/utils/threat-display";
 function ScoreTable({ total, details }: Threat["score"]) {
   const {
@@ -54,13 +64,44 @@ function ScoreTable({ total, details }: Threat["score"]) {
     </Table>
   );
 }
+interface FormData {
+  mitigation: {
+    value: string;
+  }[];
+  status: "Non mitigated" | "Partially mitigated" | "Fully mitigated";
+}
 function Body({ data }: { data: Threat | null | undefined }) {
+  const { control, register, getValues } = useForm<FormData>({
+    defaultValues: {
+      mitigation: [
+        {
+          value: "",
+        },
+      ],
+      status: "Non mitigated",
+    },
+  });
+  const updateThreatMutation = useUpdateThreatMutation();
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "mitigation",
+  });
   const [editMode, setEditMode] = useState(false);
   if (!data) return <></>;
   function toggleEditMode() {
     setEditMode((prev) => !prev);
   }
   function saveChanges() {
+    if (!data) return;
+    const formData = getValues();
+    const mitigation = formData.mitigation.map((item) => item.value);
+    updateThreatMutation.mutate({
+      id: data._id,
+      data: {
+        mitigation,
+        status: formData.status,
+      },
+    });
     setEditMode((prev) => !prev);
   }
   return (
@@ -108,10 +149,55 @@ function Body({ data }: { data: Threat | null | undefined }) {
         <ScoreTable details={data.score.details} total={data.score.total} />
         <Divider />
         <Typography variant="h6">Current status</Typography>
-        <Typography>{data.status}</Typography>
+        {editMode ? (
+          <Controller
+            name="status"
+            control={control}
+            defaultValue={data.status}
+            render={({ field }) => (
+              <Select {...field} variant="outlined">
+                <MenuItem value="Non mitigated">🔴 Non mitigated</MenuItem>
+                <MenuItem value="Partially mitigated">
+                  🟠 Partially mitigated
+                </MenuItem>
+                <MenuItem value="Fully mitigated">🟢 Fully mitigated</MenuItem>
+              </Select>
+            )}
+          />
+        ) : (
+          <Typography>{data.status}</Typography>
+        )}
         <Divider />
         <Typography variant="h6">Mitigation</Typography>
-        <Typography>{data?.mitigation}</Typography>
+        {editMode ? (
+          <>
+            {fields.map((field, index) => (
+              <TextField
+                key={field.id}
+                {...register(`mitigation.${index}.value`)}
+                label="Mitigation"
+                fullWidth
+                multiline
+                rows={3}
+                placeholder="Type your mitigation here"
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={() => remove(index)}>
+                        <Delete />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            ))}
+            <Button onClick={() => append({ value: "" })}>
+              Add another mitigation
+            </Button>
+          </>
+        ) : (
+          <Typography>{data?.mitigation}</Typography>
+        )}
       </Stack>
     </Container>
   );
@@ -132,10 +218,7 @@ export default function ThreatDetailsDialog({
   setOpen: (open: boolean) => void;
 }) {
   const [searchParams] = useSearchParams();
-  const id = searchParams.get("threatId");
-  if (!id) {
-    return <></>;
-  }
+  const id = searchParams.get("threatId") as string;
   const getThreatQuery = useThreatQuery(id);
   const threat = getThreatQuery.data?.data;
   return (
