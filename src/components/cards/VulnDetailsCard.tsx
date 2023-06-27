@@ -1,4 +1,11 @@
-import { Add, BugReport, ExpandMore, Reviews } from "@mui/icons-material";
+import {
+  Add,
+  BugReport,
+  ChevronLeft,
+  ChevronRight,
+  ExpandMore,
+  Reviews,
+} from "@mui/icons-material";
 import {
   Avatar,
   Box,
@@ -9,15 +16,17 @@ import {
   CardHeader,
   Collapse,
   Divider,
+  IconButton,
   List,
   ListItem,
   ListItemAvatar,
   ListItemText,
+  Pagination,
   Typography,
 } from "@mui/material";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import AddVulnResolutionDialog from "~/components/dialogs/AddVulnResolutionDialog";
 import { Vulnerability } from "~/hooks/fetching/artifact";
 import AvatarImage from "/avatar.webp";
@@ -99,11 +108,35 @@ export default function VulnDetailsCard({
           </Button>
         </Box>
       </CardActions>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <CardContent>
-          {resolution ? (
-            <List>
-              {resolution.resolution.map((item) => (
+      <ResolutionCollapse expanded={expanded} resolution={resolution} />
+      <AddVulnResolutionDialog
+        open={open}
+        setOpen={setOpen}
+        cveId={selectedCveId}
+      />
+    </Card>
+  );
+}
+function ResolutionCollapse({
+  expanded,
+  resolution,
+}: {
+  expanded: boolean;
+  resolution: Resolution | undefined;
+}) {
+  const pageSize = 3;
+  const [page, setPage] = useState(1);
+  function handlePageChange(event: ChangeEvent<unknown>, page: number) {
+    setPage(page);
+  }
+  return (
+    <Collapse in={expanded} timeout="auto" unmountOnExit>
+      <CardContent>
+        {resolution ? (
+          <List>
+            {resolution.resolution
+              .slice(page - 1, Math.ceil(pageSize / page))
+              .map((item) => (
                 <>
                   <ListItem>
                     <ListItemAvatar>
@@ -134,19 +167,22 @@ export default function VulnDetailsCard({
                   <Divider />
                 </>
               ))}
-            </List>
-          ) : (
-            <Typography variant="body1">
-              No resolution found for this vulnerability
-            </Typography>
-          )}
-        </CardContent>
-      </Collapse>
-      <AddVulnResolutionDialog
-        open={open}
-        setOpen={setOpen}
-        cveId={selectedCveId}
-      />
-    </Card>
+            <Box
+              sx={{ display: "flex", width: "100%", justifyContent: "center" }}
+            >
+              <Pagination
+                count={Math.ceil(resolution.resolution.length / pageSize)}
+                page={page}
+                onChange={handlePageChange}
+              />
+            </Box>
+          </List>
+        ) : (
+          <Typography variant="body1">
+            No resolution found for this vulnerability
+          </Typography>
+        )}
+      </CardContent>
+    </Collapse>
   );
 }
