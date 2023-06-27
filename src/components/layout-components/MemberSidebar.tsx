@@ -1,8 +1,8 @@
 import {
   AssignmentOutlined,
   ChevronLeft,
+  FactCheckOutlined,
   HomeOutlined,
-  InfoOutlined,
   SecurityOutlined,
 } from "@mui/icons-material";
 import {
@@ -83,7 +83,7 @@ function DrawerContent() {
       <Item text="Overview" icon={<HomeOutlined />} path={`/${encodedUrl}/`} />
       <Item
         text="Ticket"
-        icon={<InfoOutlined />}
+        icon={<FactCheckOutlined />}
         path={`/${encodedUrl}/tickets`}
       />
       <Item

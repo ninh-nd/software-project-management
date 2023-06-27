@@ -1,10 +1,9 @@
 import {
   AssessmentOutlined,
   ChevronLeft,
-  Description,
   DescriptionOutlined,
+  FactCheckOutlined,
   HomeOutlined,
-  InfoOutlined,
   SecurityOutlined,
 } from "@mui/icons-material";
 import {
@@ -73,7 +72,7 @@ function DrawerContent() {
       />
       <Item
         text="Ticket"
-        icon={<InfoOutlined />}
+        icon={<FactCheckOutlined />}
         path={`/${encodedUrl}/tickets`}
       />
       <Divider />
