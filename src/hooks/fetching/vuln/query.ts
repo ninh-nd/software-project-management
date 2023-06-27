@@ -1,8 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { addResolution, getResolution, getVulnProgress } from "./axios";
-import { Resolution } from ".";
 import { useSnackbar } from "notistack";
 import { toast } from "~/utils/toast";
+import { addResolution, getResolution, getVulnProgress } from "./axios";
 
 export function useVulnProgress(projectName: string) {
   return useQuery(["progress", projectName], () =>
