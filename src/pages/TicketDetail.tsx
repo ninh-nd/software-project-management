@@ -1,29 +1,22 @@
 import {
   AccountCircle,
-  BugReport,
   CheckCircleOutline,
-  CheckCircleOutlined,
-  ModeStandbyOutlined,
   RefreshOutlined,
 } from "@mui/icons-material";
 import {
   Box,
   Button,
-  Chip,
   Container,
   Divider,
-  Stack,
-  Typography,
   Grid,
-  Card,
-  CardHeader,
-  CardContent,
+  Stack,
   Toolbar,
+  Typography,
 } from "@mui/material";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-dayjs.extend(relativeTime);
 import { useParams } from "react-router-dom";
+import VulnDetailsCard from "~/components/cards/VulnDetailsCard";
 import PriorityChip from "~/components/styled-components/PriorityChip";
 import TicketStatusChip from "~/components/styled-components/TicketStatusChip";
 import { Ticket } from "~/hooks/fetching/ticket";
@@ -31,6 +24,8 @@ import {
   useMarkTicketMutation,
   useTicketQuery,
 } from "~/hooks/fetching/ticket/query";
+import { useGetResolutionQuery } from "~/hooks/fetching/vuln/query";
+dayjs.extend(relativeTime);
 function Headline({ ticket }: { ticket: Ticket }) {
   const relativeTime = dayjs().to(dayjs(ticket.updatedAt));
   return (
@@ -78,6 +73,9 @@ function RightColumn({ ticket }: { ticket: Ticket }) {
 }
 
 function MainContent({ ticket }: { ticket: Ticket }) {
+  const cveIds = ticket.targetedVulnerability.map((v) => v.cveId);
+  const resolutionQuery = useGetResolutionQuery(cveIds);
+  const resolution = resolutionQuery.data?.data;
   return (
     <Stack spacing={5}>
       <Box>
@@ -91,39 +89,10 @@ function MainContent({ ticket }: { ticket: Ticket }) {
           <b>Vulnerabilities</b>
         </Typography>
         {ticket.targetedVulnerability.map((v) => (
-          <Card sx={{ m: 2 }}>
-            <CardHeader
-              title={
-                <Box display="flex" alignItems="center">
-                  <BugReport />
-                  <Typography display="inline" variant="h5" sx={{ ml: 1 }}>
-                    {v.cveId}
-                  </Typography>
-                </Box>
-              }
-            />
-            <CardContent>
-              <Typography variant="body1">
-                <b>Description: </b>
-                {v.description}
-              </Typography>
-              <Divider sx={{ mt: 2, mb: 2 }} />
-              <Typography variant="body1">
-                <b>Severity: </b>
-                {v.severity}
-              </Typography>
-              <Divider sx={{ mt: 2, mb: 2 }} />
-              <Typography variant="body1">
-                <b>Score: </b>
-                {v.score}
-              </Typography>
-              <Divider sx={{ mt: 2, mb: 2 }} />
-              <Typography variant="body1">
-                <b>CWEs: </b>
-                {v.cwes.join(", ")}
-              </Typography>
-            </CardContent>
-          </Card>
+          <VulnDetailsCard
+            vuln={v}
+            resolution={resolution?.find((x) => x.cveId === v.cveId)}
+          />
         ))}
       </Box>
     </Stack>
