@@ -15,6 +15,7 @@ import { MouseEvent, useState } from "react";
 import { PullRequest } from "~/icons/Icons";
 import { User } from "~/hooks/fetching/user";
 const rowsPerPage = 5;
+import dayjs from "dayjs";
 export default function ActivityHistoryCard({
   member,
   sx,
@@ -42,6 +43,8 @@ export default function ActivityHistoryCard({
             <TableRow>
               <TableCell align="center">Activity</TableCell>
               <TableCell>Description</TableCell>
+              <TableCell>Created</TableCell>
+              <TableCell>Updated</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -51,6 +54,12 @@ export default function ActivityHistoryCard({
                   {a.action === "pr" ? <PullRequest /> : <Commit />}
                 </TableCell>
                 <TableCell>{a.content}</TableCell>
+                <TableCell>
+                  {dayjs(a.createdAt).format("DD/MM/YYYY HH:mm:ss")}
+                </TableCell>
+                <TableCell>
+                  {dayjs(a.updatedAt).format("DD/MM/YYYY HH:mm:ss")}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

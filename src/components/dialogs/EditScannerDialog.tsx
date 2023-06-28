@@ -16,6 +16,7 @@ import {
   useGetScanner,
   useUpdateScannerMutation,
 } from "~/hooks/fetching/scanner/query";
+import Instruction from "../text/Instruction";
 
 export default function EditScannerDialog({
   open,
@@ -57,6 +58,7 @@ export default function EditScannerDialog({
               required: "Install command is required",
             })}
           />
+          <Instruction />
           <FormControl>
             <FormLabel>Code</FormLabel>
             <Controller
@@ -67,7 +69,7 @@ export default function EditScannerDialog({
                 <ReactCodeMirror
                   {...field}
                   extensions={[langs.javascript()]}
-                  width="800px"
+                  width="100%"
                   height="500px"
                 />
               )}

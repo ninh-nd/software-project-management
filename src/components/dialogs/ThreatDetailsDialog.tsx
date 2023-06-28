@@ -8,8 +8,6 @@ import {
   Divider,
   IconButton,
   InputAdornment,
-  ListItemIcon,
-  ListItemText,
   MenuItem,
   Paper,
   Select,
@@ -24,7 +22,7 @@ import {
   Typography,
 } from "@mui/material";
 import { TransitionProps } from "@mui/material/transitions";
-import { forwardRef, useState } from "react";
+import { ReactElement, Ref, forwardRef, useState } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { useSearchParams } from "react-router-dom";
 import { Threat } from "~/hooks/fetching/threat";
@@ -204,9 +202,9 @@ function Body({ data }: { data: Threat | null | undefined }) {
 }
 const Transition = forwardRef(function Transition(
   props: TransitionProps & {
-    children: React.ReactElement;
+    children: ReactElement;
   },
-  ref: React.Ref<unknown>
+  ref: Ref<unknown>
 ) {
   return <Slide direction="left" ref={ref} {...props} />;
 });

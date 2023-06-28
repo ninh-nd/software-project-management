@@ -100,10 +100,7 @@ export default function CweDetailsDialog({
   setOpen: (value: boolean) => void;
 }) {
   const [searchParams] = useSearchParams();
-  const cwe = searchParams.get("cweId");
-  if (!cwe) {
-    return <></>;
-  }
+  const cwe = searchParams.get("cweId") ?? "";
   const cweQuery = useCweQuery(cwe);
   const cweData = cweQuery.data?.data;
   return (

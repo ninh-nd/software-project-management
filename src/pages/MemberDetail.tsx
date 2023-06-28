@@ -22,14 +22,14 @@ export default function MemberDetail() {
           alignItems="center"
           height="100%"
         >
-          <Grid item xs={5}>
+          <Grid item xs={4}>
             <MemberInfoCard member={member} />
           </Grid>
-          <Grid item xs={7}>
-            <Stack spacing={3}>
-              <ActivityHistoryCard member={member} />
-              <TaskCard member={member} />
-            </Stack>
+          <Grid item xs={8}>
+            <TaskCard member={member} />
+          </Grid>
+          <Grid item xs={12}>
+            <ActivityHistoryCard member={member} />
           </Grid>
         </Grid>
       </Container>

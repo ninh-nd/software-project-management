@@ -18,6 +18,7 @@ import {
   useCreateNewScannerMutation,
   useSampleCode,
 } from "~/hooks/fetching/scanner/query";
+import Instruction from "../text/Instruction";
 export default function AddNewToolDialog({
   open,
   setOpen,
@@ -74,11 +75,11 @@ export default function AddNewToolDialog({
     );
   }
   return (
-    <Dialog open={open} onClose={() => setOpen(false)} maxWidth="lg">
+    <Dialog open={open} onClose={() => setOpen(false)} maxWidth="lg" fullWidth>
       <form onSubmit={handleSubmit(onSubmit)}>
         <DialogTitle>Add a new scanning tool</DialogTitle>
-        <Box sx={{ display: "flex", justifyContent: "center" }}>
-          <Stack spacing={2} sx={{ p: 2, width: "40%" }}>
+        <Box sx={{ display: "flex", width: "100%" }}>
+          <Stack spacing={2} sx={{ p: 2, width: "100%" }}>
             <TextField
               label="Name"
               {...register("name", {
@@ -98,6 +99,7 @@ export default function AddNewToolDialog({
                 "This command will be used to install the tool in a Docker container"
               }
             />
+            <Instruction />
           </Stack>
           <Divider orientation="vertical" flexItem />
           <Stack spacing={2} sx={{ p: 2 }}>

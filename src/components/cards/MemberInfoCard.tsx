@@ -18,8 +18,8 @@ function DisplayBadge({ thirdPartyList }: { thirdPartyList: ThirdParty[] }) {
   return (
     <Box justifyContent="center" display="flex" sx={{ py: 1 }}>
       {thirdPartyList.map((t) => {
-        if (t.name === "Github") return <GitHub />;
-        if (t.name === "Gitlab") return <GitLab />;
+        if (t.name === "Github") return <GitHub key={t.name} />;
+        if (t.name === "Gitlab") return <GitLab key={t.name} />;
       })}
     </Box>
   );
