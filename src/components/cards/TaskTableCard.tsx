@@ -1,7 +1,8 @@
-import { Search } from "@mui/icons-material";
+import { CheckBox, CheckBoxOutlineBlank, Search } from "@mui/icons-material";
 import {
   Box,
   Card,
+  IconButton,
   InputAdornment,
   OutlinedInput,
   Stack,
@@ -12,15 +13,34 @@ import {
   TablePagination,
   TableRow,
   TextField,
+  Tooltip,
   Typography,
   debounce,
 } from "@mui/material";
 import dayjs from "dayjs";
 import { ChangeEvent, useEffect, useState } from "react";
 import { Task } from "~/hooks/fetching/task";
+import { useUpdateTaskMutation } from "~/hooks/fetching/task/query";
+import { useUserByAccountIdQuery } from "~/hooks/fetching/user/query";
+import { useUserRole } from "~/hooks/general";
 function TaskTable({ tasks }: { tasks: Task[] }) {
+  const userRole = useUserRole();
+  const userInfoQuery = useUserByAccountIdQuery();
+  const userInfo = userInfoQuery.data?.data;
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const updateTaskMutation = useUpdateTaskMutation();
+  function markTask(id: string, status: "active" | "completed") {
+    return () => {
+      if (!userInfo) return;
+      updateTaskMutation.mutate({
+        id,
+        data: {
+          status,
+        },
+      });
+    };
+  }
   const onPageChange = (event: unknown, newPage: number) => {
     setPage(newPage);
   };
@@ -39,6 +59,7 @@ function TaskTable({ tasks }: { tasks: Task[] }) {
               <TableCell align="center">Status</TableCell>
               <TableCell>Description</TableCell>
               <TableCell>Due date</TableCell>
+              <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -48,6 +69,29 @@ function TaskTable({ tasks }: { tasks: Task[] }) {
                 <TableCell align="center">{t.status}</TableCell>
                 <TableCell>{t.description}</TableCell>
                 <TableCell>{dayjs(t.dueDate).format("DD/MM/YYYY")}</TableCell>
+                <TableCell>
+                  {userRole === "member" && (
+                    <Tooltip
+                      title={
+                        t.status === "active" ? "Mark as completed" : "Undo"
+                      }
+                    >
+                      <IconButton
+                        edge="end"
+                        onClick={markTask(
+                          t._id,
+                          t.status === "active" ? "completed" : "active"
+                        )}
+                      >
+                        {t.status === "active" ? (
+                          <CheckBoxOutlineBlank />
+                        ) : (
+                          <CheckBox />
+                        )}
+                      </IconButton>
+                    </Tooltip>
+                  )}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -68,6 +112,9 @@ function TaskTable({ tasks }: { tasks: Task[] }) {
 
 export default function ExtendedTaskTable({ tasks }: { tasks: Task[] }) {
   const [displayTasks, setDisplayTasks] = useState(tasks);
+  useEffect(() => {
+    setDisplayTasks(tasks);
+  }, [tasks]);
   function handleFilterTask(event: ChangeEvent<HTMLInputElement>) {
     const value = event.target.value;
     if (value === "all") {

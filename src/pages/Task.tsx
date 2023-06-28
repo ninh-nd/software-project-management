@@ -29,7 +29,7 @@ export default function Task() {
   // Find the number of overdue tasks
   const overdueTasks = memberInfo?.taskAssigned.filter((x) => {
     const dueDate = new Date(x.dueDate);
-    return dueDate < new Date();
+    return dueDate < new Date() && x.status === "active";
   });
   const overdueCount = overdueTasks?.length ?? 0;
   if (!memberInfo) return <></>;
