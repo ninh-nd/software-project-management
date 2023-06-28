@@ -1,10 +1,8 @@
-import { Close, Undo } from "@mui/icons-material";
 import {
   Box,
   Card,
   CardContent,
   CardHeader,
-  IconButton,
   Link,
   List,
   ListItem,
@@ -12,7 +10,6 @@ import {
   ListItemText,
   Pagination,
   SxProps,
-  Tooltip,
   Typography,
 } from "@mui/material";
 import { useState } from "react";
@@ -57,22 +54,7 @@ export default function TicketAssigned({
         ) : (
           <List>
             {currentPageList.map((ticket) => (
-              <ListItem
-                key={ticket._id}
-                secondaryAction={
-                  <Tooltip
-                    title={
-                      ticket.status === "open"
-                        ? "Close this ticket"
-                        : "Reopen ticket"
-                    }
-                  >
-                    <IconButton edge="end">
-                      {ticket.status === "open" ? <Close /> : <Undo />}
-                    </IconButton>
-                  </Tooltip>
-                }
-              >
+              <ListItem key={ticket._id}>
                 <ListItemIcon>
                   {ticket.priority === "low"
                     ? "🟢"
