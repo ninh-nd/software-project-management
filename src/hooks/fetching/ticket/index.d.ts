@@ -19,7 +19,6 @@ export interface TicketCreate {
   description: string;
   priority: "low" | "medium" | "high";
   assignee: string;
-  assigner: string;
   targetedVulnerability: Vulnerability[];
   projectName: string;
 }

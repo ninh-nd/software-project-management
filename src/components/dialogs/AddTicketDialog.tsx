@@ -60,14 +60,14 @@ export default function AddTicketDialog({ open, setOpen }: Props) {
   }
   async function submit(data: TicketCreate) {
     if (!accountInfo || !currentProject) return;
-    const assigner = accountInfo._id;
+    const assignee = accountInfo._id;
     const priority = selectedPriority.toLowerCase() as
       | "low"
       | "medium"
       | "high";
     const ticket = {
       ...data,
-      assigner,
+      assignee,
       priority,
       projectName: currentProject,
     };

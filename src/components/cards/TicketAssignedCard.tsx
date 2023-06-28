@@ -16,7 +16,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useParams } from "react-router-dom";
 import { Ticket } from "~/hooks/fetching/ticket";
 const numberOfTaskPerPage = 5;
 export default function TicketAssigned({
@@ -26,6 +26,8 @@ export default function TicketAssigned({
   tickets: Ticket[];
   sx?: SxProps;
 }) {
+  const { currentProject } = useParams();
+  const encodedUrl = encodeURIComponent(currentProject);
   const [currentPage, setCurrentPage] = useState(0);
   const visibility = tickets.length > 0 ? "visible" : "hidden";
   function handlePageChange(event: React.ChangeEvent<unknown>, value: number) {
@@ -80,8 +82,11 @@ export default function TicketAssigned({
                 </ListItemIcon>
                 <ListItemText
                   primary={
-                    <Link component={RouterLink} to={`/tickets/${ticket._id}`}>
-                      ticket.title
+                    <Link
+                      component={RouterLink}
+                      to={`/${encodedUrl}/tickets/${ticket._id}`}
+                    >
+                      {ticket.title}
                     </Link>
                   }
                   secondary={ticket.description}
