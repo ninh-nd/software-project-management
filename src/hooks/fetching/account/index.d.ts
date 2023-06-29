@@ -18,6 +18,7 @@ export interface Account {
 export interface AccountUpdate {
   email: string;
   role: "manager" | "member";
+  permission: string[];
 }
 export interface AccountRegister {
   username: string;

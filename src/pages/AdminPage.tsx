@@ -1,4 +1,4 @@
-import { Delete, Edit, ManageAccounts } from "@mui/icons-material";
+import { Delete, ManageAccounts } from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -23,7 +23,6 @@ import {
 } from "@mui/x-data-grid";
 import { useState } from "react";
 import ScanningToolManagementCard from "~/components/cards/ScanningToolManagementCard";
-import ChangePermissionDialog from "~/components/dialogs/ChangePermissionDialog";
 import EditAccountDialog from "~/components/dialogs/EditAccountDialog";
 import RoleChip from "~/components/styled-components/RoleChip";
 import {
@@ -60,7 +59,6 @@ function ConfirmDeleteDialog({ id, open, handleClose }: DialogProps) {
 }
 export default function AdminPage() {
   const [open, setOpen] = useState(false);
-  const [openPermissionEdit, setOpenPermissionEdit] = useState(false);
   const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
   const [id, setId] = useState<GridRowId>("");
   function handleCloseEditDialog() {
@@ -68,9 +66,6 @@ export default function AdminPage() {
   }
   function handleCloseConfirmDeleteDialog() {
     setOpenConfirmDelete(false);
-  }
-  function handleClosePermissionEditDialog() {
-    setOpenPermissionEdit(false);
   }
   function handleEditClick(id: GridRowId) {
     return async () => {
@@ -82,12 +77,6 @@ export default function AdminPage() {
     return async () => {
       setId(id);
       setOpenConfirmDelete(true);
-    };
-  }
-  function handleChangePermissionClick(id: GridRowId) {
-    return async () => {
-      setId(id);
-      setOpenPermissionEdit(true);
     };
   }
   const columns: GridColDef[] = [
@@ -118,24 +107,13 @@ export default function AdminPage() {
         return [
           <GridActionsCellItem
             icon={
-              <Tooltip title="Edit">
-                <Edit />
-              </Tooltip>
-            }
-            label="Edit"
-            className="textPrimary"
-            onClick={handleEditClick(id)}
-            color="inherit"
-          />,
-          <GridActionsCellItem
-            icon={
-              <Tooltip title="Change permission">
+              <Tooltip title="Update account">
                 <ManageAccounts />
               </Tooltip>
             }
-            label="Change permision"
+            label="Update account"
             className="textPrimary"
-            onClick={handleChangePermissionClick(id)}
+            onClick={handleEditClick(id)}
             color="inherit"
           />,
           <GridActionsCellItem
@@ -200,11 +178,6 @@ export default function AdminPage() {
         id={id}
         open={openConfirmDelete}
         handleClose={handleCloseConfirmDeleteDialog}
-      />
-      <ChangePermissionDialog
-        id={id}
-        open={openPermissionEdit}
-        handleClose={handleClosePermissionEditDialog}
       />
     </Box>
   );

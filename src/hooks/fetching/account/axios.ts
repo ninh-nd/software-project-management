@@ -30,15 +30,6 @@ export async function getPermissions(): PromiseServer<string[]> {
   const response = await api.get("/permission/");
   return response.data;
 }
-export async function updatePermission(
-  id: string,
-  updateData: string[]
-): PromiseServer<null> {
-  const response = await api.patch(`/account/${id}/permission`, {
-    data: updateData,
-  });
-  return response.data;
-}
 export async function updateAccessToken(
   accessToken: string
 ): PromiseServer<null> {

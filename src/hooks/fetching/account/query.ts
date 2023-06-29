@@ -11,7 +11,6 @@ import {
   getPermissions,
   updateAccessToken,
   updateAccount,
-  updatePermission,
   updateScannerPreference,
 } from "./axios";
 import { updateAccountContext } from "~/hooks/general";
@@ -35,6 +34,7 @@ export function useAccountUpdateMutation() {
     onSuccess: (response) => {
       toast(response, enqueueSnackbar, () => {
         queryClient.invalidateQueries(["accounts"]);
+        queryClient.invalidateQueries(["account"]);
       });
     },
   });
@@ -50,24 +50,6 @@ export function useDeleteAccountMutation() {
     onSuccess: (response) => {
       toast(response, enqueueSnackbar, () => {
         queryClient.invalidateQueries(["accounts"]);
-      });
-    },
-  });
-}
-export function useUpdatePermissionMutation() {
-  interface UpdatePermissionParams {
-    id: string;
-    permission: string[];
-  }
-  const queryClient = useQueryClient();
-  const { enqueueSnackbar } = useSnackbar();
-  return useMutation({
-    mutationFn: ({ id, permission }: UpdatePermissionParams) =>
-      updatePermission(id, permission),
-    onSuccess: (response, { id }) => {
-      toast(response, enqueueSnackbar, () => {
-        queryClient.invalidateQueries(["permissions"]);
-        queryClient.invalidateQueries(["account", id]);
       });
     },
   });
