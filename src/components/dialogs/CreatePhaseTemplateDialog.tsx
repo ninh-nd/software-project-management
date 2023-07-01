@@ -273,7 +273,7 @@ function CreateNew({ updateStep }: CreatePhaseTemplateProps) {
 function ConfirmPhaseTemplate() {
   const { data } = useContext(PhaseTemplateContext);
   return (
-    <Stack spacing={1} alignItems="center">
+    <Stack spacing={1} alignItems="center" sx={{ m: 2 }}>
       <FormControlLabel
         control={<Checkbox defaultChecked={data?.isPrivate} />}
         label="Private template"

@@ -1,5 +1,10 @@
 import api from "~/api";
-import { Phase, PhaseTemplate, PhaseTemplateCreate } from ".";
+import {
+  Phase,
+  PhaseTemplate,
+  PhaseTemplateCreate,
+  PhaseTemplateUpdate,
+} from ".";
 import { PromiseServer } from "~/hooks/fetching/response-type";
 import { ArtifactCreate } from "../artifact";
 export async function getPhase(id: string): PromiseServer<Phase> {
@@ -21,14 +26,14 @@ export async function removeTaskFromPhase(
   return response.data;
 }
 export async function getPhaseTemplates(): PromiseServer<PhaseTemplate[]> {
-  const response = await api.get(`/phase/templates`);
+  const response = await api.get(`/phase/template`);
   return response.data;
 }
 export async function createPhasesFromTemplate(
   projectName: string,
   data: PhaseTemplateCreate
 ): PromiseServer<null> {
-  const response = await api.post(`/phase/templates`, {
+  const response = await api.post(`/phase/template`, {
     projectName,
     data,
   });
@@ -50,5 +55,20 @@ export async function removeArtifactFromPhase(
   const response = await api.patch(
     `/phase/${phaseId}/artifact/delete/${artifactId}`
   );
+  return response.data;
+}
+export async function getPhaseTemplateById(
+  id: string
+): PromiseServer<PhaseTemplate> {
+  const response = await api.get(`/phase/template/${id}`);
+  return response.data;
+}
+export async function updatePhaseTemplate(
+  id: string,
+  data: PhaseTemplateUpdate
+): PromiseServer<null> {
+  const response = await api.patch(`/phase/template/${id}`, {
+    data,
+  });
   return response.data;
 }

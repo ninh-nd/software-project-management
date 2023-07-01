@@ -23,3 +23,5 @@ export interface PhaseTemplate {
 }
 export interface PhaseTemplateCreate
   extends Omit<PhaseTemplate, "_id" | "createdBy"> {}
+export interface PhaseTemplateUpdate
+  extends Omit<PhaseTemplate, "_id" | "createdBy" | "isPrivate"> {}

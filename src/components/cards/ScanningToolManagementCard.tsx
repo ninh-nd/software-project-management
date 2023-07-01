@@ -21,12 +21,7 @@ export default function ScanningToolManagementCard({ sx }: { sx?: SxProps }) {
     {
       field: "name",
       headerName: "Name",
-    },
-    {
-      field: "config.installCommand",
-      headerName: "Install command",
-      flex: 3,
-      valueGetter: ({ row }) => row.config?.installCommand ?? "",
+      flex: 1,
     },
     {
       field: "createdBy",
@@ -36,7 +31,6 @@ export default function ScanningToolManagementCard({ sx }: { sx?: SxProps }) {
       field: "actions",
       type: "actions",
       headerName: "Actions",
-      flex: 0.5,
       headerAlign: "center",
       align: "center",
       cellClassName: "actions",
@@ -63,7 +57,7 @@ export default function ScanningToolManagementCard({ sx }: { sx?: SxProps }) {
   const scanners = scanningToolsQuery.data?.data ?? [];
   return (
     <Card sx={sx}>
-      <CardHeader title="Scanning tool management" />
+      <CardHeader title="Scanning tool" />
       <CardContent>
         <DataGrid
           columns={columns}

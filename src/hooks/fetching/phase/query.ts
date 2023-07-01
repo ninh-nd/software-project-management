@@ -4,11 +4,13 @@ import {
   addTaskToPhase,
   createPhasesFromTemplate,
   getPhase,
+  getPhaseTemplateById,
   getPhaseTemplates,
   removeArtifactFromPhase,
   removeTaskFromPhase,
+  updatePhaseTemplate,
 } from "./axios";
-import { PhaseTemplateCreate } from ".";
+import { PhaseTemplateCreate, PhaseTemplateUpdate } from ".";
 import { useSnackbar } from "notistack";
 import { toast } from "~/utils/toast";
 import { ArtifactCreate } from "../artifact";
@@ -98,8 +100,27 @@ export function useCreatePhasesFromTemplateMutation() {
   });
 }
 export function usePhaseTemplatesQuery() {
-  return useQuery(["phaseTemplates"], getPhaseTemplates);
+  return useQuery(["phaseTemplate"], getPhaseTemplates);
 }
 export function usePhaseQuery(id: string) {
   return useQuery(["phase", id], () => getPhase(id));
+}
+export function useGetPhaseTemplateByIdQuery(id: string) {
+  return useQuery(["phaseTemplate", id], () => getPhaseTemplateById(id));
+}
+export function useUpdateTemplateMutation() {
+  interface Params {
+    id: string;
+    data: PhaseTemplateUpdate;
+  }
+  const queryClient = useQueryClient();
+  const { enqueueSnackbar } = useSnackbar();
+  return useMutation({
+    mutationFn: ({ id, data }: Params) => updatePhaseTemplate(id, data),
+    onSuccess: (response) => {
+      toast(response, enqueueSnackbar, () => {
+        queryClient.invalidateQueries(["phaseTemplate"]);
+      });
+    },
+  });
 }

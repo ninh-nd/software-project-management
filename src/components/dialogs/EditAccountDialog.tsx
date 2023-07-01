@@ -26,7 +26,7 @@ import {
 interface DialogProps {
   id: GridRowId;
   open: boolean;
-  handleClose: () => void;
+  setOpen: (value: boolean) => void;
 }
 const PermissionsSection = ({
   sectionName,
@@ -77,11 +77,7 @@ interface FormData {
   role: "manager" | "member";
   permission: Record<string, boolean>;
 }
-export default function EditAccountDialog({
-  id,
-  open,
-  handleClose,
-}: DialogProps) {
+export default function EditAccountDialog({ id, open, setOpen }: DialogProps) {
   const {
     register,
     handleSubmit,
@@ -103,7 +99,7 @@ export default function EditAccountDialog({
         permission: processedPerms,
       },
     });
-    handleClose();
+    setOpen(false);
   }
   // Stop TS from complaining about id not being a string
   if (typeof id !== "string") return null;
@@ -112,7 +108,7 @@ export default function EditAccountDialog({
   if (!account || !permissionList) return <></>;
   const groupedPermissions = groupPermission(permissionList);
   return (
-    <Dialog open={open} onClose={handleClose} maxWidth="lg" fullWidth>
+    <Dialog open={open} onClose={() => setOpen(false)} maxWidth="lg" fullWidth>
       <DialogTitle>Edit Account</DialogTitle>
       <Box component="form" onSubmit={handleSubmit(onSubmit)}>
         <DialogContent>
@@ -199,7 +195,7 @@ export default function EditAccountDialog({
           </Stack>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="inherit">
+          <Button onClick={() => setOpen(false)} color="inherit">
             Cancel
           </Button>
           <Button type="submit">Save</Button>
