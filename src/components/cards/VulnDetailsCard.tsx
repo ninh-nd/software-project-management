@@ -1,10 +1,9 @@
 import {
   Add,
   BugReport,
-  ChevronLeft,
-  ChevronRight,
   ExpandMore,
   Reviews,
+  Verified,
 } from "@mui/icons-material";
 import {
   Avatar,
@@ -16,12 +15,12 @@ import {
   CardHeader,
   Collapse,
   Divider,
-  IconButton,
   List,
   ListItem,
   ListItemAvatar,
   ListItemText,
   Pagination,
+  Stack,
   Typography,
 } from "@mui/material";
 import dayjs from "dayjs";
@@ -29,8 +28,13 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import { ChangeEvent, useState } from "react";
 import AddVulnResolutionDialog from "~/components/dialogs/AddVulnResolutionDialog";
 import { Vulnerability } from "~/hooks/fetching/artifact";
-import AvatarImage from "/avatar.webp";
 import { Resolution } from "~/hooks/fetching/vuln";
+import AvatarImage from "/avatar.webp";
+import { useAccountContext, useUserRole } from "~/hooks/general";
+import { useParams } from "react-router-dom";
+import { useGetMembersOfProjectQuery } from "~/hooks/fetching/project/query";
+import { useApproveResolutionMutation } from "~/hooks/fetching/vuln/query";
+import ConfirmActionDialog from "../dialogs/ConfirmActionDialog";
 dayjs.extend(relativeTime);
 export default function VulnDetailsCard({
   vuln,
@@ -42,6 +46,9 @@ export default function VulnDetailsCard({
   const [selectedCveId, setSelectedCveId] = useState("");
   const [open, setOpen] = useState(false);
   const [expanded, setExpanded] = useState(false);
+  const containApprovedResolution = resolution?.resolution.find(
+    (x) => x.isApproved
+  );
   async function handleOpenDialog(cveId: string) {
     setSelectedCveId(cveId);
     setOpen(true);
@@ -56,6 +63,16 @@ export default function VulnDetailsCard({
               {vuln.cveId}
             </Typography>
           </Box>
+        }
+        action={
+          containApprovedResolution && (
+            <Stack direction="row" spacing={1}>
+              <Typography display="inline">
+                This vulnerability has approved resolution(s)
+              </Typography>
+              <Verified color="success" />
+            </Stack>
+          )
         }
       />
       <CardContent>
@@ -125,9 +142,28 @@ function ResolutionCollapse({
   resolution: Resolution | undefined;
 }) {
   const pageSize = 3;
+  const approveResolutionMutation = useApproveResolutionMutation();
+  const userRole = useUserRole();
+  const accountContext = useAccountContext();
+  const { currentProject } = useParams();
+  const [open, setOpen] = useState(false);
+  const membersOfProjectQuery = useGetMembersOfProjectQuery(currentProject);
+  const members = membersOfProjectQuery.data?.data
+    ? membersOfProjectQuery.data.data
+        .map((item) => item.account.username)
+        .filter((item) => item !== accountContext.username)
+    : [];
   const [page, setPage] = useState(1);
+  const [resolutionId, setResolutionId] = useState("");
   function handlePageChange(event: ChangeEvent<unknown>, page: number) {
     setPage(page);
+  }
+  function approveResolution(resolutionId: string) {
+    approveResolutionMutation.mutate(resolutionId);
+  }
+  function onClickApprove(resolutionId: string) {
+    setOpen(true);
+    setResolutionId(resolutionId);
   }
   return (
     <Collapse in={expanded} timeout="auto" unmountOnExit>
@@ -149,7 +185,7 @@ function ResolutionCollapse({
                       />
                     </ListItemAvatar>
                     <ListItemText
-                      primary={item.createdBy ?? "Unknown"}
+                      primary={item.createdBy}
                       secondary={
                         <>
                           <Typography
@@ -163,7 +199,24 @@ function ResolutionCollapse({
                         </>
                       }
                     />
+                    {userRole === "manager" &&
+                      members.includes(item.createdBy) && (
+                        <Button
+                          color="success"
+                          onClick={() => onClickApprove(item._id)}
+                          disabled={item.isApproved}
+                        >
+                          Approve this resolution
+                        </Button>
+                      )}
+                    {item.isApproved && <Verified color="success" />}
                   </ListItem>
+                  <ConfirmActionDialog
+                    open={open}
+                    setOpen={setOpen}
+                    text="Are you sure you want to approve this resolution?"
+                    callback={() => approveResolution(resolutionId)}
+                  />
                   <Divider />
                 </Box>
               ))}

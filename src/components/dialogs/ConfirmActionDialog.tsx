@@ -10,20 +10,20 @@ interface Props {
   open: boolean;
   setOpen: (value: boolean) => void;
   text: string;
-  deleteFunction: () => void;
+  callback: Function;
 }
-export default function ConfirmDeleteDialog({
+export default function ConfirmActionDialog({
   text,
   open,
   setOpen,
-  deleteFunction,
+  callback,
 }: Props) {
   function handleClose() {
     setOpen(false);
   }
   function confirmDelete() {
     setOpen(false);
-    deleteFunction();
+    callback();
   }
   return (
     <Dialog open={open} onClose={handleClose}>
@@ -32,12 +32,10 @@ export default function ConfirmDeleteDialog({
         <DialogContentText>{text}</DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose} color="info">
+        <Button onClick={handleClose} color="secondary">
           No
         </Button>
-        <Button onClick={confirmDelete} color="error">
-          Yes
-        </Button>
+        <Button onClick={confirmDelete}>Yes</Button>
       </DialogActions>
     </Dialog>
   );

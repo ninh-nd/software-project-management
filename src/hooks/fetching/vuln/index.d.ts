@@ -3,11 +3,14 @@ export interface Progress {
   resolved: number;
 }
 export interface Resolution {
+  _id: string;
   cveId: string;
   resolution: [
     {
-      createdBy?: string;
+      _id: string;
+      createdBy: string;
       description: string;
+      isApproved?: boolean;
     }
   ];
 }

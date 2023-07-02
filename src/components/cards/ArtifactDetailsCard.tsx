@@ -20,7 +20,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
-import ConfirmDeleteDialog from "~/components/dialogs/ConfirmDeleteDialog";
+import ConfirmActionDialog from "~/components/dialogs/ConfirmActionDialog";
 import CreateArtifactDialog from "~/components/dialogs/CreateArtifactDialog";
 import UpdateArtifactDialog from "~/components/dialogs/UpdateArtifactDialog";
 import { Phase } from "~/hooks/fetching/phase";
@@ -168,10 +168,10 @@ export default function ArtifactDetails({ phase }: ArtifactDetailsProps) {
         setOpen={setOpenArtUpdateDialog}
         artifactId={selectedArtifact}
       />
-      <ConfirmDeleteDialog
+      <ConfirmActionDialog
         open={confirmModal}
         setOpen={setConfirmModal}
-        deleteFunction={removeArtifact}
+        callback={removeArtifact}
         text="Do you want to delete this artifact?"
       />
       <AddThreatDialog

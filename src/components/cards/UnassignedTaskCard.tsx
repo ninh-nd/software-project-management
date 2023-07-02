@@ -26,7 +26,7 @@ import {
   useDeleteTaskMutation,
 } from "~/hooks/fetching/task/query";
 import AssignTaskDialog from "~/components/dialogs/AssignTaskDialog";
-import ConfirmDeleteDialog from "~/components/dialogs/ConfirmDeleteDialog";
+import ConfirmActionDialog from "~/components/dialogs/ConfirmActionDialog";
 import CreateTaskDialog from "~/components/dialogs/CreateTaskDialog";
 import EditTaskDialog from "~/components/dialogs/EditTaskDialog";
 
@@ -111,7 +111,6 @@ export default function UnassignedTaskCard() {
   function deleteTask() {
     if (!selectedTask) return;
     deleteTaskMutation.mutate(selectedTask);
-    setOpenConfirmDelete(false);
   }
   return (
     <>
@@ -132,10 +131,10 @@ export default function UnassignedTaskCard() {
           </CardActions>
         </Card>
       </Stack>
-      <ConfirmDeleteDialog
+      <ConfirmActionDialog
         open={openConfirmDelete}
         setOpen={setOpenConfirmDelete}
-        deleteFunction={deleteTask}
+        callback={deleteTask}
         text="Are you sure you want to delete this task?"
       />
       <EditTaskDialog open={openEdit} setOpen={setOpenEdit} id={selectedTask} />

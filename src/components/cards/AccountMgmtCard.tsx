@@ -14,7 +14,7 @@ import {
   useAccountsQuery,
   useDeleteAccountMutation,
 } from "~/hooks/fetching/account/query";
-import ConfirmDeleteDialog from "../dialogs/ConfirmDeleteDialog";
+import ConfirmActionDialog from "../dialogs/ConfirmActionDialog";
 export default function AccountMgmtCard() {
   const deleteAccountMutation = useDeleteAccountMutation();
   const [openEdit, setOpen] = useState(false);
@@ -36,7 +36,6 @@ export default function AccountMgmtCard() {
   }
   function handleDelete() {
     deleteAccountMutation.mutate(id as string);
-    setOpenConfirmDelete(false);
   }
   const columns: GridColDef[] = [
     {
@@ -113,11 +112,11 @@ export default function AccountMgmtCard() {
         />
       </CardContent>
       <EditAccountDialog id={id} open={openEdit} setOpen={setOpen} />
-      <ConfirmDeleteDialog
+      <ConfirmActionDialog
         open={openConfirmDelete}
         setOpen={setOpenConfirmDelete}
         text="Are you sure you want to delete this account"
-        deleteFunction={handleDelete}
+        callback={handleDelete}
       />
     </Card>
   );

@@ -48,7 +48,7 @@ import {
 } from "~/hooks/fetching/account/query";
 import { GitLab } from "~/icons/Icons";
 import AddNewToolDialog from "../dialogs/AddNewToolDialog";
-import ConfirmDeleteDialog from "../dialogs/ConfirmDeleteDialog";
+import ConfirmActionDialog from "../dialogs/ConfirmActionDialog";
 import ImageScanningConfigDialog from "../dialogs/ImageScanningConfigDialog";
 import { useAccountContext } from "~/hooks/general";
 import { useGetScanners } from "~/hooks/fetching/scanner/query";
@@ -310,17 +310,17 @@ export default function Integration() {
         setOpen={setOpenUpdateAccessToken}
         github={github}
       />
-      <ConfirmDeleteDialog
+      <ConfirmActionDialog
         open={openDisconnectFromGithub}
         setOpen={setOpenDisconnectFromGithub}
         text="Are you sure you want to disconnect from Github?"
-        deleteFunction={disconnectFromGithub}
+        callback={disconnectFromGithub}
       />
-      <ConfirmDeleteDialog
+      <ConfirmActionDialog
         open={openDisconnectFromGitlab}
         setOpen={setOpenDisconnectFromGitlab}
         text="Are you sure you want to disconnect from Github?"
-        deleteFunction={disconnectFromGitlab}
+        callback={disconnectFromGitlab}
       />
       <ImageScanningConfigDialog
         open={openImageScanningConfig}

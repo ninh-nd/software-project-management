@@ -30,3 +30,13 @@ export async function addResolution(
   });
   return response.data;
 }
+export async function approveResolution(
+  resolutionId: string
+): PromiseServer<null> {
+  const response = await api.patch(`/vuln/resolution/approve`, {
+    data: {
+      resolutionId,
+    },
+  });
+  return response.data;
+}
