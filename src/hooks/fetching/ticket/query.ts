@@ -15,6 +15,7 @@ export function useCreateTicketMutation() {
     onSuccess: (response) => {
       toast(response, enqueueSnackbar, () => {
         queryClient.invalidateQueries(["tickets"]);
+        queryClient.invalidateQueries(["changeHistory"]);
       });
     },
   });
@@ -34,6 +35,7 @@ export function useMarkTicketMutation() {
     onSuccess: (response, { id }) => {
       toast(response, enqueueSnackbar, () => {
         queryClient.invalidateQueries(["ticket", id]);
+        queryClient.invalidateQueries(["changeHistory"]);
       });
     },
   });

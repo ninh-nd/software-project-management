@@ -136,8 +136,8 @@ function ResolutionCollapse({
           <List>
             {resolution.resolution
               .slice(page - 1, Math.ceil(pageSize / page))
-              .map((item) => (
-                <>
+              .map((item, index) => (
+                <Box key={index}>
                   <ListItem>
                     <ListItemAvatar>
                       <Avatar
@@ -165,7 +165,7 @@ function ResolutionCollapse({
                     />
                   </ListItem>
                   <Divider />
-                </>
+                </Box>
               ))}
             <Box
               sx={{ display: "flex", width: "100%", justifyContent: "center" }}

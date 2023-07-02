@@ -4,6 +4,17 @@ import {
   RefreshOutlined,
 } from "@mui/icons-material";
 import {
+  Timeline,
+  TimelineConnector,
+  TimelineContent,
+  TimelineDot,
+  TimelineItem,
+  TimelineOppositeContent,
+  TimelineSeparator,
+  timelineItemClasses,
+  timelineOppositeContentClasses,
+} from "@mui/lab";
+import {
   Box,
   Button,
   Container,
@@ -19,6 +30,7 @@ import { useParams } from "react-router-dom";
 import VulnDetailsCard from "~/components/cards/VulnDetailsCard";
 import PriorityChip from "~/components/styled-components/PriorityChip";
 import TicketStatusChip from "~/components/styled-components/TicketStatusChip";
+import { useChangeHistoryQuery } from "~/hooks/fetching/change-history/query";
 import { Ticket } from "~/hooks/fetching/ticket";
 import {
   useMarkTicketMutation,
@@ -71,13 +83,44 @@ function RightColumn({ ticket }: { ticket: Ticket }) {
     </Stack>
   );
 }
-
+function History({ ticketId }: { ticketId: string }) {
+  const query = useChangeHistoryQuery(ticketId);
+  const history = query.data?.data ?? [];
+  return (
+    <Timeline
+      sx={{
+        [`& .${timelineOppositeContentClasses.root}`]: {
+          flex: 0.2,
+        },
+      }}
+    >
+      {history.map((h, index) => (
+        <TimelineItem>
+          <TimelineOppositeContent color="textSecondary">
+            {dayjs().to(dayjs(h.timestamp))}
+          </TimelineOppositeContent>
+          <TimelineSeparator>
+            <TimelineDot color="primary" />
+            {index !== history.length - 1 && <TimelineConnector />}
+          </TimelineSeparator>
+          <TimelineContent>{h.description}</TimelineContent>
+        </TimelineItem>
+      ))}
+    </Timeline>
+  );
+}
 function MainContent({ ticket }: { ticket: Ticket }) {
   const cveIds = ticket.targetedVulnerability.map((v) => v.cveId);
   const resolutionQuery = useGetResolutionQuery(cveIds);
   const resolution = resolutionQuery.data?.data;
   return (
     <Stack spacing={5}>
+      <Box>
+        <Typography variant="h5">
+          <b>History</b>
+        </Typography>
+        <History ticketId={ticket._id} />
+      </Box>
       <Box>
         <Typography variant="h5">
           <b>Description</b>

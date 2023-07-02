@@ -21,6 +21,7 @@ export function useAddResolutionMutation() {
     onSuccess: (response) => {
       toast(response, enqueueSnackbar, () => {
         queryClient.invalidateQueries(["resolution"]);
+        queryClient.invalidateQueries(["changeHistory"]);
       });
     },
   });
