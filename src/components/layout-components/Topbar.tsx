@@ -113,33 +113,33 @@ export default function Topbar() {
         >
           Dashboard
         </Typography>
-        <FormControl
-          sx={{ px: 1, display: role === "admin" ? "none" : "initial" }}
-        >
-          <InputLabel sx={{ color: "white" }}>Project</InputLabel>
-          <Select
-            label="Project"
-            IconComponent={() => <ExpandMore color="inherit" />}
-            sx={{ minWidth: 200, color: "info" }}
-            onChange={switchProject}
-            value={currentProject}
-          >
-            {projects?.map((project) => (
-              <MenuItem key={project._id} value={project.name}>
+        {role === "manager" && (
+          <FormControl sx={{ px: 1 }}>
+            <InputLabel sx={{ color: "white" }}>Project</InputLabel>
+            <Select
+              label="Project"
+              IconComponent={() => <ExpandMore color="inherit" />}
+              sx={{ minWidth: 200, color: "info" }}
+              onChange={switchProject}
+              value={currentProject}
+            >
+              {projects?.map((project) => (
+                <MenuItem key={project._id} value={project.name}>
+                  <Stack direction="row" alignItems="center">
+                    <Book fontSize="small" />
+                    <Typography>{project.name}</Typography>
+                  </Stack>
+                </MenuItem>
+              ))}
+              <MenuItem key="add-project" value="add-new-project">
                 <Stack direction="row" alignItems="center">
-                  <Book fontSize="small" />
-                  <Typography>{project.name}</Typography>
+                  <Add fontSize="small" />
+                  <Typography>Add new project</Typography>
                 </Stack>
               </MenuItem>
-            ))}
-            <MenuItem key="add-project" value="add-new-project">
-              <Stack direction="row" alignItems="center">
-                <Add fontSize="small" />
-                <Typography>Add new project</Typography>
-              </Stack>
-            </MenuItem>
-          </Select>
-        </FormControl>
+            </Select>
+          </FormControl>
+        )}
         <Tooltip
           title="Account"
           sx={{ display: role === "admin" ? "none" : "inline-flex" }}

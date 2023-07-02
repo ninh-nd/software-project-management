@@ -2,13 +2,6 @@ import api from "~/api";
 import { PromiseServer } from "~/hooks/fetching/response-type";
 import { User } from ".";
 import { Project } from "../project";
-export async function getMembersOfProject(
-  projectName: string
-): PromiseServer<User[]> {
-  const urlEncodedProjectName = encodeURIComponent(projectName);
-  const response = await api.get(`/project/${urlEncodedProjectName}/member`);
-  return response.data;
-}
 export async function getUserById(memberId: string): PromiseServer<User> {
   const response = await api.get(`/user/`, {
     params: {
@@ -46,5 +39,9 @@ export async function updateUser(
     name,
     email,
   });
+  return response.data;
+}
+export async function getAllUsers(): PromiseServer<User[]> {
+  const response = await api.get(`/user/getAll`);
   return response.data;
 }

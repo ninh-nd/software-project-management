@@ -14,10 +14,8 @@ import dayjs from "dayjs";
 import { Controller, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { useTasksQuery } from "~/hooks/fetching/task/query";
-import {
-  useAssignTaskMutation,
-  useMembersQuery,
-} from "~/hooks/fetching/user/query";
+import { useAssignTaskMutation } from "~/hooks/fetching/user/query";
+import { useGetMembersOfProjectQuery } from "~/hooks/fetching/project/query";
 interface FormData {
   taskId: string;
   memberId: string;
@@ -33,7 +31,7 @@ export default function AssignTaskDialog({
   const { currentProject } = useParams();
   const availableTasksQuery = useTasksQuery(currentProject);
   const availableTasks = availableTasksQuery.data?.data;
-  const membersQuery = useMembersQuery(currentProject);
+  const membersQuery = useGetMembersOfProjectQuery(currentProject);
   const members = membersQuery.data?.data;
   const assignTaskMutation = useAssignTaskMutation();
   async function onSubmit(data: FormData) {

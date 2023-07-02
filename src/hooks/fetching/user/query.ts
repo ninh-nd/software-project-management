@@ -4,7 +4,7 @@ import { useAccountContext } from "~/hooks/general";
 import { toast } from "~/utils/toast";
 import {
   assignTask,
-  getMembersOfProject,
+  getAllUsers,
   getProjectIn,
   getUserByAccountId,
   getUserById,
@@ -20,10 +20,6 @@ export function useUserByAccountIdQuery() {
       enabled: !!account,
     }
   );
-}
-
-export function useMembersQuery(project: string) {
-  return useQuery(["members", project], () => getMembersOfProject(project));
 }
 
 export function useUserQuery(memberId: string) {
@@ -64,4 +60,8 @@ export function useUpdateUserMutation() {
       );
     },
   });
+}
+
+export function useGetAllUsersQuery() {
+  return useQuery(["users"], getAllUsers);
 }

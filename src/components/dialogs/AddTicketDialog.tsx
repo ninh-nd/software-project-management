@@ -28,7 +28,7 @@ import { Vulnerability } from "~/hooks/fetching/artifact";
 import { useArtifactsQuery } from "~/hooks/fetching/artifact/query";
 import { TicketCreate } from "~/hooks/fetching/ticket";
 import { useCreateTicketMutation } from "~/hooks/fetching/ticket/query";
-import { useMembersQuery } from "~/hooks/fetching/user/query";
+import { useGetMembersOfProjectQuery } from "~/hooks/fetching/project/query";
 import { useAccountContext } from "~/hooks/general";
 interface Props {
   open: boolean;
@@ -40,7 +40,7 @@ export default function AddTicketDialog({ open, setOpen }: Props) {
   const artifacts = getAllArtifactsQuery.data?.data;
   const vulns =
     artifacts?.flatMap((artifact) => artifact.vulnerabilityList) ?? [];
-  const memberInfoQuery = useMembersQuery(currentProject);
+  const memberInfoQuery = useGetMembersOfProjectQuery(currentProject);
   const createTicketMutation = useCreateTicketMutation();
   const memberInfo = memberInfoQuery.data?.data ?? [];
   const accountInfo = useAccountContext();
