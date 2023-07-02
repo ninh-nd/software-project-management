@@ -113,33 +113,35 @@ export default function Topbar() {
         >
           Dashboard
         </Typography>
-        {role === "manager" && (
-          <FormControl sx={{ px: 1 }}>
-            <InputLabel sx={{ color: "white" }}>Project</InputLabel>
-            <Select
-              label="Project"
-              IconComponent={() => <ExpandMore color="inherit" />}
-              sx={{ minWidth: 200, color: "info" }}
-              onChange={switchProject}
-              value={currentProject}
-            >
-              {projects?.map((project) => (
-                <MenuItem key={project._id} value={project.name}>
-                  <Stack direction="row" alignItems="center">
-                    <Book fontSize="small" />
-                    <Typography>{project.name}</Typography>
-                  </Stack>
-                </MenuItem>
-              ))}
-              <MenuItem key="add-project" value="add-new-project">
+        <FormControl sx={{ px: 1 }}>
+          <InputLabel sx={{ color: "white" }}>Project</InputLabel>
+          <Select
+            label="Project"
+            IconComponent={() => <ExpandMore color="inherit" />}
+            sx={{ minWidth: 200, color: "info" }}
+            onChange={switchProject}
+            value={currentProject}
+          >
+            {projects?.map((project) => (
+              <MenuItem key={project._id} value={project.name}>
                 <Stack direction="row" alignItems="center">
-                  <Add fontSize="small" />
-                  <Typography>Add new project</Typography>
+                  <Book fontSize="small" />
+                  <Typography>{project.name}</Typography>
                 </Stack>
               </MenuItem>
-            </Select>
-          </FormControl>
-        )}
+            ))}
+            <MenuItem
+              key="add-project"
+              value="add-new-project"
+              disabled={role !== "manager"}
+            >
+              <Stack direction="row" alignItems="center">
+                <Add fontSize="small" />
+                <Typography>Add new project</Typography>
+              </Stack>
+            </MenuItem>
+          </Select>
+        </FormControl>
         <Tooltip
           title="Account"
           sx={{ display: role === "admin" ? "none" : "inline-flex" }}
