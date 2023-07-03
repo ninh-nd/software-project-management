@@ -1,5 +1,6 @@
 import { Commit } from "@mui/icons-material";
 import {
+  Box,
   Card,
   CardContent,
   CardHeader,
@@ -8,6 +9,7 @@ import {
   ListItemIcon,
   ListItemText,
   SxProps,
+  Typography,
 } from "@mui/material";
 import dayjs from "dayjs";
 import { PullRequest } from "~/icons/Icons";
@@ -16,9 +18,28 @@ export default function RecentActivity({
   activityHistory,
   sx,
 }: {
-  activityHistory: ActivityHistory[];
+  activityHistory: ActivityHistory[] | null | undefined;
   sx?: SxProps;
 }) {
+  if (!activityHistory) {
+    return (
+      <Card sx={{ height: "100%" }}>
+        <CardHeader title="Activity timeline" />
+        <CardContent>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <Typography color="error" variant="h6" align="center">
+              No activity found! Have you linked your Github/Gitlab account?
+            </Typography>
+          </Box>
+        </CardContent>
+      </Card>
+    );
+  }
   const lastRecentAct = activityHistory
     .sort((a, b) => {
       const dateB = new Date(b.createdAt);

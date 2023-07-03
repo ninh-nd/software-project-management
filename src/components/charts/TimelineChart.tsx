@@ -4,6 +4,9 @@ import {
   Card,
   CardHeader,
   CardContent,
+  Typography,
+  Box,
+  CssBaseline,
 } from "@mui/material";
 import dayjs from "dayjs";
 import {
@@ -43,9 +46,23 @@ export default function TimelineChart({
   activityHistory,
   sx,
 }: {
-  activityHistory: ActivityHistory[];
+  activityHistory: ActivityHistory[] | null | undefined;
   sx?: SxProps;
 }) {
+  if (!activityHistory) {
+    return (
+      <Card>
+        <CardHeader title="Activity timeline" />
+        <CardContent>
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
+            <Typography color="error" variant="h6">
+              No activity found! Have you linked your Github/Gitlab account?
+            </Typography>
+          </Box>
+        </CardContent>
+      </Card>
+    );
+  }
   const theme = useTheme();
   activityHistory.sort((a, b) => {
     return dayjs(a.createdAt).valueOf() - dayjs(b.createdAt).valueOf();

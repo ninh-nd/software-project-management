@@ -4,6 +4,7 @@ import {
   CheckBoxOutlineBlank,
 } from "@mui/icons-material";
 import {
+  Box,
   Card,
   CardContent,
   CardHeader,
@@ -15,6 +16,7 @@ import {
   Pagination,
   SxProps,
   Tooltip,
+  Typography,
 } from "@mui/material";
 import { useState } from "react";
 import { Task } from "~/hooks/fetching/task";
@@ -56,46 +58,61 @@ export default function TaskAssigned({
     <Card sx={sx}>
       <CardHeader title="Task Assigned" />
       <CardContent>
-        <List>
-          {currentPageList.map((task) => (
-            <ListItem
-              key={task._id}
-              secondaryAction={
-                <Tooltip
-                  title={
-                    task.status === "active" ? "Mark as completed" : "Undo"
-                  }
-                >
-                  <IconButton
-                    edge="end"
-                    onClick={markTask(
-                      task._id,
-                      task.status === "active" ? "completed" : "active"
-                    )}
+        {tasks.length === 0 ? (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              height: "100%",
+              alignItems: "center",
+            }}
+          >
+            <Typography variant="h6" color="textSecondary">
+              There's nothing here...
+            </Typography>
+          </Box>
+        ) : (
+          <List>
+            {currentPageList.map((task) => (
+              <ListItem
+                key={task._id}
+                secondaryAction={
+                  <Tooltip
+                    title={
+                      task.status === "active" ? "Mark as completed" : "Undo"
+                    }
                   >
-                    {task.status === "active" ? (
-                      <CheckBoxOutlineBlank />
-                    ) : (
-                      <CheckBox />
-                    )}
-                  </IconButton>
-                </Tooltip>
-              }
-            >
-              <ListItemIcon>
-                <Assignment />
-              </ListItemIcon>
-              <ListItemText
-                primary={task.name}
-                secondary={task.description}
-                sx={{
-                  textDecoration:
-                    task.status === "completed" ? "line-through" : "none",
-                }}
-              />
-            </ListItem>
-          ))}
-        </List>
+                    <IconButton
+                      edge="end"
+                      onClick={markTask(
+                        task._id,
+                        task.status === "active" ? "completed" : "active"
+                      )}
+                    >
+                      {task.status === "active" ? (
+                        <CheckBoxOutlineBlank />
+                      ) : (
+                        <CheckBox />
+                      )}
+                    </IconButton>
+                  </Tooltip>
+                }
+              >
+                <ListItemIcon>
+                  <Assignment />
+                </ListItemIcon>
+                <ListItemText
+                  primary={task.name}
+                  secondary={task.description}
+                  sx={{
+                    textDecoration:
+                      task.status === "completed" ? "line-through" : "none",
+                  }}
+                />
+              </ListItem>
+            ))}
+          </List>
+        )}
         <Pagination
           sx={{
             display: "flex",

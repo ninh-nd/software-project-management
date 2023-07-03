@@ -58,7 +58,6 @@ function MemberHomePage() {
   const userQuery = useUserByAccountIdQuery();
   const user = userQuery.data?.data;
   if (!user) return <></>;
-  if (!actHistData) return <></>;
   const { taskAssigned, ticketAssigned } = user;
   return (
     <Box sx={{ flexGrow: 1, height: "100vh" }}>
