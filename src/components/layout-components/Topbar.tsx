@@ -88,22 +88,18 @@ export default function Topbar() {
           pr: "24px", // keep right padding when drawer closed
         }}
       >
-        {role === "admin" ? (
-          <></>
-        ) : (
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerToggle}
-            sx={{
-              marginRight: "36px",
-              ...(open && { display: "none" }),
-            }}
-          >
-            <Menu />
-          </IconButton>
-        )}
+        <IconButton
+          edge="start"
+          color="inherit"
+          aria-label="open drawer"
+          onClick={handleDrawerToggle}
+          sx={{
+            marginRight: "36px",
+            ...(open && { display: "none" }),
+          }}
+        >
+          <Menu />
+        </IconButton>
         <Typography
           component="h1"
           variant="h6"

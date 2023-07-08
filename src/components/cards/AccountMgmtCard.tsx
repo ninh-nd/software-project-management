@@ -16,12 +16,12 @@ import {
 } from "~/hooks/fetching/account/query";
 import ConfirmActionDialog from "../dialogs/ConfirmActionDialog";
 export default function AccountMgmtCard() {
+  const accountsQuery = useAccountsQuery();
+  const accounts = accountsQuery.data?.data ?? [];
   const deleteAccountMutation = useDeleteAccountMutation();
   const [openEdit, setOpen] = useState(false);
   const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
   const [id, setId] = useState<GridRowId>("");
-  const accountsQuery = useAccountsQuery();
-  const accounts = accountsQuery.data?.data ?? [];
   function handleEditClick(id: GridRowId) {
     return async () => {
       setId(id);

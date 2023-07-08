@@ -25,13 +25,15 @@ import { createPalette } from "~/theme/create-palette";
 import { createShadows } from "~/theme/create-shadows";
 import { createTypography } from "~/theme/create-typography";
 import NotFound from "./404";
-import Script from "./Script";
+const Script = lazy(() => import("./Script"));
+const AdminAccountPage = lazy(() => import("./AdminAccountPage"));
+const AdminTemplatePage = lazy(() => import("./AdminTemplatePage"));
+const AdminToolPage = lazy(() => import("./AdminToolPage"));
 const FirstTimeLoginPage = lazy(() => import("./FirstTimeLoginPage"));
 const Task = lazy(() => import("./Task"));
-const AdminLayout = lazy(() => import("~/layouts/AdminLayout"));
 const DashboardLayout = lazy(() => import("~/layouts/DashboardLayout"));
 const AccountInfo = lazy(() => import("./Account"));
-const AdminPage = lazy(() => import("./AdminPage"));
+const AdminPage = lazy(() => import("./AdminHomePage"));
 const Home = lazy(() => import("./Home"));
 const Login = lazy(() => import("./Login"));
 const MemberDetailInfo = lazy(() => import("./MemberDetail"));
@@ -103,11 +105,23 @@ const managerAndMemberRoutes: RouteObject = {
 };
 const adminRoutes: RouteObject = {
   path: "/admin",
-  element: <GlobalSuspense element={<AdminLayout />} />,
+  element: <GlobalSuspense element={<DashboardLayout />} />,
   children: [
     {
-      path: "",
+      path: "home",
       element: <GlobalSuspense element={<AdminPage />} />,
+    },
+    {
+      path: "accounts",
+      element: <GlobalSuspense element={<AdminAccountPage />} />,
+    },
+    {
+      path: "templates",
+      element: <GlobalSuspense element={<AdminTemplatePage />} />,
+    },
+    {
+      path: "tools",
+      element: <GlobalSuspense element={<AdminToolPage />} />,
     },
   ],
 };

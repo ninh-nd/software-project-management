@@ -26,7 +26,7 @@ export function useLoginMutation() {
         await updateAccountContext();
         const { role } = data;
         if (role === "admin") {
-          navigate("/admin");
+          navigate("/admin/home");
         } else {
           const { data } = await getProjectIn();
           if (!data) {

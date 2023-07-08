@@ -10,35 +10,19 @@ import {
   Divider,
   IconButton,
   List,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
   ListSubheader,
-  Drawer as MuiDrawer,
   Toolbar,
-  styled,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { drawerWidth, useDrawerState } from "~/hooks/drawer";
+import { useParams } from "react-router-dom";
+import { useDrawerState } from "~/hooks/drawer";
 import { useProjectInQuery } from "~/hooks/fetching/user/query";
-interface ItemProps {
+import { Item } from "./SidebarItem";
+import { Drawer } from "./StyledDrawer";
+export interface ItemProps {
   text: string;
   icon: JSX.Element;
   path: string;
-}
-function Item({ text, icon, path }: ItemProps) {
-  const navigate = useNavigate();
-  return (
-    <ListItemButton
-      onClick={() => {
-        navigate(path);
-      }}
-    >
-      <ListItemIcon>{icon}</ListItemIcon>
-      <ListItemText primary={text} />
-    </ListItemButton>
-  );
 }
 function DrawerContent() {
   const projectInQuery = useProjectInQuery();
@@ -87,31 +71,6 @@ function DrawerContent() {
     </List>
   );
 }
-const Drawer = styled(MuiDrawer, {
-  shouldForwardProp: (prop) => prop !== "open",
-})(({ theme, open }) => ({
-  "& .MuiDrawer-paper": {
-    position: "relative",
-    whiteSpace: "nowrap",
-    width: drawerWidth,
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-    boxSizing: "border-box",
-    ...(!open && {
-      overflowX: "hidden",
-      transition: theme.transitions.create("width", {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-      }),
-      width: theme.spacing(7),
-      [theme.breakpoints.up("sm")]: {
-        width: theme.spacing(9),
-      },
-    }),
-  },
-}));
 export default function Sidebar() {
   const { open, setOpen } = useDrawerState();
   function handleDrawerToggle() {

@@ -1,4 +1,5 @@
 import { Outlet } from "react-router-dom";
+import AdminSidebar from "~/components/layout-components/AdminSidebar";
 import MemberSidebar from "~/components/layout-components/MemberSidebar";
 import QueryBoundaries from "~/components/layout-components/QueryBoundaries";
 import Sidebar from "~/components/layout-components/Sidebar";
@@ -11,8 +12,8 @@ function SidebarWithRole() {
       return <Sidebar />;
     case "member":
       return <MemberSidebar />;
-    default:
-      return <></>;
+    case "admin":
+      return <AdminSidebar />;
   }
 }
 export default function DashboardLayout() {
