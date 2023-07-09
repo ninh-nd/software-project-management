@@ -19,7 +19,7 @@ export default function MemberHomePage() {
   return (
     <Box sx={{ flexGrow: 1, height: "100vh" }}>
       <Toolbar />
-      <Container sx={{ mt: 4, mb: 4 }}>
+      <Container sx={{ my: 4 }} maxWidth="xl">
         <Grid container spacing={2}>
           <Grid item xs={12} md={6}>
             <RecentActivity activityHistory={actHistData} />

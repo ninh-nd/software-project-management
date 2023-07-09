@@ -26,7 +26,7 @@ function NoWorkflow() {
   return (
     <Box sx={{ flexGrow: 1, height: "100vh" }}>
       <Toolbar />
-      <Container sx={{ my: 4 }} maxWidth="lg">
+      <Container sx={{ my: 4 }} maxWidth="xl">
         <Stack spacing={3}>
           <Typography variant="h4">Workflow scripts</Typography>
           <Card sx={{ p: 2 }}>
@@ -91,7 +91,7 @@ export default function Script() {
   return (
     <Box sx={{ flexGrow: 1, height: "100vh" }}>
       <Toolbar />
-      <Container sx={{ my: 4 }} maxWidth="lg">
+      <Container sx={{ my: 4 }} maxWidth="xl">
         <Stack spacing={3}>
           <Typography variant="h4">Workflow scripts</Typography>
           <Card sx={{ p: 2 }}>

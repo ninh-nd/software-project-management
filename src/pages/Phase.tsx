@@ -25,7 +25,7 @@ export default function Phase() {
   return (
     <Box sx={{ flexGrow: 1, height: "100vh" }}>
       <Toolbar />
-      <Container sx={{ my: 4 }}>
+      <Container sx={{ my: 4 }} maxWidth="xl">
         <Stack spacing={4}>
           <Typography variant="h4">Phases</Typography>
           <Grid container spacing={2}>

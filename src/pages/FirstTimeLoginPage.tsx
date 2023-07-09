@@ -12,7 +12,7 @@ export default function FirstTimeLoginPage() {
       }}
     >
       <Toolbar />
-      <Container maxWidth="lg" sx={{ my: 4 }}>
+      <Container sx={{ my: 4 }} maxWidth="xl">
         <Typography variant="h4" align="center">
           Import your projects from Gitlab or Github using the project selection
           on the topbar

@@ -45,7 +45,7 @@ export default function Task() {
       }}
     >
       <Toolbar />
-      <Container maxWidth="lg" sx={{ my: 4 }}>
+      <Container sx={{ my: 4 }} maxWidth="xl">
         <Stack spacing={3}>
           <Stack
             direction="row"

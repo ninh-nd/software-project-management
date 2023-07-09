@@ -162,7 +162,7 @@ export default function TicketDetail() {
   return (
     <Box flexGrow={1} height="100vh">
       <Toolbar />
-      <Container maxWidth="lg" sx={{ my: 4 }}>
+      <Container sx={{ my: 4 }} maxWidth="xl">
         <Stack spacing={2} sx={{ m: 2 }}>
           <Stack
             direction="row"

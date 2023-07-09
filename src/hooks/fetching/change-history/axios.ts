@@ -5,9 +5,15 @@ import { PromiseServer } from "../response-type";
 export async function getChangeHistory(
   objectId: string
 ): PromiseServer<ChangeHistory[]> {
-  const response = await api.get("/history", {
+  const response = await api.get(`/history/${objectId}`);
+  return response.data;
+}
+export async function getAdminChangeHistory(
+  total: number
+): PromiseServer<ChangeHistory[]> {
+  const response = await api.get("history", {
     params: {
-      objectId,
+      total,
     },
   });
   return response.data;

@@ -14,7 +14,7 @@ export default function Ticket() {
       }}
     >
       <Toolbar />
-      <Container maxWidth="lg" sx={{ my: 4 }}>
+      <Container sx={{ my: 4 }} maxWidth="xl">
         <ExtendedTicketTable />
       </Container>
     </Box>
