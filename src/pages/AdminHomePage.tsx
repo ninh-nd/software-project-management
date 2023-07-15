@@ -33,7 +33,10 @@ export default function AdminHomePage() {
             <TotalPhaseTemplates total={phaseTemplates.length} />
           </Grid>
           <Grid item xs={4}>
-            <RoleDistributionChart accounts={accounts} />
+            <RoleDistributionChart
+              accounts={accounts}
+              sx={{ height: "100%" }}
+            />
           </Grid>
           <Grid item xs={8}>
             <RecentChangeActivityCard />
