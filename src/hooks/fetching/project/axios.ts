@@ -49,3 +49,18 @@ export async function addMemberToProject(
   });
   return response.data;
 }
+export async function removeMemberFromProject(
+  projectName: string,
+  accountId: string
+) {
+  const urlEncodedProjectName = encodeURIComponent(projectName);
+  const response = await api.delete(
+    `/project/${urlEncodedProjectName}/member`,
+    {
+      data: {
+        accountId,
+      },
+    }
+  );
+  return response.data;
+}

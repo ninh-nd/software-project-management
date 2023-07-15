@@ -1,4 +1,4 @@
-import { GitHub } from "@mui/icons-material";
+import { GitHub, PersonRemove } from "@mui/icons-material";
 import {
   Avatar,
   Box,
@@ -14,6 +14,11 @@ import { GitLab } from "~/icons/Icons";
 import { ThirdParty } from "~/hooks/fetching/account";
 import { User } from "~/hooks/fetching/user";
 import AvatarImage from "/avatar.webp";
+import { useRemoveMemberFromProjectMutation } from "~/hooks/fetching/project/query";
+import { useNavigate, useParams } from "react-router-dom";
+import ConfirmActionDialog from "../dialogs/ConfirmActionDialog";
+import { useState } from "react";
+import { useAccountContext } from "~/hooks/general";
 function DisplayBadge({ thirdPartyList }: { thirdPartyList: ThirdParty[] }) {
   return (
     <Box justifyContent="center" display="flex" sx={{ py: 1 }}>
@@ -26,6 +31,25 @@ function DisplayBadge({ thirdPartyList }: { thirdPartyList: ThirdParty[] }) {
 }
 
 export default function MemberInfoCard({ member }: { member: User }) {
+  console.log(member);
+  const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+  const removeMemberMutation = useRemoveMemberFromProjectMutation();
+  const { currentProject } = useParams();
+  const accountContext = useAccountContext();
+  function removeMember() {
+    removeMemberMutation.mutate(
+      {
+        accountId: member.account._id,
+        projectName: currentProject,
+      },
+      {
+        onSuccess: () => {
+          navigate(-1);
+        },
+      }
+    );
+  }
   return (
     <Card>
       <CardContent>
@@ -53,11 +77,24 @@ export default function MemberInfoCard({ member }: { member: User }) {
           <DisplayBadge thirdPartyList={member.account.thirdParty} />
         </Box>
       </CardContent>
-      <Divider />
-      <CardActions>
-        <Button fullWidth variant="text">
-          Update info
-        </Button>
+      <CardActions sx={{ display: "flex", justifyContent: "flex-end" }}>
+        {accountContext._id !== member.account._id && (
+          <>
+            <Button
+              color="error"
+              startIcon={<PersonRemove />}
+              onClick={() => setOpen(true)}
+            >
+              Remove member
+            </Button>
+            <ConfirmActionDialog
+              open={open}
+              setOpen={setOpen}
+              text="Do you want to remove this member from the project?"
+              callback={removeMember}
+            />
+          </>
+        )}
       </CardActions>
     </Card>
   );

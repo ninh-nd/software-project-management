@@ -4,6 +4,7 @@ import {
   getMembersOfProject,
   getProjectInfo,
   importProject,
+  removeMemberFromProject,
 } from "./axios";
 import { useSnackbar } from "notistack";
 import { useNavigate } from "react-router-dom";
@@ -46,6 +47,23 @@ export function useAddMemberToProjectMutation() {
   return useMutation({
     mutationFn: ({ projectName, accountId }: Params) =>
       addMemberToProject(projectName, accountId),
+    onSuccess: (response) => {
+      toast(response, enqueueSnackbar, () => {
+        queryClient.invalidateQueries(["members"]);
+      });
+    },
+  });
+}
+export function useRemoveMemberFromProjectMutation() {
+  interface Params {
+    projectName: string;
+    accountId: string;
+  }
+  const queryClient = useQueryClient();
+  const { enqueueSnackbar } = useSnackbar();
+  return useMutation({
+    mutationFn: ({ projectName, accountId }: Params) =>
+      removeMemberFromProject(projectName, accountId),
     onSuccess: (response) => {
       toast(response, enqueueSnackbar, () => {
         queryClient.invalidateQueries(["members"]);
