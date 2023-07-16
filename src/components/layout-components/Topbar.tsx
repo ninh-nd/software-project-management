@@ -4,58 +4,37 @@ import {
   Book,
   ExpandMore,
   LogoutOutlined,
-  Menu,
 } from "@mui/icons-material";
 import {
+  AppBar,
   AppBarProps,
   Dialog,
   FormControl,
   IconButton,
   InputLabel,
   MenuItem,
-  AppBar as MuiAppBar,
   Select,
   SelectChangeEvent,
   Stack,
   Toolbar,
   Tooltip,
   Typography,
-  styled,
 } from "@mui/material";
 import { ReactNode, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import ImportProject from "~/components/dialogs/ImportProjectDialog";
 import { getAccountInfo } from "~/hooks/fetching/account/axios";
 import { logout } from "~/hooks/fetching/auth/axios";
-import { drawerWidth, useDrawerState } from "~/hooks/drawer";
 import { useProjectInQuery } from "~/hooks/fetching/user/query";
-import ImportProject from "~/components/dialogs/ImportProjectDialog";
 import { useUserRole } from "~/hooks/general";
 interface Props extends AppBarProps {
   open: boolean;
 }
-const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== "open",
-})<Props>(({ theme, open }) => ({
-  zIndex: theme.zIndex.drawer + 1,
-  transition: theme.transitions.create(["width", "margin"], {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  ...(open && {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  }),
-}));
 export default function Topbar() {
   const navigate = useNavigate();
   const role = useUserRole();
   const { currentProject } = useParams();
   const [openDialog, setOpenDialog] = useState(false);
-  const { open, setOpen } = useDrawerState();
   const projectInQuery = useProjectInQuery();
   const projects = projectInQuery.data?.data;
   async function handleLogOut() {
@@ -69,9 +48,6 @@ export default function Topbar() {
     const { username } = data;
     navigate(`/user/${username}`);
   }
-  function handleDrawerToggle() {
-    setOpen(!open);
-  }
   function switchProject(event: SelectChangeEvent<string>, child: ReactNode) {
     const selection = event.target.value;
     const encoded = encodeURIComponent(selection);
@@ -82,24 +58,11 @@ export default function Topbar() {
     navigate(`/${encoded}/`);
   }
   return (
-    <AppBar position="absolute" open={open}>
-      <Toolbar
-        sx={{
-          pr: "24px", // keep right padding when drawer closed
-        }}
-      >
-        <IconButton
-          edge="start"
-          color="inherit"
-          aria-label="open drawer"
-          onClick={handleDrawerToggle}
-          sx={{
-            marginRight: "36px",
-            ...(open && { display: "none" }),
-          }}
-        >
-          <Menu />
-        </IconButton>
+    <AppBar
+      position="absolute"
+      sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+    >
+      <Toolbar>
         <Typography
           component="h1"
           variant="h6"
