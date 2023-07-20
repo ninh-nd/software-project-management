@@ -86,6 +86,7 @@ function RightColumn({ ticket }: { ticket: Ticket }) {
 function History({ ticketId }: { ticketId: string }) {
   const query = useChangeHistoryQuery(ticketId);
   const history = query.data?.data ?? [];
+  const lastFive = history.slice(-5);
   return (
     <Timeline
       sx={{
@@ -94,14 +95,14 @@ function History({ ticketId }: { ticketId: string }) {
         },
       }}
     >
-      {history.map((h, index) => (
+      {lastFive.map((h, index) => (
         <TimelineItem>
           <TimelineOppositeContent color="textSecondary">
             {dayjs().to(dayjs(h.timestamp))}
           </TimelineOppositeContent>
           <TimelineSeparator>
             <TimelineDot color="primary" />
-            {index !== history.length - 1 && <TimelineConnector />}
+            {index !== lastFive.length - 1 && <TimelineConnector />}
           </TimelineSeparator>
           <TimelineContent>{h.description}</TimelineContent>
         </TimelineItem>
