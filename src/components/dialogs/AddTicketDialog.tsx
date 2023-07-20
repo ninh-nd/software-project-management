@@ -9,6 +9,7 @@ import {
   DialogTitle,
   FormControl,
   FormControlLabel,
+  FormHelperText,
   InputLabel,
   ListItem,
   ListItemIcon,
@@ -84,14 +85,25 @@ export default function AddTicketDialog({ open, setOpen }: Props) {
               alignItems="center"
             >
               <Typography variant="body1">Title</Typography>
-              <TextField {...register("title")} label="Title" />
+              <TextField
+                {...register("title", {
+                  required: "Title is required",
+                })}
+                label="Title"
+                error={!!errors.title}
+                helperText={errors.title?.message}
+              />
             </Box>
             <TextField
-              {...register("description")}
+              {...register("description", {
+                required: "Description is required",
+              })}
               label="Description"
               fullWidth
               multiline
               minRows={5}
+              error={!!errors.description}
+              helperText={errors.description?.message}
             />
             <Box
               display="flex"
@@ -131,6 +143,7 @@ export default function AddTicketDialog({ open, setOpen }: Props) {
             <Controller
               control={control}
               name="assignee"
+              rules={{ required: "Assignee is required" }}
               render={({ field }) => (
                 <FormControl>
                   <InputLabel>Assignee</InputLabel>
@@ -149,9 +162,13 @@ export default function AddTicketDialog({ open, setOpen }: Props) {
                 </FormControl>
               )}
             />
+            {errors.assignee && (
+              <FormHelperText error>{errors.assignee.message}</FormHelperText>
+            )}
             <Controller
               control={control}
               name="targetedVulnerability"
+              rules={{ required: "Select at least one vulnerability" }}
               render={({ field: { onChange, value } }) => (
                 <Autocomplete
                   multiple
@@ -167,6 +184,11 @@ export default function AddTicketDialog({ open, setOpen }: Props) {
                 />
               )}
             />
+            {errors.targetedVulnerability && (
+              <FormHelperText error>
+                {errors.targetedVulnerability.message}
+              </FormHelperText>
+            )}
           </Stack>
         </DialogContent>
         <DialogActions>

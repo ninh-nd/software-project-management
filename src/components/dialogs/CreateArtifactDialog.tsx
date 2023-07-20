@@ -67,19 +67,13 @@ export default function CreateArtifactDialog({
         <DialogTitle>Add a new artifact</DialogTitle>
         <DialogContent>
           <Stack spacing={2}>
-            <Controller
-              name="name"
-              control={control}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  label="Name"
-                  error={!!errors.name}
-                  helperText={errors.name?.message}
-                  required
-                  InputLabelProps={{ shrink: field.value ? true : false }}
-                />
-              )}
+            <TextField
+              {...register("name", {
+                required: "Name is required",
+              })}
+              label="Name"
+              error={!!errors.name}
+              helperText={errors.name?.message}
             />
             <TextField
               {...register("url", {
@@ -91,21 +85,19 @@ export default function CreateArtifactDialog({
               error={!!errors.url}
               helperText={
                 errors.url?.type === "pattern"
-                  ? "Invalid URL"
+                  ? "Invalid Url"
                   : errors.url?.message
               }
-              required
             />
-            <Controller
-              name="version"
-              control={control}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  label="Version"
-                  InputLabelProps={{ shrink: field.value ? true : false }}
-                />
-              )}
+            <TextField
+              {...register("version", {
+                pattern: /^(\d+\.)?(\d+\.)?(\*|\d+)$/,
+              })}
+              label="Version"
+              error={!!errors.version}
+              helperText={
+                errors.version?.type === "pattern" && "Invalid version number"
+              }
             />
             <TextField
               {...register("cpe", {
