@@ -85,13 +85,12 @@ export default function ImageScanningConfigDialog({
                 defaultValue="default"
                 render={({ field }) => (
                   <RadioGroup {...field} row>
-                    {watchService === "Grype" && (
-                      <FormControlLabel
-                        value="default"
-                        control={<Radio />}
-                        label="Use default endpoint"
-                      />
-                    )}
+                    <FormControlLabel
+                      disabled={watchService !== "Grype"}
+                      value="default"
+                      control={<Radio />}
+                      label="Use default endpoint"
+                    />
                     <FormControlLabel
                       value="self-hosted"
                       control={<Radio />}
@@ -112,6 +111,9 @@ export default function ImageScanningConfigDialog({
             </Typography>
             <Typography variant="body1">
               1. Pull the image from Docker Hub using commands provided below
+              <Typography variant="body1" color="error">
+                (Ignore this step if you use a tool different than Grype)
+              </Typography>
             </Typography>
             <TextField
               label="Grype"
