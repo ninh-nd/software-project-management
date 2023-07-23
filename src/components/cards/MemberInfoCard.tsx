@@ -31,7 +31,6 @@ function DisplayBadge({ thirdPartyList }: { thirdPartyList: ThirdParty[] }) {
 }
 
 export default function MemberInfoCard({ member }: { member: User }) {
-  console.log(member);
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const removeMemberMutation = useRemoveMemberFromProjectMutation();

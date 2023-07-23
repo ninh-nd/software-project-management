@@ -251,7 +251,7 @@ export default function Integration() {
       <ConfirmActionDialog
         open={openDisconnectGitlab}
         setOpen={setOpenDisconnectGitlab}
-        text="Are you sure you want to disconnect from Github?"
+        text="Are you sure you want to disconnect from Gitlab?"
         callback={disconnectFromGitlab}
       />
       <ImageScanningConfigDialog open={openConfig} setOpen={setOpenConfig} />

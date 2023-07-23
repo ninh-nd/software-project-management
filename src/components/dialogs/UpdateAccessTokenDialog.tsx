@@ -45,7 +45,7 @@ export default function UpdateAccessTokenDialog({
   return (
     <Dialog open={open} fullWidth>
       <Box component="form" onSubmit={handleSubmit(onSubmit)}>
-        <DialogTitle>Update Github configuration</DialogTitle>
+        <DialogTitle>Update access token</DialogTitle>
         <DialogContent>
           <TextField
             type={isTokenShown ? "text" : "password"}
