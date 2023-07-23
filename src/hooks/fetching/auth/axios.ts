@@ -1,13 +1,9 @@
 import api from "~/api";
-import { Account, AccountRegister } from "~/hooks/fetching/account";
+import { AccountRegister } from "~/hooks/fetching/account";
 import { PromiseServer } from "~/hooks/fetching/response-type";
 
 export async function login(username: string, password: string) {
   const response = await api.post("/auth/login", { username, password });
-  return response;
-}
-export async function githubLogin() {
-  const response = await api.get("/auth/github");
   return response;
 }
 export async function logout() {

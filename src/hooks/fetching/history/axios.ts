@@ -7,18 +7,13 @@ export async function getHistoryByProject(
 ): PromiseServer<ActivityHistory[]> {
   const urlEncodedProjectName = encodeURIComponent(projectName);
   if (!username) {
-    const response = await api.get(
-      `/activity/github/${urlEncodedProjectName}/activityHistory`
-    );
+    const response = await api.get(`/activity/${urlEncodedProjectName}`);
     return response.data;
   }
-  const response = await api.get(
-    `/activity/github/${urlEncodedProjectName}/activityHistory`,
-    {
-      params: {
-        username,
-      },
-    }
-  );
+  const response = await api.get(`/activity/${urlEncodedProjectName}`, {
+    params: {
+      username,
+    },
+  });
   return response.data;
 }

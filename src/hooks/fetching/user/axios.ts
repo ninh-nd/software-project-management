@@ -24,7 +24,7 @@ export async function assignTask(
   taskId: string,
   memberId: string
 ): PromiseServer<null> {
-  const response = await api.patch(`/user/${memberId}/assignTask/${taskId}`);
+  const response = await api.patch(`/user/${memberId}/assign/${taskId}`);
   return response.data;
 }
 export async function getProjectIn(): PromiseServer<Project[]> {

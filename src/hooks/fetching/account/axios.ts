@@ -30,10 +30,18 @@ export async function getPermissions(): PromiseServer<string[]> {
   const response = await api.get("/permission/");
   return response.data;
 }
-export async function updateAccessToken(
+export async function updateGithubAccessToken(
   accessToken: string
 ): PromiseServer<null> {
   const response = await api.patch(`/account/thirdParty/github`, {
+    data: accessToken,
+  });
+  return response.data;
+}
+export async function updateGitlabAccessToken(
+  accessToken: string
+): PromiseServer<null> {
+  const response = await api.patch(`/account/thirdParty/gitlab`, {
     data: accessToken,
   });
   return response.data;

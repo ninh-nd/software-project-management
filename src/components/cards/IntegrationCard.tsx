@@ -1,25 +1,11 @@
-import {
-  BugReport,
-  Edit,
-  GitHub,
-  Handyman,
-  Tune,
-  Visibility,
-  VisibilityOff,
-} from "@mui/icons-material";
+import { BugReport, Edit, GitHub, Handyman, Tune } from "@mui/icons-material";
 import {
   Box,
-  Button,
   Card,
   CardContent,
   CardHeader,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
   Divider,
   IconButton,
-  InputAdornment,
   List,
   ListItem,
   ListItemIcon,
@@ -28,7 +14,6 @@ import {
   Menu,
   MenuItem,
   Popover,
-  TextField,
   Typography,
   useTheme,
 } from "@mui/material";
@@ -39,91 +24,33 @@ import {
   usePopupState,
 } from "material-ui-popup-state/hooks";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { ThirdParty } from "~/hooks/fetching/account";
 import {
   useDisconnectFromGithubMutation,
   useDisconnectFromGitlabMutation,
-  useUpdateAccessTokenMutation,
 } from "~/hooks/fetching/account/query";
+import { useGetScanners } from "~/hooks/fetching/scanner/query";
+import { useAccountContext } from "~/hooks/general";
 import { GitLab } from "~/icons/Icons";
 import AddNewToolDialog from "../dialogs/AddNewToolDialog";
 import ConfirmActionDialog from "../dialogs/ConfirmActionDialog";
-import ImageScanningConfigDialog from "../dialogs/ImageScanningConfigDialog";
-import { useAccountContext } from "~/hooks/general";
-import { useGetScanners } from "~/hooks/fetching/scanner/query";
 import EditScannerDialog from "../dialogs/EditScannerDialog";
+import ImageScanningConfigDialog from "../dialogs/ImageScanningConfigDialog";
+import UpdateAccessTokenDialog from "../dialogs/UpdateAccessTokenDialog";
+import { useSearchParams } from "react-router-dom";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-function UpdateAccessTokenDialog({
-  github,
-  setOpen,
-  open,
-}: {
-  github: ThirdParty | undefined;
-  setOpen: (open: boolean) => void;
-  open: boolean;
-}) {
-  const updateAccessTokenMutation = useUpdateAccessTokenMutation();
-  const [isTokenShown, setIsTokenShown] = useState(false);
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<{ accessToken: string }>();
-  async function onSubmit(data: { accessToken: string }) {
-    updateAccessTokenMutation.mutate(data.accessToken);
-    setOpen(false);
-  }
-  return (
-    <Dialog open={open} fullWidth>
-      <Box component="form" onSubmit={handleSubmit(onSubmit)}>
-        <DialogTitle>Update Github configuration</DialogTitle>
-        <DialogContent>
-          <TextField
-            type={isTokenShown ? "text" : "password"}
-            defaultValue={github?.accessToken}
-            {...register("accessToken", {
-              required: "Access token is required",
-            })}
-            error={errors.accessToken !== undefined}
-            helperText={errors.accessToken?.message}
-            fullWidth
-            label="Access token"
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton onClick={() => setIsTokenShown(!isTokenShown)}>
-                    {isTokenShown ? <Visibility /> : <VisibilityOff />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpen(false)} color="inherit">
-            Cancel
-          </Button>
-          <Button type="submit">Update</Button>
-        </DialogActions>
-      </Box>
-    </Dialog>
-  );
-}
 export default function Integration() {
-  const [selectedScanner, setSelectedScanner] = useState("");
+  const [, setSearchParams] = useSearchParams();
   const account = useAccountContext();
   const scannersQuery = useGetScanners(account.username);
   const scanners = scannersQuery.data?.data ?? [];
   const github = account.thirdParty.find((t) => t.name === "Github");
   const gitlab = account.thirdParty.find((t) => t.name === "Gitlab");
   const [openEditScanner, setOpenEditScanner] = useState(false);
-  const [openImageScanningConfig, setOpenImageScanningConfig] = useState(false);
-  const [openUpdateAccessToken, setOpenUpdateAccessToken] = useState(false);
-  const [openDisconnectFromGithub, setOpenDisconnectFromGithub] =
-    useState(false);
-  const [openDisconnectFromGitlab, setOpenDisconnectFromGitlab] =
-    useState(false);
+  const [openConfig, setOpenConfig] = useState(false);
+  const [openUpdateTokenGithub, setOpenUpdateTokenGithub] = useState(false);
+  const [openUpdateTokenGitlab, setOpenUpdateTokenGitlab] = useState(false);
+  const [openDisconnectGithub, setOpenDisconnectGithub] = useState(false);
+  const [openDisconnectGitlab, setOpenDisconnectGitlab] = useState(false);
   const [openAddNew, setOpenAddNew] = useState(false);
   const disconnectFromGithubMutation = useDisconnectFromGithubMutation();
   const disconnectFromGitlabMutation = useDisconnectFromGitlabMutation();
@@ -154,7 +81,7 @@ export default function Integration() {
   }
   function editScanner(id: string) {
     return () => {
-      setSelectedScanner(id);
+      setSearchParams({ scannerId: id });
       setOpenEditScanner(true);
     };
   }
@@ -186,13 +113,13 @@ export default function Integration() {
                         <MenuItem>
                           <Typography
                             sx={{ color: theme.palette.error.main }}
-                            onClick={() => setOpenDisconnectFromGithub(true)}
+                            onClick={() => setOpenDisconnectGithub(true)}
                           >
                             Disconnect from Github
                           </Typography>
                         </MenuItem>
                         <MenuItem
-                          onClick={() => setOpenUpdateAccessToken(true)}
+                          onClick={() => setOpenUpdateTokenGithub(true)}
                         >
                           <Typography>Update access token</Typography>
                         </MenuItem>
@@ -233,13 +160,13 @@ export default function Integration() {
                         <MenuItem>
                           <Typography
                             sx={{ color: theme.palette.error.main }}
-                            onClick={() => setOpenDisconnectFromGitlab(true)}
+                            onClick={() => setOpenDisconnectGitlab(true)}
                           >
                             Disconnect from Gitlab
                           </Typography>
                         </MenuItem>
                         <MenuItem
-                          onClick={() => setOpenUpdateAccessToken(true)}
+                          onClick={() => setOpenUpdateTokenGitlab(true)}
                         >
                           <Typography>Update access token</Typography>
                         </MenuItem>
@@ -279,7 +206,7 @@ export default function Integration() {
                   }}
                 >
                   <Menu {...bindMenu(popupStateImageScanning)}>
-                    <MenuItem onClick={() => setOpenImageScanningConfig(true)}>
+                    <MenuItem onClick={() => setOpenConfig(true)}>
                       Configure
                     </MenuItem>
                     <MenuItem onClick={() => setOpenAddNew(true)}>
@@ -306,31 +233,29 @@ export default function Integration() {
         </CardContent>
       </Card>
       <UpdateAccessTokenDialog
-        open={openUpdateAccessToken}
-        setOpen={setOpenUpdateAccessToken}
-        github={github}
+        open={openUpdateTokenGithub}
+        setOpen={setOpenUpdateTokenGithub}
+        thirdParty={github}
+      />
+      <UpdateAccessTokenDialog
+        open={openUpdateTokenGitlab}
+        setOpen={setOpenUpdateTokenGitlab}
+        thirdParty={gitlab}
       />
       <ConfirmActionDialog
-        open={openDisconnectFromGithub}
-        setOpen={setOpenDisconnectFromGithub}
+        open={openDisconnectGithub}
+        setOpen={setOpenDisconnectGithub}
         text="Are you sure you want to disconnect from Github?"
         callback={disconnectFromGithub}
       />
       <ConfirmActionDialog
-        open={openDisconnectFromGitlab}
-        setOpen={setOpenDisconnectFromGitlab}
+        open={openDisconnectGitlab}
+        setOpen={setOpenDisconnectGitlab}
         text="Are you sure you want to disconnect from Github?"
         callback={disconnectFromGitlab}
       />
-      <ImageScanningConfigDialog
-        open={openImageScanningConfig}
-        setOpen={setOpenImageScanningConfig}
-      />
-      <EditScannerDialog
-        open={openEditScanner}
-        setOpen={setOpenEditScanner}
-        scannerId={selectedScanner}
-      />
+      <ImageScanningConfigDialog open={openConfig} setOpen={setOpenConfig} />
+      <EditScannerDialog open={openEditScanner} setOpen={setOpenEditScanner} />
       <AddNewToolDialog open={openAddNew} setOpen={setOpenAddNew} />
     </>
   );

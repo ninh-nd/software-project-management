@@ -43,7 +43,7 @@ interface ThreatTabPanelProps {
   index: number;
 }
 function VulnTabPanel(props: VulnTabPanelProps) {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [, setSearchParams] = useSearchParams();
   const { list, value, index, setOpenCweDetails } = props;
   if (value !== index) return <></>;
   function viewCwe(cwe: string) {
@@ -95,7 +95,7 @@ function VulnTabPanel(props: VulnTabPanelProps) {
   );
 }
 function ThreatTabPanel(props: ThreatTabPanelProps) {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [, setSearchParams] = useSearchParams();
   const [open, setOpen] = useState(false);
   const { list, value, index } = props;
   if (value !== index) return <></>;

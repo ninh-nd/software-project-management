@@ -17,16 +17,17 @@ import {
   useUpdateScannerMutation,
 } from "~/hooks/fetching/scanner/query";
 import Instruction from "../text/Instruction";
+import { useSearchParams } from "react-router-dom";
 
 export default function EditScannerDialog({
   open,
   setOpen,
-  scannerId,
 }: {
   open: boolean;
   setOpen: (open: boolean) => void;
-  scannerId: string;
 }) {
+  const [searchParams] = useSearchParams();
+  const scannerId = searchParams.get("scannerId") ?? "";
   async function onSubmit(data: CreateOrUpdateNewScanner) {
     updateScannerMutation.mutate(data);
     setOpen(false);

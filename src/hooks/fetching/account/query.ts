@@ -9,9 +9,10 @@ import {
   getAccountById,
   getAllAccounts,
   getPermissions,
-  updateAccessToken,
+  updateGithubAccessToken,
   updateAccount,
   updateScannerPreference,
+  updateGitlabAccessToken,
 } from "./axios";
 import { updateAccountContext } from "~/hooks/general";
 
@@ -54,10 +55,21 @@ export function useDeleteAccountMutation() {
     },
   });
 }
-export function useUpdateAccessTokenMutation() {
+export function useUpdateGithubAccessTokenMutation() {
   const { enqueueSnackbar } = useSnackbar();
   return useMutation({
-    mutationFn: (accessToken: string) => updateAccessToken(accessToken),
+    mutationFn: (accessToken: string) => updateGithubAccessToken(accessToken),
+    onSuccess: (response) => {
+      toast(response, enqueueSnackbar, async () => {
+        await updateAccountContext();
+      });
+    },
+  });
+}
+export function useUpdateGitlabAccessTokenMutation() {
+  const { enqueueSnackbar } = useSnackbar();
+  return useMutation({
+    mutationFn: (accessToken: string) => updateGitlabAccessToken(accessToken),
     onSuccess: (response) => {
       toast(response, enqueueSnackbar, async () => {
         await updateAccountContext();
