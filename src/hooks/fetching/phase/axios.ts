@@ -72,3 +72,7 @@ export async function updatePhaseTemplate(
   });
   return response.data;
 }
+export async function deletePhaseTemplate(id: string): PromiseServer<null> {
+  const response = await api.delete(`/phase/template/${id}`);
+  return response.data;
+}

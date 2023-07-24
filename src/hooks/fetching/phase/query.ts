@@ -3,6 +3,7 @@ import {
   addArtifactToPhase,
   addTaskToPhase,
   createPhasesFromTemplate,
+  deletePhaseTemplate,
   getPhase,
   getPhaseTemplateById,
   getPhaseTemplates,
@@ -117,6 +118,18 @@ export function useUpdateTemplateMutation() {
   const { enqueueSnackbar } = useSnackbar();
   return useMutation({
     mutationFn: ({ id, data }: Params) => updatePhaseTemplate(id, data),
+    onSuccess: (response) => {
+      toast(response, enqueueSnackbar, () => {
+        queryClient.invalidateQueries(["phaseTemplate"]);
+      });
+    },
+  });
+}
+export function useDeleteTemplateMutation() {
+  const queryClient = useQueryClient();
+  const { enqueueSnackbar } = useSnackbar();
+  return useMutation({
+    mutationFn: (id: string) => deletePhaseTemplate(id),
     onSuccess: (response) => {
       toast(response, enqueueSnackbar, () => {
         queryClient.invalidateQueries(["phaseTemplate"]);

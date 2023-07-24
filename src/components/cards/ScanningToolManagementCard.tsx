@@ -9,11 +9,12 @@ import {
 import { useState } from "react";
 import { useGetScanners } from "~/hooks/fetching/scanner/query";
 import EditScannerDialog from "../dialogs/EditScannerDialog";
+import { useSearchParams } from "react-router-dom";
 
 export default function ScanningToolManagementCard({ sx }: { sx?: SxProps }) {
   function handleViewCode(id: GridRowId) {
     return async () => {
-      setId(id as string);
+      setSearchParams({ scannerId: id as string });
       setOpen(true);
     };
   }
@@ -51,8 +52,8 @@ export default function ScanningToolManagementCard({ sx }: { sx?: SxProps }) {
       },
     },
   ];
+  const [, setSearchParams] = useSearchParams();
   const [open, setOpen] = useState(false);
-  const [id, setId] = useState("");
   const scanningToolsQuery = useGetScanners();
   const scanners = scanningToolsQuery.data?.data ?? [];
   return (
@@ -65,7 +66,7 @@ export default function ScanningToolManagementCard({ sx }: { sx?: SxProps }) {
           getRowId={(row) => row._id}
         />
       </CardContent>
-      <EditScannerDialog open={open} setOpen={setOpen} scannerId={id} />
+      <EditScannerDialog open={open} setOpen={setOpen} />
     </Card>
   );
 }

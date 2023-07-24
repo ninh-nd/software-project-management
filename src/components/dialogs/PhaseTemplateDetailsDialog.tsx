@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import { useEffect } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
+import { useSearchParams } from "react-router-dom";
 import { PhaseTemplateUpdate } from "~/hooks/fetching/phase";
 import {
   useGetPhaseTemplateByIdQuery,
@@ -23,12 +24,12 @@ import {
 export default function PhaseTemplateDetailsDialog({
   open,
   setOpen,
-  templateId,
 }: {
   open: boolean;
   setOpen: (open: boolean) => void;
-  templateId: string;
 }) {
+  const [searchParams] = useSearchParams();
+  const templateId = searchParams.get("templateId") ?? "";
   const phaseTemplateQuery = useGetPhaseTemplateByIdQuery(templateId);
   const updateTemplateMutation = useUpdateTemplateMutation();
   const template = phaseTemplateQuery.data?.data;

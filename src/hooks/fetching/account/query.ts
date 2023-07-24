@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSnackbar } from "notistack";
 import { toast } from "~/utils/toast";
-import { AccountUpdate } from ".";
+import { AccountRegister, AccountUpdate } from ".";
 import {
   deleteAccount,
   disconnectFromGithub,
@@ -15,6 +15,7 @@ import {
   updateGitlabAccessToken,
 } from "./axios";
 import { updateAccountContext } from "~/hooks/general";
+import { register } from "../auth/axios";
 
 export function useAccountsQuery() {
   return useQuery(["accounts"], getAllAccounts);
@@ -111,6 +112,18 @@ export function useUpdateScannerPreferenceMutation() {
     onSuccess: (response) => {
       toast(response, enqueueSnackbar, async () => {
         await updateAccountContext();
+      });
+    },
+  });
+}
+export function useCreateAccountAdminMutation() {
+  const queryClient = useQueryClient();
+  const { enqueueSnackbar } = useSnackbar();
+  return useMutation({
+    mutationFn: (account: AccountRegister) => register(account),
+    onSuccess: (response) => {
+      toast(response, enqueueSnackbar, () => {
+        queryClient.invalidateQueries(["accounts"]);
       });
     },
   });

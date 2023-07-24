@@ -326,7 +326,7 @@ interface CreatePhaseTemplateFormProps {
   open: boolean;
   setOpen: (open: boolean) => void;
 }
-export default function CreatePhaseTemplateDialog({
+export default function CreatePhaseFromTemplateDialog({
   setOpen,
   open,
 }: CreatePhaseTemplateFormProps) {

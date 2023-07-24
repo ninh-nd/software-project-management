@@ -1,5 +1,12 @@
-import { Delete, ManageAccounts } from "@mui/icons-material";
-import { Card, CardContent, CardHeader, Tooltip } from "@mui/material";
+import { Add, Delete, ManageAccounts } from "@mui/icons-material";
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  Tooltip,
+} from "@mui/material";
 import {
   DataGrid,
   GridActionsCellItem,
@@ -15,10 +22,12 @@ import {
   useDeleteAccountMutation,
 } from "~/hooks/fetching/account/query";
 import ConfirmActionDialog from "../dialogs/ConfirmActionDialog";
+import CreateNewAccountDialog from "../dialogs/CreateNewAccountDialog";
 export default function AccountMgmtCard() {
   const accountsQuery = useAccountsQuery();
   const accounts = accountsQuery.data?.data ?? [];
   const deleteAccountMutation = useDeleteAccountMutation();
+  const [openCreate, setOpenCreate] = useState(false);
   const [openEdit, setOpen] = useState(false);
   const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
   const [id, setId] = useState<GridRowId>("");
@@ -111,6 +120,11 @@ export default function AccountMgmtCard() {
           }}
         />
       </CardContent>
+      <CardActions>
+        <Button startIcon={<Add />} onClick={() => setOpenCreate(true)}>
+          Create new account
+        </Button>
+      </CardActions>
       <EditAccountDialog id={id} open={openEdit} setOpen={setOpen} />
       <ConfirmActionDialog
         open={openConfirmDelete}
@@ -118,6 +132,7 @@ export default function AccountMgmtCard() {
         text="Are you sure you want to delete this account"
         callback={handleDelete}
       />
+      <CreateNewAccountDialog open={openCreate} setOpen={setOpenCreate} />
     </Card>
   );
 }

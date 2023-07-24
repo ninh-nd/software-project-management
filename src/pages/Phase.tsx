@@ -12,10 +12,12 @@ import { useParams } from "react-router-dom";
 import PhaseBoard from "~/components/cards/PhaseBoard";
 import PhaseProgressChart from "~/components/charts/PhaseProgressChart";
 import PhaseTasksChart from "~/components/charts/PhaseTasksChart";
-import CreatePhaseTemplateDialog from "~/components/dialogs/CreatePhaseTemplateDialog";
+import CreatePhaseFromTemplateDialog from "~/components/dialogs/CreatePhaseFromTemplateDialog";
+import ManageTemplateDialog from "~/components/dialogs/ManageTemplateDialog";
 import { useProjectInfoQuery } from "~/hooks/fetching/project/query";
 
 export default function Phase() {
+  const [open, setOpen] = useState(false);
   const { currentProject } = useParams();
   const projectQuery = useProjectInfoQuery(currentProject);
   const project = projectQuery.data?.data;
@@ -27,7 +29,13 @@ export default function Phase() {
       <Toolbar />
       <Container sx={{ my: 4 }} maxWidth="xl">
         <Stack spacing={4}>
-          <Typography variant="h4">Phases</Typography>
+          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+            <Typography variant="h4">Phases</Typography>
+            <Button variant="contained" onClick={() => setOpen(true)}>
+              Manage phase templates
+            </Button>
+            <ManageTemplateDialog open={open} setOpen={setOpen} />
+          </Box>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <PhaseBoard phases={phaseList} />
@@ -73,7 +81,7 @@ function CreatePhaseTemplate() {
           </Button>
         </Box>
       </Container>
-      <CreatePhaseTemplateDialog open={open} setOpen={setOpen} />
+      <CreatePhaseFromTemplateDialog open={open} setOpen={setOpen} />
     </Box>
   );
 }
