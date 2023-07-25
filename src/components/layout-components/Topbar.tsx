@@ -27,9 +27,6 @@ import { getAccountInfo } from "~/hooks/fetching/account/axios";
 import { logout } from "~/hooks/fetching/auth/axios";
 import { useProjectInQuery } from "~/hooks/fetching/user/query";
 import { useUserRole } from "~/hooks/general";
-interface Props extends AppBarProps {
-  open: boolean;
-}
 export default function Topbar() {
   const navigate = useNavigate();
   const role = useUserRole();
