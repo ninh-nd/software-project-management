@@ -21,7 +21,7 @@ import {
   Typography,
 } from "@mui/material";
 import { ReactNode, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import ImportProject from "~/components/dialogs/ImportProjectDialog";
 import { getAccountInfo } from "~/hooks/fetching/account/axios";
 import { logout } from "~/hooks/fetching/auth/axios";
@@ -33,6 +33,10 @@ interface Props extends AppBarProps {
 export default function Topbar() {
   const navigate = useNavigate();
   const role = useUserRole();
+  const location = useLocation();
+  console.log(location);
+  const shouldProjectSelectRender =
+    !location.pathname.includes("user") && role !== "admin";
   const { currentProject } = useParams();
   const [openDialog, setOpenDialog] = useState(false);
   const projectInQuery = useProjectInQuery();
@@ -74,7 +78,7 @@ export default function Topbar() {
         </Typography>
         <FormControl sx={{ px: 1 }}>
           <InputLabel sx={{ color: "white" }}>Project</InputLabel>
-          {role !== "admin" && (
+          {shouldProjectSelectRender && (
             <Select
               label="Project"
               IconComponent={() => <ExpandMore color="inherit" />}
