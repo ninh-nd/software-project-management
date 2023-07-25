@@ -121,11 +121,6 @@ export default function Login() {
               Sign In with Gitlab
             </Button>
             <Grid container>
-              <Grid item xs>
-                <Link href="/forgetpwd" variant="body2" underline="hover">
-                  Forgot password?
-                </Link>
-              </Grid>
               <Grid>
                 <Link href="/signup" variant="body2" underline="hover">
                   Don't have an account? Sign Up

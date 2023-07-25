@@ -8,12 +8,14 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  Stack,
   SxProps,
   Typography,
 } from "@mui/material";
 import dayjs from "dayjs";
 import { PullRequest } from "~/icons/Icons";
 import { ActivityHistory } from "~/hooks/fetching/history";
+import Empty from "/empty.png";
 export default function RecentActivity({
   activityHistory,
   sx,
@@ -21,21 +23,23 @@ export default function RecentActivity({
   activityHistory: ActivityHistory[] | null | undefined;
   sx?: SxProps;
 }) {
-  if (!activityHistory) {
+  if (!activityHistory || activityHistory.length === 0) {
     return (
       <Card sx={{ height: "100%" }}>
         <CardHeader title="Activity timeline" />
         <CardContent>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
+          <Stack sx={{ alignItems: "center" }}>
+            <img
+              src={Empty}
+              style={{
+                width: 150,
+                height: 150,
+              }}
+            />
             <Typography color="error" variant="h6" align="center">
               No activity found! Have you linked your Github/Gitlab account?
             </Typography>
-          </Box>
+          </Stack>
         </CardContent>
       </Card>
     );

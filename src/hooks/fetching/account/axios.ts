@@ -1,5 +1,5 @@
 import api from "~/api";
-import { Account, AccountUpdate } from ".";
+import { Account, AccountUpdate, ChangePassword } from ".";
 import { PromiseServer } from "~/hooks/fetching/response-type";
 export async function getAccountInfo(): PromiseServer<Account> {
   const response = await api.get("/account/");
@@ -63,6 +63,14 @@ export async function updateScannerPreference(
       scanner,
       endpoint,
     },
+  });
+  return response.data;
+}
+export async function changePassword(
+  data: ChangePassword
+): PromiseServer<null> {
+  const response = await api.patch("/account/password", {
+    data,
   });
   return response.data;
 }

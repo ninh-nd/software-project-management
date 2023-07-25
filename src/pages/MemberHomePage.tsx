@@ -22,7 +22,10 @@ export default function MemberHomePage() {
       <Container sx={{ my: 4 }} maxWidth="xl">
         <Grid container spacing={2}>
           <Grid item xs={12} md={6}>
-            <RecentActivity activityHistory={actHistData} />
+            <RecentActivity
+              activityHistory={actHistData}
+              sx={{ height: "100%" }}
+            />
           </Grid>
           <Grid item xs={12} md={6}>
             <ProjectInfo />

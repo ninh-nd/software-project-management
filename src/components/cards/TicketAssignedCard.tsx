@@ -9,12 +9,14 @@ import {
   ListItemIcon,
   ListItemText,
   Pagination,
+  Stack,
   SxProps,
   Typography,
 } from "@mui/material";
 import { useState } from "react";
 import { Link as RouterLink, useParams } from "react-router-dom";
 import { Ticket } from "~/hooks/fetching/ticket";
+import Empty from "/empty.png";
 const numberOfTaskPerPage = 5;
 export default function TicketAssigned({
   tickets,
@@ -39,18 +41,18 @@ export default function TicketAssigned({
       <CardHeader title="Ticket Assigned" />
       <CardContent>
         {tickets.length === 0 ? (
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              height: "100%",
-              alignItems: "center",
-            }}
-          >
+          <Stack sx={{ alignItems: "center" }}>
+            <img
+              src={Empty}
+              style={{
+                width: 150,
+                height: 150,
+              }}
+            />
             <Typography variant="h6" color="textSecondary">
               There's nothing here...
             </Typography>
-          </Box>
+          </Stack>
         ) : (
           <List>
             {currentPageList.map((ticket) => (

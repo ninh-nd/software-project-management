@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   addArtifactToPhase,
   addTaskToPhase,
+  createPhaseTemplate,
   createPhasesFromTemplate,
   deletePhaseTemplate,
   getPhase,
@@ -130,6 +131,18 @@ export function useDeleteTemplateMutation() {
   const { enqueueSnackbar } = useSnackbar();
   return useMutation({
     mutationFn: (id: string) => deletePhaseTemplate(id),
+    onSuccess: (response) => {
+      toast(response, enqueueSnackbar, () => {
+        queryClient.invalidateQueries(["phaseTemplate"]);
+      });
+    },
+  });
+}
+export function useCreatePhaseTemplateMutation() {
+  const queryClient = useQueryClient();
+  const { enqueueSnackbar } = useSnackbar();
+  return useMutation({
+    mutationFn: (data: PhaseTemplateCreate) => createPhaseTemplate(data),
     onSuccess: (response) => {
       toast(response, enqueueSnackbar, () => {
         queryClient.invalidateQueries(["phaseTemplate"]);

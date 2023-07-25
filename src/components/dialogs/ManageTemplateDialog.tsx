@@ -12,11 +12,15 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { usePhaseTemplatesQuery } from "~/hooks/fetching/phase/query";
+import {
+  useDeleteTemplateMutation,
+  usePhaseTemplatesQuery,
+} from "~/hooks/fetching/phase/query";
 import { useAccountContext } from "~/hooks/general";
 import PhaseTemplateDetailsDialog from "./PhaseTemplateDetailsDialog";
 import { Add } from "@mui/icons-material";
 import CreateNewTemplateDialog from "./CreateNewTemplateDialog";
+import ConfirmActionDialog from "./ConfirmActionDialog";
 export default function ManageTemplateDialog({
   open,
   setOpen,
@@ -27,21 +31,31 @@ export default function ManageTemplateDialog({
   const accountContext = useAccountContext();
   const [openEdit, setOpenEdit] = useState(false);
   const [openCreate, setOpenCreate] = useState(false);
-  const [, setSearchParams] = useSearchParams();
+  const [openDelete, setOpenDelete] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const deleteTemplateMutation = useDeleteTemplateMutation();
   const templatesQuery = usePhaseTemplatesQuery();
   const templates =
     templatesQuery.data?.data?.filter(
       (x) => x.createdBy == accountContext.username
     ) ?? [];
-  async function editTemplate(id: string) {
+  function editTemplate(id: string) {
     setSearchParams({ templateId: id });
     setOpenEdit(true);
   }
+  function deleteTemplate(id: string) {
+    setSearchParams({ templateId: id });
+    setOpenDelete(true);
+  }
+  function handleDelete() {
+    const templateId = searchParams.get("templateId") ?? "";
+    deleteTemplateMutation.mutate(templateId);
+  }
   return (
     <Dialog open={open} onClose={() => setOpen(false)} maxWidth="lg" fullWidth>
-      <DialogTitle>Manage templates</DialogTitle>
+      <DialogTitle>Templates you own</DialogTitle>
       <DialogContent>
-        <Stack spacing={2} direction="row">
+        <Stack direction="row">
           {templates.map((temp) => {
             return (
               <Card sx={{ m: 1, minWidth: 300 }} key={temp.name}>
@@ -60,6 +74,19 @@ export default function ManageTemplateDialog({
                   <PhaseTemplateDetailsDialog
                     open={openEdit}
                     setOpen={setOpenEdit}
+                  />
+                  <Button
+                    size="small"
+                    color="error"
+                    onClick={() => deleteTemplate(temp._id)}
+                  >
+                    Delete
+                  </Button>
+                  <ConfirmActionDialog
+                    open={openDelete}
+                    setOpen={setOpenDelete}
+                    text="Are you sure you want to delete this template?"
+                    callback={handleDelete}
                   />
                 </CardActions>
               </Card>

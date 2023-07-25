@@ -29,7 +29,7 @@ import {
   useDisconnectFromGitlabMutation,
 } from "~/hooks/fetching/account/query";
 import { useGetScanners } from "~/hooks/fetching/scanner/query";
-import { useAccountContext } from "~/hooks/general";
+import { useAccountContext, useUserRole } from "~/hooks/general";
 import { GitLab } from "~/icons/Icons";
 import AddNewToolDialog from "../dialogs/AddNewToolDialog";
 import ConfirmActionDialog from "../dialogs/ConfirmActionDialog";
@@ -39,6 +39,7 @@ import UpdateAccessTokenDialog from "../dialogs/UpdateAccessTokenDialog";
 import { useSearchParams } from "react-router-dom";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 export default function Integration() {
+  const role = useUserRole();
   const [, setSearchParams] = useSearchParams();
   const account = useAccountContext();
   const scannersQuery = useGetScanners(account.username);
@@ -186,36 +187,38 @@ export default function Integration() {
               </ListItemSecondaryAction>
             </ListItem>
             <Divider />
-            <ListItem>
-              <ListItemIcon>
-                <BugReport />
-              </ListItemIcon>
-              <ListItemText primary="Image scanning tool" />
-              <ListItemSecondaryAction>
-                <IconButton
-                  {...bindTrigger(popupStateImageScanning)}
-                  edge="end"
-                >
-                  <Tune />
-                </IconButton>
-                <Popover
-                  {...bindPopover(popupStateImageScanning)}
-                  anchorOrigin={{
-                    vertical: "bottom",
-                    horizontal: "center",
-                  }}
-                >
-                  <Menu {...bindMenu(popupStateImageScanning)}>
-                    <MenuItem onClick={() => setOpenConfig(true)}>
-                      Configure
-                    </MenuItem>
-                    <MenuItem onClick={() => setOpenAddNew(true)}>
-                      Add a new tool
-                    </MenuItem>
-                  </Menu>
-                </Popover>
-              </ListItemSecondaryAction>
-            </ListItem>
+            {role === "manager" && (
+              <ListItem>
+                <ListItemIcon>
+                  <BugReport />
+                </ListItemIcon>
+                <ListItemText primary="Image scanning tool" />
+                <ListItemSecondaryAction>
+                  <IconButton
+                    {...bindTrigger(popupStateImageScanning)}
+                    edge="end"
+                  >
+                    <Tune />
+                  </IconButton>
+                  <Popover
+                    {...bindPopover(popupStateImageScanning)}
+                    anchorOrigin={{
+                      vertical: "bottom",
+                      horizontal: "center",
+                    }}
+                  >
+                    <Menu {...bindMenu(popupStateImageScanning)}>
+                      <MenuItem onClick={() => setOpenConfig(true)}>
+                        Configure
+                      </MenuItem>
+                      <MenuItem onClick={() => setOpenAddNew(true)}>
+                        Add a new tool
+                      </MenuItem>
+                    </Menu>
+                  </Popover>
+                </ListItemSecondaryAction>
+              </ListItem>
+            )}
             {scanners.map((scanner) => (
               <ListItem key={scanner.name} sx={{ mx: 3 }}>
                 <ListItemIcon>

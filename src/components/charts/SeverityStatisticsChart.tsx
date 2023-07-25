@@ -3,12 +3,14 @@ import {
   Card,
   CardContent,
   CardHeader,
+  Stack,
   SxProps,
   Typography,
   useTheme,
 } from "@mui/material";
 import { Legend, Pie, PieChart, ResponsiveContainer } from "recharts";
 import { Vulnerability } from "~/hooks/fetching/artifact";
+import Empty from "/empty.png";
 interface Props {
   vulnList: Vulnerability[];
   sx?: SxProps;
@@ -60,16 +62,18 @@ export default function SeverityStatistics({ vulnList, sx }: Props) {
       <CardHeader title="Severity statistics" />
       <CardContent>
         {vulnList.length === 0 ? (
-          <Box
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            height="100%"
-          >
+          <Stack sx={{ alignItems: "center" }}>
+            <img
+              src={Empty}
+              style={{
+                width: 150,
+                height: 150,
+              }}
+            />
             <Typography variant="h6" color="textSecondary">
               There's nothing here...
             </Typography>
-          </Box>
+          </Stack>
         ) : (
           <ResponsiveContainer width="100%" minHeight={300}>
             <PieChart>

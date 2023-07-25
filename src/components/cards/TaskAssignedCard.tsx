@@ -14,6 +14,7 @@ import {
   ListItemIcon,
   ListItemText,
   Pagination,
+  Stack,
   SxProps,
   Tooltip,
   Typography,
@@ -22,7 +23,7 @@ import { useState } from "react";
 import { Task } from "~/hooks/fetching/task";
 import { useUpdateTaskMutation } from "~/hooks/fetching/task/query";
 import { useUserByAccountIdQuery } from "~/hooks/fetching/user/query";
-
+import Empty from "/empty.png";
 const numberOfTaskPerPage = 5;
 export default function TaskAssigned({
   tasks,
@@ -59,18 +60,18 @@ export default function TaskAssigned({
       <CardHeader title="Task Assigned" />
       <CardContent>
         {tasks.length === 0 ? (
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              height: "100%",
-              alignItems: "center",
-            }}
-          >
+          <Stack sx={{ alignItems: "center" }}>
+            <img
+              src={Empty}
+              style={{
+                width: 150,
+                height: 150,
+              }}
+            />
             <Typography variant="h6" color="textSecondary">
               There's nothing here...
             </Typography>
-          </Box>
+          </Stack>
         ) : (
           <List>
             {currentPageList.map((task) => (

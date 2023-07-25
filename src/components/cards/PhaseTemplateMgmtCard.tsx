@@ -48,6 +48,7 @@ export default function PhaseTemplateMgmtCard({ sx }: { sx?: SxProps }) {
     {
       field: "name",
       headerName: "Name",
+      flex: 0.5,
     },
     { field: "description", headerName: "Description", flex: 1 },
     { field: "createdBy", headerName: "Created by" },

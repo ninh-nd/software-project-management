@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSnackbar } from "notistack";
 import { toast } from "~/utils/toast";
-import { AccountRegister, AccountUpdate } from ".";
+import { AccountRegister, AccountUpdate, ChangePassword } from ".";
 import {
   deleteAccount,
   disconnectFromGithub,
@@ -13,6 +13,7 @@ import {
   updateAccount,
   updateScannerPreference,
   updateGitlabAccessToken,
+  changePassword,
 } from "./axios";
 import { updateAccountContext } from "~/hooks/general";
 import { register } from "../auth/axios";
@@ -125,6 +126,15 @@ export function useCreateAccountAdminMutation() {
       toast(response, enqueueSnackbar, () => {
         queryClient.invalidateQueries(["accounts"]);
       });
+    },
+  });
+}
+export function useChangePasswordMutation() {
+  const { enqueueSnackbar } = useSnackbar();
+  return useMutation({
+    mutationFn: (data: ChangePassword) => changePassword(data),
+    onSuccess: (response) => {
+      toast(response, enqueueSnackbar, () => {});
     },
   });
 }

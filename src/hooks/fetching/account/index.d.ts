@@ -26,3 +26,8 @@ export interface AccountRegister {
   confirmPassword: string;
   password: string;
 }
+export interface ChangePassword {
+  oldPassword: string;
+  confirmPassword: string;
+  newPassword: string;
+}

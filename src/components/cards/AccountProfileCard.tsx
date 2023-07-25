@@ -1,9 +1,21 @@
-import { Avatar, Box, Card, CardContent, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  Divider,
+  Typography,
+} from "@mui/material";
 import { Account } from "~/hooks/fetching/account";
 import RoleChip from "../styled-components/RoleChip";
 import AvatarImage from "/avatar.webp";
 import { useUserByAccountIdQuery } from "~/hooks/fetching/user/query";
+import ChangePasswordDialog from "../dialogs/ChangePasswordDialog";
+import { useState } from "react";
 export default function AccountProfile({ account }: { account: Account }) {
+  const [open, setOpen] = useState(false);
   const memberByAccountIdInfo = useUserByAccountIdQuery();
   const memberInfo = memberByAccountIdInfo.data?.data;
   return (
@@ -32,6 +44,13 @@ export default function AccountProfile({ account }: { account: Account }) {
           </Typography>
         </Box>
       </CardContent>
+      <Divider />
+      <CardActions sx={{ display: "flex", justifyContent: "center" }}>
+        <Button fullWidth onClick={() => setOpen(true)}>
+          Change password
+        </Button>
+        <ChangePasswordDialog open={open} setOpen={setOpen} />
+      </CardActions>
     </Card>
   );
 }

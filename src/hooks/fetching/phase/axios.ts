@@ -76,3 +76,11 @@ export async function deletePhaseTemplate(id: string): PromiseServer<null> {
   const response = await api.delete(`/phase/template/${id}`);
   return response.data;
 }
+export async function createPhaseTemplate(
+  data: PhaseTemplateCreate
+): PromiseServer<null> {
+  const response = await api.post(`/phase/template`, {
+    data,
+  });
+  return response.data;
+}

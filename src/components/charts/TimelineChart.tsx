@@ -7,6 +7,7 @@ import {
   Typography,
   Box,
   CssBaseline,
+  Stack,
 } from "@mui/material";
 import dayjs from "dayjs";
 import {
@@ -18,6 +19,7 @@ import {
   YAxis,
 } from "recharts";
 import { ActivityHistory } from "~/hooks/fetching/history";
+import Empty from "/empty.png";
 function dateFormatter(date: string) {
   return dayjs(date).format("DD/MM/YY");
 }
@@ -49,16 +51,23 @@ export default function TimelineChart({
   activityHistory: ActivityHistory[] | null | undefined;
   sx?: SxProps;
 }) {
-  if (!activityHistory) {
+  if (!activityHistory || activityHistory.length === 0) {
     return (
       <Card>
         <CardHeader title="Activity timeline" />
         <CardContent>
-          <Box sx={{ display: "flex", justifyContent: "center" }}>
-            <Typography color="error" variant="h6">
+          <Stack sx={{ alignItems: "center" }}>
+            <img
+              src={Empty}
+              style={{
+                width: 150,
+                height: 150,
+              }}
+            />
+            <Typography color="error" variant="h6" align="center">
               No activity found! Have you linked your Github/Gitlab account?
             </Typography>
-          </Box>
+          </Stack>
         </CardContent>
       </Card>
     );
