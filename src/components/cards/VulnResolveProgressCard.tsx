@@ -22,7 +22,10 @@ export default function VulnResolveProgressCard({
   const { currentProject } = useParams();
   const vulnProgressQuery = useVulnProgress(currentProject);
   const data = vulnProgressQuery.data?.data;
-  const percentage = data ? Math.round(data.resolved / data.total) : 0;
+  const percentage =
+    data && !isNaN(Math.round(data.resolved / data.total))
+      ? Math.round(data.resolved / data.total)
+      : 0;
   return (
     <Card sx={sx}>
       <CardContent>
