@@ -31,7 +31,6 @@ export default function Topbar() {
   const navigate = useNavigate();
   const role = useUserRole();
   const location = useLocation();
-  console.log(location);
   const shouldProjectSelectRender =
     !location.pathname.includes("user") && role !== "admin";
   const { currentProject } = useParams();

@@ -89,16 +89,7 @@ export default function CreateArtifactDialog({
                   : errors.url?.message
               }
             />
-            <TextField
-              {...register("version", {
-                pattern: /^(\d+\.)?(\d+\.)?(\*|\d+)$/,
-              })}
-              label="Version"
-              error={!!errors.version}
-              helperText={
-                errors.version?.type === "pattern" && "Invalid version number"
-              }
-            />
+            <TextField {...register("version")} label="Version" />
             <TextField
               {...register("cpe", {
                 pattern:

@@ -172,7 +172,7 @@ export default function ArtifactDetails({ phase }: ArtifactDetailsProps) {
         open={confirmModal}
         setOpen={setConfirmModal}
         callback={removeArtifact}
-        text="Do you want to delete this artifact?"
+        text="Do you want to delete this artifact? This will also remove any ticket that is linked to its vulnerabilities"
       />
       <AddThreatDialog
         open={openAddThreatDialog}
