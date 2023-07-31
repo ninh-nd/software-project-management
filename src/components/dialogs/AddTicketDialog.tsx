@@ -22,7 +22,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { ChangeEvent, HTMLAttributes, useState } from "react";
+import { ChangeEvent, HTMLAttributes, SyntheticEvent, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { Vulnerability } from "~/hooks/fetching/artifact";
@@ -36,6 +36,7 @@ interface Props {
   setOpen: (open: boolean) => void;
 }
 export default function AddTicketDialog({ open, setOpen }: Props) {
+  const [recommendedPriority, setRecommendedPriority] = useState("");
   const { currentProject } = useParams();
   const getAllArtifactsQuery = useArtifactsQuery(currentProject);
   const artifacts = getAllArtifactsQuery.data?.data;
@@ -50,6 +51,7 @@ export default function AddTicketDialog({ open, setOpen }: Props) {
     handleSubmit,
     formState: { errors },
     control,
+    setValue,
   } = useForm<TicketCreate>();
   const [selectedPriority, setSelectedPriority] = useState<
     "Low" | "Medium" | "High"
@@ -58,6 +60,21 @@ export default function AddTicketDialog({ open, setOpen }: Props) {
     setSelectedPriority(
       (event.target as HTMLInputElement).value as "Low" | "Medium" | "High"
     );
+  }
+  function captureVulnsSeverity(
+    event: SyntheticEvent<Element, Event>,
+    data: Vulnerability[],
+    onChange: (...event: any[]) => void
+  ) {
+    const severities = data.map((vuln) => vuln.severity.toLowerCase());
+    if (severities.includes("high") || severities.includes("critical")) {
+      setValue("priority", "high");
+    } else if (severities.includes("medium")) {
+      setValue("priority", "medium");
+    } else {
+      setValue("priority", "low");
+    }
+    onChange(data);
   }
   async function submit(data: TicketCreate) {
     if (!accountInfo || !currentProject) return;
@@ -111,29 +128,23 @@ export default function AddTicketDialog({ open, setOpen }: Props) {
               alignItems="center"
             >
               <Typography variant="body1">Priority</Typography>
-              <RadioGroup
-                row
-                value={selectedPriority}
-                onChange={selectPriority}
-              >
-                {["Low", "Medium", "High"].map((p) => (
-                  <FormControlLabel
-                    {...register("priority")}
-                    value={p}
-                    control={<Radio />}
-                    label={
-                      p === "Low" ? (
-                        <Box color="green">Low</Box>
-                      ) : p === "Medium" ? (
-                        <Box color="orange">Medium</Box>
-                      ) : (
-                        <Box color="red">High</Box>
-                      )
-                    }
-                    key={p}
-                  />
-                ))}
-              </RadioGroup>
+              <Controller
+                name="priority"
+                control={control}
+                defaultValue="low"
+                render={({ field }) => (
+                  <RadioGroup {...field} row>
+                    {["low", "medium", "high"].map((item) => (
+                      <FormControlLabel
+                        key={item}
+                        value={item}
+                        control={<Radio />}
+                        label={item.charAt(0).toUpperCase() + item.slice(1)}
+                      />
+                    ))}
+                  </RadioGroup>
+                )}
+              />
             </Box>
             <TextField
               label="Assigner"
@@ -173,7 +184,9 @@ export default function AddTicketDialog({ open, setOpen }: Props) {
                 <Autocomplete
                   multiple
                   options={vulns}
-                  onChange={(event, data) => onChange(data)}
+                  onChange={(event, data) =>
+                    captureVulnsSeverity(event, data, onChange)
+                  }
                   renderOption={(props, option) => (
                     <VulnOption props={props} option={option} />
                   )}
