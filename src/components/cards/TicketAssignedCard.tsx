@@ -28,7 +28,6 @@ export default function TicketAssigned({
   const { currentProject } = useParams();
   const encodedUrl = encodeURIComponent(currentProject);
   const [currentPage, setCurrentPage] = useState(0);
-  const visibility = tickets.length > 0 ? "visible" : "hidden";
   function handlePageChange(event: React.ChangeEvent<unknown>, value: number) {
     setCurrentPage(value - 1);
   }
@@ -39,7 +38,7 @@ export default function TicketAssigned({
   return (
     <Card sx={sx}>
       <CardHeader title="Ticket Assigned" />
-      <CardContent>
+      <CardContent sx={{ height: 400 }}>
         {tickets.length === 0 ? (
           <Stack sx={{ alignItems: "center" }}>
             <img
@@ -54,36 +53,38 @@ export default function TicketAssigned({
             </Typography>
           </Stack>
         ) : (
-          <List>
-            {currentPageList.map((ticket) => (
-              <ListItem key={ticket._id}>
-                <ListItemIcon>
-                  {ticket.priority === "low"
-                    ? "🟢"
-                    : ticket.priority === "medium"
-                    ? "🟠"
-                    : "🔴"}
-                </ListItemIcon>
-                <ListItemText
-                  primary={
-                    <Link
-                      component={RouterLink}
-                      to={`/${encodedUrl}/tickets/${ticket._id}`}
-                    >
-                      {ticket.title}
-                    </Link>
-                  }
-                  secondary={ticket.description}
-                />
-              </ListItem>
-            ))}
-          </List>
+          <Stack sx={{ height: "100%" }}>
+            <List sx={{ flexGrow: 1 }}>
+              {currentPageList.map((ticket) => (
+                <ListItem key={ticket._id}>
+                  <ListItemIcon>
+                    {ticket.priority === "low"
+                      ? "🟢"
+                      : ticket.priority === "medium"
+                      ? "🟠"
+                      : "🔴"}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={
+                      <Link
+                        component={RouterLink}
+                        to={`/${encodedUrl}/tickets/${ticket._id}`}
+                      >
+                        {ticket.title}
+                      </Link>
+                    }
+                    secondary={ticket.description}
+                  />
+                </ListItem>
+              ))}
+            </List>
+            <Pagination
+              sx={{ display: "flex", justifyContent: "center" }}
+              count={Math.ceil(tickets.length / numberOfTaskPerPage)}
+              onChange={handlePageChange}
+            />
+          </Stack>
         )}
-        <Pagination
-          sx={{ display: "flex", justifyContent: "center", visibility }}
-          count={Math.ceil(tickets.length / numberOfTaskPerPage)}
-          onChange={handlePageChange}
-        />
       </CardContent>
     </Card>
   );

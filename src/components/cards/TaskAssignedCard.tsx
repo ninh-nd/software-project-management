@@ -36,7 +36,6 @@ export default function TaskAssigned({
   const userInfo = userInfoQuery.data?.data;
   const [currentPage, setCurrentPage] = useState(0);
   const updateTaskMutation = useUpdateTaskMutation();
-  const visibility = tasks.length > 0 ? "visible" : "hidden";
   function handlePageChange(event: React.ChangeEvent<unknown>, value: number) {
     setCurrentPage(value - 1);
   }
@@ -58,7 +57,7 @@ export default function TaskAssigned({
   return (
     <Card sx={sx}>
       <CardHeader title="Task Assigned" />
-      <CardContent>
+      <CardContent sx={{ height: 400 }}>
         {tasks.length === 0 ? (
           <Stack sx={{ alignItems: "center" }}>
             <img
@@ -73,56 +72,57 @@ export default function TaskAssigned({
             </Typography>
           </Stack>
         ) : (
-          <List>
-            {currentPageList.map((task) => (
-              <ListItem
-                key={task._id}
-                secondaryAction={
-                  <Tooltip
-                    title={
-                      task.status === "active" ? "Mark as completed" : "Undo"
-                    }
-                  >
-                    <IconButton
-                      edge="end"
-                      onClick={markTask(
-                        task._id,
-                        task.status === "active" ? "completed" : "active"
-                      )}
+          <Stack sx={{ height: "100%" }}>
+            <List sx={{ flexGrow: 1 }}>
+              {currentPageList.map((task) => (
+                <ListItem
+                  key={task._id}
+                  secondaryAction={
+                    <Tooltip
+                      title={
+                        task.status === "active" ? "Mark as completed" : "Undo"
+                      }
                     >
-                      {task.status === "active" ? (
-                        <CheckBoxOutlineBlank />
-                      ) : (
-                        <CheckBox />
-                      )}
-                    </IconButton>
-                  </Tooltip>
-                }
-              >
-                <ListItemIcon>
-                  <Assignment />
-                </ListItemIcon>
-                <ListItemText
-                  primary={task.name}
-                  secondary={task.description}
-                  sx={{
-                    textDecoration:
-                      task.status === "completed" ? "line-through" : "none",
-                  }}
-                />
-              </ListItem>
-            ))}
-          </List>
+                      <IconButton
+                        edge="end"
+                        onClick={markTask(
+                          task._id,
+                          task.status === "active" ? "completed" : "active"
+                        )}
+                      >
+                        {task.status === "active" ? (
+                          <CheckBoxOutlineBlank />
+                        ) : (
+                          <CheckBox />
+                        )}
+                      </IconButton>
+                    </Tooltip>
+                  }
+                >
+                  <ListItemIcon>
+                    <Assignment />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={task.name}
+                    secondary={task.description}
+                    sx={{
+                      textDecoration:
+                        task.status === "completed" ? "line-through" : "none",
+                    }}
+                  />
+                </ListItem>
+              ))}
+            </List>
+            <Pagination
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+              }}
+              count={Math.ceil(tasks.length / numberOfTaskPerPage)}
+              onChange={handlePageChange}
+            />
+          </Stack>
         )}
-        <Pagination
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            visibility,
-          }}
-          count={Math.ceil(tasks.length / numberOfTaskPerPage)}
-          onChange={handlePageChange}
-        />
       </CardContent>
     </Card>
   );
