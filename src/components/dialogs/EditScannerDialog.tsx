@@ -61,7 +61,7 @@ export default function EditScannerDialog({
           />
           <Instruction />
           <FormControl>
-            <FormLabel>Code</FormLabel>
+            <FormLabel>Code (JavaScript)</FormLabel>
             <Controller
               name="config.code"
               control={control}
