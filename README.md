@@ -4,3 +4,5 @@
 2. Install [pnpm](https://pnpm.io/installation)
 3. Run `pnpm install` to install dependencies
 4. Run `npm run dev` to start the dev server
+
+Some commit
