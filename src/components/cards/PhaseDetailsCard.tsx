@@ -18,7 +18,7 @@ interface PhaseDetailsProps {
 }
 export default function PhaseDetails({ phase }: PhaseDetailsProps) {
   const taskColumn: GridColDef[] = [
-    { field: "name", headerName: "Name", width: 200 },
+    { field: "name", headerName: "Name", width: 400 },
     { field: "status", headerName: "Status" },
     { field: "description", headerName: "Description", minWidth: 400, flex: 1 },
   ];

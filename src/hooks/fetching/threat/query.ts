@@ -13,9 +13,10 @@ export function useCreateThreatMutation() {
   return useMutation({
     mutationFn: (threat: ThreatCreate) => createThreat(threat),
     onSuccess: (response) => {
-      toast(response, enqueueSnackbar, () =>
-        queryClient.invalidateQueries(["artifacts"])
-      );
+      toast(response, enqueueSnackbar, () => {
+        queryClient.invalidateQueries(["artifacts"]);
+        queryClient.invalidateQueries(["threats"]);
+      });
     },
   });
 }

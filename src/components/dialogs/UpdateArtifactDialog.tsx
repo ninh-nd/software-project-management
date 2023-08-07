@@ -18,6 +18,7 @@ import {
 } from "@mui/material";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { useSearchParams } from "react-router-dom";
 import { ArtifactUpdate } from "~/hooks/fetching/artifact";
 import {
   useArtifactQuery,
@@ -28,12 +29,10 @@ const type = ["image", "log", "source code", "executable", "library"];
 interface UpdateArtifactFormProps {
   open: boolean;
   setOpen: (open: boolean) => void;
-  artifactId: string;
 }
 export default function UpdateArtifactDialog({
   open,
   setOpen,
-  artifactId,
 }: UpdateArtifactFormProps) {
   const {
     register,
@@ -43,12 +42,14 @@ export default function UpdateArtifactDialog({
     formState: { errors },
     watch,
     setValue,
+    reset,
   } = useForm<ArtifactUpdate>({
     defaultValues: {
       threatList: [],
     },
   });
   const watchCpe = watch("cpe");
+
   useEffect(() => {
     if (watchCpe) {
       setValue("name", getValues("cpe")?.split(":")[4] ?? "");
@@ -58,8 +59,13 @@ export default function UpdateArtifactDialog({
   const threatsQuery = useThreatsQuery();
   const threats = threatsQuery.data?.data ?? [];
   const updateArtifactMutation = useUpdateArtifactMutation();
+  const [searchParams] = useSearchParams();
+  const artifactId = searchParams.get("artifactId") ?? "";
   const artifactQuery = useArtifactQuery(artifactId);
   const artifact = artifactQuery.data?.data;
+  useEffect(() => {
+    reset();
+  }, [artifactId]);
   if (!artifact) return <></>;
   async function submit(data: ArtifactUpdate) {
     updateArtifactMutation.mutate({
@@ -107,6 +113,7 @@ export default function UpdateArtifactDialog({
             />
             <Controller
               name="version"
+              defaultValue={artifact.version}
               control={control}
               render={({ field }) => (
                 <TextField

@@ -27,6 +27,8 @@ import { Phase } from "~/hooks/fetching/phase";
 import { useRemoveArtifactFromPhaseMutation } from "~/hooks/fetching/phase/query";
 import { Docker } from "~/icons/Icons";
 import AddThreatDialog from "../dialogs/AddThreatDialog";
+import ThreatDictionaryDialog from "../dialogs/ThreatDictionaryDialog";
+import { useSearchParams } from "react-router-dom";
 function renderType({
   type,
 }: {
@@ -74,29 +76,30 @@ interface ArtifactDetailsProps {
   phase: Phase;
 }
 export default function ArtifactDetails({ phase }: ArtifactDetailsProps) {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const artifactId = searchParams.get("artifactId") ?? "";
+  const [openDictionary, setOpenDictionary] = useState(false);
   const [openAddThreatDialog, setOpenAddThreatDialog] = useState(false);
   const [openArtCreateDialog, setOpenArtCreateDialog] = useState(false);
   const [openArtUpdateDialog, setOpenArtUpdateDialog] = useState(false);
-  const [selectedArtifact, setSelectedArtifact] = useState("");
   const [confirmModal, setConfirmModal] = useState(false);
   function handleUpdateSelectedArtifact(id: string) {
     return () => {
-      setSelectedArtifact(id);
+      setSearchParams({ artifactId: id });
       setOpenArtUpdateDialog(true);
     };
   }
   function handleDeleteSelectedArtifact(id: string) {
     return () => {
-      setSelectedArtifact(id);
+      setSearchParams({ artifactId: id });
       setConfirmModal(true);
     };
   }
   const removeArtifactMutation = useRemoveArtifactFromPhaseMutation();
   async function removeArtifact() {
-    if (selectedArtifact === "") return;
     removeArtifactMutation.mutate({
       phaseId: phase._id,
-      artifactId: selectedArtifact,
+      artifactId,
     });
   }
   return (
@@ -157,6 +160,14 @@ export default function ArtifactDetails({ phase }: ArtifactDetailsProps) {
         >
           Add a new threat
         </Button>
+        <Button
+          variant="contained"
+          color="info"
+          startIcon={<BugReport />}
+          onClick={() => setOpenDictionary(true)}
+        >
+          Threat dictionary
+        </Button>
       </CardActions>
       <CreateArtifactDialog
         open={openArtCreateDialog}
@@ -166,7 +177,6 @@ export default function ArtifactDetails({ phase }: ArtifactDetailsProps) {
       <UpdateArtifactDialog
         open={openArtUpdateDialog}
         setOpen={setOpenArtUpdateDialog}
-        artifactId={selectedArtifact}
       />
       <ConfirmActionDialog
         open={confirmModal}
@@ -177,6 +187,10 @@ export default function ArtifactDetails({ phase }: ArtifactDetailsProps) {
       <AddThreatDialog
         open={openAddThreatDialog}
         setOpen={setOpenAddThreatDialog}
+      />
+      <ThreatDictionaryDialog
+        open={openDictionary}
+        setOpen={setOpenDictionary}
       />
     </Card>
   );
