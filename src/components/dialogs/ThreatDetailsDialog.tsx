@@ -71,12 +71,14 @@ interface FormData {
 function Body({ data }: { data: Threat | null | undefined }) {
   const { control, register, getValues } = useForm<FormData>({
     defaultValues: {
-      mitigation: [
+      mitigation: data?.mitigation?.map((str) => ({
+        value: str,
+      })) ?? [
         {
           value: "",
         },
       ],
-      status: "Non mitigated",
+      status: data?.status ?? "Non mitigated",
     },
   });
   const updateThreatMutation = useUpdateThreatMutation();
@@ -194,7 +196,11 @@ function Body({ data }: { data: Threat | null | undefined }) {
             </Button>
           </>
         ) : (
-          <Typography>{data?.mitigation}</Typography>
+          <>
+            {data?.mitigation.map((str) => (
+              <Typography>{str}</Typography>
+            ))}
+          </>
         )}
       </Stack>
     </Container>
