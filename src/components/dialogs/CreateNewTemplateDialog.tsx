@@ -17,6 +17,7 @@ import {
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { PhaseTemplate, PhaseTemplateCreate } from "~/hooks/fetching/phase";
 import { useCreatePhaseTemplateMutation } from "~/hooks/fetching/phase/query";
+import { useUserRole } from "~/hooks/general";
 
 export default function CreateNewTemplateDialog({
   open,
@@ -25,6 +26,7 @@ export default function CreateNewTemplateDialog({
   open: boolean;
   setOpen: (open: boolean) => void;
 }) {
+  const role = useUserRole();
   const {
     register,
     handleSubmit,
@@ -65,7 +67,9 @@ export default function CreateNewTemplateDialog({
                   name="isPrivate"
                   control={control}
                   defaultValue={false}
-                  render={({ field }) => <Checkbox {...field} />}
+                  render={({ field }) => (
+                    <Checkbox {...field} disabled={role === "admin"} />
+                  )}
                 />
               }
               label="Make this template private"
