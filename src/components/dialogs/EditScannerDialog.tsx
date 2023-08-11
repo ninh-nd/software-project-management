@@ -18,6 +18,7 @@ import {
 } from "~/hooks/fetching/scanner/query";
 import Instruction from "../text/Instruction";
 import { useSearchParams } from "react-router-dom";
+import { useEffect } from "react";
 
 export default function EditScannerDialog({
   open,
@@ -32,9 +33,12 @@ export default function EditScannerDialog({
     updateScannerMutation.mutate(data);
     setOpen(false);
   }
-  const { register, control, handleSubmit } =
-    useForm<CreateOrUpdateNewScanner>();
   const updateScannerMutation = useUpdateScannerMutation();
+  const { register, control, handleSubmit, reset } =
+    useForm<CreateOrUpdateNewScanner>();
+  useEffect(() => {
+    reset();
+  }, [scannerId]);
   const scannerQuery = useGetScanner(scannerId);
   const scanner = scannerQuery.data?.data;
   if (!scanner) return <></>;
