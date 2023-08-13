@@ -26,7 +26,7 @@ export default function ManagerSidebarItems() {
       </ListSubheader>
       <Item text="Home" icon={<HomeOutlined />} path={`/${encodedUrl}/`} />
       <Item
-        text="Phase"
+        text="Progress"
         icon={<AssessmentOutlined />}
         path={`/${encodedUrl}/phases`}
       />
@@ -35,15 +35,15 @@ export default function ManagerSidebarItems() {
         icon={<DescriptionOutlined />}
         path={`/${encodedUrl}/scripts`}
       />
+      <Divider />
+      <ListSubheader component="div" inset>
+        Vulnerability control
+      </ListSubheader>
       <Item
         text="Ticket"
         icon={<FactCheckOutlined />}
         path={`/${encodedUrl}/tickets`}
       />
-      <Divider />
-      <ListSubheader component="div" inset>
-        Vulnerability control
-      </ListSubheader>
       <Item
         text="Vulnerabilities"
         icon={<SecurityOutlined />}

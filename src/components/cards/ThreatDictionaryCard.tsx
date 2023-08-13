@@ -1,14 +1,19 @@
-import { Dialog, DialogContent, DialogTitle } from "@mui/material";
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  SxProps,
+} from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useThreatsQuery } from "~/hooks/fetching/threat/query";
+import AddThreatDialog from "../dialogs/AddThreatDialog";
+import { useState } from "react";
+import { BugReport } from "@mui/icons-material";
 
-export default function ThreatDictionaryDialog({
-  open,
-  setOpen,
-}: {
-  open: boolean;
-  setOpen: (open: boolean) => void;
-}) {
+export default function ThreatDictionaryCard({ sx }: { sx?: SxProps }) {
+  const [openAddThreatDialog, setOpenAddThreatDialog] = useState(false);
   const threatsQuery = useThreatsQuery();
   const threats = threatsQuery.data?.data ?? [];
   const columns: GridColDef[] = [
@@ -27,16 +32,29 @@ export default function ThreatDictionaryDialog({
     },
   ];
   return (
-    <Dialog open={open} onClose={() => setOpen(false)} fullWidth maxWidth="xl">
-      <DialogTitle>Threat Dictionary</DialogTitle>
-      <DialogContent>
+    <Card sx={sx}>
+      <CardHeader title="Threat Dictionary" />
+      <CardContent>
         <DataGrid
           rows={threats}
           columns={columns}
           autoHeight
           getRowId={(row) => row._id}
         />
-      </DialogContent>
-    </Dialog>
+      </CardContent>
+      <CardActions>
+        <Button
+          color="warning"
+          startIcon={<BugReport />}
+          onClick={() => setOpenAddThreatDialog(true)}
+        >
+          Add a new threat
+        </Button>
+      </CardActions>
+      <AddThreatDialog
+        open={openAddThreatDialog}
+        setOpen={setOpenAddThreatDialog}
+      />
+    </Card>
   );
 }

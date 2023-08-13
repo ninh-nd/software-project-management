@@ -38,7 +38,7 @@ const Home = lazy(() => import("./Home"));
 const Login = lazy(() => import("./Login"));
 const MemberDetailInfo = lazy(() => import("./MemberDetail"));
 const PhaseDetailInfo = lazy(() => import("./PhaseDetail"));
-const PhaseInfo = lazy(() => import("./Phase"));
+const PhaseInfo = lazy(() => import("./Progress"));
 const SignUpPage = lazy(() => import("./SignUp"));
 const TicketDetailPage = lazy(() => import("./TicketDetail"));
 const TicketPage = lazy(() => import("./Ticket"));

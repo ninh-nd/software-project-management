@@ -21,11 +21,6 @@ export default function MemberSidebarItems() {
     <List component="nav">
       <Item text="Overview" icon={<HomeOutlined />} path={`/${encodedUrl}/`} />
       <Item
-        text="Ticket"
-        icon={<FactCheckOutlined />}
-        path={`/${encodedUrl}/tickets`}
-      />
-      <Item
         text="Task"
         icon={<AssignmentOutlined />}
         path={`/${encodedUrl}/tasks`}
@@ -34,6 +29,11 @@ export default function MemberSidebarItems() {
       <ListSubheader component="div" inset>
         Vulnerability control
       </ListSubheader>
+      <Item
+        text="Ticket"
+        icon={<FactCheckOutlined />}
+        path={`/${encodedUrl}/tickets`}
+      />
       <Item
         text="Vulnerabilities"
         icon={<SecurityOutlined />}

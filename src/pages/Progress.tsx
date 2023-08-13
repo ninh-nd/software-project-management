@@ -10,8 +10,8 @@ import {
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import PhaseBoard from "~/components/cards/PhaseBoard";
-import PhaseProgressChart from "~/components/charts/PhaseProgressChart";
-import PhaseTasksChart from "~/components/charts/PhaseTasksChart";
+import TaskMgmtCard from "~/components/cards/TaskMgmtCard";
+import TaskStatusChart from "~/components/charts/TaskStatusChart";
 import CreatePhaseFromTemplateDialog from "~/components/dialogs/CreatePhaseFromTemplateDialog";
 import ManageTemplateDialog from "~/components/dialogs/ManageTemplateDialog";
 import { useProjectInfoQuery } from "~/hooks/fetching/project/query";
@@ -30,7 +30,7 @@ export default function Phase() {
       <Container sx={{ my: 4 }} maxWidth="xl">
         <Stack spacing={4}>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-            <Typography variant="h4">Phases</Typography>
+            <Typography variant="h4">Progress</Typography>
             <Button variant="contained" onClick={() => setOpen(true)}>
               Manage phase templates
             </Button>
@@ -40,11 +40,11 @@ export default function Phase() {
             <Grid item xs={12}>
               <PhaseBoard phases={phaseList} />
             </Grid>
-            <Grid item xs={5}>
-              <PhaseTasksChart phases={phaseList} />
+            <Grid item xs={4}>
+              <TaskStatusChart />
             </Grid>
-            <Grid item xs={7}>
-              <PhaseProgressChart phases={phaseList} />
+            <Grid item xs={8}>
+              <TaskMgmtCard />
             </Grid>
           </Grid>
         </Stack>

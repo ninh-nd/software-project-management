@@ -2,6 +2,7 @@ import { MoreVert } from "@mui/icons-material";
 import {
   Card,
   CardContent,
+  CardHeader,
   IconButton,
   SxProps,
   Table,
@@ -28,13 +29,13 @@ export default function PhaseBoard({
   }
   return (
     <Card sx={sx}>
+      <CardHeader title="Phases" />
       <CardContent>
         <Table>
           <TableHead>
             <TableRow>
               <TableCell>Name</TableCell>
               <TableCell>Description</TableCell>
-              <TableCell>Tasks</TableCell>
               <TableCell>Artifacts</TableCell>
               <TableCell>Details</TableCell>
             </TableRow>
@@ -44,7 +45,6 @@ export default function PhaseBoard({
               <TableRow key={phase._id}>
                 <TableCell>{phase.name}</TableCell>
                 <TableCell>{phase.description}</TableCell>
-                <TableCell>{phase.tasks.length}</TableCell>
                 <TableCell>{phase.artifacts.length}</TableCell>
                 <TableCell>
                   <IconButton onClick={visitDetails(phase._id)}>

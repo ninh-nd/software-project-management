@@ -1,6 +1,5 @@
 import {
   Add,
-  BugReport,
   Code,
   ContentPaste,
   CreateOutlined,
@@ -20,15 +19,13 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import ConfirmActionDialog from "~/components/dialogs/ConfirmActionDialog";
 import CreateArtifactDialog from "~/components/dialogs/CreateArtifactDialog";
 import UpdateArtifactDialog from "~/components/dialogs/UpdateArtifactDialog";
 import { Phase } from "~/hooks/fetching/phase";
 import { useRemoveArtifactFromPhaseMutation } from "~/hooks/fetching/phase/query";
 import { Docker } from "~/icons/Icons";
-import AddThreatDialog from "../dialogs/AddThreatDialog";
-import ThreatDictionaryDialog from "../dialogs/ThreatDictionaryDialog";
-import { useSearchParams } from "react-router-dom";
 function renderType({
   type,
 }: {
@@ -78,8 +75,6 @@ interface ArtifactDetailsProps {
 export default function ArtifactDetails({ phase }: ArtifactDetailsProps) {
   const [searchParams, setSearchParams] = useSearchParams();
   const artifactId = searchParams.get("artifactId") ?? "";
-  const [openDictionary, setOpenDictionary] = useState(false);
-  const [openAddThreatDialog, setOpenAddThreatDialog] = useState(false);
   const [openArtCreateDialog, setOpenArtCreateDialog] = useState(false);
   const [openArtUpdateDialog, setOpenArtUpdateDialog] = useState(false);
   const [confirmModal, setConfirmModal] = useState(false);
@@ -148,25 +143,8 @@ export default function ArtifactDetails({ phase }: ArtifactDetailsProps) {
         <Button
           startIcon={<Add />}
           onClick={() => setOpenArtCreateDialog(true)}
-          variant="contained"
         >
           Add a new artifact
-        </Button>
-        <Button
-          variant="contained"
-          color="warning"
-          startIcon={<BugReport />}
-          onClick={() => setOpenAddThreatDialog(true)}
-        >
-          Add a new threat
-        </Button>
-        <Button
-          variant="contained"
-          color="info"
-          startIcon={<BugReport />}
-          onClick={() => setOpenDictionary(true)}
-        >
-          Threat dictionary
         </Button>
       </CardActions>
       <CreateArtifactDialog
@@ -183,14 +161,6 @@ export default function ArtifactDetails({ phase }: ArtifactDetailsProps) {
         setOpen={setConfirmModal}
         callback={removeArtifact}
         text="Do you want to delete this artifact? This will also remove any ticket that is linked to its vulnerabilities"
-      />
-      <AddThreatDialog
-        open={openAddThreatDialog}
-        setOpen={setOpenAddThreatDialog}
-      />
-      <ThreatDictionaryDialog
-        open={openDictionary}
-        setOpen={setOpenDictionary}
       />
     </Card>
   );

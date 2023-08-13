@@ -1,4 +1,5 @@
 import {
+  Add,
   CheckCircle,
   Delete,
   Edit,
@@ -11,6 +12,7 @@ import {
   CardContent,
   CardHeader,
   Stack,
+  SxProps,
 } from "@mui/material";
 import {
   DataGrid,
@@ -21,16 +23,16 @@ import {
 import dayjs from "dayjs";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import {
-  useAvailableTasksQuery,
-  useDeleteTaskMutation,
-} from "~/hooks/fetching/task/query";
 import AssignTaskDialog from "~/components/dialogs/AssignTaskDialog";
 import ConfirmActionDialog from "~/components/dialogs/ConfirmActionDialog";
 import CreateTaskDialog from "~/components/dialogs/CreateTaskDialog";
 import EditTaskDialog from "~/components/dialogs/EditTaskDialog";
+import {
+  useDeleteTaskMutation,
+  useTasksQuery,
+} from "~/hooks/fetching/task/query";
 
-export default function UnassignedTaskCard() {
+export default function TaskMgmtCard({ sx }: { sx?: SxProps }) {
   const { currentProject } = useParams();
   const [openAssign, setOpenAssign] = useState(false);
   const [openConfirmDelete, setOpenConfirmDelete] = useState(false);
@@ -40,10 +42,10 @@ export default function UnassignedTaskCard() {
     undefined
   );
   const deleteTaskMutation = useDeleteTaskMutation();
-  const availableTasksQuery = useAvailableTasksQuery(currentProject);
+  const availableTasksQuery = useTasksQuery(currentProject);
   const availableTasks = availableTasksQuery.data?.data ?? [];
   const columns: GridColDef[] = [
-    { field: "name", headerName: "Name", editable: true, flex: 0.3 },
+    { field: "name", headerName: "Name", editable: true, flex: 1 },
     {
       field: "status",
       headerName: "Status",
@@ -113,24 +115,31 @@ export default function UnassignedTaskCard() {
     deleteTaskMutation.mutate(selectedTask);
   }
   return (
-    <>
-      <Stack spacing={2}>
-        <Card>
-          <CardHeader title="Dangling tasks" />
-          <CardContent>
-            <DataGrid
-              sx={{ minHeight: 500 }}
-              rows={availableTasks}
-              getRowId={(row) => row._id}
-              columns={columns}
-            />
-          </CardContent>
-          <CardActions>
-            <Button onClick={() => setOpenAssign(true)}>Assign task</Button>
-            <Button onClick={() => setOpenCreate(true)}>Create new task</Button>
-          </CardActions>
-        </Card>
-      </Stack>
+    <Card sx={sx}>
+      <CardHeader title="Dangling tasks" />
+      <CardContent sx={{ height: 350 }}>
+        <DataGrid
+          rows={availableTasks}
+          getRowId={(row) => row._id}
+          columns={columns}
+        />
+      </CardContent>
+      <CardActions>
+        <Button
+          onClick={() => setOpenAssign(true)}
+          startIcon={<Add />}
+          color="inherit"
+        >
+          Assign task
+        </Button>
+        <Button
+          onClick={() => setOpenCreate(true)}
+          startIcon={<Add />}
+          color="success"
+        >
+          Create new task
+        </Button>
+      </CardActions>
       <ConfirmActionDialog
         open={openConfirmDelete}
         setOpen={setOpenConfirmDelete}
@@ -140,6 +149,6 @@ export default function UnassignedTaskCard() {
       <EditTaskDialog open={openEdit} setOpen={setOpenEdit} id={selectedTask} />
       <CreateTaskDialog open={openCreate} setOpen={setOpenCreate} />
       <AssignTaskDialog open={openAssign} setOpen={setOpenAssign} />
-    </>
+    </Card>
   );
 }

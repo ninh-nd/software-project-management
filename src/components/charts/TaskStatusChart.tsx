@@ -5,28 +5,21 @@ import {
   SxProps,
   useTheme,
 } from "@mui/material";
+import { useParams } from "react-router-dom";
 import { Legend, Pie, PieChart, ResponsiveContainer } from "recharts";
-import { Phase } from "~/hooks/fetching/phase";
+import { useTasksQuery } from "~/hooks/fetching/task/query";
 
-export default function PhaseTasksChart({
-  sx,
-  phases,
-}: {
-  phases: Phase[];
-  sx?: SxProps;
-}) {
+export default function TaskStatusChart({ sx }: { sx?: SxProps }) {
   const theme = useTheme();
-  const activeTasksCount = phases
-    .map(
-      (phase) => phase.tasks.filter((task) => task.status === "active").length
-    )
-    .reduce((a, b) => a + b, 0);
-  const completedTasksCount = phases
-    .map(
-      (phase) =>
-        phase.tasks.filter((task) => task.status === "completed").length
-    )
-    .reduce((a, b) => a + b, 0);
+  const { currentProject } = useParams();
+  const tasksQuery = useTasksQuery(currentProject);
+  const tasks = tasksQuery.data?.data ?? [];
+  const activeTasksCount = tasks.filter(
+    (task) => task.status === "active"
+  ).length;
+  const completedTasksCount = tasks.filter(
+    (task) => task.status === "completed"
+  ).length;
   return (
     <Card sx={sx}>
       <CardHeader title="Tasks" />
